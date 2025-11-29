@@ -1,16 +1,17 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
-import { HOME_URL } from "@/app/(core)/appConstants"
 import { LoginFormSchema } from "../_schema/loginSchema"
 import { clientSupabase } from "@/app/(core)/_supabase/clientSupabase"
 import toast from "react-hot-toast"
+import { useState } from "react"
 
 /** ログイン時のハンドル */
 export const useLogin = () => {
-  const router = useRouter()
-  const handleLogin = async (form: LoginFormSchema) => {
+  const [userId, setUserId] = useState("")
+  const handleLogin = async ({onSuccess, form}: {
+    form: LoginFormSchema,
+    onSuccess: () => void
+  }) => {
 
     // ログインする
     const { data, error } = await clientSupabase.auth.signInWithPassword({
@@ -25,11 +26,16 @@ export const useLogin = () => {
       return
     }
     
-    // 次画面で表示するメッセージを登録する
-    appStorage.feedbackMessage.set('ログインしました')
+    // ユーザIDをセットする
+    setUserId(data.user.id)
 
-    // ホーム画面に遷移する
-    router.push(`${HOME_URL}`)
+    // 成功後の処理を実行する
+    onSuccess()
   }
-  return { handleLogin }
+  return { 
+    /** ログインハンドル */    
+    handleLogin, 
+    /** ユーザID */
+    userId
+  }
 }

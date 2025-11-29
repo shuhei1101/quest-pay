@@ -8,6 +8,7 @@ import { fetchUser } from "../../(user)/_query/userQuery";
 export const useAuthCheck = () => {
   const router = useRouter()
   
+  /** 現在の認証状態を確認する */
   const checkAuth = async () => {
     // セッションストレージからセッション情報を取得する
     let session = appStorage.supabaseSession.get()
@@ -27,7 +28,6 @@ export const useAuthCheck = () => {
       appStorage.supabaseSession.set(session)
     }
 
-
     // セッションストレージからユーザ情報を取得する
     let userInfo = appStorage.user.get()
     if (!userInfo) {
@@ -36,11 +36,11 @@ export const useAuthCheck = () => {
       // ユーザ情報が取得できた場合、セッションストレージに格納する
       if (userInfo) appStorage.user.set(userInfo)
     }
-    // ユーザ情報を返却する
+  
     return {
       userInfo,
       userId: session.user.id,
     }
   }
-  return {checkAuth}
+  return { checkAuth }
 }

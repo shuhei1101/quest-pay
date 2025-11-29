@@ -7,7 +7,7 @@ export const updateUser = async (user: UserFormSchema) => {
   await userDao.update({
     name: user.name,
     updated_at: user.updated_at!,
-    type_id: user.type_id!,
+    type_id: user.type!,
     user_id: user.user_id!
   })
 }

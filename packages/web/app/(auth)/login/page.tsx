@@ -6,6 +6,8 @@ import { IconDualScreen, IconDualScreenFilled } from "@tabler/icons-react";
 import { useLogin } from "./_hooks/useLogin";
 import { useSignUp } from "./_hooks/useSignUp";
 import { useLoginForm } from "./_hooks/useLoginForm";
+import { SelectRolePopup } from "../_components/SelectRolePopup";
+import { useDisclosure } from "@mantine/hooks";
 
 const guest = {
   email: process.env.NEXT_PUBLIC_GUEST_EMAIL ?? "",
@@ -19,20 +21,23 @@ export default function Page() {
   }, []);
 
   /** ハンドラ */
-  const { handleLogin } = useLogin()
+  const { handleLogin, userId } = useLogin()
   const { handleSignUp } = useSignUp()
+
+  /** 名前入力ポップアッププロパティ */
+  const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false);
 
   // 新規登録かサインインかを判定する状態
   const [isLogin, setIsLogin] = useState<boolean>(true)
 
   // ログインフォームを取得する
-  const { register, handleSubmit} = useLoginForm();
+  const { register, handleSubmit } = useLoginForm();
 
   // ゲストでログイン押下時のハンドル
   const handleGuestLogin = () => {
     handleLogin({
-      email: guest.email,
-      password: guest.pass
+      form: {email: guest.email, password: guest.pass},
+      onSuccess: () => openPopup()
     })
   }
 
@@ -48,8 +53,8 @@ export default function Page() {
         >
           <Center p="md" className="flex flex-col gap-5">
             {/* タイトル */}
-            <Title order={1} c={"white"}>サンプルアプリ</Title>
-            <form onSubmit={handleSubmit((form) => isLogin ? handleLogin(form) : handleSignUp(form))}>
+            <Title order={1} c={"white"}>タスクペイ</Title>
+            <form onSubmit={handleSubmit((form) => isLogin ? handleLogin({form, onSuccess: () => openPopup()}) : handleSignUp(form))}>
               {/* タブ */}
               <Tabs defaultValue="ログイン" variant="outline">
                 <Tabs.List>
@@ -82,6 +87,7 @@ export default function Page() {
           </Center>
         </Box>
       </div>
+      <SelectRolePopup close={closePopup} opened={popupOpened} />
     </FeedbackMessageWrapper>
   )
 }

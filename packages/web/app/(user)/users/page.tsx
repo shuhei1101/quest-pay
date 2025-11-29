@@ -77,7 +77,7 @@ function UsersContent() {
   }
 
   return (
-    <AuthorizedPageLayout requireAdmin={true} title="ユーザ一覧">
+    <AuthorizedPageLayout requiredParent={true} title="ユーザ一覧">
       {/* 検索条件欄 */}
       <UserFilterWithType types={fetchedTypes} filter={userFilter} handleSearch={handleSerch} setFilter={setUserFilter} 
        />

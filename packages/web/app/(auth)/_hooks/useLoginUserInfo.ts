@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useAuthCheck } from "./useAuthCheck"
 import { RawUser } from "../../(user)/_schema/userSchema"
 
+/** ログインユーザの情報を取得する */
 export const useLoginUserInfo = () => {
   const { checkAuth } = useAuthCheck()
   const [userInfo, setUserInfo] = useState<RawUser>()
@@ -19,6 +20,7 @@ export const useLoginUserInfo = () => {
         setUserInfo(result.userInfo)
         setUserId(result.userId ?? "")
       }
+      // ロード状態を解除する
       setIsLoading(false)
     }
     getUserInfo()
@@ -28,7 +30,5 @@ export const useLoginUserInfo = () => {
     userInfo,
     userId,
     isLoading,
-    isAdmin: userInfo?.type_id == 3,
-    isGuest: userInfo?.type_id == 1
   }
 }

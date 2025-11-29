@@ -48,7 +48,7 @@ export const UserForm = ( params: {
 
   return (
     <>
-      <AuthorizedPageLayout title={"ユーザ編集"} requireAdmin={true}
+      <AuthorizedPageLayout title={"ユーザ編集"} requiredParent={true}
       actionButtons={<FormBackButton isValueChanged={isValueChanged} previousScreenURL={USERS_URL} />}>
         <div>
 
@@ -78,7 +78,7 @@ export const UserForm = ( params: {
                 </div>
                 {/* タイプ入力欄 */}
                 <div>
-                  <Input.Wrapper label="タイプ" required error={errors.type_id?.message}>
+                  <Input.Wrapper label="タイプ" required error={errors.type?.message}>
                     <UserTypeCombobox userTypes={fetchedTypes} currentValue={watchUser("type_id")} onChanged={handleChangedStatus} />
                   </Input.Wrapper>
                 </div>

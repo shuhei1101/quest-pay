@@ -1,41 +1,37 @@
 import { z } from "zod";
 
 /** DBのユーザスキーマ */
-export const rawUser = z.object({
+export const RawUser = z.object({
   user_id: z.string(),
+  type: z.enum(["parent", "child"]),
   name: z.string(),
-  type_id: z.number(),
+  icon: z.string(),
+  birthday: z.string(),
   created_at: z.string(),
-  updated_at: z.string()
+  updated_at: z.string(),
 })
-export type RawUser = z.infer<typeof rawUser>
+export type RawUser = z.infer<typeof RawUser>
 
 // 更新用
-export type UserInsert = Pick<RawUser, "name" | "user_id">
-export type UserUpdate = Omit<RawUser, "created_at">
-export type UserDelete = Pick<RawUser, "user_id" | "updated_at">
+export const UserInsert = RawUser.omit({id: true, created_at: true, updated_at: true})
+export const UserUpdate = RawUser.omit({created_at: true})
+export const UserDelete = RawUser.pick({id: true, created_at: true})
+export type UserInsert = z.infer<typeof UserInsert>
+export type UserUpdate = z.infer<typeof UserUpdate>
+export type UserDelete = z.infer<typeof UserDelete>
 
-// ユーザのカラム名
+// ユーザカラム名の型
 export type UserColumns = keyof RawUser;
 
 /** ユーザフォームスキーマ */
 export const userFormSchema = z.object({
+  /** ユーザタイプ */
+  type: z.enum(["parent", "child"]),
   /** ユーザ名 */
   name: z.string().nonempty({error: "氏名は必須です。"}),
-  /** ユーザタイプ */
-  type_id: z.number().optional(),
-  /** UUID */
-  user_id: z.string().optional(),
-  /** 作成日時 */
-  created_at: z.string().optional(),
-  /** 更新日時 */
-  updated_at: z.string().optional()
+  /** アイコン */
+  icon: z.string().default(""),
 })
-
-/** ユーザフィルター */
-export type UserFilterSchema = Partial<Pick<RawUser, 
-  "name" | "type_id"
->>
 
 /** ユーザフォームスキーマの型 */
 export type UserFormSchema = z.infer<typeof userFormSchema>;
@@ -43,23 +39,8 @@ export type UserFormSchema = z.infer<typeof userFormSchema>;
 /** エンティティからユーザフォームスキーマを生成する */
 export const createUserSchemaFromEntity = (entity: RawUser): UserFormSchema => {
   return {
+    type: entity.type,
     name: entity.name,
-    user_id: entity.user_id,
-    type_id: entity.type_id,
-    created_at: entity.created_at,
-    updated_at: entity.updated_at
+    icon: entity.icon,
   }
-}
-
-/** クエリオブジェクトからユーザフィルターに変換する */
-export const createUserFilterFromQueryObj = (queryObj: any) => {
-  // クエリオブジェクトが空の場合はリターンする
-  if (!queryObj) return {}
-
-  const result: UserFilterSchema = {}
-
-  // 氏名をセットする
-  result.name = queryObj.name ?? undefined
-  
-  return result
 }

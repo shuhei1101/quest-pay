@@ -11,12 +11,12 @@ import { useRouter } from "next/navigation";
 import { AUTH_ERROR_URL } from "../../(core)/appConstants";
 
 /** 認証済みのページに適用するレイアウト */
-export const AuthorizedPageLayout = ({ children, title, actionButtons, requireAdmin, guestNG }: {
+export const AuthorizedPageLayout = ({ children, title, actionButtons, requiredParent, requiredChild }: {
   title: string
   actionButtons?: ReactNode
   children: ReactNode
-  requireAdmin?: boolean
-  guestNG?: boolean
+  requiredParent?: boolean
+  requiredChild?: boolean
 }) => {
   const router = useRouter()
 
@@ -24,22 +24,22 @@ export const AuthorizedPageLayout = ({ children, title, actionButtons, requireAd
   const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false);
 
   /** ログインユーザ情報 */
-  const {userId, userInfo, isLoading, isAdmin, isGuest} = useLoginUserInfo()
+  const {userId, userInfo, isLoading } = useLoginUserInfo()
 
   // 画面の権限チェックを行う
   const [redirected, setRedirected] = useState(false)
   useEffect(() => {
     if (isLoading || redirected) return
 
-    // 管理者権限が必要な場合
-    if (requireAdmin && !isAdmin) {
+    // 親専用画面の場合
+    if (requiredParent && userInfo?.type !== "parent" ) {
       router.push(AUTH_ERROR_URL)
       setRedirected(true)
       return
     }
 
-    // ゲスト禁止画面の場合
-    if (guestNG && isGuest) {
+    // 子供専用画面の場合
+    if (requiredChild && userInfo?.type !== "child") {
       router.push(AUTH_ERROR_URL)
       setRedirected(true)
       return
@@ -48,7 +48,7 @@ export const AuthorizedPageLayout = ({ children, title, actionButtons, requireAd
     if (!userInfo) {
       openPopup()
     }
-  }, [isLoading, isAdmin, isGuest, requireAdmin, guestNG, userInfo, router, redirected])
+  }, [isLoading, requiredParent, requiredChild, userInfo, router, redirected])
 
   
   return (

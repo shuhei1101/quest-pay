@@ -1,7 +1,7 @@
 'use client'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createUserSchemaFromEntity, rawUser, UserFormSchema, userFormSchema } from "../../../_schema/userSchema"
+import { createUserSchemaFromEntity, RawUser, UserFormSchema, userFormSchema } from "../../../_schema/userSchema"
 import useSWR from "swr"
 import { fetchUser } from "../../../_query/userQuery"
 import { useEffect, useState } from "react"
@@ -12,7 +12,7 @@ export const useUserForm = ({id}: {id?: string}) => {
   /** ユーザフォームのデフォルト値 */
   const defaultUser: UserFormSchema = {
     name: "",
-    type_id: 1,
+    type: 1,
     user_id: undefined,
     created_at: undefined,
     updated_at: undefined
@@ -58,7 +58,7 @@ export const useUserForm = ({id}: {id?: string}) => {
   /** 値を変更したかどうか */
   const isValueChanged = 
     currentUsers.name !== fetchedUser.name ||
-    currentUsers.type_id !== fetchedUser.type_id
+    currentUsers.type !== fetchedUser.type
 
   return {
     register,

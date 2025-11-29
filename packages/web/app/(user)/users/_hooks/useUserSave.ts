@@ -6,7 +6,7 @@ import { UserFormSchema } from "../../_schema/userSchema"
 import { userApi } from "../../_api-client/userApi"
 import toast from "react-hot-toast"
 
-/** ユーザ作成時のハンドル */
+/** ユーザ保存のハンドル */
 export const useUserSave = ({close}: {
   close: () => void
 }) => {
