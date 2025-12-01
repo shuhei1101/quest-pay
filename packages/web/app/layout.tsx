@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import '@mantine/core/styles.css';
 import 'mantine-datatable/styles.layer.css';
+import '@mantine/dates/styles.css';
 import React from "react";
 
 const geistSans = Geist({
@@ -29,19 +30,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  
+
   return (
     <React.StrictMode>
-      <html lang="en">
+      <html lang="ja" {...mantineHtmlProps}>
         <head>
-          <title>サンプルアプリ</title>
+          <title>タスクペイ</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
-          <ColorSchemeScript/>
+          <ColorSchemeScript />
         </head>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <MantineProvider>
-              <div>
                 {children}
-              </div>
             </MantineProvider>
           </body>
       </html>

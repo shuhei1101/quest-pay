@@ -1,34 +1,38 @@
 "use client"
 import { useEffect, useState } from "react"
-import { useAuthCheck } from "./useAuthCheck"
-import { RawUser } from "../../(user)/_schema/userSchema"
+import { useSession } from "./useSession"
+import { UserEntity } from "../../(user)/_schema/userSchema"
+import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
+import { fetchUser } from "../../(user)/_query/userQuery";
 
 /** ログインユーザの情報を取得する */
 export const useLoginUserInfo = () => {
-  const { checkAuth } = useAuthCheck()
-  const [userInfo, setUserInfo] = useState<RawUser>()
-  const [userId, setUserId] = useState<string>("")
+  const { session, isLoading: sessionLoading } = useSession()
+  const [userInfo, setUserInfo] = useState<UserEntity>()
   const [isLoading, setIsLoading] = useState(true)
   
   useEffect(() => {
+    if (sessionLoading || !session) return
     const getUserInfo = async () => {
-      // ローディング中にする
-      setIsLoading(true)
-      // 認可処理を行う
-      const result = await checkAuth()
-      if (result) {
-        setUserInfo(result.userInfo)
-        setUserId(result.userId ?? "")
+      // セッションストレージからユーザ情報を取得する
+      let userInfo = appStorage.user.get()
+      // ユーザ情報がない場合
+      if (!userInfo) {
+      // ユーザ情報を取得する
+        userInfo = await fetchUser(session.user.id)
+        // ユーザ情報が取得できた場合、セッションストレージに格納する
+        if (userInfo) appStorage.user.set(userInfo)
       }
-      // ロード状態を解除する
-      setIsLoading(false)
+      setUserInfo(userInfo)
     }
     getUserInfo()
-  }, [])
+    // ロード状態を解除する
+    setIsLoading(false)
+  }, [session, sessionLoading])
 
   return {
     userInfo,
-    userId,
     isLoading,
+    session,
   }
 }

@@ -2,14 +2,14 @@
 import { DataTable, DataTableSortStatus } from "mantine-datatable"
 import { useState } from "react"
 import { Button, Modal } from "@mantine/core"
-import { UserColumns, UserFilterSchema, RawUser } from "../../_schema/userSchema"
+import { UserColumns, UserFilterSchema, UserEntitySchema } from "../../_schema/userSchema"
 import { useUsers } from "../_hooks/useUsers"
 import { UserFilter } from "./UserFilter"
 
 export const UserSelectPopup = ({opened ,close, handleUsers}: {
   opened: boolean,
   close: () => void,
-  handleUsers: (users: RawUser[]) => void
+  handleUsers: (users: UserEntitySchema[]) => void
 }) => {
   /** ユーザフィルター状態 */
   const [userFilter, setUserFilter] = useState<UserFilterSchema>({})
@@ -18,7 +18,7 @@ export const UserSelectPopup = ({opened ,close, handleUsers}: {
   const [searchFilter, setSearchFilter] = useState<UserFilterSchema>({})
 
   /** ソート状態 */
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<RawUser>>({
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<UserEntitySchema>>({
     columnAccessor: 'name' as UserColumns,
     direction: 'asc',
   })
@@ -42,7 +42,7 @@ export const UserSelectPopup = ({opened ,close, handleUsers}: {
   })
 
   /** 選択状態 */
-  const [selectedRecords, setSelectedRecords] = useState<RawUser[]>([]);
+  const [selectedRecords, setSelectedRecords] = useState<UserEntitySchema[]>([]);
 
   /** 閉じる処理のラッパー */
   const handleClose = () => {
@@ -72,7 +72,7 @@ export const UserSelectPopup = ({opened ,close, handleUsers}: {
       <UserFilter filter={userFilter} handleSearch={handleSerch} setFilter={setUserFilter} />
       <div className="m-5" />
       {/* ユーザ一覧テーブル */}
-      <DataTable<RawUser> 
+      <DataTable<UserEntitySchema> 
         withTableBorder
         highlightOnHover
         noRecordsText=""

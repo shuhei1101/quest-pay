@@ -13,6 +13,12 @@ export const LOGIN_URL = `/login`
 export const TASKS_URL = `/tasks`
 export const TASK_NEW_URL = `${TASKS_URL}/new`
 export const TASK_API_URL = `${TASKS_URL}/api`
+export const TASK_FAMILY_API_URL = `${TASK_API_URL}/family`
+
+// 家族
+export const FAMILIES_URL = `/families`
+export const FAMILY_NEW_URL = `${FAMILIES_URL}/new`
+export const FAMILY_API_URL = `${FAMILIES_URL}/api`
 
 // プロジェクト
 export const PROJECTS_URL = `/projects`

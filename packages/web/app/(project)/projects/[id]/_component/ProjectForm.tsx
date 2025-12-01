@@ -10,7 +10,7 @@ import { useProjectForm } from "../_hooks/useProjectForm";
 import { ProjectMemberTable } from "./ProjectMemberTable";
 import { UserSelectPopup } from "@/app/(user)/users/_components/UserSelectPopup";
 import { useDisclosure } from "@mantine/hooks";
-import { RawUser } from "@/app/(user)/_schema/userSchema";
+import { UserEntitySchema } from "@/app/(user)/_schema/userSchema";
 import { PROJECTS_URL } from "@/app/(core)/appConstants";
 import { useLoginUserInfo } from "@/app/(auth)/_hooks/useLoginUserInfo";
 
@@ -45,7 +45,7 @@ export const ProjectForm = ( params: {
   const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false);
 
   /** ユーザ選択時のハンドル */
-  const handleMembers = (members: RawUser[]) => {
+  const handleMembers = (members: UserEntitySchema[]) => {
     // 現在のメンバーを取得
     const currentMembers = watchProject().members || []
     // 既存メンバーのuser_idリストを作成

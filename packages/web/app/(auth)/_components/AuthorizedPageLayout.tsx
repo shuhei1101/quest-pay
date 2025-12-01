@@ -5,7 +5,7 @@ import { LoadingOverlay, Title } from "@mantine/core";
 import { FeedbackMessageWrapper } from "../../(shared)/_components/FeedbackMessageWrapper";
 import Header from "../../(shared)/_components/Header";
 import { useDisclosure } from "@mantine/hooks";
-import { RegisterNamePopup } from "./RegisterNamePopup";
+import { NameRegisterPopup } from "./NameRegisterPopup";
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo";
 import { useRouter } from "next/navigation";
 import { AUTH_ERROR_URL } from "../../(core)/appConstants";
@@ -24,32 +24,33 @@ export const AuthorizedPageLayout = ({ children, title, actionButtons, requiredP
   const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false);
 
   /** ログインユーザ情報 */
-  const {userId, userInfo, isLoading } = useLoginUserInfo()
+  const { userInfo, isLoading, session } = useLoginUserInfo()
 
   // 画面の権限チェックを行う
   const [redirected, setRedirected] = useState(false)
   useEffect(() => {
     if (isLoading || redirected) return
 
-    // 親専用画面の場合
-    if (requiredParent && userInfo?.type !== "parent" ) {
-      router.push(AUTH_ERROR_URL)
-      setRedirected(true)
-      return
-    }
+    // // 親専用画面の場合
+    // if (requiredParent && userInfo?.type !== "parent" ) {
+    //   router.push(AUTH_ERROR_URL)
+    //   setRedirected(true)
+    //   return
+    // }
 
-    // 子供専用画面の場合
-    if (requiredChild && userInfo?.type !== "child") {
-      router.push(AUTH_ERROR_URL)
-      setRedirected(true)
-      return
-    }
+    // // 子供専用画面の場合
+    // if (requiredChild && userInfo?.type !== "child") {
+    //   router.push(AUTH_ERROR_URL)
+    //   setRedirected(true)
+    //   return
+    // }
 
     if (!userInfo) {
       openPopup()
     }
   }, [isLoading, requiredParent, requiredChild, userInfo, router, redirected])
 
+  if (isLoading) return <div>読み込み中...</div>;
   
   return (
     <>
@@ -75,7 +76,6 @@ export const AuthorizedPageLayout = ({ children, title, actionButtons, requiredP
         {/* 子コンポーネント */}
         {children}
       </div>
-      <RegisterNamePopup close={closePopup} opened={popupOpened} userId={userId!} />
     </FeedbackMessageWrapper>
     </>
   )

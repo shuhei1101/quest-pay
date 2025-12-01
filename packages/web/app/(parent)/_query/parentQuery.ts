@@ -1,15 +1,17 @@
-import { RawParent } from "../_schema/parentSchema";
-import { clientSupabase } from "@/app/(core)/_supabase/clientSupabase";
+import { ParentEntitySchema } from "../_schema/parentEntity"
+import { clientSupabase } from "@/app/(core)/_supabase/clientSupabase"
 
 /** IDに紐づく親を取得する */
 export const fetchParent = async (userId: string) => {
   // データを取得する
-  const { data, error } = await clientSupabase.from("Parents")
-      .select('*')
-      .eq("user_id", userId).single();
+  const { data, error } = await clientSupabase.from("parents")
+    .select('*')
+    .eq("user_id", userId)
 
-    // エラーをチェックする
-    if (error) throw error;
+  // エラーをチェックする
+  if (error) throw error
 
-    return data as RawParent
+  console.log("親情報", JSON.stringify(data))
+
+  return data && ParentEntitySchema.parse(data[0])
 }

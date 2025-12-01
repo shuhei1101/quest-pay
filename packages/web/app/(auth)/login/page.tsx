@@ -1,13 +1,13 @@
 "use client"
-import { Box, Button, Center, Fieldset, PasswordInput, Tabs, TextInput, Title } from "@mantine/core";
-import { FeedbackMessageWrapper } from "../../(shared)/_components/FeedbackMessageWrapper";
-import { useState, useEffect } from "react";
-import { IconDualScreen, IconDualScreenFilled } from "@tabler/icons-react";
-import { useLogin } from "./_hooks/useLogin";
-import { useSignUp } from "./_hooks/useSignUp";
-import { useLoginForm } from "./_hooks/useLoginForm";
-import { SelectRolePopup } from "../_components/SelectRolePopup";
-import { useDisclosure } from "@mantine/hooks";
+import { Box, Button, Center, Fieldset, PasswordInput, Tabs, TextInput, Title } from "@mantine/core"
+import { FeedbackMessageWrapper } from "../../(shared)/_components/FeedbackMessageWrapper"
+import { useState, useEffect } from "react"
+import { IconDualScreen, IconDualScreenFilled } from "@tabler/icons-react"
+import { useLogin } from "./_hooks/useLogin"
+import { useSignUp } from "./_hooks/useSignUp"
+import { useLoginForm } from "./_hooks/useLoginForm"
+import { LoginTypeSelectPopup } from "../_components/LoginTypeSelectPopup"
+import { useDisclosure } from "@mantine/hooks"
 
 const guest = {
   email: process.env.NEXT_PUBLIC_GUEST_EMAIL ?? "",
@@ -17,21 +17,21 @@ const guest = {
 export default function Page() {
   /** セッションストレージを空にする */
   useEffect(() => {
-    sessionStorage.clear();
-  }, []);
+    sessionStorage.clear()
+  }, [])
 
   /** ハンドラ */
   const { handleLogin, userId } = useLogin()
   const { handleSignUp } = useSignUp()
 
   /** 名前入力ポップアッププロパティ */
-  const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false);
+  const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false)
 
   // 新規登録かサインインかを判定する状態
   const [isLogin, setIsLogin] = useState<boolean>(true)
 
   // ログインフォームを取得する
-  const { register, handleSubmit } = useLoginForm();
+  const { register, handleSubmit } = useLoginForm()
 
   // ゲストでログイン押下時のハンドル
   const handleGuestLogin = () => {
@@ -70,8 +70,8 @@ export default function Page() {
               </Tabs>
               {/* 入力フォーム */}
               <Fieldset legend="" w={300}>
-                <TextInput label="メールアドレス" type="email" {...register("email")} />
-                <PasswordInput withAsterisk
+                <TextInput required label="メールアドレス" type="email" {...register("email")} />
+                <PasswordInput required
                   label="パスワード"
                   placeholder="6文字以上"
                   {...register("password")}
@@ -87,7 +87,7 @@ export default function Page() {
           </Center>
         </Box>
       </div>
-      <SelectRolePopup close={closePopup} opened={popupOpened} />
+      <LoginTypeSelectPopup close={closePopup} opened={popupOpened} />
     </FeedbackMessageWrapper>
   )
 }

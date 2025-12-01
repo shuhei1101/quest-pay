@@ -1,35 +1,37 @@
-import { RawUser } from "@/app/(user)/_schema/userSchema";
-import toast from "react-hot-toast";
+import { IconCategoryEntity, IconCategoryEntitySchema } from "@/app/(shared)/_icon/_schema/iconCategorySchema"
+import { IconEntityWithCategoriesEntity, IconEntityWithCategoriesSchema } from "@/app/(shared)/_icon/_schema/iconSchema"
+import { UserEntity } from "@/app/(user)/_schema/userSchema"
+import toast from "react-hot-toast"
 
 export const appStorage = {
   // フィードバックメッセージ
   feedbackMessage: {
     /** メッセージを出力する */
     out: () => {
-      const message = sessionStorage.getItem('feedbackMessage');
+      const message = sessionStorage.getItem('feedbackMessage')
       if (message) {
-        toast(message, {duration: 1500});
-        sessionStorage.removeItem('feedbackMessage');
+        toast(message, {duration: 1500})
+        sessionStorage.removeItem('feedbackMessage')
       }
     },
     /** メッセージをセットする */
     set: (message: string) => {
-      sessionStorage.setItem('feedbackMessage', message);
+      sessionStorage.setItem('feedbackMessage', message)
     }
   },
   // 親画面
   parentScreen: {
     /** 親画面のURLを取得する */
     get: () => {
-      return sessionStorage.getItem("parentScreen");
+      return sessionStorage.getItem("parentScreen")
     },
     /** 親画面のURLをセットする */
     set: (url: string) => {
-      sessionStorage.setItem("parentScreen", url);
+      sessionStorage.setItem("parentScreen", url)
     },
     /** 親画面のURLを破棄する */
     remove: () => {
-      sessionStorage.removeItem("parentScreen");
+      sessionStorage.removeItem("parentScreen")
     }
   },
   // Supabaseセッション状態
@@ -44,8 +46,32 @@ export const appStorage = {
   user: {
     get: () => {
       const cached = sessionStorage.getItem("user")
-      return cached ? JSON.parse(cached) as RawUser : undefined
+      return cached ? JSON.parse(cached) as UserEntity : undefined
     },
-    set: (data: RawUser) => sessionStorage.setItem("user", JSON.stringify(data))
-  }
+    set: (data: UserEntity) => sessionStorage.setItem("user", JSON.stringify(data))
+  },
+  // アイコン情報
+  icons: {
+    /** アイコンを取得する */
+    get: () => {
+      const icons = sessionStorage.getItem("icons")
+      return icons ? IconEntityWithCategoriesSchema.array().parse(JSON.parse(icons)) : []
+    },
+    /** アイコンをセットする */
+    set: (icons: IconEntityWithCategoriesEntity[]) => {
+      sessionStorage.setItem('icons', JSON.stringify(icons))
+    },
+  },
+  // アイコンカテゴリ情報
+  iconCategories: {
+    /** アイコンカテゴリを取得する */
+    get: () => {
+      const iconCategories = sessionStorage.getItem("iconCategories")
+      return iconCategories ? IconCategoryEntitySchema.array().parse(JSON.parse(iconCategories)) : []
+    },
+    /** アイコンカテゴリをセットする */
+    set: (iconCategories: IconCategoryEntity[]) => {
+      sessionStorage.setItem('iconCategories', JSON.stringify(iconCategories))
+    },
+  },
 }

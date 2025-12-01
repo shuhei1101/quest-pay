@@ -1,46 +1,30 @@
+
 import { z } from "zod";
 
 /** DBのユーザスキーマ */
-export const RawUser = z.object({
+export const UserEntitySchema = z.object({
   user_id: z.string(),
-  type: z.enum(["parent", "child"]),
   name: z.string(),
   icon: z.string(),
   birthday: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
 })
-export type RawUser = z.infer<typeof RawUser>
+export type UserEntity = z.infer<typeof UserEntitySchema>
 
 // 更新用
-export const UserInsert = RawUser.omit({id: true, created_at: true, updated_at: true})
-export const UserUpdate = RawUser.omit({created_at: true})
-export const UserDelete = RawUser.pick({id: true, created_at: true})
-export type UserInsert = z.infer<typeof UserInsert>
-export type UserUpdate = z.infer<typeof UserUpdate>
-export type UserDelete = z.infer<typeof UserDelete>
+export const UserInsertSchema = UserEntitySchema.omit({created_at: true, updated_at: true})
+export const UserUpdateSchema = UserEntitySchema.omit({created_at: true})
+export const UserDeleteSchema = UserEntitySchema.pick({user_id: true, updated_at: true})
+export type UserInsert = z.infer<typeof UserInsertSchema>
+export type UserUpdate = z.infer<typeof UserUpdateSchema>
+export type UserDelete = z.infer<typeof UserDeleteSchema>
 
 // ユーザカラム名の型
-export type UserColumns = keyof RawUser;
+export type UserColumns = keyof UserEntity
 
-/** ユーザフォームスキーマ */
-export const userFormSchema = z.object({
-  /** ユーザタイプ */
-  type: z.enum(["parent", "child"]),
-  /** ユーザ名 */
-  name: z.string().nonempty({error: "氏名は必須です。"}),
-  /** アイコン */
-  icon: z.string().default(""),
+// 値オブジェクト
+export const UserName = z.string().nonempty({error: "氏名は必須です。"})
+export const Birthday = z.string().nonempty({error: "誕生日は必須です。"}).refine((val) => !isNaN(Date.parse(val)), {
+  message: "有効な日付文字列ではありません",
 })
-
-/** ユーザフォームスキーマの型 */
-export type UserFormSchema = z.infer<typeof userFormSchema>;
-
-/** エンティティからユーザフォームスキーマを生成する */
-export const createUserSchemaFromEntity = (entity: RawUser): UserFormSchema => {
-  return {
-    type: entity.type,
-    name: entity.name,
-    icon: entity.icon,
-  }
-}

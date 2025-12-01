@@ -1,43 +1,30 @@
 import { Button, Input, Modal, Space, Text } from "@mantine/core"
-import { useUserForm } from "../_hooks/useRegisterUserForm"
-import { useEffect } from "react"
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"
-import useSWR from "swr"
-import { fetchChild } from "@/app/(child)/_query/childQuery"
-import { useChild } from "@/app/(child)/_hooks/useChild"
-import { useParent } from "@/app/(parent)/_hooks/useParent"
-import { useFamily } from "@/app/(family)/_hooks/useFamily"
-// import { useTypeSelect } from "../_hooks/useRoleSelect"
+import { useRouter } from "next/navigation"
+import { FAMILY_NEW_URL } from "@/app/(core)/appConstants"
+import { useUserFamily } from "@/app/(family)/_hooks/useFamily"
+import { useEffect } from "react"
 
-/** ロール選択ポップアップ */
-export const SelectRolePopup = ({opened ,close}: {
+
+/** ログインタイプ選択ポップアップ */
+export const LoginTypeSelectPopup = ({opened ,close}: {
   opened: boolean,
   close: () => void,
 }) => {
+  const router = useRouter()
 
   /** ハンドル */
-  // const { handleSave } = useTypeSelect({close})
+  // const { handleCreateFamily } = useFamilyCreate({close})
 
   /** ログインユーザ情報 */
-  const { userId, userInfo, isLoading: userLoading } = useLoginUserInfo()
-
+  const { userInfo, isLoading: userLoading } = useLoginUserInfo()
   /** ユーザIDに紐づく子供情報 */
-  const { data: child, mutate: mutateChild } = useChild(userId)
-  /** ユーザIDに紐づく親情報 */
-  const { data: parent, mutate: mutateParent } = useParent(userId)
-  /** 家族ID */
-  const familyId = child?.family_id || parent?.family_id;
-  /** 家族情報 */
-  const { data: family, mutate: mutateFamily } = useFamily(familyId)
+  const { data, isLoading, mutate } = useUserFamily(userInfo?.user_id)
+  const { parent, family } = data || {}
 
   useEffect(() => {
-    if (!opened) return
-
-    if (userId) {
-      mutateChild()
-      mutateParent()
-      if (familyId) mutateFamily()
-    }
+    mutate()
+    console.log("家族情報:", data)
   }, [opened])
 
   return (
@@ -60,7 +47,9 @@ export const SelectRolePopup = ({opened ,close}: {
       {/* 家族が取得できなかった場合 */}
         <div className="flex flex-col gap-2">
           {/* 新規家族作成ボタン */}
-          <Button variant="light">家族を作成する</Button>
+          <Button variant="light"
+            onClick={() => router.push(`${FAMILY_NEW_URL}`)}
+          >家族を作成する</Button>
           {/* 家族に参加ボタン */}
           <Button variant="light">家族に参加する</Button>
         </div>

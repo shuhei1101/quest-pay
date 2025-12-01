@@ -1,6 +1,6 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import { AppError, DatabaseError, UNKNOWN_ERROR } from "./appError"
-import { HOME_URL } from "./appConstants"
+import { HOME_URL, LOGIN_URL } from "./appConstants"
 import { appStorage } from "./_sessionStorage/appStorage"
 import { NextResponse } from "next/server"
 
@@ -52,7 +52,7 @@ export const handleAppError = (error: any, router: AppRouterInstance) => {
     
     // 前画面がある場合、遷移する
     const parentScreen = appStorage.parentScreen.get()
-    router.push(`${parentScreen ?? HOME_URL}`);
+    router.push(`${parentScreen ?? LOGIN_URL}`);
   } else {
     console.error("不明なエラー:", error);
   }

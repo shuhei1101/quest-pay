@@ -4,7 +4,7 @@ import { useUserSave } from "../../(user)/users/_hooks/useUserSave";
 import { useEffect } from "react";
 
 /** 名前入力ポップアップ */
-export const RegisterNamePopup = ({opened ,close, userId}: {
+export const NameRegisterPopup = ({opened ,close, userId}: {
   opened: boolean,
   close: () => void,
   userId: string

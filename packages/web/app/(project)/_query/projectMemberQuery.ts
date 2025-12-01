@@ -1,4 +1,4 @@
-import { RawUser } from "@/app/(user)/_schema/userSchema";
+import { UserEntitySchema } from "@/app/(user)/_schema/userSchema";
 import { clientSupabase } from "@/app/(core)/_supabase/clientSupabase";
 
 /** プロジェクトIDに紐づくプロジェクトメンバーIDを取得する */
@@ -25,7 +25,7 @@ export const fetchProjectMembers = async (project_id: number) => {
     // エラーをチェックする
     if (error) throw error;
 
-    const members = data?.flatMap(e => e.users) as RawUser[] ?? []
+    const members = data?.flatMap(e => e.users) as UserEntitySchema[] ?? []
 
     return members
 }

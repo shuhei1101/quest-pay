@@ -3,14 +3,14 @@
 import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/errorHandler"
 import { taskApi } from "../../../_api-client/taskApi"
-import { TaskFormSchema } from "../../../_schema/taskSchema"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { TASKS_URL } from "@/app/(core)/appConstants"
+import { TaskDelete } from "@/app/(task)/_schema/taskEntity"
 
 /** 削除ボタン押下時のハンドル */
 export const useTaskDelete = () => {
   const router = useRouter()
-  const handleDelete = async (task: TaskFormSchema) => {
+  const handleDelete = async (task: TaskDelete) => {
     try {
       // 削除確認を行う
       if (window.confirm('削除します。よろしいですか？')) {

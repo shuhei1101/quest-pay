@@ -1,13 +1,14 @@
 "use client"
 
 import useSWR from "swr"
-import { TaskColumns, TaskFilterSchema } from "../../_schema/taskSchema"
+import { TaskColumns } from "../../_schema/taskEntity"
 import { fetchTasks } from "../../_query/taskQuery"
 import { SortOrder } from "@/app/(core)/appSchema"
+import { TaskFilterType } from "../_schema/taskFilterSchema"
 
 /** タスクリストを取得する */
 export const useTasks = ({filter, sortColumn, sortOrder, page, pageSize}:{
-  filter: TaskFilterSchema, sortColumn: TaskColumns, sortOrder: SortOrder, page: number, pageSize: number}) => {
+  filter: TaskFilterType, sortColumn: TaskColumns, sortOrder: SortOrder, page: number, pageSize: number}) => {
 
   // 検索条件に紐づくタスクリストを取得する
   const { data, error, mutate, isLoading } = useSWR(

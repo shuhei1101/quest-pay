@@ -1,15 +1,12 @@
 "use client"
 
-import { Accordion, Button, Input } from "@mantine/core"
-import { TaskStatusCombobox } from "../[id]/_component/TaskStatusCombobox"
+import { Accordion, Button, Input, Pill, PillsInput } from "@mantine/core"
 import { Dispatch, SetStateAction, useState } from "react"
-import { TaskFilterSchema } from "../../_schema/taskSchema"
-import { RawTaskStatus } from "../../_schema/taskStatusSchema"
+import { TaskFilterType } from "../_schema/taskFilterSchema"
 
-export const TaskFilter = ({filter, setFilter, statuses, handleSearch}: {
-  filter: TaskFilterSchema,
-  setFilter: Dispatch<SetStateAction<TaskFilterSchema>> ,
-  statuses: RawTaskStatus[],
+export const TaskFilter = ({filter, setFilter, handleSearch}: {
+  filter: TaskFilterType,
+  setFilter: Dispatch<SetStateAction<TaskFilterType>> ,
   handleSearch: () => void
 }) => {
 
@@ -22,14 +19,31 @@ export const TaskFilter = ({filter, setFilter, statuses, handleSearch}: {
     handleSearch()
   }
 
-  // ステータス変更時のイベント
-  const onStutasChanged = (val: number | undefined) => {
-    // 選択された値をステータスにセットする
-    setFilter((prev) => ({
+  // タグ更新ラッパー関数
+  const setTags = (tags: string[]) => {
+    setFilter(prev => ({
       ...prev,
-      status_id: val !== -1 ? val : undefined
+      tags
     }))
   }
+
+  /** タグ入力状態 */
+  const [tagInputValue, setTagInputValue] = useState("")
+
+  /** タグ入力時のハンドル */
+  const handleTag = () => {
+    const newTag = tagInputValue.trim()
+    // タグが空白もしくは既に登録済みの場合、処理を終了する
+    if (newTag && !filter.tags.includes(newTag)) {
+      // タグを追加する
+      setTags([...filter.tags, newTag])
+    }
+    // タグ入力状態を初期化する
+    setTagInputValue("")
+  }
+
+  /** IME入力状態 */
+  const [isComposing, setIsComposing] = useState(false);
 
   return (
     <div>
@@ -39,15 +53,7 @@ export const TaskFilter = ({filter, setFilter, statuses, handleSearch}: {
           <Accordion.Panel>
           <div className="flex gap-6  items-center p-2 flex-wrap">
             <div className="flex gap-6 flex-nowrap">
-              <Input.Wrapper label="ID">
-                <Input onChange={(event) => {
-                  const value = event.currentTarget.value.trim();
-                  setFilter((prev) => ({
-                    ...prev,
-                    id: value ? Number(value) : undefined
-                  }))
-                }} className="max-w-20" type="number" />
-              </Input.Wrapper>
+              {/* タスク名 */}
               <Input.Wrapper label="タスク名">
                 <Input onChange={(event) => {
                   const value = event.currentTarget.value.trim();
@@ -58,9 +64,30 @@ export const TaskFilter = ({filter, setFilter, statuses, handleSearch}: {
                 }} className="max-w-120" />
               </Input.Wrapper>
             </div>
-            <Input.Wrapper label="ステータス" >
-              <TaskStatusCombobox onChanged={onStutasChanged} taskStatuses={statuses} currentValue={filter?.status_id} />
-            </Input.Wrapper>
+            {/* タグ */}
+            <PillsInput label="タグ">
+              <Pill.Group>
+                {filter.tags.map((tag) => (
+                  <Pill key={tag} withRemoveButton
+                    onRemove={() => setTags(filter.tags.filter((t) => t !== tag))}
+                  >{tag}</Pill>
+                ))}
+                <PillsInput.Field placeholder="タグを追加" 
+                  value={tagInputValue}
+                  onChange={(e) => setTagInputValue(e.target.value)}
+                  onBlur={() => handleTag()}
+                  onCompositionStart={() => setIsComposing(true)}
+                  onCompositionEnd={() => setIsComposing(false)}
+                  onKeyDown={(e) => {
+                    if (e.key == "Enter" && !isComposing) {
+                      e.preventDefault()
+                      handleTag()
+                    }
+                  }}
+                />
+              </Pill.Group>
+            </PillsInput>
+
           </div>
           <div className="mb-5" />
           <div className="flex justify-end">

@@ -1,5 +1,5 @@
 import { taskDao } from "../_data-access/taskDao";
-import { TaskFormSchema } from "../_schema/taskSchema";
+import { TaskFormSchema } from "../_schema/taskEntity";
 
 /** タスクを更新する */
 export const updateTask = async (task: TaskFormSchema) => {

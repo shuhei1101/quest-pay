@@ -1,7 +1,7 @@
 'use client'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createUserSchemaFromEntity, RawUser, UserFormSchema, userFormSchema } from "../../../_schema/userSchema"
+import { createUserSchemaFromEntity, UserEntitySchema, UserFormSchema, userFormSchema } from "../../../_schema/userSchema"
 import useSWR from "swr"
 import { fetchUser } from "../../../_query/userQuery"
 import { useEffect, useState } from "react"

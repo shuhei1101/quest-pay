@@ -1,6 +1,6 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
-import { createUserFilterFromQueryObj, RawUser, UserColumns, UserFilterSchema } from "../_schema/userSchema"
+import { createUserFilterFromQueryObj, UserEntitySchema, UserColumns, UserFilterSchema } from "../_schema/userSchema"
 import { useUserTypes } from "../_hooks/useUserTypes"
 import { DataTable, DataTableSortStatus } from "mantine-datatable"
 import { useEffect, useState, Suspense } from "react"
@@ -33,7 +33,7 @@ function UsersContent() {
   const { fetchedTypes, isLoading: typeLoading } = useUserTypes()
   
   /** ソート状態 */
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<RawUser>>({
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<UserEntitySchema>>({
     columnAccessor: 'user_id' as UserColumns,
     direction: 'asc',
   })
@@ -83,7 +83,7 @@ function UsersContent() {
        />
       <div className="m-5" />
       {/* ユーザ一覧テーブル */}
-      <DataTable<RawUser> 
+      <DataTable<UserEntitySchema> 
         withTableBorder 
         highlightOnHover
         noRecordsText=""

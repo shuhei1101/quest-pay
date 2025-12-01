@@ -1,25 +1,14 @@
-import { RawUser } from "@/app/(user)/_schema/userSchema"
+import { UserEntitySchema } from "@/app/(user)/_schema/userSchema"
 import { Button, Table } from "@mantine/core"
 
 const BTN_SIZE = 60
 
 /** プロジェクトメンバーテーブル */
 export const ProjectMemberTable = ({members, onDeleteClick, onAddClick}: {
-  members: RawUser[],
+  members: UserEntitySchema[],
   onDeleteClick: (userId: string) => void,
   onAddClick: () => void,
 }) => {
-
-  const rows = members.map((member) => (
-    <Table.Tr key={member.user_id}>
-      <Table.Td>{member.name}</Table.Td>
-      <Table.Td w={BTN_SIZE}>
-        <Button w={BTN_SIZE} color="red" size="xs" variant="light" onClick={() => onDeleteClick(member.user_id)}>
-          <p>削除</p>
-        </Button>
-      </Table.Td>
-    </Table.Tr>
-  ))
   
   return (
     <Table striped highlightOnHover withTableBorder withColumnBorders>
@@ -35,8 +24,21 @@ export const ProjectMemberTable = ({members, onDeleteClick, onAddClick}: {
           </Table.Th>
         </Table.Tr>
       </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-
+      <Table.Tbody>
+        {members.map((member) => (
+          <Table.Tr key={member.user_id}>
+            {/* メンバー名 */}
+            <Table.Td>{member.name}</Table.Td>
+            {/* 削除ボタン */}
+            <Table.Td w={BTN_SIZE}>
+              <Button w={BTN_SIZE} color="red" size="xs" variant="light" onClick={() => onDeleteClick(member.user_id)}>
+                <p>削除</p>
+              </Button>
+            </Table.Td>
+          </Table.Tr>
+          ))
+        }
+      </Table.Tbody>
     </Table>
 
   )

@@ -1,44 +1,46 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
-import { createTaskFilterFromQueryObj, RawTask, TaskColumns, TaskFilterSchema } from "../_schema/taskSchema"
-import { useTaskStatuses } from "../_hooks/useTaskStatuses"
+import { TaskEntity, TaskColumns } from "../_schema/taskEntity"
 import { DataTable, DataTableSortStatus } from "mantine-datatable"
 import { useEffect, useState, Suspense } from "react"
 import { useTasks } from "./_hooks/useTasks"
-import { TaskFilter } from "./_components/TaskFilter"
 import { TASKS_URL } from "../../(core)/appConstants"
 import { AuthorizedPageLayout } from "../../(auth)/_components/AuthorizedPageLayout"
-import { Button, LoadingOverlay } from "@mantine/core"
+import { Button } from "@mantine/core"
 import Link from "next/link"
-import { getStatusName } from "../_schema/taskStatusSchema"
 import { useLoginUserInfo } from "@/app/(auth)/_hooks/useLoginUserInfo"
+import { TaskFilterSchema, TaskFilterType } from "./_schema/taskFilterSchema"
+import { TaskFilter } from "./_components/TaskFilter"
 
 function TasksContent() {
   const router = useRouter();
 
   /** ログインユーザ情報を取得する */
-  const {isGuest, isAdmin} = useLoginUserInfo()
+  const { userInfo } = useLoginUserInfo()
 
   /** タスクフィルター状態 */
-  const [taskFilter, setTaskFilter] = useState<TaskFilterSchema>({})
+  const [taskFilter, setTaskFilter] = useState<TaskFilterType>({tags: []})
   
   /** 検索実行用フィルター状態 */
-  const [searchFilter, setSearchFilter] = useState<TaskFilterSchema>({})
+  const [searchFilter, setSearchFilter] = useState<TaskFilterType>({tags: []})
   
   /** クエリストリングの状態 */
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
   
   // パラメータをタスクフィルターにセットする
   useEffect(() => {
-    const queryObj: TaskFilterSchema = searchParams ? Object.fromEntries(searchParams.entries()): {}
-    setTaskFilter(createTaskFilterFromQueryObj(queryObj))
+    if (!searchParams) return
+    const queryObj = searchParams ? Object.fromEntries(searchParams.entries()): {}
+    // tags を配列に変換
+    const parsedQuery = {
+      ...queryObj,
+      tags: queryObj.tags ? queryObj.tags.split(",") : []
+    }
+    setTaskFilter(TaskFilterSchema.parse(parsedQuery))
   }, [searchParams])
 
-  // タスクステータスマスタを取得する
-  const { fetchedStatuses, isLoading: statusLoading } = useTaskStatuses()
-  
   /** ソート状態 */
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<RawTask>>({
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<TaskEntity>>({
     columnAccessor: 'id' as TaskColumns,
     direction: 'asc',
   })
@@ -62,7 +64,7 @@ function TasksContent() {
   })
 
   /** 全体のロード状態 */
-  const loading = statusLoading || taskLoading;
+  const loading = taskLoading;
 
   /** 検索ボタン押下時のハンドル */
   const handleSerch = () => {
@@ -83,16 +85,16 @@ function TasksContent() {
 
   return (
     <AuthorizedPageLayout title="タスク一覧" actionButtons={(
-      <Button hidden={isGuest} onClick={() => {
+      <Button hidden={false} onClick={() => {
         router.push("/tasks/new")
       }}>新規作成</Button>
     )}>
       {/* 検索条件欄 */}
-      <TaskFilter statuses={fetchedStatuses} filter={taskFilter} handleSearch={handleSerch} setFilter={setTaskFilter} 
+      <TaskFilter filter={taskFilter} handleSearch={handleSerch} setFilter={setTaskFilter} 
        />
       <div className="m-5" />
       {/* タスク一覧テーブル */}
-      <DataTable<RawTask> 
+      <DataTable<TaskEntity> 
         withTableBorder 
         highlightOnHover
         noRecordsText=""
@@ -105,15 +107,6 @@ function TasksContent() {
             return (<Link href={url} className="text-blue-400">{task.id}</Link>)}
           },
           { accessor: 'name', title: 'タスク名', sortable: true, resizable: true },
-          { accessor: 'detail', title: '詳細', sortable: true, resizable: true,
-            render: (record) => {
-              const text = record.detail || '';
-              return text.length > 30 ? text.slice(0, 30) + '...' : text;
-            }
-           },
-          { accessor: 'status_id', title: 'ステータス', sortable: true, resizable: true,
-            render: (task) => getStatusName(fetchedStatuses, task.status_id)
-          }
         ]}
         sortStatus={sortStatus}
         onSortStatusChange={setSortStatus}
