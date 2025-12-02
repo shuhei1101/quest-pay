@@ -1,6 +1,5 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
-import { createUserFilterFromQueryObj, UserEntitySchema, UserColumns, UserFilterSchema } from "../_schema/userSchema"
 import { useUserTypes } from "../_hooks/useUserTypes"
 import { DataTable, DataTableSortStatus } from "mantine-datatable"
 import { useEffect, useState, Suspense } from "react"
@@ -8,7 +7,6 @@ import { useUsers } from "./_hooks/useUsers"
 import {  USERS_URL } from "../../(core)/appConstants"
 import { AuthorizedPageLayout } from "../../(auth)/_components/AuthorizedPageLayout"
 import Link from "next/link"
-import { getTypeName } from "../_schema/userTypeSchema"
 import { UserFilterWithType } from "./_components/UserFilterWithType"
 
 function UsersContent() {

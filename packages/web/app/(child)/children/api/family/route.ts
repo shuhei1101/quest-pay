@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { deleteTask } from "../../../_service/deleteTask";
 import { handleServerError } from "@/app/(core)/errorHandler";
-import { RegisterTaskRequestSchema, UpdateTaskRequestSchema } from "../schema";
+import { RegisterTaskRequest, RegisterTaskRequestSchema, UpdateTaskRequestSchema } from "../schema";
 import { taskDao } from "@/app/(task)/_data-access/taskDao";
 import { TaskDeleteSchema } from "@/app/(task)/_schema/taskEntity";
 

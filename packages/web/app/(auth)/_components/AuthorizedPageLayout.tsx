@@ -5,10 +5,8 @@ import { LoadingOverlay, Title } from "@mantine/core";
 import { FeedbackMessageWrapper } from "../../(shared)/_components/FeedbackMessageWrapper";
 import Header from "../../(shared)/_components/Header";
 import { useDisclosure } from "@mantine/hooks";
-import { NameRegisterPopup } from "./NameRegisterPopup";
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo";
 import { useRouter } from "next/navigation";
-import { AUTH_ERROR_URL } from "../../(core)/appConstants";
 
 /** 認証済みのページに適用するレイアウト */
 export const AuthorizedPageLayout = ({ children, title, actionButtons, requiredParent, requiredChild }: {
@@ -50,8 +48,6 @@ export const AuthorizedPageLayout = ({ children, title, actionButtons, requiredP
     }
   }, [isLoading, requiredParent, requiredChild, userInfo, router, redirected])
 
-  if (isLoading) return <div>読み込み中...</div>;
-  
   return (
     <>
     {/* ロード中のオーバーレイ */}

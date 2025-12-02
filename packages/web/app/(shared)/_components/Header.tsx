@@ -12,7 +12,7 @@ export default function Header() {
   /** ポップアップの表示状態 */
   const [opened, { open, close }] = useDisclosure(false);
   /** ログインユーザ情報 */
-  const {userInfo, isAdmin, isGuest} = useLoginUserInfo()
+  const { userInfo } = useLoginUserInfo()
 
   return (
     <>
@@ -61,11 +61,11 @@ export default function Header() {
             leftSection={<IconFiles size={16} stroke={1.5} />}
           />
           {/* ゲスト以外 */}
-          {!isGuest && <NavLink
+          <NavLink
             href={`${TASK_NEW_URL}`}
             label="タスク作成"
             leftSection={<IconFilePlus size={16} stroke={1.5} />}
-          />}
+          />
         </NavLink>
         <NavLink
           href="#required-for-focus"
@@ -78,20 +78,18 @@ export default function Header() {
             leftSection={<IconFolders size={16} stroke={1.5} />}
           />
           {/* ゲスト以外 */}
-          {!isGuest && <NavLink
+          <NavLink
             href={`${PROJECT_NEW_URL}`}
             label="プロジェクト作成"
             leftSection={<IconFolderPlus size={16} stroke={1.5} />}
-          />}
+          />
         </NavLink>
         {/* 管理者のみ */}
-        {isAdmin &&
-          <NavLink
-            href={`${USERS_URL}`}
-            label="ユーザ管理"
-            leftSection={<IconUsers size={16} stroke={1.5} />}
-          />
-        }
+        <NavLink
+          href={`${USERS_URL}`}
+          label="ユーザ管理"
+          leftSection={<IconUsers size={16} stroke={1.5} />}
+        />
       </Drawer>
     </>
   )

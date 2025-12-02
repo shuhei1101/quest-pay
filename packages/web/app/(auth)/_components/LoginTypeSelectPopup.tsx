@@ -2,7 +2,7 @@ import { Button, Input, Modal, Space, Text } from "@mantine/core"
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"
 import { useRouter } from "next/navigation"
 import { FAMILY_NEW_URL } from "@/app/(core)/appConstants"
-import { useUserFamily } from "@/app/(family)/_hooks/useFamily"
+import { useUserFamily } from "@/app/(family)/_hooks/useUserFamily"
 import { useEffect } from "react"
 
 
@@ -16,15 +16,13 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
   /** ハンドル */
   // const { handleCreateFamily } = useFamilyCreate({close})
 
-  /** ログインユーザ情報 */
-  const { userInfo, isLoading: userLoading } = useLoginUserInfo()
-  /** ユーザIDに紐づく子供情報 */
-  const { data, isLoading, mutate } = useUserFamily(userInfo?.user_id)
-  const { parent, family } = data || {}
+  /** ユーザIDに紐づく家族情報 */
+  const { parent, family, child, isLoading, mutate } = useUserFamily()
 
   useEffect(() => {
+    if (!opened) return
     mutate()
-    console.log("家族情報:", data)
+    console.log("家族情報:", family)
   }, [opened])
 
   return (

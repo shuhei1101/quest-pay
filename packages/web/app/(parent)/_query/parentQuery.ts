@@ -11,7 +11,5 @@ export const fetchParent = async (userId: string) => {
   // エラーをチェックする
   if (error) throw error
 
-  console.log("親情報", JSON.stringify(data))
-
-  return data && ParentEntitySchema.parse(data[0])
+  return data.length !== 0 ? ParentEntitySchema.parse(data[0]) : undefined
 }

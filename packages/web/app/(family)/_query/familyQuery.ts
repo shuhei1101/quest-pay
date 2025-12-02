@@ -11,5 +11,5 @@ export const fetchFamily = async (id: number) => {
   // エラーをチェックする
   if (error) throw error;
 
-    return data && FamilyEntitySchema.parse(data[0])
+  return data.length !== 0 ? FamilyEntitySchema.parse(data[0]) : undefined
 }
