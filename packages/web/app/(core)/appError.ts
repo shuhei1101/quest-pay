@@ -14,6 +14,15 @@ export class AppError extends Error {
   }
 }
 
+/** クライアント認証エラー */
+export const CLIENT_AUTH_ERROR_CODE = 'CLIENT_AUTH_ERROR'
+export class ClientAuthError extends AppError {
+  constructor(message = 'ログイン状態が無効です。') {
+    super(CLIENT_AUTH_ERROR_CODE, 401, message);
+  }
+}
+
+
 /** サーバ内失敗 */
 export const SERVER_ERROR_CODE = 'AUTH_ERROR'
 export class ServerError extends AppError {

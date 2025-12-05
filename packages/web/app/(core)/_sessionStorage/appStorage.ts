@@ -1,7 +1,6 @@
-import { IconCategoryEntity, IconCategoryEntitySchema } from "@/app/(shared)/_icon/_schema/iconCategorySchema"
-import { IconEntityWithCategoriesEntity, IconEntityWithCategoriesSchema } from "@/app/(shared)/_icon/_schema/iconSchema"
-import { ProfileEntity } from "@/app/(user)/_schema/profileEntity"
-import { UserInfoView } from "@/app/(user)/schema"
+import { IconCategoryEntity, IconCategoryEntitySchema } from "@/app/(core)/_icon/_schema/iconCategorySchema"
+import { IconEntityWithCategoriesEntity, IconEntityWithCategoriesSchema } from "@/app/(core)/_icon/_schema/iconSchema"
+import { UserInfoView } from "@/app/api/users/view"
 import toast from "react-hot-toast"
 
 export const appStorage = {

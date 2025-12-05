@@ -56,6 +56,7 @@ export const handleAppError = (error: any, router: AppRouterInstance) => {
   } else {
     console.error("不明なエラー:", error);
   }
+  throw new Error(error.message)
 }
 
 // データ取得例外時のハンドル
