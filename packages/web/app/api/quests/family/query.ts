@@ -1,12 +1,12 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod"
 import { FamilyQuestViewSchema } from "./view";
-import { QuestTagEntitySchema } from "@/app/quests/_schema/questTagEntity";
+import { QuestTagEntitySchema } from "@/app/(app)/quests/_schema/questTagEntity";
 import { FamilyQuestSearchParams, QuestsFamilyGetResponse } from "./schema";
 import { devLog } from "@/app/(core)/util";
 
 /** 取得結果の型 */
-export const FetchQuestsResult = z.array(FamilyQuestViewSchema.extend({
+export const FetchFamilyQuestsResult = z.array(FamilyQuestViewSchema.extend({
   quest_tags: z.array(QuestTagEntitySchema)
 }))
 
@@ -44,7 +44,7 @@ export const fetchFamilyQuests = async ({
 
     if (error) throw error
 
-    const fetchedQuests = FetchQuestsResult.parse(data ?? [])
+    const fetchedQuests = FetchFamilyQuestsResult.parse(data ?? [])
 
     // 指定タグに完全一致しているクエストを絞り込む
     const questsWithAllTags = fetchedQuests.filter(quest =>

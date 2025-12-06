@@ -1,7 +1,7 @@
 import { DatabaseError } from "@/app/(core)/appError"
 import { QuestInsert } from "./entity"
 import { SupabaseClient } from "@supabase/supabase-js"
-import { QuestTagUpdate } from "../../quests/_schema/questTagEntity"
+import { QuestTagUpdate } from "../../(app)/quests/_schema/questTagEntity"
 import { QuestDelete, QuestUpdate } from "@/app/api/quests/entity"
 import { questExclusiveControl } from "./dbHelper"
 

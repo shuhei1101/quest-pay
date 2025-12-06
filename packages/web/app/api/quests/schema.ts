@@ -1,8 +1,8 @@
 import { z } from "zod"
 import { SortOrderSchema } from "@/app/(core)/schema"
-import { QuestTagInsertSchema } from "../../quests/_schema/questTagEntity"
+import { QuestTagInsertSchema } from "../../(app)/quests/_schema/questTagEntity"
 import { QuestColumnsSchema, QuestInsertSchema } from "./entity"
-import { FetchQuestsResult } from "./query"
+import { FetchFamilyQuestsResult } from "./family/query"
 
 /** クエストフィルター */
 export const QuestFilterSchema = z.object({
@@ -23,7 +23,7 @@ export type QuestSearchParams = z.infer<typeof QuestSearchParamsSchema>
 
 /** クエスト取得レスポンススキーマ */
 export const QuestsGetResponseSchema = z.object({
-  quests: FetchQuestsResult,
+  quests: FetchFamilyQuestsResult,
   totalRecords: z.number()
 })
 export type QuestsGetResponse = z.infer<typeof QuestsGetResponseSchema>

@@ -1,6 +1,6 @@
 import { Button, Group, Input, Modal, Space, Title } from "@mantine/core"
 import { useUserForm } from "../_hooks/useRegisterUserForm";
-import { useUserSave } from "../../users/_hooks/useUserSave";
+import { useUserSave } from "../../(app)/users/_hooks/useUserSave";
 import { useEffect } from "react";
 
 /** 名前入力ポップアップ */

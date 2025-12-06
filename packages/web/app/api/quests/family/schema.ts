@@ -1,9 +1,9 @@
 import { z } from "zod"
 import { SortOrderSchema } from "@/app/(core)/schema"
-import { FetchQuestsResult } from "./query"
+import { FetchFamilyQuestsResult } from "./query"
 import { QuestInsertSchema } from "@/app/api/quests/entity"
 import { FamilyQuestInsertSchema } from "./entity"
-import { QuestTagInsertSchema } from "@/app/quests/_schema/questTagEntity"
+import { QuestTagInsertSchema } from "@/app/(app)/quests/_schema/questTagEntity"
 import { FamilyQuestColumnsSchema } from "./view"
 
 /** クエストフィルター */
@@ -25,7 +25,7 @@ export type FamilyQuestSearchParams = z.infer<typeof FamilyQuestSearchParamsSche
 
 /** クエスト取得レスポンススキーマ */
 export const QuestsFamilyGetResponseSchema = z.object({
-  quests: FetchQuestsResult,
+  quests: FetchFamilyQuestsResult,
   totalRecords: z.number()
 })
 export type QuestsFamilyGetResponse = z.infer<typeof QuestsFamilyGetResponseSchema>

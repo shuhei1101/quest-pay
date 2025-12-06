@@ -4,7 +4,7 @@ import { z } from "zod"
 export const QuestEntitySchema = z.object({
   id: z.number(),
   name: z.string(),
-  type: z.enum(["template", "share", "family"]),
+  type: z.enum(["template", "public", "family"]),
   icon: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
