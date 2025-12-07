@@ -3,8 +3,7 @@ import { SupabaseClient } from "@supabase/supabase-js"
 import { QuestDelete, QuestInsert, QuestUpdate } from "@/app/api/quests/entity"
 import { questExclusiveControl } from "./dbHelper"
 import { QuestTagUpdate } from "@/app/(app)/quests/tag/entity"
-import { FamilyQuestInsert, FamilyQuestUpdate } from "./entity"
-import { z } from "zod"
+import { FamilyQuestEntitySchema, FamilyQuestInsert, FamilyQuestUpdate } from "./entity"
 import { devLog } from "@/app/(core)/util"
 
 /** クエストを挿入する */
@@ -32,7 +31,7 @@ export const insertFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
     throw new DatabaseError('クエストの作成に失敗しました。')
   }
 
-  const questId = z.number().parse(data)
+  const questId = FamilyQuestEntitySchema.shape.quest_id.parse(data)
 
   return questId
 }

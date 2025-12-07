@@ -13,16 +13,16 @@ export const LOGIN_URL = `/login`
 // クエスト
 export const QUESTS_URL = `/quests`
 export const QUESTS_NEW_URL = `${QUESTS_URL}/new`
-export const QUEST_URL =(questId: number) => `${QUESTS_URL}/${questId}`
+export const QUEST_URL =(questId: string) => `${QUESTS_URL}/${questId}`
 export const QUESTS_API_URL = `/api/quests/`
-export const QUEST_API_URL = (questId: number) => `/api/quests/${questId}`
+export const QUEST_API_URL = (questId: string) => `/api/quests/${questId}`
 
 // 家族クエスト
 export const FAMILY_QUESTS_URL = `${QUESTS_URL}/family`
-export const FAMILY_QUEST_URL = (questId: number) => `${QUEST_URL(questId)}/family`
+export const FAMILY_QUEST_URL = (questId: string) => `${QUEST_URL(questId)}/family`
 export const FAMILY_QUESTS_NEW_URL = `${QUESTS_NEW_URL}/family`
 export const FAMILY_QUESTS_API_URL = `${QUESTS_API_URL}/family`
-export const FAMILY_QUEST_API_URL = (questId: number) => `${QUEST_API_URL(questId)}/family`
+export const FAMILY_QUEST_API_URL = (questId: string) => `${QUEST_API_URL(questId)}/family`
 
 // 家族
 export const FAMILIES_URL = `/families`

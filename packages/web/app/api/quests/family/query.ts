@@ -19,7 +19,7 @@ export const fetchFamilyQuests = async ({
 }: {
   params: FamilyQuestSearchParams,
   supabase: SupabaseClient,
-  familyId: number
+  familyId: string
 }) => {
 
   // データを取得する
@@ -68,7 +68,7 @@ export const fetchFamilyQuest = async ({
   questId
 }: {
   supabase: SupabaseClient,
-  questId: number
+  questId: string
 }) => {
 
   // データを取得する

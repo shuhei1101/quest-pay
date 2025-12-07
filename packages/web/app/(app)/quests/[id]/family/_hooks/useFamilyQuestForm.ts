@@ -7,7 +7,7 @@ import { useState } from "react"
 import { devLog, isSameArray } from "@/app/(core)/util"
 
 /** クエストフォームを取得する */
-export const useFamilyQuestForm = ({questId}: {questId?: number}) => {
+export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
 
   /** クエストフォームのデフォルト値 */
   const defaultQuest: FamilyQuestFormType = {

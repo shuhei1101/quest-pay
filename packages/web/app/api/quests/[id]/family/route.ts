@@ -17,7 +17,7 @@ export async function GET(
     try {
       // パスパラメータからIDを取得する
       const params = await context.params
-      const questId = Number(params.id)
+      const questId = params.id
       
       devLog("GetFamilyQuest.パラメータ.ID: ", params.id)
       
@@ -42,7 +42,7 @@ export async function PUT(
     try {
       // パスパラメータからIDを取得する
       const params = await context.params
-      const questId = Number(params.id)
+      const questId = params.id
 
       // bodyから家族クエストを取得する
       const body = await req.json()
@@ -87,7 +87,7 @@ export async function DELETE(
     try {
       // パスパラメータからIDを取得する
       const params = await context.params
-      const questId = Number(params.id)
+      const questId = params.id
 
       // bodyから家族クエストを取得する
       const body = await req.json()

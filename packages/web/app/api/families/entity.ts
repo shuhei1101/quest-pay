@@ -4,7 +4,7 @@ import { IdSchema as Id } from "@/app/(core)/_schema/checkSchema"
 
 /** DBの家族スキーマ */
 export const FamilyEntitySchema = z.object({
-  id: z.number(),
+  id: z.string(),
   display_id: z.string(),
   local_name: z.string(),
   online_name: z.string().optional(),

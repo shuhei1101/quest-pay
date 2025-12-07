@@ -2,7 +2,7 @@ import { z } from "zod"
 import { SortOrderSchema } from "@/app/(core)/schema"
 import { FetchFamilyQuestsResult } from "./query"
 import { QuestInsertSchema } from "@/app/api/quests/entity"
-import { FamilyQuestInsertSchema } from "./entity"
+import { FamilyQuestEntitySchema, FamilyQuestInsertSchema } from "./entity"
 import { QuestTagInsertSchema } from "@/app/(app)/quests/tag/entity"
 import { FamilyQuestColumnsSchema } from "./view"
 
@@ -40,6 +40,6 @@ export type PostFamilyQuestRequest = z.infer<typeof PostFamilyQuestRequestSchema
 
 /** クエスト挿入レスポンススキーマ */
 export const PostFamilyQuestResponseSchema = z.object({
-  questId: z.number()
+  questId: FamilyQuestEntitySchema.shape.quest_id
 })
 export type PostFamilyQuestResponse = z.infer<typeof PostFamilyQuestResponseSchema>

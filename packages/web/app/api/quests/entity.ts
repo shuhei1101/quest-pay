@@ -2,7 +2,7 @@ import { z } from "zod"
 
 /** DBのクエストスキーマ */
 export const QuestEntitySchema = z.object({
-  id: z.number(),
+  id: z.string(),
   name: z.string(),
   type: z.enum(["template", "public", "family"]),
   created_at: z.string(),

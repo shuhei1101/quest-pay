@@ -2,7 +2,7 @@ import { z } from "zod"
 
 /** DBの親スキーマ */
 export const ParentEntitySchema = z.object({
-  id: z.number(),
+  id: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
 })

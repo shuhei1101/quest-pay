@@ -13,7 +13,7 @@ export const useDeleteFamilyQuest = () => {
 
   /** 削除処理 */
   const mutation = useMutation({
-    mutationFn: ({questId, updatedAt}: {questId: number, updatedAt: string}) => deleteFamilyQuest({
+    mutationFn: ({questId, updatedAt}: {questId: string, updatedAt: string}) => deleteFamilyQuest({
       quest: {
         id: questId,
         updated_at: updatedAt
@@ -29,7 +29,7 @@ export const useDeleteFamilyQuest = () => {
   })
 
   /** 削除ハンドル */
-  const handleDelete = ({questId, updatedAt}: {questId?: number, updatedAt?: string}) => {
+  const handleDelete = ({questId, updatedAt}: {questId?: string, updatedAt?: string}) => {
     if (!questId || !updatedAt) throw new ClientValueError()
     if (!window.confirm('削除します。よろしいですか？')) return
     mutation.mutate({questId, updatedAt})

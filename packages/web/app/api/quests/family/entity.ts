@@ -2,10 +2,10 @@ import { z } from "zod"
 
 /** DBのクエストスキーマ */
 export const FamilyQuestEntitySchema = z.object({
-  id: z.number(),
-  family_id: z.number(),
+  id: z.string(),
+  family_id: z.string(),
   is_public: z.boolean(),
-  quest_id: z.number(),
+  quest_id: z.string(),
 })
 export type FamilyQuestEntity = z.infer<typeof FamilyQuestEntitySchema>
 

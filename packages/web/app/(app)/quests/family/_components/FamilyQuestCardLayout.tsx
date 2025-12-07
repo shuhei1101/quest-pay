@@ -4,7 +4,7 @@ import { Badge, Card, Group, Text } from "@mantine/core";
 
 export const FamilyQuestCardLayout = ({quest, onClick}: {
   quest: FamilyQuestView,
-  onClick: (questId: number) => void
+  onClick: (questId: string) => void
 }) => (
   <Card shadow="sm" padding="md" radius="md" withBorder
     onClick={() => onClick(quest.id)}

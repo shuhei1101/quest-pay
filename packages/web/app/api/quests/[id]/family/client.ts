@@ -5,7 +5,7 @@ import { devLog } from "@/app/(core)/util";
 
 
 /** 家族クエストを取得する */
-export const getFamilyQuest = async (questId: number) => {
+export const getFamilyQuest = async (questId: string) => {
   devLog("getFamilyQuest.実行API: ", `${FAMILY_QUEST_API_URL(questId)}`)
   // APIを実行する
   const res = await fetch(`${FAMILY_QUEST_API_URL(questId)}`, {

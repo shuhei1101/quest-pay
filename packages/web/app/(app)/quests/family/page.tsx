@@ -118,7 +118,10 @@ function QuestsContent() {
   }, [fetchedQuests, page])
 
   /** クエスト選択時のハンドル */
-  const handleQuestId = (questId: number) => router.push(FAMILY_QUEST_URL(questId))
+  const handleQuestId = (questId: string) => router.push(FAMILY_QUEST_URL(questId))
+
+  /** IME入力状態 */
+  const [isComposing, setIsComposing] = useState(false)
 
   return (
       <>
@@ -166,7 +169,15 @@ function QuestsContent() {
                 ...prev,
                 name: value
               }))
-            }} 
+            }}
+            onCompositionStart={() => setIsComposing(true)}
+            onCompositionEnd={() => setIsComposing(false)}
+            onKeyDown={(e) => {
+              if (e.key == "Enter" && !isComposing) {
+                e.preventDefault()
+                handleSearch()
+              }
+            }}
             className="w-full" 
           />
           {/* フィルター設定ポップアップ起動 */}

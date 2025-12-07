@@ -15,7 +15,7 @@ export const useUpdateFamilyQuest = () => {
 
   /** 更新処理 */
   const mutation = useMutation({
-    mutationFn: ({form, questId, updatedAt}: {form: FamilyQuestFormType, questId: number, updatedAt: string}) => putFamilyQuest({
+    mutationFn: ({form, questId, updatedAt}: {form: FamilyQuestFormType, questId: string, updatedAt: string}) => putFamilyQuest({
       family_quest: {
         is_public: form.isPublic,
       },
@@ -41,7 +41,7 @@ export const useUpdateFamilyQuest = () => {
   })
 
   /** 更新ハンドル */
-  const handleUpdate = ({form, questId, updatedAt}: {form: FamilyQuestFormType, questId?: number, updatedAt?: string}) => {
+  const handleUpdate = ({form, questId, updatedAt}: {form: FamilyQuestFormType, questId?: string, updatedAt?: string}) => {
     if (!questId || !updatedAt) throw new ClientValueError()
     if (!window.confirm('更新します。よろしいですか？')) return
     mutation.mutate({form, questId, updatedAt})

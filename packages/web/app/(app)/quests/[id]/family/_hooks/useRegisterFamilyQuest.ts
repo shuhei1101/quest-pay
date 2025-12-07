@@ -9,7 +9,7 @@ import { handleAppError } from "@/app/(core)/errorHandler"
 
 
 /** 登録ボタン押下時のハンドル */
-export const useRegisterFamilyQuest = ({setId}: {setId: (id: number) => void}) => {
+export const useRegisterFamilyQuest = ({setId}: {setId: (id: string) => void}) => {
   const router = useRouter()
   const queryClient = useQueryClient()
 

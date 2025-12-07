@@ -2,7 +2,7 @@ import { z } from "zod"
 
 /** DBの子供スキーマ */
 export const ChildEntitySchema = z.object({
-  id: z.number(),
+  id: z.string(),
   min_savings: z.number().optional(),
   current_savings: z.number().optional(),
   current_level: z.number().optional(),

@@ -18,7 +18,7 @@ export const FamilyQuestForm = ( params: {
 }) => {
 
   /** 家族クエストID */
-  const [id, setId] = useState<number | undefined>(() => params.id ? Number(params.id) : undefined)
+  const [id, setId] = useState<string | undefined>(params.id)
   devLog("FamilyQuestForm.ID: ", id)
 
   /** ポップアップ制御状態 */

@@ -11,7 +11,7 @@ export const FamilyQuestFilter = ({filter, setFilter, handleSearch}: {
 }) => {
 
   // アコーディオンの開閉状態（デフォルトは開いた状態）
-  const [openedAccordion, setOpenedAccordion] = useState<string | null>("search");
+  const [openedAccordion, setOpenedAccordion] = useState<string | null>("search")
 
   // 検索ボタン押下時のイベント
   const onSearchClick = () => {
@@ -43,7 +43,7 @@ export const FamilyQuestFilter = ({filter, setFilter, handleSearch}: {
   }
 
   /** IME入力状態 */
-  const [isComposing, setIsComposing] = useState(false);
+  const [isComposing, setIsComposing] = useState(false)
 
   return (
     <div>
@@ -56,7 +56,7 @@ export const FamilyQuestFilter = ({filter, setFilter, handleSearch}: {
               {/* クエスト名 */}
               <Input.Wrapper label="クエスト名">
                 <Input onChange={(event) => {
-                  const value = event.currentTarget.value.trim();
+                  const value = event.currentTarget.value.trim()
                   setFilter((prev) => ({
                     ...prev,
                     name: value

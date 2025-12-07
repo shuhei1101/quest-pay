@@ -5,7 +5,7 @@ import { fetchFamilyQuest } from "./query"
 export const questExclusiveControl = {
   /** 既に存在するかどうかを確認する */
   existsCheck: async ({id, supabase}: {
-    id: number, 
+    id: string, 
     supabase: SupabaseClient
   }) => {
     const record = await fetchFamilyQuest({questId: id, supabase})

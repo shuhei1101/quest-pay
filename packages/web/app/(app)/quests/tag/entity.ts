@@ -2,7 +2,7 @@ import { z } from "zod"
 
 /** DBのクエストスキーマ */
 export const QuestTagEntitySchema = z.object({
-  quest_id: z.number(),
+  quest_id: z.string(),
   name: z.string(),
 })
 export type QuestTagEntity = z.infer<typeof QuestTagEntitySchema>

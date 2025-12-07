@@ -2,7 +2,7 @@ import { z } from "zod"
 
 /** DBのユーザスキーマ */
 export const ProfileEntitySchema = z.object({
-  id: z.number(),
+  id: z.string(),
   user_id: z.string(),
   name: z.string(),
   icon: z.string(),

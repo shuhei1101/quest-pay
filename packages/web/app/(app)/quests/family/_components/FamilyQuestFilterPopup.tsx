@@ -14,6 +14,9 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
   /** クエストフィルター状態 */
   const [filter, setFilter] = useState<FamilyQuestFilterType>({tags: []})
 
+  /** タグ入力状態 */
+  const [tagInputValue, setTagInputValue] = useState("")
+  
   // ポップアップ起動時のイベント
   useEffect(() => {
     if (!opened) return
@@ -35,8 +38,6 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
     }))
   }
 
-  /** タグ入力状態 */
-  const [tagInputValue, setTagInputValue] = useState("")
 
   /** タグ入力時のハンドル */
   const handleTag = () => {
@@ -65,7 +66,9 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
                     ...prev,
                     name: value
                   }))
-                }} className="max-w-120" />
+                }} className="max-w-120"
+                value={filter.name}
+                />
               </Input.Wrapper>
             </div>
             {/* タグ */}
@@ -93,7 +96,7 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
             </PillsInput>
 
           </div>
-          <div className="mb-5" />
+          <div className="mb-5" /> 
           <div className="flex justify-end">
             <Button variant="gradient" onClick={onSearchClick}>検索</Button>
           </div>
