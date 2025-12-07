@@ -5,9 +5,11 @@ export const QuestEntitySchema = z.object({
   id: z.number(),
   name: z.string(),
   type: z.enum(["template", "public", "family"]),
-  icon: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
+  category_id: z.number().nullable(),
+  icon_id: z.number(),
+  icon_color: z.string().nullable()
 })
 export type QuestEntity = z.infer<typeof QuestEntitySchema>
 
@@ -20,6 +22,6 @@ export type QuestUpdate = z.infer<typeof QuestUpdateSchema>
 export type QuestDelete = z.infer<typeof QuestDeleteSchema>
 
 // クエストのカラム名
-const QuestColumnsArray = ["id", "name", "type", "icon", "created_at", "updated_at"] as const
+const QuestColumnsArray = ["id", "name", "type", "icon_id", "created_at", "updated_at", "category_id"] as const
 export const QuestColumnsSchema = z.enum(QuestColumnsArray)
 export type QuestColumns = z.infer<typeof QuestColumnsSchema>

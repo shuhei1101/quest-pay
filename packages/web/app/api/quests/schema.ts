@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { SortOrderSchema } from "@/app/(core)/schema"
-import { QuestTagInsertSchema } from "../../(app)/quests/_schema/questTagEntity"
+import { QuestTagInsertSchema } from "../../(app)/quests/tag/entity"
 import { QuestColumnsSchema, QuestInsertSchema } from "./entity"
 import { FetchFamilyQuestsResult } from "./family/query"
 

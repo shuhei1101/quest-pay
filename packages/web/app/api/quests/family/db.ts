@@ -2,9 +2,10 @@ import { DatabaseError } from "@/app/(core)/appError"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { QuestDelete, QuestInsert, QuestUpdate } from "@/app/api/quests/entity"
 import { questExclusiveControl } from "./dbHelper"
-import { QuestTagUpdate } from "@/app/(app)/quests/_schema/questTagEntity"
-import { FamilyQuestInsert } from "./entity"
+import { QuestTagUpdate } from "@/app/(app)/quests/tag/entity"
+import { FamilyQuestInsert, FamilyQuestUpdate } from "./entity"
 import { z } from "zod"
+import { devLog } from "@/app/(core)/util"
 
 /** クエストを挿入する */
 export const insertFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
@@ -19,8 +20,10 @@ export const insertFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
     _family_id: familyQuest.family_id,
     _is_public: familyQuest.is_public,
     _type: quest.type,
-    _icon: quest.icon,
-    _tags: tags.map(t => t.name)
+    _icon_id: quest.icon_id,
+    _icon_color: quest.icon_color,
+    _tags: tags.map(t => t.name),
+    _category_id: quest.category_id
   })
   
   // エラーをチェックする
@@ -37,7 +40,7 @@ export const insertFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
 /** クエストを更新する */
 export const updateFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
   quest: QuestUpdate,
-  familyQuest: FamilyQuestInsert
+  familyQuest: FamilyQuestUpdate
   tags: QuestTagUpdate[],
   supabase: SupabaseClient
 }) => {
@@ -56,13 +59,16 @@ export const updateFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
     _name: quest.name,
     _is_public: familyQuest.is_public,
     _type: quest.type,
-    _icon: quest.icon,
-    _tags: tags.map(t => t.name)
+    _icon_id: quest.icon_id,
+    _icon_color: quest.icon_color,
+    _tags: tags.map(t => t.name),
+    _category_id: quest.category_id
   })
 
   // エラーをチェックする
   if (error) {
-    console.log(error)
+    devLog("家族クエスト更新エラー: ", error)
+    devLog("更新データ: ", {quest, familyQuest, tags, supabase})
     throw new DatabaseError(`更新時にエラーが発生しました。`)
   }
 }

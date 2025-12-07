@@ -7,6 +7,8 @@ import { LOGIN_URL } from "@/app/(core)/constants"
 import { ClientAuthError } from "@/app/(core)/appError"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/app/(core)/_supabase/client"
+import { createIconById, IconById } from "../entity"
+import { devLog } from "@/app/(core)/util"
 
 
 export const useIcons = () => {
@@ -32,14 +34,21 @@ export const useIcons = () => {
           throw new ClientAuthError()
         }
         // セッションストレージに格納する
-        if (fetchedIcons) appStorage.icons.set(fetchedIcons)
+        appStorage.icons.set(fetchedIcons)
       }
-      return { icons: fetchedIcons }
+      // アイコン辞書を取得する
+      const iconById = createIconById(fetchedIcons)
+
+      devLog("取得アイコン: ", fetchedIcons)
+      return { icons: fetchedIcons, iconById }
     }
   })
 
+
+
   return { 
     icons: data?.icons ?? [], 
-    isLoading 
+    isLoading,
+    iconById: data?.iconById
   }
 }

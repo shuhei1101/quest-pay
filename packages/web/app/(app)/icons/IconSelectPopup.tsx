@@ -1,29 +1,54 @@
-import { ActionIcon, Button, Input, Modal, Space, Tabs, Text } from "@mantine/core"
-import { useEffect } from "react"
+"use client"
+
+import { ActionIcon, Button, ColorPicker, Input, Modal, Popover, Space, Tabs, Text } from "@mantine/core"
+import { useEffect, useState } from "react"
 import { RenderIcon } from "./_components/RenderIcon"
 import { useIcons } from "./_hooks/useIcons"
 import { useIconCategories } from "./category/_hooks/useIconCategories"
-import { IconWithCategoryView } from "./view"
+import { IconEntity } from "./entity"
 
 /** アイコン選択ポップアップ */
-export const IconSelectPopup = ({opened, close, setIcon}: {
+export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor, currentColor}: {
   opened: boolean,
   close: () => void,
-  setIcon: (icon: string) => void
+  currentIconId: number,
+  setIcon: (icon: number) => void,
+  setColor: (icon: string) => void,
+  currentColor?: string
 }) => {
-  useEffect(() => {
-    // ポップアップ起動時の処理
-  }, [opened])
-
-  /* アイコンカテゴリ **/
+  /** アイコンカテゴリ */
   const { iconCategories } = useIconCategories()
-  /* アイコン **/
+  /** アイコン */
   const { icons } = useIcons()
 
+  /** カラーピッカーの状態 */
+  const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined)
+
+  /** 選択中のアイコン */
+  const [selectedIconId, setSelectedIconId] = useState<number | undefined>(undefined)
+
+  // ポップアップ起動時のイベント
+  useEffect(() => {
+    if (!opened) return
+    // 現在の値をセットする
+    setSelectedColor(currentColor)
+    setSelectedIconId(currentIconId)
+  }, [opened])
+
   /** アイコン選択時のハンドル */
-  const onIconSelect = (icon: IconWithCategoryView) => {
+  const onIconSelect = (icon: IconEntity) => {
+    setSelectedIconId(icon.id)
+  }
+  
+  /** 確定ボタン押下時のハンドル */
+  const onSubmit = () => {
     // アイコンをセットする
-    setIcon(icon.name)
+    setIcon(selectedIconId!)
+    // カラーをセットする
+    setColor(selectedColor!)
+    // 状態をリセットする
+    setSelectedIconId(undefined)
+    setSelectedColor(undefined)
     // ポップアップを閉じる
     close()
   }
@@ -38,7 +63,7 @@ export const IconSelectPopup = ({opened, close, setIcon}: {
                 <Tabs.Tab
                   key={category.name}
                   value={category.name}
-                  leftSection={<RenderIcon iconName={category.icon_name} size={category.icon_size ?? undefined} />}
+                  leftSection={<RenderIcon iconName={category.icon_name} iconSize={category.icon_size} />}
                 >
                 {category.name}
                 </Tabs.Tab>
@@ -50,15 +75,31 @@ export const IconSelectPopup = ({opened, close, setIcon}: {
         {iconCategories.map((category) => 
           <Tabs.Panel value={category.name} key={category.id}>
             <div className="flex flex-wrap justify-start gap-3 m-3">
-              {icons.filter((icon) => icon.category_name === category.name).map((icon) => (
-                <ActionIcon key={icon.name} variant="light" radius="sm" onClick={() => onIconSelect(icon)}>
-                  <RenderIcon iconName={icon.name} />
-                </ActionIcon>
+              {icons.filter((icon) => icon.category_id === category.id).map((icon) => (
+                <>
+                    <ActionIcon key={icon.id} variant={selectedIconId === icon.id ? "outline" : "white"} radius="sm" onClick={() => onIconSelect(icon)} 
+                      >
+                      <RenderIcon iconName={icon.name} color={selectedColor} />
+                    </ActionIcon>
+              </>
               ))}
             </div>
           </Tabs.Panel>
         )}
       </Tabs>
+      <div className="flex justify-end gap-2.5">
+        <Popover width={270} position="bottom" withArrow shadow="lg">
+          <Popover.Target>
+            <Button variant="outline">色変更</Button>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <div className="flex flex-col items-center justify-center">
+              <ColorPicker format="rgba" value={selectedColor} onChange={setSelectedColor} />
+            </div>
+          </Popover.Dropdown>
+        </Popover>
+        <Button disabled={(currentIconId === selectedIconId && currentColor === selectedColor) || selectedIconId === null} onClick={onSubmit} >確定</Button>
+      </div>
     </Modal>
   )
 }

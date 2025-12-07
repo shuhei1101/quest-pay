@@ -20,10 +20,12 @@ export const useUpdateFamilyQuest = () => {
         is_public: form.isPublic,
       },
       quest: {
-        icon: form.icon,
+        icon_id: form.iconId,
         name: form.name,
         id: questId,
-        updated_at: updatedAt
+        updated_at: updatedAt,
+        category_id: null, // TODO: カテゴリを設定できるようにする
+        icon_color: form.iconColor,
       },
       tags: form.tags.map(t => { return { name: t }})
     }),

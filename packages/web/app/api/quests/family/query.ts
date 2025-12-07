@@ -1,14 +1,15 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient } from "@supabase/supabase-js"
 import { z } from "zod"
-import { FamilyQuestViewSchema } from "./view";
-import { QuestTagEntitySchema } from "@/app/(app)/quests/_schema/questTagEntity";
-import { FamilyQuestSearchParams, QuestsFamilyGetResponse } from "./schema";
-import { devLog } from "@/app/(core)/util";
+import { FamilyQuestViewSchema } from "./view"
+import { QuestTagEntitySchema } from "@/app/(app)/quests/tag/entity"
+import { FamilyQuestSearchParams, QuestsFamilyGetResponse } from "./schema"
+import { devLog } from "@/app/(core)/util"
 
 /** 取得結果の型 */
 export const FetchFamilyQuestsResult = z.array(FamilyQuestViewSchema.extend({
   quest_tags: z.array(QuestTagEntitySchema)
 }))
+export type FetchFamilyQuestsResultType = z.infer<typeof FetchFamilyQuestsResult>
 
 /** 検索条件に一致するクエストを取得する */
 export const fetchFamilyQuests = async ({

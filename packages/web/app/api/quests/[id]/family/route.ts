@@ -56,11 +56,13 @@ export async function PUT(
       await updateFamilyQuest({
         tags: data.tags,
         quest: {
-          icon: data.quest.icon,
+          icon_id: data.quest.icon_id,
           type: "family",
           name: data.quest.name,
           id: questId,
-          updated_at: data.quest.updated_at
+          updated_at: data.quest.updated_at,
+          category_id: data.quest.category_id,
+          icon_color: data.quest.icon_color,
         },
         supabase,
         familyQuest: {

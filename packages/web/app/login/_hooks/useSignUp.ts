@@ -1,13 +1,13 @@
 "use client"
 
 import toast from "react-hot-toast"
-import { LoginFormSchema } from "../_schema/loginSchema"
 import { createClient } from "@/app/(core)/_supabase/client"
+import { LoginFormType } from "../form"
 
 /** サインアップ時のハンドル */
 export const useSignUp = () => {
 
-  const handleSignUp = async (form: LoginFormSchema) => {
+  const handleSignUp = async (form: LoginFormType) => {
     // 新規登録する
     const { data, error } = await createClient().auth.signUp({
       email: form.email,

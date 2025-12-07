@@ -5,10 +5,11 @@ import * as TbIcons from "react-icons/tb";
 import * as TablerIcons from '@tabler/icons-react';
 
 /** レンダリングされたアイコン */
-export const RenderIcon = ({
-  iconName,
-  ...props
-}: { iconName?: string } & React.ComponentProps<typeof IconQuestionMark>) => {
+export const RenderIcon = ({iconName, iconSize, iconColor, ...props}: { 
+  iconName?: string,
+  iconSize?: number | null,
+  iconColor?: string | null,
+} & React.ComponentProps<typeof IconQuestionMark>) => {
   // アイコンが指定されていない場合、はてなマークを返却する
   if (!iconName || typeof iconName !== "string") return <IconQuestionMark {...props} />
 
@@ -23,6 +24,6 @@ export const RenderIcon = ({
     IconQuestionMark
 
   return (
-    <IconComponent {...props} />
+    <IconComponent bg="#000000" color={iconColor} size={iconSize} {...props} />
   )
 }

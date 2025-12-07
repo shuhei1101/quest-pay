@@ -34,6 +34,7 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   return {
     fetchedQuests: data?.quests ?? [],
     totalRecords: data?.totalRecords ?? 0,
+    maxPage: Math.ceil((data?.totalRecords ?? 0) / pageSize),
     isLoading,
     refresh :mutate
   }

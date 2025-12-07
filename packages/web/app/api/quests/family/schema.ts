@@ -3,7 +3,7 @@ import { SortOrderSchema } from "@/app/(core)/schema"
 import { FetchFamilyQuestsResult } from "./query"
 import { QuestInsertSchema } from "@/app/api/quests/entity"
 import { FamilyQuestInsertSchema } from "./entity"
-import { QuestTagInsertSchema } from "@/app/(app)/quests/_schema/questTagEntity"
+import { QuestTagInsertSchema } from "@/app/(app)/quests/tag/entity"
 import { FamilyQuestColumnsSchema } from "./view"
 
 /** クエストフィルター */

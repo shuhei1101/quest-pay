@@ -1,22 +1,30 @@
 "use client"
 
-import { QuestFilterType } from "@/app/(quest)/quests/_schema/questFilterSchema"
-import { Accordion, Button, Input, Pill, PillsInput } from "@mantine/core"
-import { Dispatch, SetStateAction, useState } from "react"
+import { FamilyQuestFilterType } from "@/app/api/quests/family/schema"
+import { ActionIcon, Button, ColorPicker, Input, Modal, Pill, PillsInput, Popover, Space, Tabs, Text } from "@mantine/core"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
-export const QuestFilter = ({filter, setFilter, handleSearch}: {
-  filter: QuestFilterType,
-  setFilter: Dispatch<SetStateAction<QuestFilterType>> ,
-  handleSearch: () => void
+/** 家族クエストフィルターポップアップ */
+export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSearch}: {
+  opened: boolean,
+  close: () => void,
+  currentFilter: FamilyQuestFilterType,
+  handleSearch: (filter: FamilyQuestFilterType) => void
 }) => {
+  /** クエストフィルター状態 */
+  const [filter, setFilter] = useState<FamilyQuestFilterType>({tags: []})
 
-  // アコーディオンの開閉状態（デフォルトは開いた状態）
-  const [openedAccordion, setOpenedAccordion] = useState<string | null>("search");
+  // ポップアップ起動時のイベント
+  useEffect(() => {
+    if (!opened) return
+    setFilter(currentFilter)
+  }, [opened])
+
 
   // 検索ボタン押下時のイベント
   const onSearchClick = () => {
-    setOpenedAccordion(null)
-    handleSearch()
+    handleSearch(filter)
+    close()
   }
 
   // タグ更新ラッパー関数
@@ -46,11 +54,7 @@ export const QuestFilter = ({filter, setFilter, handleSearch}: {
   const [isComposing, setIsComposing] = useState(false);
 
   return (
-    <div>
-      <Accordion variant="contained" value={openedAccordion} onChange={setOpenedAccordion}>
-        <Accordion.Item value="search" key="search">
-          <Accordion.Control icon={"🔍"}>検索条件</Accordion.Control>
-          <Accordion.Panel>
+    <Modal opened={opened} onClose={close} title="フィルター">
           <div className="flex gap-6  items-center p-2 flex-wrap">
             <div className="flex gap-6 flex-nowrap">
               {/* クエスト名 */}
@@ -91,11 +95,8 @@ export const QuestFilter = ({filter, setFilter, handleSearch}: {
           </div>
           <div className="mb-5" />
           <div className="flex justify-end">
-            <Button variant="filled" onClick={onSearchClick}>検索</Button>
+            <Button variant="gradient" onClick={onSearchClick}>検索</Button>
           </div>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
-    </div>
+    </Modal>
   )
 }

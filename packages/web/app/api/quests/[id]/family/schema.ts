@@ -1,5 +1,5 @@
 import { QuestDeleteSchema, QuestUpdateSchema } from "@/app/api/quests/entity"
-import { QuestTagUpdateSchema } from "@/app/(app)/quests/_schema/questTagEntity"
+import { QuestTagUpdateSchema } from "@/app/(app)/quests/tag/entity"
 import { z } from "zod"
 import { FamilyQuestUpdateSchema } from "../../family/entity"
 import { FetchFamilyQuestResult } from "../../family/query"

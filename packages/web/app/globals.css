@@ -62,3 +62,15 @@ body {
 .side-nav:hover {
   background-color: rgba(0, 112, 243, 0.1) !important;
 }
+
+.hidden-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.quest-card:hover {
+  box-shadow: 0 10px 25px 0 rgba(0, 112, 243, 0.1);
+}

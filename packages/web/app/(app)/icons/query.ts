@@ -1,16 +1,19 @@
 import { SupabaseClient } from "@supabase/supabase-js"
-import { IconWithCategoryViewSchema } from "./view"
+import { devLog } from "@/app/(core)/util"
+import { IconEntitySchema } from "./entity"
 
 /** 全てのアイコンとカテゴリを取得する */
 export const fetchIcons = async ({supabase}: {
   supabase: SupabaseClient,
 }) => {
   // データを取得する
-  const { data, error } = await supabase.from("icon_with_category_view")
+  const { data, error } = await supabase.from("icons")
       .select(`*`)
 
     // エラーをチェックする
     if (error) throw error
 
-    return IconWithCategoryViewSchema.array().parse(data)
+    devLog("fetchIcons.アイコン取得: ", data)
+
+    return IconEntitySchema.array().parse(data)
 }

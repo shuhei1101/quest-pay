@@ -1,17 +1,35 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
-import { DataTable, DataTableSortStatus } from "mantine-datatable"
 import { useEffect, useState, Suspense } from "react"
-import Link from "next/link"
-import { FamilyQuestColumns, FamilyQuestView } from "../../../api/quests/family/view"
+import { FamilyQuestSort } from "../../../api/quests/family/view"
 import { useFamilyQuests } from "./_hooks/useFamilyQuests"
-import { FAMILY_QUESTS_URL } from "@/app/(core)/constants"
-import { FamilyQuestFilter } from "./_components/FamilyQuestFilter"
+import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL } from "@/app/(core)/constants"
 import { FamilyQuestFilterSchema, FamilyQuestFilterType } from "../../../api/quests/family/schema"
-import { Tabs } from "@mantine/core"
+import { SimpleGrid, Tabs, Input, ActionIcon } from "@mantine/core"
+import { useQuestCategories } from "@/app/api/quests/category/_hooks/useQuestCategories"
+import { RenderIcon } from "../../icons/_components/RenderIcon"
+import { useDisclosure, useIntersection } from "@mantine/hooks"
+import { FamilyQuestCardLayout } from "./_components/FamilyQuestCardLayout"
+import { devLog } from "@/app/(core)/util"
+import { FetchFamilyQuestsResultType } from "@/app/api/quests/family/query"
+import { IconArrowsSort, IconFilter, IconSearch } from "@tabler/icons-react"
+import { FamilyQuestFilterPopup } from "./_components/FamilyQuestFilterPopup"
+import { FamilyQuestSortPopup } from "./_components/FamilyQuestSortPopup"
+import { useConstants } from "@/app/(core)/useConstants"
 
 function QuestsContent() {
   const router = useRouter() 
+
+  /** 画面定数 */
+  const { isMobile, isTablet, isDesktop } = useConstants()
+
+  /**  フィルターポップアップ制御状態 */
+  const [filterOpened, { open: openFilter, close: closeFilter }] = useDisclosure(false)
+  /**  ソートポップアップ制御状態 */
+  const [sortOpened, { open: openSort, close: closeSort }] = useDisclosure(false)
+
+  /** 現在のクエスト一覧状態 */
+  const [displayQuests, setDisplayQuests] = useState<FetchFamilyQuestsResultType>([])
 
   /** クエストフィルター状態 */
   const [questFilter, setQuestFilter] = useState<FamilyQuestFilterType>({tags: []})
@@ -19,6 +37,9 @@ function QuestsContent() {
   /** 検索実行用フィルター状態 */
   const [searchFilter, setSearchFilter] = useState<FamilyQuestFilterType>({tags: []})
   
+  /** ソート状態 */
+  const [sort, setSort] = useState<FamilyQuestSort>({column: "id", order: "asc"})
+
   /** クエリストリングの状態 */
   const searchParams = useSearchParams()
   
@@ -34,32 +55,43 @@ function QuestsContent() {
     setQuestFilter(FamilyQuestFilterSchema.parse(parsedQuery))
   }, [searchParams])
 
-  /** ソート状態 */
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<FamilyQuestView>>({
-    columnAccessor: 'id' as FamilyQuestColumns,
-    direction: 'asc',
-  })
-
   /** ページャ状態 */
   const [page, setPage] = useState<number>(1)
   const pageSize = 10
-
-  /** ページ変更時のイベント */
-  const handleChangedPage = (page: number) => {
-    setPage(page)
-  }
   
-  // クエスト一覧を取得する
-  const { fetchedQuests, isLoading, totalRecords } = useFamilyQuests({
+  /** クエストカテゴリ */
+  const { questCategories, isLoading: categoryLoading } = useQuestCategories()
+
+  /** クエスト一覧 */
+  const { fetchedQuests, isLoading, totalRecords ,maxPage } = useFamilyQuests({
     filter: searchFilter,
-    sortColumn: sortStatus.columnAccessor as FamilyQuestColumns,
-    sortOrder: sortStatus.direction,
+    sortColumn: sort.column,
+    sortOrder: sort.order,
     page,
     pageSize
   })
 
+  /** 無限スクロール用 Intersection Observer */
+  const { ref: sentinelRef, entry } = useIntersection({
+    threshold: 1,
+  })
+  /** 下まで来たら次ページを取得 */
+  useEffect(() => {
+    if (entry?.isIntersecting) {
+      devLog("ページ最下層検知。現在のページ: ", {page, maxPage, totalRecords})
+      // 次のページが存在するときだけセット
+      if (page < maxPage && !isLoading) {
+        setPage((prev) => prev + 1)
+      }
+    }
+  }, [entry, totalRecords, page, isLoading])
+  
   /** 検索ボタン押下時のハンドル */
-  const handleSerch = () => {
+  const handleSearch = () => {
+    // ページを初期化する
+    setPage(1)
+    setDisplayQuests([])
+
     // クエストフィルターをクエリストリングに変換する
     const paramsObj = Object.fromEntries(
       Object.entries(questFilter)
@@ -75,38 +107,149 @@ function QuestsContent() {
     setSearchFilter(questFilter)
   }
 
+  // データ取得時のハンドル
+  useEffect(() => {
+    if (page === 1) {
+      // 検索切り替え時などはリセット
+      setDisplayQuests(fetchedQuests)
+    } else {
+      setDisplayQuests(prev => [...prev, ...fetchedQuests])
+    }
+  }, [fetchedQuests, page])
+
+  /** クエスト選択時のハンドル */
+  const handleQuestId = (questId: number) => router.push(FAMILY_QUEST_URL(questId))
+
   return (
       <>
-    <Tabs defaultValue="gallery">
-      <Tabs.List>
-        <Tabs.Tab value="gallery">
-          Gallery
-        </Tabs.Tab>
-        <Tabs.Tab value="messages">
-          Messages
-        </Tabs.Tab>
-        <Tabs.Tab value="settings">
-          Settings
-        </Tabs.Tab>
-      </Tabs.List>
+      {/* クエスト一覧 */}
+      <Tabs defaultValue={questCategories.at(0) ? questCategories.at(0)?.name : ""}>
+        {/* アイコンカテゴリ */}
+        <Tabs.List>
+          <div className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+          <Tabs.Tab
+            key={0}
+            value={"すべて"}
+          >
+            すべて
+          </Tabs.Tab>
+          {questCategories.map((category) => {
+            return (
+                <Tabs.Tab
+                  key={category.id}
+                  value={category.name}
+                  leftSection={<RenderIcon iconName={category.icon_name} size={category.icon_size ?? undefined} iconColor={category.icon_color} />}
+                >
+                {category.name}
+                </Tabs.Tab>
+            )
+          })}
+          <Tabs.Tab
+            key={-1}
+            value={"その他"}
+          >
+            その他
+          </Tabs.Tab>
+        </div>
+        </Tabs.List>
+        <div className="m-3" />
 
-      <Tabs.Panel value="gallery">
-        Gallery tab content
-      </Tabs.Panel>
+        {/* 検索バー */}
+        <div className="flex gap-2 items-center">
+          {/* クエスト名で検索 */}
+          <Input
+            leftSection={<IconSearch size={16} />}
+            placeholder="クエスト名で検索"
+            onChange={(event) => {
+              const value = event.currentTarget.value.trim()
+              setQuestFilter((prev) => ({
+                ...prev,
+                name: value
+              }))
+            }} 
+            className="w-full" 
+          />
+          {/* フィルター設定ポップアップ起動 */}
+          <ActionIcon variant="default"
+            onClick={() => openFilter()}
+          >
+            <IconFilter style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+          {/* ソート設定ポップアップ起動 */}
+          <ActionIcon variant="default"
+            onClick={() => openSort()}
+          >
+            <IconArrowsSort style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+        </div>
+        <div className="m-3" />
+        {/* 全件表示 */}
+        <Tabs.Panel value={"すべて"} key={0}>
+        <SimpleGrid
+          cols={isMobile ? 1 : isTablet ? 2 : isDesktop ? 3 : 4}
+          spacing="md"
+        >
+            {displayQuests.map((quest, index) => (
+              <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+            ))}
+          </SimpleGrid>
+          <div ref={sentinelRef} style={{ height: 1 }} />
+        </Tabs.Panel>
 
-      <Tabs.Panel value="messages">
-        Messages tab content
-      </Tabs.Panel>
+        {/* カテゴリごとのクエスト一覧 */}
+        {questCategories.map((category) => 
+          <Tabs.Panel value={category.name} key={category.id}>
+          <SimpleGrid
+            cols={isMobile ? 1 : isTablet ? 2 : isDesktop ? 3 : 4}
+            spacing="md"
+          >
+              {displayQuests.filter((quest) => quest.category_id === category.id).map((quest, index) => (
+                <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+              ))}
+            </SimpleGrid>
+          </Tabs.Panel>
+        )}
 
-      <Tabs.Panel value="settings">
-        Settings tab content
-      </Tabs.Panel>
-    </Tabs>
+        {/* その他表示 */}
+        <Tabs.Panel value={"その他"} key={-1}>
+        <SimpleGrid
+          cols={isMobile ? 1 : isTablet ? 2 : isDesktop ? 3 : 4}
+          spacing="md"
+          >
+            {displayQuests.filter((quest) => quest.category_id == undefined).map((quest, index) => (
+              <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+            ))}
+          </SimpleGrid>
+        </Tabs.Panel>
+        <div className="m-5" />
+      </Tabs>
+
+      {/* フィルターポップアップ */}
+      <FamilyQuestFilterPopup 
+        close={closeFilter}
+        handleSearch={(filter) => {
+          setQuestFilter(filter)
+          handleSearch()
+        }}
+        currentFilter={questFilter}
+        opened={filterOpened}
+      />
+      {/* ソートポップアップ */}
+      <FamilyQuestSortPopup 
+        close={closeSort}
+        handleSearch={(sort) => {
+          setSort(sort)
+          handleSearch()
+        }}
+        opened={sortOpened}
+        currentSort={sort}
+      />
+
       {/* 検索条件欄 */}
-      <FamilyQuestFilter filter={questFilter} handleSearch={handleSerch} setFilter={setQuestFilter} />
+      {/* <FamilyQuestFilter filter={questFilter} handleSearch={handleSerch} setFilter={setQuestFilter} /> */}
       <div className="m-5" />
       {/* クエスト一覧テーブル */}
-      <DataTable<FamilyQuestView> 
+      {/* <DataTable<FamilyQuestView> 
         withTableBorder 
         highlightOnHover
         noRecordsText=""
@@ -126,7 +269,7 @@ function QuestsContent() {
         recordsPerPage={pageSize}
         page={page}
         onPageChange={handleChangedPage}
-      />
+      /> */}
     </>
   )
 }

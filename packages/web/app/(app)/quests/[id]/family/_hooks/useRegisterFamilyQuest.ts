@@ -20,8 +20,10 @@ export const useRegisterFamilyQuest = ({setId}: {setId: (id: number) => void}) =
         is_public: form.isPublic,
       },
       quest: {
-        icon: form.icon,
-        name: form.name
+        icon_id: form.iconId,
+        name: form.name,
+        category_id: null, // TODO: アイコンカテゴリを追加する
+        icon_color: form.iconColor,
       },
       tags: form.tags.map(t => { return { name: t }})
     }),

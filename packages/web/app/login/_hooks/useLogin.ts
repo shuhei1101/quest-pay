@@ -1,15 +1,15 @@
 "use client"
 
-import { LoginFormSchema } from "../_schema/loginSchema"
 import toast from "react-hot-toast"
 import { useState } from "react"
 import { createClient } from "@/app/(core)/_supabase/client"
+import { LoginFormType } from "../form"
 
 /** ログイン時のハンドル */
 export const useLogin = () => {
   const [userId, setUserId] = useState("")
   const handleLogin = async ({onSuccess, form}: {
-    form: LoginFormSchema,
+    form: LoginFormType,
     onSuccess: () => void
   }) => {
 

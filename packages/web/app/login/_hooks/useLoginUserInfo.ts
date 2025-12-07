@@ -14,7 +14,7 @@ export const useLoginUserInfo = ({ caching = true }: {
 } = {}) => {
   const router = useRouter()
 
-  const query = useQuery({
+  const data = useQuery({
     queryKey: ["loginUser"],
     retry: false,
     queryFn: async () => {
@@ -60,8 +60,9 @@ export const useLoginUserInfo = ({ caching = true }: {
   })
 
   return {
-    userInfo: query.data,
-    isLoading: query.isLoading
+    userInfo: data.data,
+    isLoading: data.isLoading,
+    refetch: data.refetch
   }
 
 }

@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { QuestCategoryEntitySchema } from "./entity";
+import { devLog } from "@/app/(core)/util";
 
 /** 全てのアイコンカテゴリを取得する */
 export const fetchQuestCategories = async ({supabase}: {
@@ -11,6 +12,9 @@ export const fetchQuestCategories = async ({supabase}: {
 
     // エラーをチェックする
     if (error) throw error
+
+    devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
+
 
     return QuestCategoryEntitySchema.array().parse(data)
 }

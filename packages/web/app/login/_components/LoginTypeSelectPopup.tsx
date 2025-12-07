@@ -16,12 +16,12 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
   // const { handleCreateFamily } = useFamilyCreate({close})
 
   /** ユーザIDに紐づく家族情報 */
-  const { userInfo, refresh } = useLoginUserInfo()
+  const { userInfo, refetch } = useLoginUserInfo()
 
   useEffect(() => {
     if (!opened) return
     console.log("ユーザ情報: ", JSON.stringify(userInfo))
-    refresh()
+    refetch()
   }, [opened])
 
   return (

@@ -50,8 +50,10 @@ export async function POST(
       const questId = await insertFamilyQuest({
         quest: {
           name: data.quest.name,
-          icon: data.quest.icon,
-          type: "family"
+          icon_id: data.quest.icon_id,
+          type: "family",
+          category_id: data.quest.category_id,
+          icon_color: data.quest.icon_color
         },
         familyQuest: {
           family_id: userInfo.family_id,

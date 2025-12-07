@@ -4,11 +4,11 @@ import { Box, Button, Center, Fieldset, PasswordInput, Tabs, TextInput, Title } 
 import { FeedbackMessageWrapper } from "../(core)/_components/FeedbackMessageWrapper"
 import { useState, useEffect } from "react"
 import { IconDualScreen, IconDualScreenFilled } from "@tabler/icons-react"
+import { useLoginForm } from "./_hooks/useLoginForm"
+import { useDisclosure } from "@mantine/hooks"
+import { LoginTypeSelectPopup } from "./_components/LoginTypeSelectPopup"
 import { useLogin } from "./_hooks/useLogin"
 import { useSignUp } from "./_hooks/useSignUp"
-import { useLoginForm } from "./_hooks/useLoginForm"
-import { LoginTypeSelectPopup } from "./_components/LoginTypeSelectPopup"
-import { useDisclosure } from "@mantine/hooks"
 
 const guest = {
   email: process.env.NEXT_PUBLIC_GUEST_EMAIL ?? "",
@@ -35,12 +35,12 @@ export default function Page() {
   const { register, handleSubmit } = useLoginForm()
 
   // ゲストでログイン押下時のハンドル
-  const handleGuestLogin = () => {
-    handleLogin({
-      form: {email: guest.email, password: guest.pass},
-      onSuccess: () => openPopup()
-    })
-  }
+  // const handleGuestLogin = () => {
+  //   handleLogin({
+  //     form: {email: guest.email, password: guest.pass},
+  //     onSuccess: () => openPopup()
+  //   })
+  // }
 
   return (
     <FeedbackMessageWrapper>
@@ -81,7 +81,7 @@ export default function Page() {
               <div className="m-3" />
               {/* サブミットボタン */}
               <div className="flex justify-end gap-5 w-full">
-                <Button onClick={handleGuestLogin} variant="default" bg={"yellow"}>ゲストログイン</Button>
+                {/* <Button onClick={handleGuestLogin} variant="default" bg={"yellow"}>ゲストログイン</Button> */}
                 <Button type="submit" variant="default">続行</Button>
               </div>
             </form>

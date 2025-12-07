@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LoginFormSchema, LoginFormType } from "../_schema/loginSchema"
+import { LoginFormSchema, LoginFormType } from "../form"
 
 /** ログインフォームを取得する */
 export const useLoginForm = () => {

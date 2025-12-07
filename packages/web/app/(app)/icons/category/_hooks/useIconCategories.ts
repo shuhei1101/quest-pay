@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { LOGIN_URL } from "@/app/(core)/constants"
 import { ClientAuthError } from "@/app/(core)/appError"
 import { createClient } from "@/app/(core)/_supabase/client"
+import { devLog } from "@/app/(core)/util"
 
 
 export const useIconCategories = () => {
@@ -34,6 +35,7 @@ export const useIconCategories = () => {
         // セッションストレージに格納する
         if (fetchedIconCategories) appStorage.iconCategories.set(fetchedIconCategories)
       }
+      devLog("取得カテゴリ: ", fetchedIconCategories)
       return { iconCategories: fetchedIconCategories }
     }
   })

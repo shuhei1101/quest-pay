@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js"
 import { IconCategoryEntitySchema } from "./entity"
+import { devLog } from "@/app/(core)/util"
 
 /** 全てのアイコンカテゴリを取得する */
 export const fetchIconCategories = async ({supabase}: {
@@ -11,6 +12,8 @@ export const fetchIconCategories = async ({supabase}: {
 
     // エラーをチェックする
     if (error) throw error
+
+    devLog("fetchIconCategories.アイコンカテゴリ取得: ", data)
 
     return IconCategoryEntitySchema.array().parse(data)
 }

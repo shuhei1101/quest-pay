@@ -12,9 +12,10 @@ export const useFamilyQuestForm = ({questId}: {questId?: number}) => {
   /** クエストフォームのデフォルト値 */
   const defaultQuest: FamilyQuestFormType = {
     name: "",
-    icon: "",
+    iconId: -1,
     tags: [],
-    isPublic: false
+    isPublic: false,
+    iconColor: "#000000"
   }
 
   // クエストフォームの状態を作成する
@@ -43,9 +44,10 @@ export const useFamilyQuestForm = ({questId}: {questId?: number}) => {
       // クエストフォームに変換する
       const fetchedFamilyQuestForm: FamilyQuestFormType = {
         name: quest.name,
-        icon: quest.icon,
         tags: quest.quest_tags.map((t) => t.name),
-        isPublic: quest.is_public
+        iconId: quest.icon_id,
+        isPublic: quest.is_public,
+        iconColor: quest.icon_color ?? "#000000",
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)
@@ -68,7 +70,8 @@ export const useFamilyQuestForm = ({questId}: {questId?: number}) => {
   /** 値を変更したかどうか */
   const isValueChanged = 
     currentQuest.name !== fetchedQuest.name ||
-    currentQuest.icon !== fetchedQuest.icon ||
+    currentQuest.iconId !== fetchedQuest.iconId ||
+    currentQuest.iconColor !== fetchedQuest.iconColor ||
     !isSameArray(currentQuest.tags, fetchedQuest.tags) ||
     currentQuest.isPublic !== fetchedQuest.isPublic
 

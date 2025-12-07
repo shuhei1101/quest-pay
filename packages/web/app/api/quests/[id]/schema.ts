@@ -1,5 +1,5 @@
 import { QuestDeleteSchema, QuestEntitySchema, QuestUpdateSchema } from "@/app/api/quests/entity"
-import { QuestTagEntitySchema, QuestTagUpdateSchema } from "@/app/(app)/quests/_schema/questTagEntity"
+import { QuestTagEntitySchema, QuestTagUpdateSchema } from "@/app/(app)/quests/tag/entity"
 import { z } from "zod"
 
 /** クエスト取得レスポンススキーマ */
