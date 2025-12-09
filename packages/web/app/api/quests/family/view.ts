@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { QuestEntitySchema } from "../entity"
 import { FamilyQuestEntitySchema } from "./entity"
-import { IconEntitySchema } from "@/app/(app)/icons/entity"
+import { IconEntitySchema } from "@/app/api/icons/entity"
 import { SortOrder } from "@/app/(core)/schema"
 
 /** 家族クエストビュー */

@@ -3,18 +3,15 @@ import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { usersLoginGet } from "@/app/api/users/login/client"
 import { useQuery } from "@tanstack/react-query"
 import { createClient } from "@/app/(core)/_supabase/client"
-import { useRouter } from "next/navigation"
-import { LOGIN_URL } from "@/app/(core)/constants"
-import { ClientAuthError } from "@/app/(core)/appError"
 import { Session } from "@supabase/supabase-js"
+import { devLog } from "@/app/(core)/util"
 
 /** ログインユーザの情報を取得する */
 export const useLoginUserInfo = ({ caching = true }: {
   caching?: boolean
 } = {}) => {
-  const router = useRouter()
 
-  const data = useQuery({
+  const query = useQuery({
     queryKey: ["loginUser"],
     retry: false,
     queryFn: async () => {
@@ -25,14 +22,7 @@ export const useLoginUserInfo = ({ caching = true }: {
       if (!session) {
         const { data } = await createClient().auth.getSession()
         // セッション状態がない場合
-        if (!data.session) {
-          // フィードバックメッセージを表示する
-          appStorage.feedbackMessage.set("セッションが切れました。再度ログインしてください。")
-          // ログイン画面に遷移する
-          router.push(LOGIN_URL)
-          // 認証エラーを発生させる
-          throw new ClientAuthError()
-        }
+        if (!data.session) return { isGuest: true }
         // セッションを設定する
         session = data.session
       }
@@ -44,25 +34,23 @@ export const useLoginUserInfo = ({ caching = true }: {
         // ユーザ情報を取得する
         const data = await usersLoginGet()
         userInfo = data.userInfo
+        if (!userInfo) return { isGuest: true }
         // セッションストレージに格納する
-        if (!userInfo) {
-          // フィードバックメッセージを表示する
-          appStorage.feedbackMessage.set("ユーザ情報の取得に失敗しました。再度ログインしてください。")
-          // ログイン画面に遷移する
-          router.push(LOGIN_URL)
-          // 認証エラーを発生させる
-          throw new ClientAuthError("ユーザ情報の取得に失敗")
-        }
         appStorage.user.set(userInfo)
       }
-    return userInfo
+    return {
+      userInfo,
+      isGuest: false
+    }
     }
   })
 
-  return {
-    userInfo: data.data,
-    isLoading: data.isLoading,
-    refetch: data.refetch
-  }
+  devLog("ゲストフラグ: ", query.data?.isGuest ?? true)
 
+  return {
+    userInfo: query.data?.userInfo,
+    isGuest: query.data?.isGuest ?? true,
+    isLoading: query.isLoading,
+    refetch: query.refetch
+  }
 }

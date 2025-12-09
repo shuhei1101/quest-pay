@@ -1,16 +1,17 @@
 'use client'
 
 import { ActionIcon, Box, Text, Button, Checkbox, Group, Input, Loader, LoadingOverlay, Pill, PillsInput, Space, Textarea} from "@mantine/core"
-import { IconSelectPopup } from "@/app/(app)/icons/IconSelectPopup"
+import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
 import { useDisclosure } from "@mantine/hooks"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { useEffect, useState } from "react"
-import { useDeleteFamilyQuest } from "../_hooks/useDeleteFamilyQuest"
-import { useRegisterFamilyQuest } from "../_hooks/useRegisterFamilyQuest"
-import { useUpdateFamilyQuest } from "../_hooks/useUpdateFamilyQuest"
-import { useFamilyQuestForm } from "../_hooks/useFamilyQuestForm"
+import { useDeleteFamilyQuest } from "../_hook/useDeleteFamilyQuest"
+import { useUpdateFamilyQuest } from "../_hook/useUpdateFamilyQuest"
+import { useFamilyQuestForm } from "../_hook/useFamilyQuestForm"
 import { devLog } from "@/app/(core)/util"
 import { useIcons } from "@/app/(app)/icons/_hooks/useIcons"
+import { useRegisterFamilyQuest } from "../_hook/useRegisterFamilyQuest"
+import { QuestCategoryCombobox } from "../../../category/_component/QuestCategoryCombobox"
 
 /** 家族クエストフォーム */
 export const FamilyQuestForm = ( params: {
@@ -68,6 +69,7 @@ export const FamilyQuestForm = ( params: {
 
   return (
     <>
+    
       <div>
         <Box pos="relative" className="max-w-120">
           {/* ロード中のオーバーレイ */}
@@ -93,13 +95,21 @@ export const FamilyQuestForm = ( params: {
                       onClick={ () => openPopup() }>
                       <RenderIcon 
                         iconName={iconById && iconById[watchFamilyQuest().iconId]?.name} 
-                        iconSize={iconById ? iconById[watchFamilyQuest().iconId]?.size : null}
+                        iconSize={iconById && iconById[watchFamilyQuest().iconId]?.size}
                         color={watchFamilyQuest().iconColor}
                       />
                     </ActionIcon>
                   </div>
                 </Input.Wrapper>
               </div>
+              {/* カテゴリ選択リストボックス */}
+            <Input.Wrapper label="カテゴリ" error={errors.categoryId?.message}>
+              <QuestCategoryCombobox
+                currentValue={watchFamilyQuest().categoryId}
+                onChanged={(id: number | null) => setFamilyQuestValue("categoryId", id)}
+              />
+            </Input.Wrapper>
+
               {/* タグ選択 */}
               <div>
                 <PillsInput label="タグ"
@@ -113,7 +123,7 @@ export const FamilyQuestForm = ( params: {
                         }}
                       >{tag}</Pill>
                     ))}
-                    <PillsInput.Field placeholder="タグを追加" 
+                    <PillsInput.Field placeholder="タグを追加"
                       value={tagInputValue}
                       onChange={(e) => setTagInputValue(e.target.value)}
                       onBlur={() => handleTag()}
@@ -129,6 +139,11 @@ export const FamilyQuestForm = ( params: {
                   </Pill.Group>
                 </PillsInput>
               </div>
+                <Input.Wrapper label="公開">
+                    <Checkbox
+                      {...questRegister("isPublic")}
+                    />
+                </Input.Wrapper>
             </div>
             <Space h="md" />
             {/* サブミットボタン */}
@@ -145,6 +160,7 @@ export const FamilyQuestForm = ( params: {
           </form>
         </Box>
       </div>
+      {/* アイコン選択ポップアップ */}
       <IconSelectPopup opened={ popupOpened } close={ closePopup } 
         setIcon={ (iconId) => setFamilyQuestValue("iconId", iconId) }
         setColor={ (iconColor) => setFamilyQuestValue("iconColor", iconColor) }

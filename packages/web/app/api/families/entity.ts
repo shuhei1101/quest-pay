@@ -7,9 +7,10 @@ export const FamilyEntitySchema = z.object({
   id: z.string(),
   display_id: z.string(),
   local_name: z.string(),
-  online_name: z.string().optional(),
-  icon: z.string().optional(),
-  introduction: z.string().optional(),
+  online_name: z.string().nullable(),
+  icon_id: z.number(),
+  icon_color: z.string(),
+  introduction: z.string().nullable(),
   created_at: z.string(),
   updated_at: z.string()
 })
@@ -28,4 +29,4 @@ export const DisplayId = Id.min(5, { error: "IDは5文字以上で入力して�
 /** 家族名（ローカル） */
 export const LocalName = z.string().nonempty({error: "家族名は必須です。"}).max(10, { error: "家族名は10文字以下で入力してください。"})
 /** 家族名（オンライン） */
-export const OnlineName = z.string().optional()
+export const OnlineName = z.string().nullable()

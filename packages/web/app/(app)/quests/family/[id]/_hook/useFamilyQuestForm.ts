@@ -5,17 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { getFamilyQuest } from "@/app/api/quests/[id]/family/client"
 import { useState } from "react"
 import { devLog, isSameArray } from "@/app/(core)/util"
+import { useMantineTheme } from "@mantine/core"
 
 /** クエストフォームを取得する */
 export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
+  const thema = useMantineTheme()
 
   /** クエストフォームのデフォルト値 */
   const defaultQuest: FamilyQuestFormType = {
     name: "",
-    iconId: -1,
+    iconId: 1,
     tags: [],
     isPublic: false,
-    iconColor: "#000000"
+    iconColor: thema.colors.blue[ 5 ],
+    categoryId: null
   }
 
   // クエストフォームの状態を作成する
@@ -44,10 +47,11 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
       // クエストフォームに変換する
       const fetchedFamilyQuestForm: FamilyQuestFormType = {
         name: quest.name,
-        tags: quest.quest_tags.map((t) => t.name),
+        tags: quest.quest_tags.map( ( t ) => t.name ),
         iconId: quest.icon_id,
         isPublic: quest.is_public,
-        iconColor: quest.icon_color ?? "#000000",
+        iconColor: quest.icon_color,
+        categoryId: null
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)
@@ -73,7 +77,8 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
     currentQuest.iconId !== fetchedQuest.iconId ||
     currentQuest.iconColor !== fetchedQuest.iconColor ||
     !isSameArray(currentQuest.tags, fetchedQuest.tags) ||
-    currentQuest.isPublic !== fetchedQuest.isPublic
+    currentQuest.isPublic !== fetchedQuest.isPublic ||
+    currentQuest.categoryId !== fetchedQuest.categoryId
 
   return {
     register,

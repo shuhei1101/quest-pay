@@ -24,7 +24,7 @@ export const useUpdateFamilyQuest = () => {
         name: form.name,
         id: questId,
         updated_at: updatedAt,
-        category_id: null, // TODO: カテゴリを設定できるようにする
+        category_id: form.categoryId,
         icon_color: form.iconColor,
       },
       tags: form.tags.map(t => { return { name: t }})

@@ -1,8 +1,9 @@
-import { IconCategoryEntity, IconCategoryEntitySchema } from "@/app/(app)/icons/category/entity"
-import { IconById, IconByIdSchema, IconEntity, IconEntitySchema } from "@/app/(app)/icons/entity"
-import { QuestCategoryEntity, QuestCategoryEntitySchema } from "@/app/api/quests/category/entity"
+import { IconCategoryEntity, IconCategoryEntitySchema } from "@/app/api/icons/category/entity"
+import { IconById, IconByIdSchema, IconEntity, IconEntitySchema } from "@/app/api/icons/entity"
+import { QuestCategoryById, QuestCategoryByIdSchema, QuestCategoryEntity, QuestCategoryEntitySchema } from "@/app/api/quests/category/entity"
 import { UserInfoView } from "@/app/api/users/view"
 import toast from "react-hot-toast"
+import { devLog } from "../util"
 
 export const appStorage = {
   // フィードバックメッセージ
@@ -68,6 +69,7 @@ export const appStorage = {
     /** アイコン辞書を取得する */
     get: () => {
       const iconById = sessionStorage.getItem("iconById")
+      devLog("セッションストレージ.アイコン辞書: ", iconById)
       return iconById ? IconByIdSchema.parse(JSON.parse(iconById)) : undefined
     },
     /** アイコン辞書をセットする */
@@ -97,6 +99,19 @@ export const appStorage = {
     /** クエストカテゴリをセットする */
     set: (questCategories: QuestCategoryEntity[]) => {
       sessionStorage.setItem('questCategories', JSON.stringify(questCategories))
+    },
+  },
+  // クエストカテゴリ辞書
+  questCategoryById: {
+    /** クエストカテゴリ辞書を取得する */
+    get: () => {
+      const questCategoryById = sessionStorage.getItem("questCategoryById")
+      devLog("セッションストレージ.クエストカテゴリ辞書: ", questCategoryById)
+      return questCategoryById ? QuestCategoryByIdSchema.parse(JSON.parse(questCategoryById)) : undefined
+    },
+    /** クエストカテゴリ辞書をセットする */
+    set: (questCategoryById: QuestCategoryById) => {
+      sessionStorage.setItem('questCategoryById', JSON.stringify(questCategoryById))
     },
   },
 }

@@ -22,7 +22,7 @@ export const useRegisterFamilyQuest = ({setId}: {setId: (id: string) => void}) =
       quest: {
         icon_id: form.iconId,
         name: form.name,
-        category_id: null, // TODO: アイコンカテゴリを追加する
+        category_id: form.categoryId,
         icon_color: form.iconColor,
       },
       tags: form.tags.map(t => { return { name: t }})

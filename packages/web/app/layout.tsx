@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
 import { ColorSchemeScript, mantineHtmlProps } from '@mantine/core'
 import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/dates/styles.css'
 import React from "react"
 import { Providers } from "./providers"
+import "./globals.css"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Sample-Next-App",
+  title: "お小遣いクエストボード",
   description: "I made a mistake in the app name and called it React.",
   icons: {
     icon: '/public/favicon.ico'

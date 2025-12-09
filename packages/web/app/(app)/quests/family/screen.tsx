@@ -2,11 +2,11 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
 import { FamilyQuestSort } from "../../../api/quests/family/view"
-import { useFamilyQuests } from "./_hooks/useFamilyQuests"
+import { useFamilyQuests } from "./_hook/useFamilyQuests"
 import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL } from "@/app/(core)/constants"
 import { FamilyQuestFilterSchema, FamilyQuestFilterType } from "../../../api/quests/family/schema"
-import { SimpleGrid, Tabs, Input, ActionIcon } from "@mantine/core"
-import { useQuestCategories } from "@/app/api/quests/category/_hooks/useQuestCategories"
+import { SimpleGrid, Tabs, Input, ActionIcon, Box, Paper } from "@mantine/core"
+import { useQuestCategories } from "@/app/api/quests/category/_hook/useQuestCategories"
 import { RenderIcon } from "../../icons/_components/RenderIcon"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
 import { FamilyQuestCardLayout } from "./_components/FamilyQuestCardLayout"
@@ -17,7 +17,7 @@ import { FamilyQuestFilterPopup } from "./_components/FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./_components/FamilyQuestSortPopup"
 import { useConstants } from "@/app/(core)/useConstants"
 
-function QuestsContent() {
+export const FamilyQuests = () => {
   const router = useRouter() 
 
   /** 画面定数 */
@@ -126,7 +126,7 @@ function QuestsContent() {
   return (
       <>
       {/* クエスト一覧 */}
-      <Tabs defaultValue={questCategories.at(0) ? questCategories.at(0)?.name : ""}>
+      <Tabs defaultValue={"すべて"}>
         {/* アイコンカテゴリ */}
         <Tabs.List>
           <div className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
@@ -195,7 +195,11 @@ function QuestsContent() {
         </div>
         <div className="m-3" />
         {/* 全件表示 */}
-        <Tabs.Panel value={"すべて"} key={0}>
+        <Tabs.Panel value={"すべて"} key={0} style={{
+          height: "calc(100vh - 200px",
+          overflowY: "auto",
+          paddingRight: "4px"
+        }}>
         <SimpleGrid
           cols={isMobile ? 1 : isTablet ? 2 : isDesktop ? 3 : 4}
           spacing="md"
@@ -255,40 +259,6 @@ function QuestsContent() {
         opened={sortOpened}
         currentSort={sort}
       />
-
-      {/* 検索条件欄 */}
-      {/* <FamilyQuestFilter filter={questFilter} handleSearch={handleSerch} setFilter={setQuestFilter} /> */}
-      <div className="m-5" />
-      {/* クエスト一覧テーブル */}
-      {/* <DataTable<FamilyQuestView> 
-        withTableBorder 
-        highlightOnHover
-        noRecordsText=""
-        noRecordsIcon={<></>}
-        records={fetchedQuests}
-        columns={[
-          { accessor: 'id', title: 'ID', sortable: true, resizable: true,
-            render: (quest) => {
-            const url = `${FAMILY_QUESTS_URL}/${quest.id}`
-            return (<Link href={url} className="text-blue-400">{quest.id}</Link>)}
-          },
-          { accessor: 'name', title: 'クエスト名', sortable: true, resizable: true },
-        ]}
-        sortStatus={sortStatus}
-        onSortStatusChange={setSortStatus}
-        totalRecords={totalRecords}
-        recordsPerPage={pageSize}
-        page={page}
-        onPageChange={handleChangedPage}
-      /> */}
     </>
-  )
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div></div>}>
-      <QuestsContent />
-    </Suspense>
   )
 }

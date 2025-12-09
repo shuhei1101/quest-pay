@@ -2,9 +2,6 @@
 
 import { useEffect } from "react"
 import { appStorage } from "./(core)/_sessionStorage/appStorage"
-import { Button } from "@mantine/core"
-import { useRouter } from "next/navigation"
-import { HOME_URL } from "./(core)/constants"
 
 export default function ErrorPage({
   error,
@@ -13,7 +10,6 @@ export default function ErrorPage({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  const router = useRouter()
   // レンダリング時の処理
   useEffect(() => {
     // セッションストレージにメッセージがある場合、表示する

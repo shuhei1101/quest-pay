@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { QUESTS_URL } from './app/(core)/constants'
 
 export function middleware(request: NextRequest) {
   // ルートパスにアクセスした場合、ログイン画面にリダイレクトする
   if (request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL(QUESTS_URL, request.url))
   }
   return NextResponse.next()
 }

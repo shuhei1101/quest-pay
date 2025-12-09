@@ -8,6 +8,7 @@ import { ClientAuthError } from "@/app/(core)/appError"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { devLog } from "@/app/(core)/util"
+import { createQuestCategoryById } from "../entity"
 
 
 export const useQuestCategories = () => {
@@ -18,15 +19,15 @@ export const useQuestCategories = () => {
     queryKey: ["questCategories"],
     retry: false,
     queryFn: async () => {
+      devLog("クエストカテゴリ取得処理")
       // セッションストレージからクエストカテゴリを取得する
       let fetchedQuestCategories = appStorage.questCategories.get() || []
-      devLog("useQuestCategories.セッションストレージ.クエストカテゴリ: ", fetchedQuestCategories)
+      devLog("クエストカテゴリ取得: ", fetchedQuestCategories)
       // 取得できなかった場合
       if (fetchedQuestCategories.length == 0) {
         // クエストカテゴリを取得する
         fetchedQuestCategories = await fetchQuestCategories({supabase})
-        if (fetchedQuestCategories.length == 0) {
-          devLog("useQuestCategories.クエストカテゴリが0件")
+        if (!fetchedQuestCategories) {
           // フィードバックメッセージを表示する
           appStorage.feedbackMessage.set("クエストカテゴリのロードに失敗しました。再度ログインしてください。")
           // ログイン画面に遷移する
@@ -35,15 +36,21 @@ export const useQuestCategories = () => {
           throw new ClientAuthError()
         }
         // セッションストレージに格納する
-        if (fetchedQuestCategories) appStorage.questCategories.set(fetchedQuestCategories)
+        appStorage.questCategories.set(fetchedQuestCategories)
       }
-      devLog("useQuestCategories.クエストカテゴリの取得件数: ", fetchedQuestCategories.length)
-      return { questCategories: fetchedQuestCategories }
+      // クエストカテゴリ辞書を取得する
+      const questCategoryById = createQuestCategoryById(fetchedQuestCategories)
+
+      devLog("取得クエストカテゴリ: ", fetchedQuestCategories)
+      return { questCategories: fetchedQuestCategories, questCategoryById }
     }
   })
 
+
+
   return { 
     questCategories: data?.questCategories ?? [], 
-    isLoading
+    isLoading,
+    questCategoryById: data?.questCategoryById
   }
 }

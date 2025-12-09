@@ -2,19 +2,19 @@
 
 import { ActionIcon, Button, ColorPicker, Input, Modal, Popover, Space, Tabs, Text } from "@mantine/core"
 import { useEffect, useState } from "react"
-import { RenderIcon } from "./_components/RenderIcon"
-import { useIcons } from "./_hooks/useIcons"
-import { useIconCategories } from "./category/_hooks/useIconCategories"
-import { IconEntity } from "./entity"
+import { RenderIcon } from "./RenderIcon"
+import { useIcons } from "../_hooks/useIcons"
+import { useIconCategories } from "../../../api/icons/category/_hook/useIconCategories"
+import { IconEntity } from "../../../api/icons/entity"
 
 /** アイコン選択ポップアップ */
 export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor, currentColor}: {
   opened: boolean,
   close: () => void,
   currentIconId: number,
-  setIcon: (icon: number) => void,
-  setColor: (icon: string) => void,
-  currentColor?: string
+  setIcon: (id: number) => void,
+  setColor: (color: string) => void,
+  currentColor: string | null
 }) => {
   /** アイコンカテゴリ */
   const { iconCategories } = useIconCategories()
@@ -22,7 +22,7 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
   const { icons } = useIcons()
 
   /** カラーピッカーの状態 */
-  const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined)
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
 
   /** 選択中のアイコン */
   const [selectedIconId, setSelectedIconId] = useState<number | undefined>(undefined)
@@ -48,7 +48,7 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
     setColor(selectedColor!)
     // 状態をリセットする
     setSelectedIconId(undefined)
-    setSelectedColor(undefined)
+    setSelectedColor(null)
     // ポップアップを閉じる
     close()
   }
@@ -79,7 +79,7 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
                 <>
                     <ActionIcon key={icon.id} variant={selectedIconId === icon.id ? "outline" : "white"} radius="sm" onClick={() => onIconSelect(icon)} 
                       >
-                      <RenderIcon iconName={icon.name} color={selectedColor} />
+                      <RenderIcon iconName={icon.name} iconColor={selectedColor} />
                     </ActionIcon>
               </>
               ))}
@@ -94,7 +94,7 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
           </Popover.Target>
           <Popover.Dropdown>
             <div className="flex flex-col items-center justify-center">
-              <ColorPicker format="rgba" value={selectedColor} onChange={setSelectedColor} />
+              <ColorPicker format="rgba" value={selectedColor ?? undefined} onChange={setSelectedColor} />
             </div>
           </Popover.Dropdown>
         </Popover>

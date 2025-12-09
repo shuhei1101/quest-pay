@@ -9,7 +9,7 @@ export const QuestEntitySchema = z.object({
   updated_at: z.string(),
   category_id: z.number().nullable(),
   icon_id: z.number(),
-  icon_color: z.string().nullable()
+  icon_color: z.string()
 })
 export type QuestEntity = z.infer<typeof QuestEntitySchema>
 

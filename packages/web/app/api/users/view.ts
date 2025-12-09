@@ -9,7 +9,8 @@ export const UserInfoViewSchema = z.object({
   user_id: z.string(),
   profile_id: ProfileEntitySchema.shape.id,
   profile_name: ProfileEntitySchema.shape.name,
-  profile_icon: ProfileEntitySchema.shape.icon,
+  profile_icon_id: ProfileEntitySchema.shape.icon_id,
+  profile_icon_color: ProfileEntitySchema.shape.icon_color,
   profile_birthday: ProfileEntitySchema.shape.birthday,
   parent_id: ParentEntitySchema.shape.id.nullable(),
   child_id: ChildEntitySchema.shape.id.nullable(),
@@ -21,7 +22,8 @@ export const UserInfoViewSchema = z.object({
   family_local_name: FamilyEntitySchema.shape.local_name.nullable(),
   family_online_name: FamilyEntitySchema.shape.online_name.nullable(),
   family_introduction: FamilyEntitySchema.shape.introduction.nullable(),
-  family_icon: FamilyEntitySchema.shape.icon.nullable(),
+  family_icon_id: FamilyEntitySchema.shape.icon_id.nullable(),
+  family_icon_color: FamilyEntitySchema.shape.icon_color.nullable(),
   family_display_id: FamilyEntitySchema.shape.display_id.nullable(),
 })
 export type UserInfoView = z.infer<typeof UserInfoViewSchema>
