@@ -1,0 +1,41 @@
+import { NextRequest, NextResponse } from "next/server"
+import { handleServerError } from "@/app/(core)/errorHandler"
+import { withAuth } from "@/app/(core)/withAuth"
+import { fetchUserInfo } from "@/app/api/users/login/query"
+import { ServerError } from "@/app/(core)/appError"
+import { PostFamilyInviteRequestSchema } from "./schema"
+import { fetchFamily } from "../query"
+import { sendFamilyInviteCode } from "./service"
+
+/** メールを送信する */
+export async function POST(
+  request: NextRequest,
+) {
+  return withAuth(async (supabase, userId) => {
+    try {
+      // bodyからメールアドレスを取得する
+      const body = await request.json()
+      const data  = PostFamilyInviteRequestSchema.parse(body)
+
+      // 家族IDを取得する
+      const userInfo = await fetchUserInfo({userId, supabase})
+      if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
+        
+      // 家族情報を取得する
+      const family = await fetchFamily({
+        familyId: userInfo.family_id,
+        supabase
+      })
+
+      // メールアドレスに家族招待コードを送信する
+      await sendFamilyInviteCode({
+        email: data.email,
+        familyInviteCode: family.invite_code
+      })
+
+
+    } catch (err) {
+      return handleServerError(err)
+    }
+  })
+}

@@ -7,7 +7,7 @@ import { devLog } from "@/app/(core)/util"
 /** 家族を挿入する */
 export const insertFamily = async ({userId, family, parent, supabase}: {
   userId: string,
-  family: Pick<FamilyInsert, "display_id" | "local_name" | "online_name" | "icon_id" | "icon_color">,
+  family: Pick<FamilyInsert, "display_id" | "local_name" | "online_name" | "icon_id" | "icon_color" | "invite_code">,
   parent: Pick<ProfileInsert, "name" | "icon_id" | "icon_color" | "birthday">,
   supabase: SupabaseClient
 }) => {

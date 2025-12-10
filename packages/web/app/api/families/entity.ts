@@ -11,6 +11,7 @@ export const FamilyEntitySchema = z.object({
   icon_id: z.number(),
   icon_color: z.string(),
   introduction: z.string().nullable(),
+  invite_code: z.string(),
   created_at: z.string(),
   updated_at: z.string()
 })

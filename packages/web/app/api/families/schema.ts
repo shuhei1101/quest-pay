@@ -6,6 +6,7 @@ import { ProfileInsertSchema } from "../users/entity"
 export const PostFamilyRequestSchema = z.object({
   family: FamilyInsertSchema.omit({
     introduction: true,
+    invite_code: true
   }),
   parent: ProfileInsertSchema.omit({
     family_id: true,

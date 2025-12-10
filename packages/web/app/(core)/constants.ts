@@ -28,6 +28,7 @@ export const FAMILY_QUEST_API_URL = (questId: string) => `${QUEST_API_URL(questI
 export const FAMILIES_URL = `/families`
 export const FAMILY_NEW_URL = `${FAMILIES_URL}/new`
 export const FAMILY_API_URL = `/api/families`
+export const FAMILY_INVITE_API_URL = `${FAMILY_API_URL}/invite`
 
 // プロジェクト
 export const PROJECTS_URL = `/projects`

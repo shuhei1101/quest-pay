@@ -2,7 +2,7 @@
 
 import { useLoginUserInfo } from '@/app/login/_hooks/useLoginUserInfo'
 import { FAMILY_QUESTS_URL, HOME_URL, LOGIN_URL, PROJECT_NEW_URL, PROJECTS_URL, QUESTS_NEW_URL, QUESTS_URL, USERS_URL } from '@/app/(core)/constants'
-import { AppShell, Text, Image, Box, Burger, Drawer, NavLink, ActionIcon, Title, ScrollArea, LoadingOverlay, useMantineColorScheme } from '@mantine/core'
+import { AppShell, Text, Image, Box, Burger, Drawer, NavLink, ActionIcon, Title, ScrollArea, LoadingOverlay, useMantineColorScheme, Button } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { IconHome2, IconUsers, IconFiles, IconFolders, IconBriefcase, IconFolderPlus, IconFilePlus, IconLogout, IconListCheck, IconMenu2, IconClipboard, IconWorld } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
@@ -22,7 +22,7 @@ export default function AppLayout({
   /** ブレークポイント */
   const { isMobile, isLight } = useConstants()
   /** ログインユーザ情報（キャッシュを使用しない） */
-  const { userInfo, isLoading } = useLoginUserInfo({caching: false})
+  const { userInfo, isLoading, isGuest } = useLoginUserInfo({caching: false})
   /** メニュー */
   const menuItems = (
     <>
@@ -111,6 +111,13 @@ export default function AppLayout({
     router.push(`${LOGIN_URL}`)
   };
 
+  // ハンバーガーメニュー
+  const MenuButton = () => (
+    <ActionIcon onClick={toggle} variant="subtle" size="xl" >
+      <IconMenu2 style={{ width: '70%', height: '70%' }} stroke={1.5} />
+    </ActionIcon>
+  )
+
   return (
     <>
     {/* ロード中のオーバーレイ */}
@@ -169,12 +176,11 @@ export default function AppLayout({
           alignItems: "center",
           color: "black",
           paddingLeft: "10px",
-          paddingRight: "10px"
+          paddingRight: "10px",
+          gap: "8px",
         }} >
             {/* ハンバーガーメニュー切り替えボタン */}
-            <ActionIcon onClick={toggle} variant="subtle" size="xl" >
-              <IconMenu2 style={{ width: '70%', height: '70%' }} stroke={1.5} />
-            </ActionIcon>
+            {!isMobile && <MenuButton/>}
             {/* ホームボタン */}
             <ActionIcon onClick={()=>{
               router.push(`${HOME_URL}`)
@@ -188,9 +194,14 @@ export default function AppLayout({
             {/* ユーザ情報を表示する */}
             <Text c="var(--mantine-color-text)" className='text-nowrap text-sm'>{userInfo?.profile_name}</Text>
             {/* サインアウトボタン */}
-            <ActionIcon onClick={handleLogout} variant="subtle" size="xl" >
-              <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
-            </ActionIcon>
+            {isGuest ? 
+              <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
+              :
+              <Button variant='gradient' className='shrink-0' onClick={handleLogout}>ログアウト</Button>
+          }
+            
+            {/* ハンバーガーメニュー切り替えボタン */}
+            {isMobile && <MenuButton/>}
         </AppShell.Header>
 
         {/* （大画面のみ）左サイドメニュー */}

@@ -3,6 +3,7 @@ import { handleServerError } from "@/app/(core)/errorHandler"
 import { withAuth } from "@/app/(core)/withAuth"
 import { PostFamilyRequestSchema, PostFamilyResponse } from "./schema"
 import { insertFamily } from "./db"
+import { generateUniqueInviteCode } from "./query"
 
 /** 家族を登録する */
 export async function POST(
@@ -13,13 +14,19 @@ export async function POST(
       // bodyから家族を取得する
       const body = await request.json()
       const data  = PostFamilyRequestSchema.parse(body)
+
+      // 招待コードを生成する
+      const inviteCode = await generateUniqueInviteCode({supabase})
         
       // 家族を登録する
       const parentId = await insertFamily({
-        family: data.family,
+        family: {
+          ...data.family,
+          invite_code: inviteCode
+        },
         parent: data.parent,
         supabase: supabase,
-        userId: userId
+        userId: userId,
       })
 
       return NextResponse.json({familyId: parentId} as PostFamilyResponse)

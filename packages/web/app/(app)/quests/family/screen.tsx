@@ -3,23 +3,28 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
 import { FamilyQuestSort } from "../../../api/quests/family/view"
 import { useFamilyQuests } from "./_hook/useFamilyQuests"
-import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL } from "@/app/(core)/constants"
+import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL, LOGIN_URL } from "@/app/(core)/constants"
 import { FamilyQuestFilterSchema, FamilyQuestFilterType } from "../../../api/quests/family/schema"
-import { SimpleGrid, Tabs, Input, ActionIcon, Box, Paper } from "@mantine/core"
+import { SimpleGrid, Tabs, Button, Text, Input, ActionIcon, Box, Paper } from "@mantine/core"
 import { useQuestCategories } from "@/app/api/quests/category/_hook/useQuestCategories"
 import { RenderIcon } from "../../icons/_components/RenderIcon"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
 import { FamilyQuestCardLayout } from "./_components/FamilyQuestCardLayout"
 import { devLog } from "@/app/(core)/util"
 import { FetchFamilyQuestsResultType } from "@/app/api/quests/family/query"
-import { IconArrowsSort, IconFilter, IconSearch } from "@tabler/icons-react"
+import { IconArrowsSort, IconFilter, IconLogout, IconSearch } from "@tabler/icons-react"
 import { FamilyQuestFilterPopup } from "./_components/FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./_components/FamilyQuestSortPopup"
 import { useConstants } from "@/app/(core)/useConstants"
+import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
+import { useSwipeable } from "react-swipeable"
 
 export const FamilyQuests = () => {
   const router = useRouter() 
 
+  /** タブ状態 */
+  const [tabValue, setTabValue] = useState<string | null>('すべて');
+  
   /** 画面定数 */
   const { isMobile, isTablet, isDesktop } = useConstants()
 
@@ -43,6 +48,26 @@ export const FamilyQuests = () => {
   /** クエリストリングの状態 */
   const searchParams = useSearchParams()
   
+  /** 左右スワイプ時のハンドル */
+  const handlers = useSwipeable({
+    onSwiped: (event) => {
+      const idx = tabList.indexOf(tabValue ?? "すべて")
+
+      if (event.dir === "Left") {
+        // 次のタブへ
+        const next = tabList[idx + 1]
+        if (next) setTabValue(next)
+      }
+
+      if (event.dir === "Right") {
+        // 前のタブへ
+        const prev = tabList[idx - 1]
+        if (prev) setTabValue(prev)
+      }
+    },
+    trackMouse: true
+  })
+  
   // パラメータをクエストフィルターにセットする
   useEffect(() => {
     if (!searchParams) return
@@ -61,6 +86,15 @@ export const FamilyQuests = () => {
   
   /** クエストカテゴリ */
   const { questCategories, isLoading: categoryLoading } = useQuestCategories()
+
+  /** タブリスト */
+  const tabList = [
+    "すべて",
+    ...questCategories.map(c => c.name),
+    "その他"
+  ]
+  /** 現在のタブインデックス */
+  const currentIndex = tabList.indexOf(tabValue ?? "すべて")
 
   /** クエスト一覧 */
   const { fetchedQuests, isLoading, totalRecords ,maxPage } = useFamilyQuests({
@@ -124,9 +158,9 @@ export const FamilyQuests = () => {
   const [isComposing, setIsComposing] = useState(false)
 
   return (
-      <>
+      <div {...handlers} className="w-full h-[80vh]">
       {/* クエスト一覧 */}
-      <Tabs defaultValue={"すべて"}>
+      <Tabs value={tabValue} onChange={setTabValue}>
         {/* アイコンカテゴリ */}
         <Tabs.List>
           <div className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
@@ -226,7 +260,7 @@ export const FamilyQuests = () => {
         )}
 
         {/* その他表示 */}
-        <Tabs.Panel value={"その他"} key={-1}>
+        <Tabs.Panel value={"その他"} key={-1} >
         <SimpleGrid
           cols={isMobile ? 1 : isTablet ? 2 : isDesktop ? 3 : 4}
           spacing="md"
@@ -259,6 +293,6 @@ export const FamilyQuests = () => {
         opened={sortOpened}
         currentSort={sort}
       />
-    </>
+    </div>
   )
 }

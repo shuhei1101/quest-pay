@@ -1,15 +1,19 @@
 "use client"
 import { useEffect, useState, Suspense, useRef } from "react"
-import { Tabs, Input, ActionIcon, Box, Paper } from "@mantine/core"
+import { Tabs, Input, ActionIcon, Box, Paper, Text, Button } from "@mantine/core"
 import { FamilyQuests } from "./family/screen"
-import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconPencil, IconPlus, IconTrash, IconWorld } from "@tabler/icons-react"
+import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconPencil, IconPlus, IconTrash, IconWorld } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion";
 import { useConstants } from "@/app/(core)/useConstants"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUEST_NEW_URL } from "@/app/(core)/constants"
+import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/constants"
+import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
 
 function QuestsContent() {
   const router = useRouter()
+
+  /** ログインユーザ情報 */
+  const { isGuest } = useLoginUserInfo()
 
   const [tabValue, setTabValue] = useState<string | null>('public');
   const [open, setOpen] = useState(false);
@@ -48,6 +52,21 @@ function QuestsContent() {
       onClick: () => router.push(FAMILY_QUEST_NEW_URL)
     },
   ];
+
+    const GuestScreen = () => (
+    <div className="w-full h-[80vh] flex flex-col items-center justify-center">
+      <Text className="text-lg mb-4">ログインが必要です。</Text>
+      <Button
+        onClick={() => router.push(`${LOGIN_URL}`)}
+      >
+        <>
+          <Text>ログイン</Text>
+          <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
+        </>
+      </Button>
+    </div>
+  )
+
   return (
       <>
     <Tabs variant="pills" value={tabValue} onChange={setTabValue} color={
@@ -61,10 +80,10 @@ function QuestsContent() {
         <Tabs.List>
           <div className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
             <Tabs.Tab value="public" leftSection={<IconWorld color={tabValue == 'public' ? "white" : "rgb(96 165 250)"} size={18} />}>
-              公開クエスト
+              公開
             </Tabs.Tab>
             <Tabs.Tab value="family" leftSection={<IconHome2 color={tabValue == 'family' ? "white" : "rgb(74, 222, 128)"} size={18} />}>
-              家族クエスト
+              家族
             </Tabs.Tab>
             <Tabs.Tab value="penalty" leftSection={<IconClipboardOff color={tabValue == 'penalty' ? "white" : "rgb(252, 132, 132)"} size={18} />}>
               違反リスト
@@ -82,7 +101,7 @@ function QuestsContent() {
         公開クエスト
       </Tabs.Panel>
       <Tabs.Panel value="family">
-        <FamilyQuests />
+        {isGuest ? <GuestScreen/> : <FamilyQuests />}
       </Tabs.Panel>
       <Tabs.Panel value="penalty">
         違反リスト
