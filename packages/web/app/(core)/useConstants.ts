@@ -14,6 +14,6 @@ export const useConstants = () => {
     isMobile,
     isTablet,
     isDesktop,
-    isLight: colorScheme === "light"
+    isDark: colorScheme === "dark"
   }
 }

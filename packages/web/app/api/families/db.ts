@@ -30,8 +30,4 @@ export const insertFamily = async ({userId, family, parent, supabase}: {
     devLog("家族作成DBエラー: ", error)
     throw new DatabaseError('家族の作成に失敗しました。')
   }
-
-  const familyId = FamilyEntitySchema.shape.id.parse(data)
-
-  return familyId
 }

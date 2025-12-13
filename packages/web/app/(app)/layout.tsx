@@ -20,7 +20,7 @@ export default function AppLayout({
   const [opened, { toggle, close }] = useDisclosure();
   const router = useRouter()
   /** ブレークポイント */
-  const { isMobile, isLight } = useConstants()
+  const { isMobile, isDark } = useConstants()
   /** ログインユーザ情報（キャッシュを使用しない） */
   const { userInfo, isLoading, isGuest } = useLoginUserInfo({caching: false})
   /** メニュー */
@@ -131,7 +131,7 @@ export default function AppLayout({
         }}
       >
         <Image
-          src={isLight ? "/images/bg-light.png" : "/images/bg-dark.png"}
+          src={isDark ? "/images/bg-dark.png" : "/images/bg-light.png"}
           alt="bg"
           style={{
             position: "absolute",
@@ -205,7 +205,7 @@ export default function AppLayout({
         </AppShell.Header>
 
         {/* （大画面のみ）左サイドメニュー */}
-        <AppShell.Navbar className={`${isLight ? "bg-zinc-600!" : "bg-zinc-800!"} text-white`}>
+        <AppShell.Navbar className={`${isDark ? "bg-zinc-800!" : "bg-zinc-600!"} text-white`}>
           {!isMobile ? (
             opened ? (
               <ScrollArea h="100%">{menuItems}</ScrollArea>

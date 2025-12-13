@@ -1,4 +1,8 @@
 import nodemailer from "nodemailer";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { ServerError } from "@/app/(core)/appError";
+import { generateInviteCode } from "@/app/(core)/util";
+import { getFamilyByInviteCode } from "../query";
 
 /** 家族招待コードをメールする */
 export const sendFamilyInviteCode = async ({email, familyInviteCode}: {
@@ -25,17 +29,21 @@ export const sendFamilyInviteCode = async ({email, familyInviteCode}: {
   });
 }
 
-const CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-/** 招待コードを生成する */
-export const generateInviteCode = (length = 8) => {
-  let code = "";
-  const array = new Uint32Array(length);
-  crypto.getRandomValues(array);
+/** 使用可能な家族招待コードを生成する */
+export const generateUniqueInviteCode = async ({supabase}: {
+  supabase: SupabaseClient,
+}) => {
+  for (let i = 0; i < 10; i++) {
+    // 招待コードを生成する
+    const code = generateInviteCode()
 
-  for (let i = 0; i < length; i++) {
-    const index = array[i] % CHARS.length;
-    code += CHARS[index];
+    const family = await getFamilyByInviteCode({code, supabase})
+
+    // 招待コードが存在していない場合
+    if (family === null) {
+      // コードを返却する
+      return code
+    }
   }
-
-  return code;
-};
+  throw new ServerError("招待コードの生成に失敗しました")
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from "next/navigation"
-import { FamilyQuestForm } from "./_component/FamilyQuestForm"
+import { ChildForm } from "../[id]/_components/ChildForm"
 
 export default function Page() {
   const params = useParams()
@@ -9,7 +9,7 @@ export default function Page() {
 
   return (
     <>
-      <FamilyQuestForm id={id} />
+      <ChildForm id={id} />
     </>
   )
 }

@@ -16,10 +16,4 @@ export const postFamily = async (request: PostFamilyRequest) => {
   if (!res.ok) {
     await handleAPIError(res)
   }
-
-  const data = await res.json()
-
-  devLog("postFamilyの戻り値: ", data)
-
-  return PostFamilyResponseSchema.parse(data)
 }

@@ -19,7 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider defaultColorScheme="dark"
+      <MantineProvider defaultColorScheme={scheme}
         theme={theme} 
       >
         {/* フィードバックメッセージラッパー */}

@@ -4,8 +4,8 @@ import { withAuth } from "@/app/(core)/withAuth"
 import { fetchUserInfo } from "@/app/api/users/login/query"
 import { ServerError } from "@/app/(core)/appError"
 import { PostFamilyInviteRequestSchema } from "./schema"
-import { fetchFamily } from "../query"
 import { sendFamilyInviteCode } from "./service"
+import { fetchFamily } from "../query"
 
 /** メールを送信する */
 export async function POST(
@@ -26,6 +26,8 @@ export async function POST(
         familyId: userInfo.family_id,
         supabase
       })
+
+      if(!family) throw new ServerError("家族の取得に失敗しました。")
 
       // メールアドレスに家族招待コードを送信する
       await sendFamilyInviteCode({

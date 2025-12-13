@@ -1,8 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js"
-import { devLog } from "@/app/(core)/util"
+import { devLog, generateInviteCode } from "@/app/(core)/util"
 import { FamilyEntitySchema } from "./entity"
-import { generateInviteCode } from "./invite/service"
-import { ServerError } from "@/app/(core)/appError"
 
 /** 家族を取得する */
 export const fetchFamily = async ({
@@ -25,25 +23,16 @@ export const fetchFamily = async ({
     return data.length > 0 ? FamilyEntitySchema.parse(data[0]) : undefined
 }
 
-/** 家族招待コードが使用可能か確認する */
-export const generateUniqueInviteCode = async ({supabase}: {
+/** 使用可能な家族招待コードか確認する */
+export const getFamilyByInviteCode = async ({supabase, code}: {
   supabase: SupabaseClient,
+  code: string
 }) => {
-  for (let i = 0; i < 10; i++) {
-    // 招待コードを生成する
-    const code = generateInviteCode()
+  const { data } = await supabase
+    .from("families")
+    .select("*")
+    .eq("invite_code", code)
+    .maybeSingle()
 
-    const { data } = await supabase
-      .from("families")
-      .select("id")
-      .eq("invite_code", code)
-      .maybeSingle()
-
-    // 招待コードが存在していない場合
-    if (data === null) {
-      // コードを返却する
-      return code
-    }
-  }
-  throw new ServerError("招待コードの生成に失敗しました")
+  return data ? FamilyEntitySchema.parse(data) : null
 }

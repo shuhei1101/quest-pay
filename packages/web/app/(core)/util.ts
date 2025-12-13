@@ -17,3 +17,18 @@ export const devLog = (text: string, obj?: unknown) => {
     }
   }
 }
+
+const CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+/** 招待コードを生成する */
+export const generateInviteCode = (length = 8) => {
+  let code = "";
+  const array = new Uint32Array(length);
+  crypto.getRandomValues(array);
+
+  for (let i = 0; i < length; i++) {
+    const index = array[i] % CHARS.length;
+    code += CHARS[index];
+  }
+
+  return code;
+};

@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState, Suspense, useRef } from "react"
 import { Tabs, Input, ActionIcon, Box, Paper, Text, Button } from "@mantine/core"
-import { FamilyQuests } from "./family/screen"
+import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconPencil, IconPlus, IconTrash, IconWorld } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion";
 import { useConstants } from "@/app/(core)/useConstants"
@@ -101,7 +101,7 @@ function QuestsContent() {
         公開クエスト
       </Tabs.Panel>
       <Tabs.Panel value="family">
-        {isGuest ? <GuestScreen/> : <FamilyQuests />}
+        {isGuest ? <GuestScreen/> : <FamilyQuestList />}
       </Tabs.Panel>
       <Tabs.Panel value="penalty">
         違反リスト

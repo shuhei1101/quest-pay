@@ -21,7 +21,7 @@ export const theme = createTheme({
   fontSizes: {
     xs: "14px",
     sm: "15px",
-    md: "16px", // ← デフォルト
+    md: "16px",
     lg: "18px",
     xl: "20px",
   },

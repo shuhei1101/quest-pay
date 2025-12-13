@@ -14,8 +14,8 @@ export const LOGIN_URL = `/login`
 export const QUESTS_URL = `/quests`
 export const QUESTS_NEW_URL = `${QUESTS_URL}/new`
 export const QUEST_URL =(questId: string) => `${QUESTS_URL}/${questId}`
-export const QUESTS_API_URL = `/api/quests/`
-export const QUEST_API_URL = (questId: string) => `/api/quests/${questId}`
+export const QUESTS_API_URL = `/api${QUESTS_URL}`
+export const QUEST_API_URL = (questId: string) => `${QUESTS_API_URL}/${questId}`
 
 // 家族クエスト
 export const FAMILY_QUESTS_URL = `${QUESTS_URL}/family`
@@ -38,10 +38,12 @@ export const PROJECT_API_URL = `${PROJECTS_URL}/api`
 // ユーザ
 export const USERS_URL = `/users`
 export const USER_NEW_URL = `${USERS_URL}/new`
-export const USER_API_URL = `/api/users`
+export const USER_API_URL = (userId: string) => `${USERS_URL}/${userId}`
 export const USER_LOGIN_API_URL = `${USER_API_URL}/login`
 
 // 子供
 export const CHILDREN_URL = `/children`
 export const CHILD_NEW_URL = `${CHILDREN_URL}/new`
-export const CHILD_API_URL = `${CHILDREN_URL}/api`
+export const CHILD_URL = (childId: string) => `${CHILDREN_URL}/${childId}`
+export const CHILDREN_API_URL = `/api${CHILDREN_URL}`
+export const CHILD_API_URL = (childId: string) => `${CHILDREN_API_URL}/${childId}`

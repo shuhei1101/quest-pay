@@ -119,14 +119,14 @@ export default function Page() {
       {/* 家族アイコン選択ポップアップ */}
       <IconSelectPopup opened={ familyIconOpened } close={ closeFamilyIcon } 
         setIcon={ () => (iconId: number) => setFamilyValue("familyIconId", iconId) }
-        setColor={ () => (iconId: string) => setFamilyValue("familyIconColor", iconId) }
+        setColor={ () => (iconColor: string) => setFamilyValue("familyIconColor", iconColor) }
         currentIconId={watchFamily().familyIconId} 
         currentColor={watchFamily().familyIconColor} 
       />
       {/* 親アイコン選択ポップアップ */}
       <IconSelectPopup opened={ parentIconOpened } close={ closeParentIcon } 
         setIcon={ () => (iconId: number) => setFamilyValue("parentIconId", iconId) }
-        setColor={ () => (iconId: string) => setFamilyValue("parentIconColor", iconId) }
+        setColor={ () => (iconColor: string) => setFamilyValue("parentIconColor", iconColor) }
         currentIconId={watchFamily().parentIconId} 
         currentColor={watchFamily().parentIconColor} 
       />

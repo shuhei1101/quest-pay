@@ -39,3 +39,19 @@ export const fetchUserInfo = async ({userId, supabase}: {
 
   return data.length !== 0 ? UserInfoViewSchema.parse(data[0]) : undefined
 }
+
+/** 子供IDに紐づく自身の家族情報を取得する */
+export const fetchUserInfoByChildId = async ({childId, supabase}: {
+  childId: string,
+  supabase: SupabaseClient
+}) => {
+  // データを取得する
+  const { data, error } = await supabase.from("user_info_view")
+    .select("*")
+    .eq("child_id", childId)
+
+  // エラーをチェックする
+  if (error) throw error;
+
+  return data.length !== 0 ? UserInfoViewSchema.parse(data[0]) : undefined
+}

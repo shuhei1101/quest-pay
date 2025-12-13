@@ -33,7 +33,7 @@ export default function Page() {
             </CopyButton>
         </div>
         </Input.Wrapper>
-        <form onSubmit={handleSubmit((form) => sendInviteMail())} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit((form) => sendInviteMail({form}))} className="flex flex-col gap-3">
           <TextInput label="招待コードを送信" description="メールで送信することも可能です"
             placeholder="メールアドレスを入力"
             type="email" {...register("email")} error={errors.email?.message} />

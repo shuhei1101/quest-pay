@@ -8,7 +8,7 @@ import toast from "react-hot-toast"
 import { handleAppError } from "@/app/(core)/errorHandler"
 
 
-/** 家族クエスト保存ハンドル */
+/** 登録ボタン押下時のハンドル */
 export const useRegisterFamilyQuest = ({setId}: {setId: (id: string) => void}) => {
   const router = useRouter()
   const queryClient = useQueryClient()
