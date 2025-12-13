@@ -1,5 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js"
-import { ServerError } from "@/app/(core)/appError"
+import { ServerError } from "@/app/(core)/error/appError"
 import { generateInviteCode } from "@/app/(core)/util"
 import { getChildByInviteCode } from "../query"
 

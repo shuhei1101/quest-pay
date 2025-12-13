@@ -1,33 +1,39 @@
-import { NextRequest, NextResponse } from "next/server"
-import { handleServerError } from "@/app/(core)/errorHandler"
+import { NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
-import { fetchUserInfo, fetchUserInfoByChildId } from "@/app/api/users/login/query"
-import { ServerError } from "@/app/(core)/appError"
+import { fetchUserInfo } from "@/app/api/users/login/query"
+import { ServerError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
 import { GetChildResponse } from "./schema"
+import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
+import { fetchUserInfoByChildId } from "./query"
 
 /** 子供を取得する */
 export async function GET(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ childId: string }> }
 ) {
-  return withAuth(async (supabase) => {
-    try {
+  return withAuth(async (supabase, userId) => {
+    return withRouteErrorHandling(async () => {
       // パスパラメータからIDを取得する
       const params = await context.params
-      const childId = params.id
+      const childId = params.childId
       
-      devLog("GetChild.パラメータ.ID: ", params.id)
+      devLog("GetChild.パラメータ.ID: ", params.childId)
+
+     // 家族IDを取得する
+      const userInfo = await fetchUserInfo({userId, supabase})
+      if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
       
       // 子供を取得する
       const data = await fetchUserInfoByChildId({ supabase, childId })
       
       devLog("取得した子供: ", data)
+
+      // 家族IDが一致しない場合
+      if (userInfo.family_id !== data?.family_id) return NextResponse.json({})
   
       return NextResponse.json({user: data} as GetChildResponse)
-    } catch (err) {
-      return handleServerError(err)
-    }
+    })
   })
 }
 

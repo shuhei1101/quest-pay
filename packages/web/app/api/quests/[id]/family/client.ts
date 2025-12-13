@@ -1,7 +1,7 @@
-import { handleAPIError } from "@/app/(core)/errorHandler";
 import { FAMILY_QUEST_API_URL, QUESTS_API_URL } from "@/app/(core)/constants";
 import { DeleteFamilyQuestRequest, GetFamilyQuestResponseSchema, PutFamilyQuestRequest } from "./schema";
 import { devLog } from "@/app/(core)/util";
+import { AppError } from "@/app/(core)/error/appError";
 
 
 /** 家族クエストを取得する */
@@ -15,7 +15,8 @@ export const getFamilyQuest = async (questId: string) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 
   devLog("getFamilyQuest.取得データ: ", `${FAMILY_QUEST_API_URL(questId)}`)
@@ -36,7 +37,8 @@ export const putFamilyQuest = async (req: PutFamilyQuestRequest) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 }
 
@@ -51,6 +53,7 @@ export const deleteFamilyQuest = async (req: DeleteFamilyQuestRequest) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 }

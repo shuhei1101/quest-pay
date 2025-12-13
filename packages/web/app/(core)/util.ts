@@ -9,14 +9,29 @@ export const isSameArray = (a: string[], b: string[]) => {
 
 /** 開発時ログ */
 export const devLog = (text: string, obj?: unknown) => {
-  if (process.env.NODE_ENV === "development") {
-    try {
-      console.log(text, obj !== undefined ? JSON.stringify(obj, null, 2) : '')
-    } catch {
-      console.log(text, obj)
+  if (process.env.NODE_ENV !== "development") return;
+
+  try {
+    let logObj = obj;
+
+    if (typeof obj === 'string') {
+      try {
+        logObj = JSON.parse(obj);
+      } catch {
+        // パースできなければそのまま文字列
+        logObj = obj;
+      }
     }
+
+    if (logObj === undefined) {
+      console.log(`【DEBUG】${getJstTimestamp()} ${text}`);
+    } else {
+      console.log(`【DEBUG】${getJstTimestamp()} ${text}`, logObj);
+    }
+  } catch (e) {
+    console.log(`【DEBUG】${getJstTimestamp()} ${text}`, obj ?? "");
   }
-}
+};
 
 const CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 /** 招待コードを生成する */
@@ -32,3 +47,19 @@ export const generateInviteCode = (length = 8) => {
 
   return code;
 };
+
+/** 現在日時(JST)を取得する */
+export const getJstTimestamp = () => {
+  const date = new Date();
+  // 日本時間に変換しフォーマットを整える
+  return date.toLocaleString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Tokyo",
+  }).replace(/\//g, "-")
+}

@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
-import { handleServerError } from "@/app/(core)/errorHandler"
 import { withAuth } from "@/app/(core)/withAuth"
 import { fetchUserInfo } from "@/app/api/users/login/query"
-import { ServerError } from "@/app/(core)/appError"
+import { ServerError } from "@/app/(core)/error/appError"
 import { PostFamilyInviteRequestSchema } from "./schema"
 import { sendFamilyInviteCode } from "./service"
 import { fetchFamily } from "../query"
+import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 
 /** メールを送信する */
 export async function POST(
   request: NextRequest,
 ) {
   return withAuth(async (supabase, userId) => {
-    try {
+    return withRouteErrorHandling(async () => {
       // bodyからメールアドレスを取得する
       const body = await request.json()
       const data  = PostFamilyInviteRequestSchema.parse(body)
@@ -35,9 +35,7 @@ export async function POST(
         familyInviteCode: family.invite_code
       })
 
-
-    } catch (err) {
-      return handleServerError(err)
-    }
+      return NextResponse.json({})
+    })
   })
 }

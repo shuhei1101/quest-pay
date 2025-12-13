@@ -1,6 +1,6 @@
-import { handleAPIError } from "@/app/(core)/errorHandler";
 import { USER_LOGIN_API_URL } from "@/app/(core)/constants";
 import { UsersLoginGetResponseSchema } from "./schema";
+import { AppError } from "@/app/(core)/error/appError";
 
 export const usersLoginGet = async () => {
   // APIを実行する
@@ -11,7 +11,8 @@ export const usersLoginGet = async () => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
   const data = await res.json()
 

@@ -2,6 +2,7 @@
 
 import { useMantineColorScheme } from "@mantine/core"
 import { useMediaQuery } from "@mantine/hooks"
+import { useSystemTheme } from "./useSystemTheme"
 
 export const useConstants = () => {
     // 画面サイズごとのプラットフォーム判定
@@ -14,6 +15,6 @@ export const useConstants = () => {
     isMobile,
     isTablet,
     isDesktop,
-    isDark: colorScheme === "dark"
+    isDark: colorScheme === "dark",
   }
 }

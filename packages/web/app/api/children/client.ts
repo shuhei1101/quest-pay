@@ -1,7 +1,25 @@
-import { handleAPIError } from "@/app/(core)/errorHandler";
 import { CHILD_API_URL, CHILDREN_API_URL } from "@/app/(core)/constants";
-import { PostChildRequest, PostChildResponseSchema } from "./schema";
+import { GetChildrenResponseSchema, PostChildRequest, PostChildResponseSchema } from "./schema";
 import { devLog } from "@/app/(core)/util";
+import { AppError } from "@/app/(core)/error/appError";
+
+/** 家族クエストをGETする */
+export const getChildren = async () => {
+  // APIを実行する
+  const res = await fetch(`${CHILDREN_API_URL}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+  const data = await res.json()
+
+  // ステータスが不正な場合、アプリ例外を発生させる
+  if (!res.ok) {
+    throw AppError.fromResponse(data, res.status)
+  }
+  devLog("getChildrenの戻り値: ", data)
+
+  return GetChildrenResponseSchema.parse(data)
+}
 
 /** 家族をPOSTする */
 export const postChild = async (request: PostChildRequest) => {
@@ -16,7 +34,8 @@ export const postChild = async (request: PostChildRequest) => {
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
     devLog("postChild.API実行失敗: ", res)
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
   const data = await res
 

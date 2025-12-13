@@ -1,4 +1,4 @@
-import { DatabaseError } from "@/app/(core)/appError"
+import { DatabaseError } from "@/app/(core)/error/appError"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { FamilyEntitySchema, FamilyInsert } from "./entity"
 import { ProfileInsert } from "../users/entity"

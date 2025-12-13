@@ -45,7 +45,7 @@ export const useLoginUserInfo = ({ caching = true }: {
     }
   })
 
-  devLog("ゲストフラグ: ", query.data?.isGuest ?? true)
+  if (query.data?.isGuest) devLog("ゲストフラグ: ", query.data?.isGuest ?? true)
 
   return {
     userInfo: query.data?.userInfo,

@@ -1,8 +1,5 @@
-import { QuestDeleteSchema, QuestUpdateSchema } from "@/app/api/quests/entity"
-import { QuestTagUpdateSchema } from "@/app/(app)/quests/tag/entity"
 import { z } from "zod"
-import { ChildEntitySchema } from "../entity"
-import { UserInfoViewSchema } from "../../users/view"
+import { UserInfoViewSchema } from "../../view"
 
 /** 子供取得レスポンススキーマ */
 export const GetChildResponseSchema = z.object({

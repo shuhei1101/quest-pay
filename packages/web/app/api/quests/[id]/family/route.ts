@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
-import { handleServerError } from "@/app/(core)/errorHandler"
 import { withAuth } from "@/app/(core)/withAuth"
 import { fetchFamilyQuest } from "../../family/query"
 import { DeleteFamilyQuestRequestSchema, GetFamilyQuestResponse, PutFamilyQuestRequestSchema } from "./schema"
 import { fetchUserInfo } from "@/app/api/users/login/query"
-import { ServerError } from "@/app/(core)/appError"
+import { ServerError } from "@/app/(core)/error/appError"
 import { deleteFamilyQuest, updateFamilyQuest } from "../../family/db"
 import { devLog } from "@/app/(core)/util"
+import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 
 /** 家族クエストを取得する */
 export async function GET(
@@ -14,7 +14,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   return withAuth(async (supabase) => {
-    try {
+    return withRouteErrorHandling(async () => {
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -27,9 +27,7 @@ export async function GET(
       devLog("取得した家族クエスト: ", data)
   
       return NextResponse.json({quest: data} as GetFamilyQuestResponse)
-    } catch (err) {
-      return handleServerError(err)
-    }
+    })
   })
 }
 
@@ -39,7 +37,7 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   return withAuth(async (supabase, userId) => {
-    try {
+    return withRouteErrorHandling(async () => {
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -72,9 +70,7 @@ export async function PUT(
       })
       
       return NextResponse.json({})
-    } catch (err) {
-      return handleServerError(err)
-    }
+    })
   })
 }
 
@@ -84,7 +80,7 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   return withAuth(async (supabase) => {
-    try {
+    return withRouteErrorHandling(async () => {
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -103,8 +99,6 @@ export async function DELETE(
       })
 
       return NextResponse.json({})
-    } catch (err) {
-      return handleServerError(err)
-    }
+    })
   })
 }

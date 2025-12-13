@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
-import { handleServerError } from "@/app/(core)/errorHandler"
 import { withAuth } from "@/app/(core)/withAuth"
 import { fetchUserInfo } from "@/app/api/users/login/query"
-import { ServerError } from "@/app/(core)/appError"
+import { ServerError } from "@/app/(core)/error/appError"
 import { fetchFamilyQuests } from "./query"
 import queryString from "query-string"
-import { FamilyQuestSearchParamsSchema, PostFamilyQuestRequestSchema, PostFamilyQuestResponse } from "./schema"
+import { FamilyQuestSearchParamsSchema, GetFamilyQuestsResponse, PostFamilyQuestRequestSchema, PostFamilyQuestResponse } from "./schema"
 import { insertFamilyQuest } from "./db"
+import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 
 /** 家族のクエストを取得する */
 export async function GET(
   req: NextRequest,
 ) {
-  return withAuth(async (supabase, userId) => {
-    try {
+  return withRouteErrorHandling(async () => {
+    return withAuth(async (supabase, userId) => {
       const url = new URL(req.url)
       const query = queryString.parse(url.search)
       const params = FamilyQuestSearchParamsSchema.parse(query)
@@ -25,10 +25,8 @@ export async function GET(
       // クエストを取得する
       const result = await fetchFamilyQuests({supabase, familyId: userInfo.family_id, params })
   
-      return NextResponse.json(result)
-    } catch (err) {
-      return handleServerError(err)
-    }
+      return NextResponse.json(result as GetFamilyQuestsResponse)
+    })
   })
 }
 
@@ -37,7 +35,7 @@ export async function POST(
   request: NextRequest,
 ) {
   return withAuth(async (supabase, userId) => {
-    try {
+    return withRouteErrorHandling(async () => {
       // bodyからクエストを取得する
       const body = await request.json()
       const data  = PostFamilyQuestRequestSchema.parse(body)
@@ -64,8 +62,6 @@ export async function POST(
       })
 
       return NextResponse.json({questId} as PostFamilyQuestResponse)
-    } catch (err) {
-      return handleServerError(err)
-    }
+    })
   })
 }

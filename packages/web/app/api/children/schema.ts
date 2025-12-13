@@ -1,6 +1,14 @@
 import { z } from "zod"
 import { ChildEntitySchema } from "./entity"
 import { ProfileInsertSchema } from "../users/entity"
+import { FetchChildrenResult } from "./query"
+
+/** クエスト取得レスポンススキーマ */
+export const GetChildrenResponseSchema = z.object({
+  children: FetchChildrenResult,
+})
+export type GetChildrenResponse = z.infer<typeof GetChildrenResponseSchema>
+
 
 /** 子供挿入リクエストスキーマ */
 export const PostChildRequestSchema = z.object({

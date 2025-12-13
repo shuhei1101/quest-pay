@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
-import { handleServerError } from "@/app/(core)/errorHandler"
 import { withAuth } from "@/app/(core)/withAuth"
 import { PostFamilyRequestSchema, PostFamilyResponse } from "./schema"
 import { insertFamily } from "./db"
 import { generateUniqueInviteCode } from "./invite/service"
+import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 
 /** 家族を登録する */
 export async function POST(
   request: NextRequest,
 ) {
   return withAuth(async (supabase, userId) => {
-    try {
+    return withRouteErrorHandling(async () => {
       // bodyから家族を取得する
       const body = await request.json()
       const data  = PostFamilyRequestSchema.parse(body)
@@ -29,8 +29,6 @@ export async function POST(
         userId: userId,
       })
       return NextResponse.json({})
-    } catch (err) {
-      return handleServerError(err)
-    }
+    })
   })
 }

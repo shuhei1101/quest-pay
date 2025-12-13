@@ -1,6 +1,6 @@
-import { handleAPIError } from "@/app/(core)/errorHandler";
 import { QUESTS_API_URL } from "@/app/(core)/constants";
 import { QuestDeleteRequest, QuestGetResponseSchema, QuestPutRequest } from "./schema";
+import { AppError } from "@/app/(core)/error/appError";
 
 
 /** クエストを取得する */
@@ -13,7 +13,8 @@ export const questGet = async (id: number) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 
   return QuestGetResponseSchema.parse(res)
@@ -30,7 +31,8 @@ export const questPut = async (req: QuestPutRequest) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 }
 
@@ -45,6 +47,7 @@ export const questDelete = async (req: QuestDeleteRequest) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 }

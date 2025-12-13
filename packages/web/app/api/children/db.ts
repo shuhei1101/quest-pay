@@ -1,4 +1,4 @@
-import { DatabaseError } from "@/app/(core)/appError"
+import { DatabaseError } from "@/app/(core)/error/appError"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { ProfileEntity, ProfileInsert } from "../users/entity"
 import { devLog } from "@/app/(core)/util"
@@ -13,8 +13,6 @@ export const insertChild = async ({profile, child, supabase, familyId}: {
   supabase: SupabaseClient
 }) => {
 
-    devLog("insertChild.家族データ: ", {profile, child})
-
   // レコードを挿入する
   const { data, error } = await supabase.rpc("insert_child", {
     _name: profile.name,
@@ -27,9 +25,9 @@ export const insertChild = async ({profile, child, supabase, familyId}: {
   
   // エラーをチェックする
   if (error) {
-    devLog("子供作成DBエラー: ", error)
+    devLog("insertChild.例外.ソース: ", {profile, child, familyId})
     throw new DatabaseError('子供の作成に失敗しました。')
   }
-  
+
   return z.string().parse(data)
 }

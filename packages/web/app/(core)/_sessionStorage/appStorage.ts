@@ -69,7 +69,6 @@ export const appStorage = {
     /** アイコン辞書を取得する */
     get: () => {
       const iconById = sessionStorage.getItem("iconById")
-      devLog("セッションストレージ.アイコン辞書: ", iconById)
       return iconById ? IconByIdSchema.parse(JSON.parse(iconById)) : undefined
     },
     /** アイコン辞書をセットする */
@@ -106,7 +105,6 @@ export const appStorage = {
     /** クエストカテゴリ辞書を取得する */
     get: () => {
       const questCategoryById = sessionStorage.getItem("questCategoryById")
-      devLog("セッションストレージ.クエストカテゴリ辞書: ", questCategoryById)
       return questCategoryById ? QuestCategoryByIdSchema.parse(JSON.parse(questCategoryById)) : undefined
     },
     /** クエストカテゴリ辞書をセットする */

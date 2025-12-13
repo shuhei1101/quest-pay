@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { useRouter } from "next/navigation"
 import { LOGIN_URL } from "@/app/(core)/constants"
-import { ClientAuthError } from "@/app/(core)/appError"
+import { ClientAuthError } from "@/app/(core)/error/appError"
 
 /** セッション情報を取得する */
 export const useSession = () => {

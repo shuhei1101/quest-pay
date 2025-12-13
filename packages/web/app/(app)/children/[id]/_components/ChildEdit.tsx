@@ -20,7 +20,6 @@ export const ChildForm = ( params: {
 }) => {
   /** 子供ID */
   const [id, setId] = useState<string | undefined>(params.id)
-  devLog("FamilyQuestForm.ID: ", id)
 
   /** ハンドル */
   const { handleRegister } = useRegisterChild({setId})

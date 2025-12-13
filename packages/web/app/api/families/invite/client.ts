@@ -1,7 +1,7 @@
-import { handleAPIError } from "@/app/(core)/errorHandler";
 import { FAMILY_INVITE_API_URL } from "@/app/(core)/constants";
 import { devLog } from "@/app/(core)/util";
 import { PostFamilyInviteRequest } from "./schema";
+import { AppError } from "@/app/(core)/error/appError";
 
 /** 家族招待メールをPOSTする */
 export const postFamilyInvite = async (request: PostFamilyInviteRequest) => {
@@ -14,7 +14,8 @@ export const postFamilyInvite = async (request: PostFamilyInviteRequest) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 
   const data = await res.json()

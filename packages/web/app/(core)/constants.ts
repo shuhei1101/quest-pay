@@ -40,6 +40,10 @@ export const USERS_URL = `/users`
 export const USER_NEW_URL = `${USERS_URL}/new`
 export const USER_API_URL = (userId: string) => `${USERS_URL}/${userId}`
 export const USER_LOGIN_API_URL = `${USER_API_URL}/login`
+// ユーザ（子供ID）
+export const USERS_CHILD_URL = (childId: string) => `${USERS_URL}/child/${childId}`
+
+
 
 // 子供
 export const CHILDREN_URL = `/children`

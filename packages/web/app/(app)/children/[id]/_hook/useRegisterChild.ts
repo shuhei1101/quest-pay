@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
-import { handleAppError } from "@/app/(core)/errorHandler"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 import { postChild } from "@/app/api/children/client"
 import { ChildFormType } from "../form"
 

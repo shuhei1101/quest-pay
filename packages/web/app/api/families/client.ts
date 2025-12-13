@@ -1,7 +1,7 @@
-import { handleAPIError } from "@/app/(core)/errorHandler";
 import { devLog } from "@/app/(core)/util";
 import { FAMILY_API_URL } from "@/app/(core)/constants";
 import { PostFamilyRequest, PostFamilyResponseSchema } from "./schema";
+import { AppError } from "@/app/(core)/error/appError";
 
 /** 家族をPOSTする */
 export const postFamily = async (request: PostFamilyRequest) => {
@@ -14,6 +14,7 @@ export const postFamily = async (request: PostFamilyRequest) => {
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 }

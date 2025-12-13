@@ -1,4 +1,4 @@
-import { DatabaseError } from "@/app/(core)/appError"
+import { DatabaseError } from "@/app/(core)/error/appError"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { QuestDelete, QuestInsert, QuestUpdate } from "@/app/api/quests/entity"
 import { questExclusiveControl } from "./dbHelper"
@@ -27,7 +27,6 @@ export const insertFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
   
   // エラーをチェックする
   if (error) {
-    console.log(error)
     throw new DatabaseError('クエストの作成に失敗しました。')
   }
 
@@ -68,7 +67,7 @@ export const updateFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
   if (error) {
     devLog("家族クエスト更新エラー: ", error)
     devLog("更新データ: ", {quest, familyQuest, tags, supabase})
-    throw new DatabaseError(`更新時にエラーが発生しました。`)
+    throw new DatabaseError(`更新時にエラーが発生しました。`, )
   }
 }
 

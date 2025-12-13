@@ -29,7 +29,7 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   )
 
   // エラーをチェックする
-  if (error) throw error;
+  if (error) handleAppError(error, router)
 
   return {
     fetchedQuests: data?.quests ?? [],

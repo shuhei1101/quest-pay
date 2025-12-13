@@ -3,9 +3,12 @@
 import { useRouter } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
-import { handleAppError } from "@/app/(core)/errorHandler"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 import { FamilyRegisterFormType } from "../form"
 import { postFamily } from "@/app/api/families/client"
+import { devLog } from "@/app/(core)/util"
+import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
+import { LOGIN_URL } from "@/app/(core)/constants"
 
 
 /** 登録ボタン押下時のハンドル */
@@ -33,8 +36,14 @@ export const useRegisterFamily = () => {
       // フィードバックメッセージを表示する
       toast('家族を登録しました', {duration: 1500})
     },
-    onError: (err) => {
-      handleAppError(err, router)
+    onError: (error) => {
+      // エラーをチェックする
+        devLog("子供登録エラー: ", error)
+        // 次画面で表示するメッセージを登録
+        appStorage.feedbackMessage.set(error.message)
+        // 前画面がある場合、遷移する
+        const parentScreen = appStorage.parentScreen.get()
+        router.push(`${parentScreen ?? LOGIN_URL}`);
     }
   })
 

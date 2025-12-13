@@ -24,11 +24,11 @@ export const FamilyQuestSearchParamsSchema = FamilyQuestFilterSchema.extend({
 export type FamilyQuestSearchParams = z.infer<typeof FamilyQuestSearchParamsSchema>
 
 /** クエスト取得レスポンススキーマ */
-export const QuestsFamilyGetResponseSchema = z.object({
+export const GetFamilyQuestsResponseSchema = z.object({
   quests: FetchFamilyQuestsResult,
   totalRecords: z.number()
 })
-export type QuestsFamilyGetResponse = z.infer<typeof QuestsFamilyGetResponseSchema>
+export type GetFamilyQuestsResponse = z.infer<typeof GetFamilyQuestsResponseSchema>
 
 /** クエスト挿入リクエストスキーマ */
 export const PostFamilyQuestRequestSchema = z.object({

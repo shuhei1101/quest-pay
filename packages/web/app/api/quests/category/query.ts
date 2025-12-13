@@ -1,20 +1,25 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { QuestCategoryEntitySchema } from "./entity";
 import { devLog } from "@/app/(core)/util";
+import { QueryError } from "@/app/(core)/error/appError";
 
-/** 全てのアイコンカテゴリを取得する */
+/** 全てのクエストカテゴリを取得する */
 export const fetchQuestCategories = async ({supabase}: {
   supabase: SupabaseClient,
 }) => {
-  // データを取得する
-  const { data, error } = await supabase.from("quest_categories")
-      .select(`*`)
+  try {
+    // データを取得する
+    const { data, error } = await supabase.from("quest_categories")
+        .select(`*`)
 
-    // エラーをチェックする
-    if (error) throw error
+      // エラーをチェックする
+      if (error) throw error
 
-    devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
+      devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
 
-
-    return QuestCategoryEntitySchema.array().parse(data)
+      return QuestCategoryEntitySchema.array().parse(data)
+  } catch (error) {
+    devLog("fetchQuestCategories.取得例外: ", error)
+    throw new QueryError("クエストカテゴリの読み込みに失敗しました。")
+  }
 }

@@ -1,24 +1,25 @@
-import { handleAPIError } from "@/app/(core)/errorHandler";
-import { CHILD_API_URL } from "@/app/(core)/constants";
+import { USERS_CHILD_URL } from "@/app/(core)/constants";
 import { devLog } from "@/app/(core)/util";
 import { GetChildResponseSchema } from "./schema";
+import { AppError } from "@/app/(core)/error/appError";
 
 
 /** 子供を取得する */
-export const getChild = async (questId: string) => {
-  devLog("getChild.実行API: ", `${CHILD_API_URL(questId)}`)
+export const getChild = async (childId: string) => {
+  devLog("getChild.実行API: ", `${USERS_CHILD_URL(childId)}`)
   // APIを実行する
-  const res = await fetch(`${CHILD_API_URL(questId)}`, {
+  const res = await fetch(`${USERS_CHILD_URL(childId)}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   })
 
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    await handleAPIError(res)
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getChild.取得データ: ", `${CHILD_API_URL(questId)}`)
+  devLog("getChild.取得データ: ", `${USERS_CHILD_URL(childId)}`)
 
   const data = await res.json()
 

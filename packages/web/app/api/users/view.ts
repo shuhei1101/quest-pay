@@ -6,7 +6,7 @@ import { FamilyEntitySchema } from "../families/entity"
 
 /** DBのユーザスキーマ */
 export const UserInfoViewSchema = z.object({
-  user_id: z.string(),
+  user_id: z.string().nullable(),
   profile_id: ProfileEntitySchema.shape.id,
   profile_name: ProfileEntitySchema.shape.name,
   profile_icon_id: ProfileEntitySchema.shape.icon_id,

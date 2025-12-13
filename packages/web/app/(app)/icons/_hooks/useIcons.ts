@@ -4,7 +4,7 @@ import { fetchIcons } from "../../../api/icons/query"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
 import { LOGIN_URL } from "@/app/(core)/constants"
-import { ClientAuthError } from "@/app/(core)/appError"
+import { ClientAuthError } from "@/app/(core)/error/appError"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { createIconById } from "../../../api/icons/entity"
@@ -19,10 +19,8 @@ export const useIcons = () => {
     queryKey: ["icons"],
     retry: false,
     queryFn: async () => {
-      devLog("アイコン取得処理")
       // セッションストレージからアイコンを取得する
       let fetchedIcons = appStorage.icons.get() || []
-      devLog("アイコン取得: ", fetchedIcons)
       // 取得できなかった場合
       if (fetchedIcons.length == 0) {
         // アイコンを取得する

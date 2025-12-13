@@ -10,12 +10,25 @@ import { appStorage } from '../(core)/_sessionStorage/appStorage'
 import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../icon'
 import { useConstants } from '../(core)/useConstants'
 import { createClient } from '../(core)/_supabase/client'
+import { useSystemTheme } from '../(core)/useSystemTheme'
+import { useEffect, useState } from 'react'
+import { devLog } from '../(core)/util'
 
 export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  // システムカラースキーム
+  const { isDark: isSystemDark } = useSystemTheme()
+  // Mantineカラースキーム
+  const { setColorScheme, clearColorScheme } = useMantineColorScheme()
+  useEffect(() => {
+    devLog("カラー: ", isSystemDark ? "dark" : "light")
+    setColorScheme(isSystemDark ? "dark" : "light")
+  }, [isSystemDark])
+
   /** メニューの表示状態 */
   const [opened, { toggle, close }] = useDisclosure();
   const router = useRouter()
@@ -117,6 +130,13 @@ export default function AppLayout({
       <IconMenu2 style={{ width: '70%', height: '70%' }} stroke={1.5} />
     </ActionIcon>
   )
+
+  // SSRレンダリング時の処理
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) return null
 
   return (
     <>
