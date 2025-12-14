@@ -22,7 +22,7 @@ export const getFamilyQuests = async (params: FamilyQuestSearchParams) => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getFamilyQuestsの戻り値: ", data)
+  devLog("getFamilyQuests.戻り値: ", data)
 
   return GetFamilyQuestsResponseSchema.parse(data)
 }
@@ -44,7 +44,7 @@ export const postFamilyQuest = async (request: PostFamilyQuestRequest) => {
 
   const data = await res.json()
 
-  devLog("postFamilyQuestの戻り値: ", data)
+  devLog("postFamilyQuest.戻り値: ", data)
 
   return PostFamilyQuestResponseSchema.parse(data)
 }

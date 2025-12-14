@@ -18,7 +18,7 @@ export const getIcons = async () => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getIconsの戻り値: ", data)
+  devLog("getIcons.戻り値: ", data)
 
   return GetIconsResponseSchema.parse(data)
 }

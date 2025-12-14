@@ -7,6 +7,7 @@ import { IconEntitySchema } from "../icons/entity"
 export const ParentViewSchema = z.object({
   user_id: z.string().nullable(),
   name: ProfileEntitySchema.shape.name,
+  icon_id: ProfileEntitySchema.shape.icon_id,
   icon_name: IconEntitySchema.shape.name,
   icon_color: ProfileEntitySchema.shape.icon_color,
   birthday: ProfileEntitySchema.shape.birthday,

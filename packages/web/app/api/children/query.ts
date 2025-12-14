@@ -34,6 +34,34 @@ export const fetchChildrenByFamilyId = async ({
   }
 }
 
+export const FetchChildResult = ChildViewSchema
+
+/** 子供IDに一致する子供を取得する */
+export const fetchChild = async ({
+  supabase,
+  childId
+}: {
+  supabase: SupabaseClient,
+  childId: string
+}) => {
+  try {
+    // データを取得する
+    const { data, error } = await supabase.from("child_view")
+      .select(`*`)
+      .eq("id", childId)
+
+    // エラーをチェックする
+    if (error) throw error
+
+    devLog("fetchChild.取得データ: ", data)
+
+    return data.length > 0 ? FetchChildResult.parse(data[0]) : undefined
+  } catch (error) {
+    devLog("fetchChild.取得例外: ", error)
+    throw new QueryError("子供情報の読み込みに失敗しました。")
+  }
+}
+
 /** 使用可能な子供招待コードか確認する */
 export const getChildByInviteCode = async ({supabase, code}: {
   supabase: SupabaseClient,

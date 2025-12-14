@@ -1,10 +1,10 @@
 "use client"
 
 import { useLoginUserInfo } from '@/app/login/_hooks/useLoginUserInfo'
-import { FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, HOME_URL, LOGIN_URL, QUESTS_NEW_URL, QUESTS_URL, USERS_URL } from '@/app/(core)/constants'
-import { AppShell, Text, Image, Box, Burger, Drawer, NavLink, ActionIcon, Title, ScrollArea, LoadingOverlay, useMantineColorScheme, Button } from '@mantine/core'
-import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { IconHome2, IconUsers, IconFiles, IconFolders, IconBriefcase, IconFolderPlus, IconFilePlus, IconLogout, IconListCheck, IconMenu2, IconClipboard, IconWorld } from '@tabler/icons-react'
+import { FAMILY_MEMBERS_URL, HOME_URL, LOGIN_URL, QUESTS_NEW_URL, QUESTS_URL, USERS_URL } from '@/app/(core)/constants'
+import { AppShell, Text, Image, Box, Drawer, NavLink, ActionIcon, Title, ScrollArea, LoadingOverlay, useMantineColorScheme, Button } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { IconHome2, IconFiles, IconFilePlus, IconMenu2 } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { appStorage } from '../(core)/_sessionStorage/appStorage'
 import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../icon'
@@ -13,6 +13,7 @@ import { createClient } from '../(core)/_supabase/client'
 import { useSystemTheme } from '../(core)/useSystemTheme'
 import { useEffect, useState } from 'react'
 import { devLog } from '../(core)/util'
+import { FeedbackMessage } from '../(core)/_components/FeedbackMessageWrapper'
 
 export default function AppLayout({
   children,
@@ -268,6 +269,7 @@ export default function AppLayout({
       )}
         </Box>
       </Box>
+      <FeedbackMessage />
     </>
   )
 }

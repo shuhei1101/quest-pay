@@ -20,5 +20,5 @@ export const postFamilyInvite = async (request: PostFamilyInviteRequest) => {
 
   const data = await res.json()
 
-  devLog("postFamilyQuestの戻り値: ", data)
+  devLog("postFamilyQuest.戻り値: ", data)
 }

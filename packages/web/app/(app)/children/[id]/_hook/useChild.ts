@@ -1,9 +1,9 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { getChild } from "@/app/api/users/child/[id]/client"
 import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
+import { getChild } from "@/app/api/children/[id]/client"
 
 /** 子供登録フォームを取得する */
 export const useChild = ({childId}: {childId: string}) => {
@@ -21,7 +21,7 @@ export const useChild = ({childId}: {childId: string}) => {
   if (error) handleAppError(error, router)
 
   return {
-    child: data?.user,
+    child: data?.child,
     isLoading
   }
 }

@@ -6,8 +6,8 @@ import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 
 /** ユーザを取得する */
 export async function GET() {
-  return withAuth(async (supabase, userId) => {
-    return withRouteErrorHandling(async () => {
+  return withRouteErrorHandling(async () => {
+    return withAuth(async (supabase, userId) => {
       // ユーザ情報を取得する
       const userInfo = await fetchUserInfo({ supabase, userId })
   

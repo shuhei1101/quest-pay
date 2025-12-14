@@ -78,12 +78,9 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
           <Tabs.Panel value={category.name} key={category.id}>
             <div className="flex flex-wrap justify-start gap-3 m-3">
               {icons.filter((icon) => icon.category_id === category.id).map((icon) => (
-                <>
-                    <ActionIcon key={icon.id} variant={selectedIconId === icon.id ? "outline" : "white"} radius="sm" onClick={() => onIconSelect(icon)} 
-                      >
-                      <RenderIcon iconName={icon.name} iconColor={selectedColor} />
-                    </ActionIcon>
-              </>
+                <ActionIcon key={icon.id} variant={selectedIconId === icon.id ? "outline" : "white"} radius="sm" onClick={() => onIconSelect(icon)}>
+                  <RenderIcon iconName={icon.name} iconColor={selectedColor} />
+                </ActionIcon>
               ))}
             </div>
           </Tabs.Panel>

@@ -1,26 +1,37 @@
 import { NextRequest, NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
+import { fetchUserInfo } from "../../users/login/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchParentsByFamilyId } from "./query"
-import { GetParentsResponse } from "./schema"
-import { fetchUserInfo } from "../users/login/query"
+import { GetParentResponse } from "./schema"
+import { fetchParent } from "../query"
 
 
 /** 家族の親を取得する */
 export async function GET(
   req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   return withRouteErrorHandling(async () => {
     return withAuth(async (supabase, userId) => {
+      // パスパラメータからIDを取得する
+      const params = await context.params
+      const parentId = params.id
+
       // 家族IDを取得する
       const userInfo = await fetchUserInfo({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 親を取得する
-      const result = await fetchParentsByFamilyId({supabase, familyId: userInfo.family_id })
+      const data = await fetchParent({supabase, parentId })
+
+      // 親が存在しない場合
+      if (!data) throw new ServerError("親情報の取得に失敗しました。")
+
+      // 家族IDが一致しない場合
+      if (userInfo.family_id !== data.family_id) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
   
-      return NextResponse.json({parents: result} as GetParentsResponse)
+      return NextResponse.json({parent: data} as GetParentResponse)
     })
   })
 }

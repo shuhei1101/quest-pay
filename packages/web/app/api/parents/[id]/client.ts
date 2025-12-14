@@ -1,12 +1,12 @@
-import { CHILD_API_URL, CHILDREN_API_URL, PARENTS_API_URL } from "@/app/(core)/constants";
+import { CHILD_API_URL, CHILDREN_API_URL, PARENT_API_URL, PARENTS_API_URL } from "@/app/(core)/constants";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
-import { GetParentsResponseSchema } from "./schema";
+import { GetParentResponseSchema } from "./schema";
 
 /** 親をGETする */
-export const getParents = async () => {
+export const getParent = async (parentId: string) => {
   // APIを実行する
-  const res = await fetch(`${PARENTS_API_URL}`, {
+  const res = await fetch(`${PARENT_API_URL(parentId)}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   })
@@ -15,9 +15,9 @@ export const getParents = async () => {
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) throw AppError.fromResponse(data, res.status)
     
-  devLog("getParents.戻り値: ", data)
+  devLog("getParent.戻り値: ", data)
 
-  return GetParentsResponseSchema.parse(data)
+  return GetParentResponseSchema.parse(data)
 }
 
 /** 親をPOSTする */

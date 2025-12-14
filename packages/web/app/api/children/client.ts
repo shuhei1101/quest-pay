@@ -16,7 +16,7 @@ export const getChildren = async () => {
   if (!res.ok) {
     throw AppError.fromResponse(data, res.status)
   }
-  devLog("getChildrenの戻り値: ", data)
+  devLog("getChildren.戻り値: ", data)
 
   return GetChildrenResponseSchema.parse(data)
 }

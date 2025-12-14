@@ -13,8 +13,8 @@ import { fetchChildrenByFamilyId } from "./query"
 export async function GET(
   req: NextRequest,
 ) {
-  return withAuth(async (supabase, userId) => {
-    return withRouteErrorHandling(async () => {
+  return withRouteErrorHandling(async () => {
+    return withAuth(async (supabase, userId) => {
       // 家族IDを取得する
       const userInfo = await fetchUserInfo({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")

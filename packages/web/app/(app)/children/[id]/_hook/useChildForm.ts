@@ -6,9 +6,9 @@ import { ChildFormSchema, ChildFormType } from "../form"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { devLog } from "@/app/(core)/util"
-import { getChild } from "@/app/api/users/child/[id]/client"
 import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
+import { getChild } from "@/app/api/children/[id]/client"
 
 /** 子供登録フォームを取得する */
 export const useChildForm = ({childId}: {childId?: string}) => {
@@ -42,17 +42,17 @@ export const useChildForm = ({childId}: {childId?: string}) => {
     queryKey: ["Child", childId],
     retry: false,
     queryFn: async () => {
-      const { user } = await getChild(childId!)
-      devLog("useChildForm.取得処理: ", user)
+      const { child } = await getChild(childId!)
+      devLog("useChildForm.取得処理: ", child)
 
-      if (!user) return {}
+      if (!child) return {}
 
       // 子供フォームに変換する
       const fetchedChildForm: ChildFormType = {
-        name: user?.profile_name,
-        iconId: user?.profile_icon_id,
-        iconColor: user.profile_icon_color,
-        birthday: user.profile_birthday
+        name: child.name,
+        iconId: child.icon_id,
+        iconColor: child.icon_color,
+        birthday: child.birthday
       }
       // 取得フォームを状態にセットする
       setFetchedChild(fetchedChildForm)
@@ -60,7 +60,7 @@ export const useChildForm = ({childId}: {childId?: string}) => {
 
       // 取得データを返却する
       return {
-        userEntity: user
+        childEntity: child
       }
     },
     enabled: !!childId
@@ -80,7 +80,7 @@ export const useChildForm = ({childId}: {childId?: string}) => {
     current.iconId !== fetchedChild.iconId
 
   devLog("useChildForm.フォーム: ", current)
-  devLog("useChildForm.エンティティ: ", data?.userEntity)
+  devLog("useChildForm.エンティティ: ", data?.childEntity)
 
 
   return {
@@ -93,6 +93,6 @@ export const useChildForm = ({childId}: {childId?: string}) => {
     handleSubmit,
     isLoading,
     fetchedChild,
-    fetchedEntity: data?.userEntity,
+    fetchedEntity: data?.childEntity,
   }
 }

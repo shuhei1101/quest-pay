@@ -13,8 +13,8 @@ export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
-  return withAuth(async (supabase) => {
-    return withRouteErrorHandling(async () => {
+  return withRouteErrorHandling(async () => {
+    return withAuth(async (supabase) => {
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -36,8 +36,8 @@ export async function PUT(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  return withAuth(async (supabase, userId) => {
-    return withRouteErrorHandling(async () => {
+  return withRouteErrorHandling(async () => {
+    return withAuth(async (supabase, userId) => {
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -79,8 +79,8 @@ export async function DELETE(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  return withAuth(async (supabase) => {
-    return withRouteErrorHandling(async () => {
+  return withRouteErrorHandling(async () => {
+    return withAuth(async (supabase) => {
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id

@@ -9,8 +9,8 @@ import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 export async function POST(
   request: NextRequest,
 ) {
-  return withAuth(async (supabase, userId) => {
-    return withRouteErrorHandling(async () => {
+  return withRouteErrorHandling(async () => {
+    return withAuth(async (supabase, userId) => {
       // bodyから家族を取得する
       const body = await request.json()
       const data  = PostFamilyRequestSchema.parse(body)
