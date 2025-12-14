@@ -3,7 +3,7 @@ import { GetChildrenResponseSchema, PostChildRequest, PostChildResponseSchema } 
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
 
-/** 家族クエストをGETする */
+/** 子供をGETする */
 export const getChildren = async () => {
   // APIを実行する
   const res = await fetch(`${CHILDREN_API_URL}`, {
@@ -21,7 +21,7 @@ export const getChildren = async () => {
   return GetChildrenResponseSchema.parse(data)
 }
 
-/** 家族をPOSTする */
+/** 子供をPOSTする */
 export const postChild = async (request: PostChildRequest) => {
   devLog("postChild.実行APIエンドポイント: ", CHILDREN_API_URL)
   // APIを実行する

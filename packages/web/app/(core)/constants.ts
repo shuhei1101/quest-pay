@@ -29,17 +29,25 @@ export const FAMILIES_URL = `/families`
 export const FAMILY_NEW_URL = `${FAMILIES_URL}/new`
 export const FAMILY_API_URL = `/api/families`
 export const FAMILY_INVITE_API_URL = `${FAMILY_API_URL}/invite`
+// 家族メンバー
+export const FAMILY_MEMBERS_URL = `${FAMILIES_URL}/members`
+// 家族メンバー（親）
+export const FAMILIES_MEMBERS_PARENT_URL = `${FAMILY_MEMBERS_URL}/parent`
+export const FAMILIES_MEMBERS_PARENT_NEW_URL = `${FAMILIES_MEMBERS_PARENT_URL}/new`
+export const FAMILIES_MEMBERS_PARENT_EDIT_URL = (parentId: string) => `${FAMILIES_MEMBERS_PARENT_URL}/${parentId}`
+export const FAMILIES_MEMBERS_PARENT_VIEW_URL = (parentId: string) => `${FAMILIES_MEMBERS_PARENT_EDIT_URL(parentId)}/view`
 
-// プロジェクト
-export const PROJECTS_URL = `/projects`
-export const PROJECT_NEW_URL = `${PROJECTS_URL}/new`
-export const PROJECT_API_URL = `${PROJECTS_URL}/api`
+// 家族メンバー（子）
+export const FAMILIES_MEMBERS_CHILD_URL = `${FAMILY_MEMBERS_URL}/child`
+export const FAMILIES_MEMBERS_CHILD_NEW_URL = `${FAMILIES_MEMBERS_CHILD_URL}/new`
+export const FAMILIES_MEMBERS_CHILD_EDIT_URL = (childId: string) => `${FAMILIES_MEMBERS_CHILD_URL}/${childId}`
+export const FAMILIES_MEMBERS_CHILD_VIEW_URL = (childId: string) => `${FAMILIES_MEMBERS_CHILD_EDIT_URL(childId)}/view`
 
 // ユーザ
 export const USERS_URL = `/users`
 export const USER_NEW_URL = `${USERS_URL}/new`
 export const USER_API_URL = (userId: string) => `${USERS_URL}/${userId}`
-export const USER_LOGIN_API_URL = `${USER_API_URL}/login`
+export const USER_LOGIN_API_URL = `/api${USERS_URL}/login`
 // ユーザ（子供ID）
 export const USERS_CHILD_URL = (childId: string) => `${USERS_URL}/child/${childId}`
 
@@ -51,3 +59,14 @@ export const CHILD_NEW_URL = `${CHILDREN_URL}/new`
 export const CHILD_URL = (childId: string) => `${CHILDREN_URL}/${childId}`
 export const CHILDREN_API_URL = `/api${CHILDREN_URL}`
 export const CHILD_API_URL = (childId: string) => `${CHILDREN_API_URL}/${childId}`
+// 子供
+export const PARENTS_URL = `/parents`
+export const PARENT_NEW_URL = `${PARENTS_URL}/new`
+export const PARENT_URL = (parentId: string) => `${PARENTS_URL}/${parentId}`
+export const PARENTS_API_URL = `/api${PARENTS_URL}`
+export const PARENT_API_URL = (parentId: string) => `${PARENTS_API_URL}/${parentId}`
+
+// アイコン
+export const ICONS_API_URL = `/api/icons`
+// アイコン
+export const ICON_CATEGORIES_API_URL = `/api/icons/category`

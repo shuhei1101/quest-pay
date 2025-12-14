@@ -3,10 +3,12 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import { LOGIN_URL } from "../../constants"
 import { appStorage } from "../../_sessionStorage/appStorage"
+import { devLog } from "../../util"
 
 
 // 画面側の例外ハンドル
-export const handleAppError = (error: any, router: AppRouterInstance) => {
+export const handleAppError = (error: Error, router: AppRouterInstance) => {
+  devLog("handleAppError.エラー内容: ", error)
   // 次画面で表示するメッセージを登録
   appStorage.feedbackMessage.set(error.message)
   

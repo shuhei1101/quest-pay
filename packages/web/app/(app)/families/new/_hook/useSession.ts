@@ -4,13 +4,13 @@ import { useQuery } from "@tanstack/react-query"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { useRouter } from "next/navigation"
 import { LOGIN_URL } from "@/app/(core)/constants"
-import { ClientAuthError } from "@/app/(core)/error/appError"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** セッション情報を取得する */
 export const useSession = () => {
   const router = useRouter()
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["session"],
     retry: false,
     queryFn: async () => {
@@ -22,18 +22,18 @@ export const useSession = () => {
         appStorage.feedbackMessage.set("セッションが切れました。再度ログインしてください。")
         // ログイン画面に遷移する
         router.push(LOGIN_URL)
-        // 認証エラーを発生させる
-        throw new ClientAuthError()
       }
       return {
         session: data.session
       }
-    }
+    },
   })
+
+  // エラーをチェックする
+  if (error) handleAppError(error, router)
 
   return {
     session: data?.session,
     isLoading
   }
-
 }

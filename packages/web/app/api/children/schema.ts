@@ -3,7 +3,7 @@ import { ChildEntitySchema } from "./entity"
 import { ProfileInsertSchema } from "../users/entity"
 import { FetchChildrenResult } from "./query"
 
-/** クエスト取得レスポンススキーマ */
+/** 子ども取得レスポンススキーマ */
 export const GetChildrenResponseSchema = z.object({
   children: FetchChildrenResult,
 })

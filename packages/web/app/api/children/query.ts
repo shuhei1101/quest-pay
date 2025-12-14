@@ -5,7 +5,7 @@ import { devLog } from "@/app/(core)/util"
 import { ChildViewSchema } from "./view"
 import { QueryError } from "@/app/(core)/error/appError"
 
-export const FetchChildrenResult = ChildViewSchema
+export const FetchChildrenResult = ChildViewSchema.array()
 
 /** 家族IDに一致する子供を取得する */
 export const fetchChildrenByFamilyId = async ({
@@ -20,14 +20,16 @@ export const fetchChildrenByFamilyId = async ({
     const { data, error } = await supabase.from("child_view")
       .select(`*`)
       .eq("family_id", familyId)
+      .not("id", "is", null)
 
+    // エラーをチェックする
     if (error) throw error
 
-    devLog("fetchChildren.取得データ: ", data)
+    devLog("fetchChildrenByFamilyId.取得データ: ", data)
 
-    return data.length > 0 ? FetchChildrenResult.parse(data[0]) : undefined
+    return data.length > 0 ? FetchChildrenResult.parse(data) : []
   } catch (error) {
-    devLog("fetchChildren.取得例外: ", error)
+    devLog("fetchChildrenByFamilyId.取得例外: ", error)
     throw new QueryError("子供情報の読み込みに失敗しました。")
   }
 }

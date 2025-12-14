@@ -1,7 +1,7 @@
 "use client"
 
 import { useLoginUserInfo } from '@/app/login/_hooks/useLoginUserInfo'
-import { FAMILY_QUESTS_URL, HOME_URL, LOGIN_URL, PROJECT_NEW_URL, PROJECTS_URL, QUESTS_NEW_URL, QUESTS_URL, USERS_URL } from '@/app/(core)/constants'
+import { FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, HOME_URL, LOGIN_URL, QUESTS_NEW_URL, QUESTS_URL, USERS_URL } from '@/app/(core)/constants'
 import { AppShell, Text, Image, Box, Burger, Drawer, NavLink, ActionIcon, Title, ScrollArea, LoadingOverlay, useMantineColorScheme, Button } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { IconHome2, IconUsers, IconFiles, IconFolders, IconBriefcase, IconFolderPlus, IconFilePlus, IconLogout, IconListCheck, IconMenu2, IconClipboard, IconWorld } from '@tabler/icons-react'
@@ -17,20 +17,20 @@ import { devLog } from '../(core)/util'
 export default function AppLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
 
   // システムカラースキーム
   const { isDark: isSystemDark } = useSystemTheme()
   // Mantineカラースキーム
-  const { setColorScheme, clearColorScheme } = useMantineColorScheme()
+  const { setColorScheme } = useMantineColorScheme()
   useEffect(() => {
     devLog("カラー: ", isSystemDark ? "dark" : "light")
     setColorScheme(isSystemDark ? "dark" : "light")
   }, [isSystemDark])
 
   /** メニューの表示状態 */
-  const [opened, { toggle, close }] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure()
   const router = useRouter()
   /** ブレークポイント */
   const { isMobile, isDark } = useConstants()
@@ -96,19 +96,20 @@ export default function AppLayout({
 
   const miniMenuItems = (
     <>
+      {/* ホームアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)}>
         <HomeIcon stroke={1.4} />
       </ActionIcon>
-      {/* クエスト画面 */}
+      {/* クエストアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
         <ClipboardIcon stroke={1.4} />
       </ActionIcon>
-
-      <ActionIcon variant="subtle" onClick={() => router.push(PROJECTS_URL)}>
+      {/* 地球アイコン */}
+      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
         <WorldIcon stroke={1.4} />
       </ActionIcon>
-
-      <ActionIcon variant="subtle" onClick={() => router.push(USERS_URL)}>
+      {/* 人アイコン */}
+      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)}>
         <UsersIcon stroke={1.4} />
       </ActionIcon>
     </>
@@ -117,12 +118,12 @@ export default function AppLayout({
   // ログアウトボタン押下時のハンドル
   const handleLogout = async () => {
     // ログアウトする
-    await createClient().auth.signOut();
+    await createClient().auth.signOut()
     // 次画面で表示するメッセージを登録する
     appStorage.feedbackMessage.set('サインアウトしました')
     // ログイン画面に遷移する
     router.push(`${LOGIN_URL}`)
-  };
+  }
 
   // ハンバーガーメニュー
   const MenuButton = () => (
@@ -136,7 +137,7 @@ export default function AppLayout({
   useEffect(() => {
     setMounted(true);
   }, []);
-  if (!mounted) return null
+  if (!mounted) return (<></>)
 
   return (
     <>
@@ -268,5 +269,5 @@ export default function AppLayout({
         </Box>
       </Box>
     </>
-  );
+  )
 }

@@ -8,7 +8,7 @@ export const ProfileEntitySchema = z.object({
   icon_id: z.number(),
   icon_color: z.string(),
   birthday: z.string(),
-  family_id: z.number(),
+  family_id: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
 })

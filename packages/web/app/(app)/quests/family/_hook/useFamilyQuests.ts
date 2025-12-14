@@ -17,31 +17,27 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   pageSize: number
 }) => {
   const router = useRouter()
-  try {
-    // 検索条件に紐づくクエストリストを取得する
-    const { data, error, mutate, isLoading } = useSWR(
-      ["クエストリスト", filter, sortColumn, sortOrder, page, pageSize],
-      () => getFamilyQuests({
-        tags: filter.tags,
-        name: filter.name,
-        sortColumn,
-        sortOrder,
-        page,
-        pageSize
-      })
-    )
+  // 検索条件に紐づくクエストリストを取得する
+  const { data, error, mutate, isLoading } = useSWR(
+    ["クエストリスト", filter, sortColumn, sortOrder, page, pageSize],
+    () => getFamilyQuests({
+      tags: filter.tags,
+      name: filter.name,
+      sortColumn,
+      sortOrder,
+      page,
+      pageSize
+    })
+  )
 
-    // エラーをチェックする
-    if (error) throw error
+  // エラーをチェックする
+  if (error) handleAppError(error, router)
 
-    return {
-      fetchedQuests: data?.quests ?? [],
-      totalRecords: data?.totalRecords ?? 0,
-      maxPage: Math.ceil((data?.totalRecords ?? 0) / pageSize),
-      isLoading,
-      refresh :mutate
-    }
-  } catch (error) {
-    handleAppError(error, router)
+  return {
+    fetchedQuests: data?.quests ?? [],
+    totalRecords: data?.totalRecords ?? 0,
+    maxPage: Math.ceil((data?.totalRecords ?? 0) / pageSize),
+    isLoading,
+    refresh :mutate
   }
 }

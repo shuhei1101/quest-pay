@@ -11,47 +11,42 @@ import { handleAppError } from "@/app/(core)/error/handler/client"
 /** 家族クエスト保存ハンドル */
 export const useRegisterFamilyQuest = ({setId}: {setId: (id: string) => void}) => {
   const router = useRouter()
-  try {
-    const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
 
-    /** 登録処理 */
-    const mutation = useMutation({
-      mutationFn: ({form}: {form: FamilyQuestFormType}) => postFamilyQuest({
-        familyQuest: {
-          is_public: form.isPublic,
-        },
-        quest: {
-          icon_id: form.iconId,
-          name: form.name,
-          category_id: form.categoryId,
-          icon_color: form.iconColor,
-        },
-        tags: form.tags.map(t => { return { name: t }})
-      }),
-      onSuccess: ( data ) => {
-        // 取得したIDをセットする
-        setId(data.questId)
-        // 家族クエストをリフレッシュする
-        queryClient.invalidateQueries({ queryKey: ["familyQuest"] })
-        // フィードバックメッセージを表示する
-        toast('クエストを登録しました', {duration: 1500})
+  /** 登録処理 */
+  const mutation = useMutation({
+    mutationFn: ({form}: {form: FamilyQuestFormType}) => postFamilyQuest({
+      familyQuest: {
+        is_public: form.isPublic,
       },
-      onError: (error) => {
-        throw error
-      }
-    })
+      quest: {
+        icon_id: form.iconId,
+        name: form.name,
+        category_id: form.categoryId,
+        icon_color: form.iconColor,
+      },
+      tags: form.tags.map(t => { return { name: t }})
+    }),
+    onSuccess: ( data ) => {
+      // 取得したIDをセットする
+      setId(data.questId)
+      // 家族クエストをリフレッシュする
+      queryClient.invalidateQueries({ queryKey: ["familyQuest"] })
+      // フィードバックメッセージを表示する
+      toast('クエストを登録しました', {duration: 1500})
+    },
+    onError: (error) => handleAppError(error, router)
+  })
 
-    /** 登録ハンドル */
-    const handleRegister = ({form}: {form: FamilyQuestFormType}) => {
-      if (!window.confirm('登録します。よろしいですか？')) return
-      mutation.mutate({form})
-    }
-
-    return {
-      handleRegister,
-      isLoading: mutation.isPending,
-    }
-  } catch (error) {
-    handleAppError(error, router)
+  /** 登録ハンドル */
+  const handleRegister = ({form}: {form: FamilyQuestFormType}) => {
+    if (!window.confirm('登録します。よろしいですか？')) return
+    mutation.mutate({form})
   }
+
+  return {
+    handleRegister,
+    isLoading: mutation.isPending,
+  }
+  
 }

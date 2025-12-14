@@ -1,6 +1,5 @@
 "use client"
 
-import { fetchIconCategories } from "../../../../api/icons/category/query"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
@@ -8,13 +7,15 @@ import { LOGIN_URL } from "@/app/(core)/constants"
 import { ClientAuthError } from "@/app/(core)/error/appError"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { devLog } from "@/app/(core)/util"
+import { getIconCategories } from "@/app/api/icons/category/client"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 
 export const useIconCategories = () => {
   const router = useRouter()
   const supabase = createClient()
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["iconCategories"],
     retry: false,
     queryFn: async () => {
@@ -23,7 +24,8 @@ export const useIconCategories = () => {
       // 取得できなかった場合
       if (fetchedIconCategories.length == 0) {
         // アイコンを取得する
-        fetchedIconCategories = await fetchIconCategories({supabase})
+        const data = await getIconCategories()
+        fetchedIconCategories = data.iconCategories
         if (!fetchedIconCategories) {
           // フィードバックメッセージを表示する
           appStorage.feedbackMessage.set("アイコンカテゴリのロードに失敗しました。再度ログインしてください。")
@@ -39,6 +41,9 @@ export const useIconCategories = () => {
       return { iconCategories: fetchedIconCategories }
     }
   })
+
+  // エラーをチェックする
+  if (error) handleAppError(error, router)
 
   return { 
     iconCategories: data?.iconCategories ?? [], 

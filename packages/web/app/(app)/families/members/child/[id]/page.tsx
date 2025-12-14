@@ -1,7 +1,7 @@
 'use client'
 
+import { ChildForm } from "@/app/(app)/children/[id]/_components/ChildEdit"
 import { useParams } from "next/navigation"
-import { ChildForm } from "./_components/ChildEdit"
 
 export default function Page() {
   const params = useParams()

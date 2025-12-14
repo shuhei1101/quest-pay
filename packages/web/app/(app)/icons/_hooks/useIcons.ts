@@ -1,21 +1,19 @@
 "use client"
 
-import { fetchIcons } from "../../../api/icons/query"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
 import { LOGIN_URL } from "@/app/(core)/constants"
-import { ClientAuthError } from "@/app/(core)/error/appError"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/app/(core)/_supabase/client"
 import { createIconById } from "../../../api/icons/entity"
 import { devLog } from "@/app/(core)/util"
+import { getIcons } from "@/app/api/icons/client"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 
 export const useIcons = () => {
   const router = useRouter()
-  const supabase = createClient()
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["icons"],
     retry: false,
     queryFn: async () => {
@@ -24,14 +22,13 @@ export const useIcons = () => {
       // 取得できなかった場合
       if (fetchedIcons.length == 0) {
         // アイコンを取得する
-        fetchedIcons = await fetchIcons({supabase})
+        const data = await getIcons()
+        fetchedIcons = data.icons
         if (!fetchedIcons) {
           // フィードバックメッセージを表示する
           appStorage.feedbackMessage.set("アイコンのロードに失敗しました。再度ログインしてください。")
           // ログイン画面に遷移する
           router.push(LOGIN_URL)
-          // 認証エラーを発生させる
-          throw new ClientAuthError()
         }
         // セッションストレージに格納する
         appStorage.icons.set(fetchedIcons)
@@ -44,7 +41,8 @@ export const useIcons = () => {
     }
   })
 
-
+  // エラーをチェックする
+  if (error) handleAppError(error, router)
 
   return { 
     icons: data?.icons ?? [], 

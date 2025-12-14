@@ -1,7 +1,7 @@
 'use client'
 
+import { ChildView } from "@/app/(app)/children/[id]/_components/ChildView"
 import { useParams } from "next/navigation"
-import { ChildView } from "../_components/ChildView"
 
 export default function Page() {
   const params = useParams()
