@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
-import { fetchUserInfo } from "../../users/login/query"
+import { fetchUserInfoByUserId } from "../../users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { GetParentResponse } from "./schema"
@@ -19,7 +19,7 @@ export async function GET(
       const parentId = params.id
 
       // 家族IDを取得する
-      const userInfo = await fetchUserInfo({userId, supabase})
+      const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 親を取得する

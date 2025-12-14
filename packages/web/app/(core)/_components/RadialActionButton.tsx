@@ -18,8 +18,8 @@ export type FloatingActionItem = {
   color?: MantineColor
 }
 
-/** フローティングアクションボタンを表示する */
-export const FloatingActionButton = ({
+/** 展開型フローティングアクションボタンを表示する */
+export const RadialActionButton = ({
   items,
   open,
   onToggle,

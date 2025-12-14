@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/constants"
 import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
-import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
+import { RadialActionButton, FloatingActionItem } from "@/app/(core)/_components/RadialActionButton"
 
 function QuestsContent() {
   const router = useRouter()
@@ -98,7 +98,7 @@ function QuestsContent() {
     </div>
     </Tabs>
     
-    <FloatingActionButton
+    <RadialActionButton
       items={actionItems}
       open={open}
       onToggle={setOpen}

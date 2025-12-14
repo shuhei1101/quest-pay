@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
 import { fetchFamilyQuest } from "../../family/query"
 import { DeleteFamilyQuestRequestSchema, GetFamilyQuestResponse, PutFamilyQuestRequestSchema } from "./schema"
-import { fetchUserInfo } from "@/app/api/users/login/query"
+import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { deleteFamilyQuest, updateFamilyQuest } from "../../family/db"
 import { devLog } from "@/app/(core)/util"
@@ -47,7 +47,7 @@ export async function PUT(
       const data = PutFamilyQuestRequestSchema.parse(body)
 
       // 家族IDを取得する
-      const userInfo = await fetchUserInfo({userId, supabase})
+      const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
         
       // 家族クエストを更新する

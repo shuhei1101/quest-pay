@@ -13,6 +13,7 @@ export const ChildViewSchema = z.object({
   birthday: ProfileEntitySchema.shape.birthday,
   family_id: ProfileEntitySchema.shape.family_id,
   id: ChildEntitySchema.shape.id,
+  invite_code: ChildEntitySchema.shape.invite_code,
   min_savings: ChildEntitySchema.shape.min_savings.nullable(),
   current_savings: ChildEntitySchema.shape.current_savings.nullable(),
   current_level: ChildEntitySchema.shape.current_level.nullable(),

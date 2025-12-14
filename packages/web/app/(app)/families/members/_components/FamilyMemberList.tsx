@@ -7,7 +7,7 @@ import { useParents } from "@/app/(app)/parents/_hook/useParents"
 import { ParentCardLayout } from "@/app/(app)/parents/_components/ParentCardLayout"
 import { FAMILIES_MEMBERS_CHILD_VIEW_URL, FAMILIES_MEMBERS_PARENT_VIEW_URL } from "@/app/(core)/constants"
 
-export const FamilyMemberList = () => {
+export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
   const router = useRouter() 
 
   /** 親一覧 */
@@ -21,16 +21,32 @@ export const FamilyMemberList = () => {
       <div className="flex flex-col gap-3">
         <SimpleGrid
           cols={1}
-          spacing="md" >
+          spacing="md"
+        >
             {parents.map((parent, index) => (
-              <ParentCardLayout key={ index } parent={ parent } onClick={(parentId) => router.push(FAMILIES_MEMBERS_PARENT_VIEW_URL(parentId))} />
+              <ParentCardLayout 
+                key={ index } 
+                parent={ parent } 
+                isSelected={selectedId === parent.id}
+                onClick={(parentId) => {
+                  router.push(FAMILIES_MEMBERS_PARENT_VIEW_URL(parentId)) // 親閲覧画面へ遷移する
+                }}
+              />
             ))}
         </SimpleGrid>
         <SimpleGrid
           cols={1}
-          spacing="md" >
+          spacing="md"
+        >
             {children.map((child, index) => (
-              <ChildCardLayout key={ index } child={ child } onClick={(childId) => router.push(FAMILIES_MEMBERS_CHILD_VIEW_URL(childId))} />
+              <ChildCardLayout 
+                key={ index } 
+                child={ child } 
+                isSelected={selectedId === child.id}
+                onClick={(childId) => {
+                  router.push(FAMILIES_MEMBERS_CHILD_VIEW_URL(childId)) // 子供閲覧画面へ遷移する
+                }}
+              />
             ))}
         </SimpleGrid>
       </div>

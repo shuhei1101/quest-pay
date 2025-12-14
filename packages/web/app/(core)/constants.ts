@@ -48,8 +48,9 @@ export const FAMILIES_MEMBERS_CHILD_EDIT_URL = (childId: string) => `${FAMILIES_
 // ユーザ
 export const USERS_URL = `/users`
 export const USER_NEW_URL = `${USERS_URL}/new`
-export const USER_API_URL = (userId: string) => `/api${USERS_URL}/${userId}`
-export const USER_LOGIN_API_URL = `/api${USERS_URL}/login`
+export const USERS_API_URL = `/api${USERS_URL}`
+export const LOGIN_USER_API_URL = `${USERS_API_URL}/login`
+export const JOIN_CHILD_API_URL = `${USERS_API_URL}/join/child`
 
 // 子供
 export const CHILDREN_URL = `/children`

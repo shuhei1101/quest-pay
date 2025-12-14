@@ -3,7 +3,7 @@ import { withAuth } from "@/app/(core)/withAuth"
 import { GetChildrenResponse, PostChildRequestSchema, PostChildResponse } from "./schema"
 import { insertChild } from "./db"
 import { generateUniqueInviteCode } from "./invite/service"
-import { fetchUserInfo } from "../users/login/query"
+import { fetchUserInfoByUserId } from "../users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchChildrenByFamilyId } from "./query"
@@ -16,7 +16,7 @@ export async function GET(
   return withRouteErrorHandling(async () => {
     return withAuth(async (supabase, userId) => {
       // 家族IDを取得する
-      const userInfo = await fetchUserInfo({userId, supabase})
+      const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 子供を取得する
@@ -38,7 +38,7 @@ export async function POST(
       const data  = PostChildRequestSchema.parse(body)
 
      // 家族IDを取得する
-      const userInfo = await fetchUserInfo({userId, supabase})
+      const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
         
       // 招待コードを生成する

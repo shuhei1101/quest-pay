@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { appStorage } from "./(core)/_sessionStorage/appStorage"
+import { Button } from "@mantine/core"
 
 export default function ErrorPage({
   error,
@@ -20,9 +21,9 @@ export default function ErrorPage({
   return (
     <div>
       <h2>不明なエラーが発生しました。</h2>
-      <button type="button" onClick={() => reset()}>
+      <Button onClick={() => reset()}>
         再度アクセスしてください。
-      </button>
+      </Button>
     </div>
   )
 }

@@ -13,5 +13,6 @@ export const ParentViewSchema = z.object({
   birthday: ProfileEntitySchema.shape.birthday,
   family_id: ProfileEntitySchema.shape.family_id,
   id: ParentEntitySchema.shape.id,
+  invite_code: ParentEntitySchema.shape.invite_code,
 })
 export type ParentView = z.infer<typeof ParentViewSchema>

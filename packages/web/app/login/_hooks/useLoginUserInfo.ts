@@ -1,6 +1,6 @@
 "use client"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
-import { usersLoginGet } from "@/app/api/users/login/client"
+import { getLoginUser } from "@/app/api/users/login/client"
 import { useQuery } from "@tanstack/react-query"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { Session } from "@supabase/supabase-js"
@@ -32,7 +32,7 @@ export const useLoginUserInfo = ({ caching = true }: {
       // ユーザ情報がない場合
       if (!userInfo) {
         // ユーザ情報を取得する
-        const data = await usersLoginGet()
+        const data = await getLoginUser()
         userInfo = data.userInfo
         if (!userInfo) return { isGuest: true }
         // セッションストレージに格納する

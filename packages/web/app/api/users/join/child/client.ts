@@ -1,12 +1,13 @@
 import { JOIN_CHILD_API_URL } from "@/app/(core)/constants";
 import { AppError } from "@/app/(core)/error/appError";
-import { GetLoginUserResponseSchema } from "./schema";
+import { JoinChildRequest, JoinChildRequestSchema } from "./schema";
 
-export const getLoginUser = async () => {
+export const postJoinChild = async (request: JoinChildRequest) => {
   // APIを実行する
   const res = await fetch(`${JOIN_CHILD_API_URL}`, {
-    method: "GET",
+    method: "POST",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
   })
 
   // ステータスが不正な場合、アプリ例外を発生させる
@@ -14,7 +15,4 @@ export const getLoginUser = async () => {
     const data = await res.json()
     throw AppError.fromResponse(data, res.status)
   }
-  const data = await res.json()
-
-  return GetLoginUserResponseSchema.parse(data)
 }

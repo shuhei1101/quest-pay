@@ -77,3 +77,12 @@ body {
 .quest-card:hover {
   box-shadow: 0 10px 25px 0 rgba(0, 112, 243, 0.1);
 }
+
+/* 選択中のカードスタイル */
+.rainbow-border {
+  border-width: 2px;
+  border-style: solid;
+  border-color: #0070f3;
+  background-color: rgba(0, 113, 243, 0.293);
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+}
