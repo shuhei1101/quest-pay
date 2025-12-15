@@ -2,9 +2,9 @@ import { SupabaseClient } from "@supabase/supabase-js"
 import { z } from "zod"
 import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
-import { ParentViewSchema } from "@/app/api/parents/view"
+import { ParentViewScheme } from "@/app/api/parents/view"
 
-export const FetchParentsResult = ParentViewSchema.array()
+export const FetchParentsResult = ParentViewScheme.array()
 
 /** 家族IDに一致する親を取得する */
 export const fetchParentsByFamilyId = async ({
@@ -33,7 +33,7 @@ export const fetchParentsByFamilyId = async ({
   }
 }
 
-export const FetchParentResult = ParentViewSchema
+export const FetchParentResult = ParentViewScheme
 
 /** IDに一致する親を取得する */
 export const fetchParent = async ({
@@ -73,7 +73,7 @@ export const fetchParent = async ({
 //     .eq("invite_code", code)
 //     .maybeSingle()
 
-//   return data ? ParentEntitySchema.parse(data) : null
+//   return data ? ParentEntityScheme.parse(data) : null
 //   } catch (error) {
 //     devLog("getParentByInviteCode.取得例外: ", error)
 //     throw new QueryError("招待コードの生成に失敗しました。")

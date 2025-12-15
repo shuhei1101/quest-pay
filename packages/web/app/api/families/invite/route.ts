@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
-import { PostFamilyInviteRequestSchema } from "./schema"
+import { PostFamilyInviteRequestScheme } from "./scheme"
 import { sendFamilyInviteCode } from "./service"
 import { fetchFamily } from "../query"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
@@ -15,7 +15,7 @@ export async function POST(
     return withAuth(async (supabase, userId) => {
       // bodyからメールアドレスを取得する
       const body = await request.json()
-      const data  = PostFamilyInviteRequestSchema.parse(body)
+      const data  = PostFamilyInviteRequestScheme.parse(body)
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
@@ -31,7 +31,7 @@ export async function POST(
 
       // メールアドレスに家族招待コードを送信する
       await sendFamilyInviteCode({
-        email: data.email,
+        email: data.form.email,
         familyInviteCode: family.invite_code
       })
 

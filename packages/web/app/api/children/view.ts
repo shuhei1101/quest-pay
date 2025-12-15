@@ -1,22 +1,22 @@
 import { z } from "zod"
-import { ProfileEntitySchema } from "../users/entity"
-import { ChildEntitySchema } from "./entity"
-import { IconEntitySchema } from "../icons/entity"
+import { ProfileEntityScheme } from "../users/entity"
+import { ChildEntityScheme } from "./entity"
+import { IconEntityScheme } from "../icons/entity"
 
 /** 子供ビュースキーマ */
-export const ChildViewSchema = z.object({
+export const ChildViewScheme = z.object({
   user_id: z.string().nullable(),
-  name: ProfileEntitySchema.shape.name,
-  icon_id: ProfileEntitySchema.shape.icon_id,
-  icon_name: IconEntitySchema.shape.name,
-  icon_color: ProfileEntitySchema.shape.icon_color,
-  birthday: ProfileEntitySchema.shape.birthday,
-  family_id: ProfileEntitySchema.shape.family_id,
-  id: ChildEntitySchema.shape.id,
-  invite_code: ChildEntitySchema.shape.invite_code,
-  min_savings: ChildEntitySchema.shape.min_savings.nullable(),
-  current_savings: ChildEntitySchema.shape.current_savings.nullable(),
-  current_level: ChildEntitySchema.shape.current_level.nullable(),
-  total_exp: ChildEntitySchema.shape.total_exp.nullable(),
+  name: ProfileEntityScheme.shape.name,
+  icon_id: ProfileEntityScheme.shape.icon_id,
+  icon_name: IconEntityScheme.shape.name,
+  icon_color: ProfileEntityScheme.shape.icon_color,
+  birthday: ProfileEntityScheme.shape.birthday,
+  family_id: ProfileEntityScheme.shape.family_id,
+  id: ChildEntityScheme.shape.id,
+  invite_code: ChildEntityScheme.shape.invite_code,
+  min_savings: ChildEntityScheme.shape.min_savings.nullable(),
+  current_savings: ChildEntityScheme.shape.current_savings.nullable(),
+  current_level: ChildEntityScheme.shape.current_level.nullable(),
+  total_exp: ChildEntityScheme.shape.total_exp.nullable(),
 })
-export type ChildView = z.infer<typeof ChildViewSchema>
+export type ChildView = z.infer<typeof ChildViewScheme>

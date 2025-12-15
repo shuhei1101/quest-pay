@@ -4,7 +4,7 @@ import { FAMILY_NEW_URL } from "@/app/(core)/constants"
 import { useEffect, useState } from "react"
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"
 import { devLog } from "@/app/(core)/util"
-import { postJoinChild } from "@/app/api/users/join/child/client"
+import { postJoinChild } from "@/app/api/children/join/client"
 
 
 /** ログインタイプ選択ポップアップ */

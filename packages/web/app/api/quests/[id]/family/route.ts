@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
 import { fetchFamilyQuest } from "../../family/query"
-import { DeleteFamilyQuestRequestSchema, GetFamilyQuestResponse, PutFamilyQuestRequestSchema } from "./schema"
+import { DeleteFamilyQuestRequestScheme, GetFamilyQuestResponse, PutFamilyQuestRequestScheme } from "./scheme"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { deleteFamilyQuest, updateFamilyQuest } from "../../family/db"
@@ -44,7 +44,7 @@ export async function PUT(
 
       // bodyから家族クエストを取得する
       const body = await req.json()
-      const data = PutFamilyQuestRequestSchema.parse(body)
+      const data = PutFamilyQuestRequestScheme.parse(body)
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
@@ -52,21 +52,18 @@ export async function PUT(
         
       // 家族クエストを更新する
       await updateFamilyQuest({
-        tags: data.tags,
-        quest: {
-          icon_id: data.quest.icon_id,
-          type: "family",
-          name: data.quest.name,
-          id: questId,
-          updated_at: data.quest.updated_at,
-          category_id: data.quest.category_id,
-          icon_color: data.quest.icon_color,
+        params: {
+          _quest_id: data.questId,
+          _name: data.form.name,
+          _is_public: data.form.isPublic,
+          _type: "family",
+          _icon_id: data.form.iconId,
+          _icon_color: data.form.iconColor,
+          _tags: data.form.tags,
+          _category_id: 0
         },
+        updated_at: data.updatedAt,
         supabase,
-        familyQuest: {
-          family_id: userInfo.family_id,
-          is_public: data.family_quest.is_public
-        }
       })
       
       return NextResponse.json({})
@@ -87,15 +84,15 @@ export async function DELETE(
 
       // bodyから家族クエストを取得する
       const body = await req.json()
-      const data = DeleteFamilyQuestRequestSchema.parse(body)
+      const data = DeleteFamilyQuestRequestScheme.parse(body)
 
       // 家族クエストを削除する
       await deleteFamilyQuest({
         supabase,
-        quest: {
-          id: questId,
-          updated_at: data.quest.updated_at,
-        }
+        params: {
+          _quest_id: data.questId
+        },
+        updatedAt: data.updatedAt,
       })
 
       return NextResponse.json({})

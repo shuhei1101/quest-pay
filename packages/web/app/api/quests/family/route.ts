@@ -4,7 +4,7 @@ import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { fetchFamilyQuests } from "./query"
 import queryString from "query-string"
-import { FamilyQuestSearchParamsSchema, GetFamilyQuestsResponse, PostFamilyQuestRequestSchema, PostFamilyQuestResponse } from "./schema"
+import { FamilyQuestSearchParamsScheme, GetFamilyQuestsResponse, PostFamilyQuestRequestScheme, PostFamilyQuestResponse } from "./scheme"
 import { insertFamilyQuest } from "./db"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 
@@ -17,7 +17,7 @@ export async function GET(
       // クエリパラメータを取得する
       const url = new URL(req.url)
       const query = queryString.parse(url.search)
-      const params = FamilyQuestSearchParamsSchema.parse(query)
+      const params = FamilyQuestSearchParamsScheme.parse(query)
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
@@ -39,7 +39,7 @@ export async function POST(
     return withAuth(async (supabase, userId) => {
       // bodyからクエストを取得する
       const body = await request.json()
-      const data  = PostFamilyQuestRequestSchema.parse(body)
+      const data  = PostFamilyQuestRequestScheme.parse(body)
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
@@ -47,18 +47,16 @@ export async function POST(
         
       // クエストを登録する
       const questId = await insertFamilyQuest({
-        quest: {
-          name: data.quest.name,
-          icon_id: data.quest.icon_id,
-          type: "family",
-          category_id: data.quest.category_id,
-          icon_color: data.quest.icon_color
+        params: {
+          _name: data.form.name,
+          _family_id: userInfo.family_id,
+          _is_public: data.form.isPublic,
+          _type: "family",
+          _icon_id: data.form.iconId,
+          _icon_color: data.form.iconColor,
+          _tags: [],
+          _category_id: 0
         },
-        familyQuest: {
-          family_id: userInfo.family_id,
-          is_public: data.familyQuest.is_public
-        },
-        tags: data.tags,
         supabase
       })
 

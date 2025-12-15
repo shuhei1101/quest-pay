@@ -1,7 +1,7 @@
 "use client"
 
 import { useConstants } from "@/app/(core)/useConstants"
-import { FamilyQuestFilterType } from "@/app/api/quests/family/schema"
+import { FamilyQuestFilterType } from "@/app/api/quests/family/scheme"
 import { FamilyQuestColumns, FamilyQuestSort } from "@/app/api/quests/family/view"
 import { ActionIcon, Button, ColorPicker, Input, Modal, Pill, PillsInput, Popover, SimpleGrid, Space, Tabs, Text } from "@mantine/core"
 import { IconArrowDown, IconArrowsSort, IconArrowUp, IconCheck, IconGrid3x3, IconWorld } from "@tabler/icons-react"

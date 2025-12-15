@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js"
 import { devLog, generateInviteCode } from "@/app/(core)/util"
-import { FamilyEntitySchema } from "./entity"
+import { FamilyEntityScheme } from "./entity"
 import { QueryError } from "@/app/(core)/error/appError"
 
 /** 家族を取得する */
@@ -22,7 +22,7 @@ export const fetchFamily = async ({
 
       devLog("fetchFamily.取得データ: ", data)
 
-      return data.length > 0 ? FamilyEntitySchema.parse(data[0]) : undefined
+      return data.length > 0 ? FamilyEntityScheme.parse(data[0]) : undefined
   } catch (error) {
     devLog("fetchFamily.取得例外: ", error)
     throw new QueryError("家族情報の読み込みに失敗しました。")
@@ -43,7 +43,7 @@ export const getFamilyByInviteCode = async ({supabase, code}: {
 
     if (error) throw error
 
-    return data ? FamilyEntitySchema.parse(data) : null
+    return data ? FamilyEntityScheme.parse(data) : null
   } catch (error) {
     devLog("getFamilyByInviteCode.取得例外: ", error)
     throw new QueryError("家族招待コードの生成に失敗しました。")

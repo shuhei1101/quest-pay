@@ -1,18 +1,18 @@
 import { z } from "zod"
-import { ProfileEntitySchema } from "../users/entity"
-import { ParentEntitySchema } from "./entity"
-import { IconEntitySchema } from "../icons/entity"
+import { ProfileEntityScheme } from "../users/entity"
+import { ParentEntityScheme } from "./entity"
+import { IconEntityScheme } from "../icons/entity"
 
 /** 子供ビュースキーマ */
-export const ParentViewSchema = z.object({
+export const ParentViewScheme = z.object({
   user_id: z.string().nullable(),
-  name: ProfileEntitySchema.shape.name,
-  icon_id: ProfileEntitySchema.shape.icon_id,
-  icon_name: IconEntitySchema.shape.name,
-  icon_color: ProfileEntitySchema.shape.icon_color,
-  birthday: ProfileEntitySchema.shape.birthday,
-  family_id: ProfileEntitySchema.shape.family_id,
-  id: ParentEntitySchema.shape.id,
-  invite_code: ParentEntitySchema.shape.invite_code,
+  name: ProfileEntityScheme.shape.name,
+  icon_id: ProfileEntityScheme.shape.icon_id,
+  icon_name: IconEntityScheme.shape.name,
+  icon_color: ProfileEntityScheme.shape.icon_color,
+  birthday: ProfileEntityScheme.shape.birthday,
+  family_id: ProfileEntityScheme.shape.family_id,
+  id: ParentEntityScheme.shape.id,
+  invite_code: ParentEntityScheme.shape.invite_code,
 })
-export type ParentView = z.infer<typeof ParentViewSchema>
+export type ParentView = z.infer<typeof ParentViewScheme>

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { FamilyQuestFormSchema, FamilyQuestFormType } from "../form"
+import { FamilyQuestFormScheme, FamilyQuestFormType } from "../form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getFamilyQuest } from "@/app/api/quests/[id]/family/client"
@@ -7,11 +7,9 @@ import { useState } from "react"
 import { devLog, isSameArray } from "@/app/(core)/util"
 import { useMantineTheme } from "@mantine/core"
 import { useRouter } from "next/navigation"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** クエストフォームを取得する */
 export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
-  const router = useRouter()
   const thema = useMantineTheme()
 
   /** クエストフォームのデフォルト値 */
@@ -33,7 +31,7 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
     watch,
     reset,
   } = useForm<FamilyQuestFormType>({
-    resolver: zodResolver(FamilyQuestFormSchema),
+    resolver: zodResolver(FamilyQuestFormScheme),
     defaultValues: defaultQuest
   })
 
@@ -69,7 +67,7 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
   })
 
   // エラーをチェックする
-  if (error) handleAppError(error, router)
+  if (error) throw error
 
   /** 現在の入力データ */
   const currentQuest = watch()

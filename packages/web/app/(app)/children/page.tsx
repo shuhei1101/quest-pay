@@ -11,7 +11,7 @@ export default function Page() {
     <>
       <div className="flex h-screen w-screen gap-3">
         <div className="w-1/2 max-h-full">
-          <FamilyMemberList />
+          <FamilyMemberList selectedId={null} />
 
         </div>
         <div className="w-1/2 h-full">

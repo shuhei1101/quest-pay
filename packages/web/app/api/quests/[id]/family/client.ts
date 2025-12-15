@@ -1,5 +1,5 @@
 import { FAMILY_QUEST_API_URL, QUESTS_API_URL } from "@/app/(core)/constants";
-import { DeleteFamilyQuestRequest, GetFamilyQuestResponseSchema, PutFamilyQuestRequest } from "./schema";
+import { DeleteFamilyQuestRequest, GetFamilyQuestResponseScheme, PutFamilyQuestRequest } from "./scheme";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
 
@@ -23,13 +23,13 @@ export const getFamilyQuest = async (questId: string) => {
 
   const data = await res.json()
 
-  return GetFamilyQuestResponseSchema.parse(data)
+  return GetFamilyQuestResponseScheme.parse(data)
 }
 
 /** 家族クエストを更新する */
 export const putFamilyQuest = async (req: PutFamilyQuestRequest) => {
   // APIを実行する
-  const res = await fetch(`${FAMILY_QUEST_API_URL(req.quest.id)}`, {
+  const res = await fetch(`${FAMILY_QUEST_API_URL(req.questId)}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req)
@@ -45,7 +45,7 @@ export const putFamilyQuest = async (req: PutFamilyQuestRequest) => {
 // 家族クエストを削除する
 export const deleteFamilyQuest = async (req: DeleteFamilyQuestRequest) => {
   // APIを実行する
-  const res = await fetch(`${FAMILY_QUEST_API_URL(req.quest.id)}`, {
+  const res = await fetch(`${FAMILY_QUEST_API_URL(req.questId)}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req)

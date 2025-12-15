@@ -1,7 +1,6 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 import { useQuery } from "@tanstack/react-query"
 import { getParents } from "@/app/api/parents/client"
 
@@ -16,7 +15,7 @@ export const useParents = () => {
   })
 
   // エラーをチェックする
-  if (error) handleAppError(error, router)
+  if (error) throw error
 
   return {
     parents: data?.parents ?? [],

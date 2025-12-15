@@ -1,6 +1,6 @@
 import { devLog } from "@/app/(core)/util";
 import { FAMILY_API_URL } from "@/app/(core)/constants";
-import { PostFamilyRequest, PostFamilyResponseSchema } from "./schema";
+import { PostFamilyRequest, PostFamilyResponseScheme } from "./scheme";
 import { AppError } from "@/app/(core)/error/appError";
 
 /** 家族をPOSTする */

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchIconCategories } from "./query"
-import { GetIconCategoriesResponse } from "./schema"
+import { GetIconCategoriesResponse } from "./scheme"
 
 /** アイコンを取得する */
 export async function GET(

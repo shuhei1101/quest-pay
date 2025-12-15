@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FamilyRegisterFormSchema, FamilyRegisterFormType } from "../form"
+import { FamilyRegisterFormScheme, FamilyRegisterFormType } from "../form"
 import { useMantineTheme } from "@mantine/core"
 
 /** 家族フォームを取得する */
@@ -29,7 +29,7 @@ export const useFamilyRegisterForm = () => {
     watch,
     reset,
   } = useForm<FamilyRegisterFormType>({
-    resolver: zodResolver(FamilyRegisterFormSchema),
+    resolver: zodResolver(FamilyRegisterFormScheme),
     defaultValues: defaultFamily
   })
 

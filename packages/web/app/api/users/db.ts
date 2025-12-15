@@ -1,6 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { SupabaseClient } from "@supabase/supabase-js"
-import { ProfileUpdate } from "./entity"
 import { devLog } from "@/app/(core)/util"
 import { profileExclusiveControl } from "./dbHelper"
 
@@ -26,33 +25,28 @@ import { profileExclusiveControl } from "./dbHelper"
 //     throw new DatabaseError('プロフィールの作成に失敗しました。')
 //   }
 
-//   const questId = ProfileEntitySchema.shape.quest_id.parse(data)
+//   const questId = ProfileEntityScheme.shape.quest_id.parse(data)
 
 //   return questId
 // }
 
-/** プロフィールを更新する */
-export const updateProfile = async ({profile, supabase}: {
-  profile: ProfileUpdate
+/** プロフィールとユーザを紐づける */
+export const linkProfileAndUser = async ({profileId, userId, supabase}: {
+  profileId: string,
+  userId: string,
   supabase: SupabaseClient
 }) => {
   // 存在をチェックする
-  const beforeProfile = await profileExclusiveControl.existsCheck({id: profile.id, supabase})
-  
-  // 更新日時による排他制御を行う
-  profileExclusiveControl.hasAlreadyUpdated({
-    beforeDate: beforeProfile.updated_at, 
-    afterDate: profile.updated_at
-  })
+  const _ = await profileExclusiveControl.existsCheck({id: profileId, supabase})
   
   // プロフィールを更新する
   const {error} = await supabase.from('profiles')
-    .update(profile)
-    .eq('id', profile.id)
+    .update({user_id: userId})
+    .eq('id', profileId)
 
   // エラーをチェックする
   if (error) {
-    devLog("家族プロフィール.更新エラー: ", error)
+    devLog("linkProfileAndUser.エラー: ", error)
     throw new DatabaseError(`更新時にエラーが発生しました。`, )
   }
 }

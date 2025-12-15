@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 import { FamilyRegisterFormType } from "../form"
 import { postFamily } from "@/app/api/families/client"
 import { devLog } from "@/app/(core)/util"
@@ -15,21 +14,7 @@ export const useRegisterFamily = () => {
 
   /** 登録処理 */
   const mutation = useMutation({
-    mutationFn: ({form}: {form: FamilyRegisterFormType}) => postFamily({
-      family: {
-        display_id: form.displayId,
-        local_name: form.localName,
-        online_name: form.onlineName,
-        icon_color: form.familyIconColor,
-        icon_id: form.familyIconId,
-      },
-      parent: {
-        birthday: form.parentBirthday,
-        name: form.parentName,
-        icon_color: form.parentIconColor,
-        icon_id: form.parentIconId,
-      },
-    }),
+    mutationFn: ({form}: {form: FamilyRegisterFormType}) => postFamily({form}),
     onSuccess: ( data ) => {
       // フィードバックメッセージを表示する
       toast('家族を登録しました', {duration: 1500})
@@ -37,7 +22,7 @@ export const useRegisterFamily = () => {
     onError: (error) => {
       // エラーをチェックする
         devLog("子供登録エラー: ", error)
-        handleAppError(error, router)
+        throw error
     }
   })
 

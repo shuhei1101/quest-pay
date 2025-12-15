@@ -1,6 +1,6 @@
 "use client"
 
-import { FamilyQuestFilterType } from "@/app/api/quests/family/schema"
+import { FamilyQuestFilterType } from "@/app/api/quests/family/scheme"
 import { Accordion, Button, Input, Pill, PillsInput } from "@mantine/core"
 import { Dispatch, SetStateAction, useState } from "react"
 

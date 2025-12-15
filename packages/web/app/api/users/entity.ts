@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 /** DBのユーザスキーマ */
-export const ProfileEntitySchema = z.object({
+export const ProfileEntityScheme = z.object({
   id: z.string(),
   user_id: z.string(),
   name: z.string(),
@@ -12,15 +12,7 @@ export const ProfileEntitySchema = z.object({
   created_at: z.string(),
   updated_at: z.string(),
 })
-export type ProfileEntity = z.infer<typeof ProfileEntitySchema>
-
-// 更新用
-export const ProfileInsertSchema = ProfileEntitySchema.omit({created_at: true, updated_at: true})
-export const ProfileUpdateSchema = ProfileEntitySchema.omit({created_at: true})
-export const ProfileDeleteSchema = ProfileEntitySchema.pick({user_id: true, updated_at: true})
-export type ProfileInsert = z.infer<typeof ProfileInsertSchema>
-export type ProfileUpdate = z.infer<typeof ProfileUpdateSchema>
-export type ProfileDelete = z.infer<typeof ProfileDeleteSchema>
+export type ProfileEntity = z.infer<typeof ProfileEntityScheme>
 
 // ユーザカラム名の型
 export type ProfileColumns = keyof ProfileEntity

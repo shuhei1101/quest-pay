@@ -46,8 +46,6 @@ export const useQuestCategories = () => {
     }
   })
 
-
-
   return { 
     questCategories: data?.questCategories ?? [], 
     isLoading,

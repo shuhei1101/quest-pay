@@ -4,7 +4,7 @@ import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchChild } from "../query"
 import { fetchUserInfoByUserId } from "../../users/query"
-import { GetChildResponse } from "./schema"
+import { GetChildResponse } from "./scheme"
 
 
 /** 子供を取得する */

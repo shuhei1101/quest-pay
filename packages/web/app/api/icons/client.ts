@@ -2,7 +2,7 @@ import queryString from "query-string"
 import { ICONS_API_URL } from "@/app/(core)/constants";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
-import { GetIconsResponseSchema } from "./schema";
+import { GetIconsResponseScheme } from "./scheme";
 
 /** 家族クエストをGETする */
 export const getIcons = async () => {
@@ -20,5 +20,5 @@ export const getIcons = async () => {
 
   devLog("getIcons.戻り値: ", data)
 
-  return GetIconsResponseSchema.parse(data)
+  return GetIconsResponseScheme.parse(data)
 }

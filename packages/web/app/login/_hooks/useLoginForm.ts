@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LoginFormSchema, LoginFormType } from "../form"
+import { LoginFormScheme, LoginFormType } from "../form"
 
 /** ログインフォームを取得する */
 export const useLoginForm = () => {
@@ -20,7 +20,7 @@ export const useLoginForm = () => {
     watch,
     reset,
   } = useForm<LoginFormType>({
-    resolver: zodResolver(LoginFormSchema),
+    resolver: zodResolver(LoginFormScheme),
     defaultValues: defaultForm
   })
 

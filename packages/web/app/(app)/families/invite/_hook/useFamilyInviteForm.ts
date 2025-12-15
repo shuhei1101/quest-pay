@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FamilyInviteSchema, FamilyInviteType } from "../form"
+import { FamilyInviteScheme, FamilyInviteType } from "../form"
 
 /** ログインフォームを取得する */
 export const useFamilyInviteForm = () => {
@@ -19,7 +19,7 @@ export const useFamilyInviteForm = () => {
     watch,
     reset,
   } = useForm<FamilyInviteType>({
-    resolver: zodResolver(FamilyInviteSchema),
+    resolver: zodResolver(FamilyInviteScheme),
     defaultValues: defaultForm
   })
 

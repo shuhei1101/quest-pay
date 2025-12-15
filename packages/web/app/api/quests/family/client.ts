@@ -1,6 +1,6 @@
 import queryString from "query-string"
 import { FAMILY_QUESTS_API_URL } from "@/app/(core)/constants";
-import { FamilyQuestSearchParams, GetFamilyQuestsResponseSchema, PostFamilyQuestRequest, PostFamilyQuestResponseSchema } from "./schema";
+import { FamilyQuestSearchParams, GetFamilyQuestsResponseScheme, PostFamilyQuestRequest, PostFamilyQuestResponseScheme } from "./scheme";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
 
@@ -24,7 +24,7 @@ export const getFamilyQuests = async (params: FamilyQuestSearchParams) => {
 
   devLog("getFamilyQuests.戻り値: ", data)
 
-  return GetFamilyQuestsResponseSchema.parse(data)
+  return GetFamilyQuestsResponseScheme.parse(data)
 }
 
 /** 家族クエストをPOSTする */
@@ -46,5 +46,5 @@ export const postFamilyQuest = async (request: PostFamilyQuestRequest) => {
 
   devLog("postFamilyQuest.戻り値: ", data)
 
-  return PostFamilyQuestResponseSchema.parse(data)
+  return PostFamilyQuestResponseScheme.parse(data)
 }

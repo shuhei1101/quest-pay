@@ -1,12 +1,11 @@
 "use client"
 
 import useSWR from "swr"
-import { SortOrder } from "@/app/(core)/schema"
-import { FamilyQuestFilterType } from "@/app/api/quests/family/schema"
+import { SortOrder } from "@/app/(core)/scheme"
+import { FamilyQuestFilterType } from "@/app/api/quests/family/scheme"
 import { FamilyQuestColumns } from "@/app/api/quests/family/view"
 import { getFamilyQuests } from "@/app/api/quests/family/client"
 import { useRouter } from "next/navigation"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 import { useQuery } from "@tanstack/react-query"
 
 /** クエストリストを取得する */
@@ -33,7 +32,7 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   })
 
   // エラーをチェックする
-  if (error) handleAppError(error, router)
+  if (error) throw error
 
   return {
     fetchedQuests: data?.quests ?? [],

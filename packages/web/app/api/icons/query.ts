@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js"
 import { devLog } from "@/app/(core)/util"
-import { IconEntitySchema } from "./entity"
+import { IconEntityScheme } from "./entity"
 import { QueryError } from "@/app/(core)/error/appError"
 
 /** 全てのアイコンとカテゴリを取得する */
@@ -17,7 +17,7 @@ export const fetchIcons = async ({supabase}: {
 
       devLog("fetchIcons.アイコン取得: ", data)
 
-      return IconEntitySchema.array().parse(data)
+      return IconEntityScheme.array().parse(data)
   } catch (error) {
     devLog("fetchIcons.取得例外: ", error)
     throw new QueryError("アイコン情報の読み込みに失敗しました。")

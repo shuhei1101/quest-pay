@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { withAuth } from "@/app/(core)/withAuth"
-import { GetChildrenResponse, PostChildRequestSchema, PostChildResponse } from "./schema"
+import { GetChildrenResponse, PostChildRequestScheme, PostChildResponse } from "./scheme"
 import { insertChild } from "./db"
 import { generateUniqueInviteCode } from "./invite/service"
 import { fetchUserInfoByUserId } from "../users/query"
@@ -35,7 +35,7 @@ export async function POST(
     return withRouteErrorHandling(async () => {
       // bodyから子供を取得する
       const body = await request.json()
-      const data  = PostChildRequestSchema.parse(body)
+      const data  = PostChildRequestScheme.parse(body)
 
      // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
@@ -46,17 +46,15 @@ export async function POST(
         
       // 子供を登録する
       const childId = await insertChild({
-        profile: {
-          name: data.child.name,
-          icon_id: data.child.icon_id,
-          icon_color: data.child.icon_color,
-          birthday: data.child.birthday
+        params: {
+          _name: data.form.name,
+          _icon_id: data.form.iconId,
+          _icon_color: data.form.iconColor,
+          _birthday: data.form.birthday,
+          _invite_code: inviteCode,
+          _family_id: userInfo.family_id
         },
-        child: {
-          invite_code: inviteCode
-        },
-        supabase: supabase,
-        familyId: userInfo.family_id
+        supabase,
       })
       return NextResponse.json({childId} as PostChildResponse)
     })

@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react"
 import { FamilyQuestSort } from "../../../../api/quests/family/view"
 import { useFamilyQuests } from "../_hook/useFamilyQuests"
 import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL, LOGIN_URL } from "@/app/(core)/constants"
-import { FamilyQuestFilterSchema, FamilyQuestFilterType } from "../../../../api/quests/family/schema"
+import { FamilyQuestFilterScheme, FamilyQuestFilterType } from "../../../../api/quests/family/scheme"
 import { SimpleGrid, Tabs, Button, Text, Input, ActionIcon, Box, Paper } from "@mantine/core"
 import { useQuestCategories } from "@/app/api/quests/category/_hook/useQuestCategories"
 import { RenderIcon } from "../../../icons/_components/RenderIcon"
@@ -76,7 +76,7 @@ export const FamilyQuestList = () => {
       ...queryObj,
       tags: queryObj.tags ? queryObj.tags.split(",") : []
     }
-    setQuestFilter(FamilyQuestFilterSchema.parse(parsedQuery))
+    setQuestFilter(FamilyQuestFilterScheme.parse(parsedQuery))
   }, [searchParams])
 
   /** ページャ状態 */

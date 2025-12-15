@@ -1,11 +1,11 @@
 import { SupabaseClient } from "@supabase/supabase-js"
-import { ChildEntitySchema } from "./entity"
+import { ChildEntityScheme } from "./entity"
 import { z } from "zod"
 import { devLog } from "@/app/(core)/util"
-import { ChildViewSchema } from "./view"
+import { ChildViewScheme } from "./view"
 import { QueryError } from "@/app/(core)/error/appError"
 
-export const FetchChildrenResult = ChildViewSchema.array()
+export const FetchChildrenResult = ChildViewScheme.array()
 
 /** 家族IDに一致する子供を取得する */
 export const fetchChildrenByFamilyId = async ({
@@ -34,7 +34,7 @@ export const fetchChildrenByFamilyId = async ({
   }
 }
 
-export const FetchChildResult = ChildViewSchema
+export const FetchChildResult = ChildViewScheme
 
 /** 子供IDに一致する子供を取得する */
 export const fetchChild = async ({
@@ -62,19 +62,18 @@ export const fetchChild = async ({
   }
 }
 
-/** 使用可能な子供招待コードか確認する */
-export const getChildByInviteCode = async ({supabase, code}: {
+/** 招待コードに紐づく子供を取得する */
+export const fetchChildByInviteCode = async ({supabase, invite_code}: {
   supabase: SupabaseClient,
-  code: string
+  invite_code: string
 }) => {
   try {
   const { data } = await supabase
     .from("children")
     .select("*")
-    .eq("invite_code", code)
-    .maybeSingle()
+    .eq("invite_code", invite_code)
 
-  return data ? ChildEntitySchema.parse(data) : null
+  return data ? ChildEntityScheme.parse(data[0]) : undefined
   } catch (error) {
     devLog("getChildByInviteCode.取得例外: ", error)
     throw new QueryError("招待コードの生成に失敗しました。")

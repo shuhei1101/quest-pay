@@ -8,7 +8,6 @@ import { ClientAuthError } from "@/app/(core)/error/appError"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { devLog } from "@/app/(core)/util"
 import { getIconCategories } from "@/app/api/icons/category/client"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 
 
 export const useIconCategories = () => {
@@ -43,7 +42,7 @@ export const useIconCategories = () => {
   })
 
   // エラーをチェックする
-  if (error) handleAppError(error, router)
+  if (error) throw error
 
   return { 
     iconCategories: data?.iconCategories ?? [], 

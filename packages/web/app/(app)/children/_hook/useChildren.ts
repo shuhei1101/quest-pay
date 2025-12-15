@@ -2,7 +2,6 @@
 
 import { getChildren } from "@/app/api/children/client"
 import { useRouter } from "next/navigation"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 import { useQuery } from "@tanstack/react-query"
 
 /** 子供リストを取得する */
@@ -16,7 +15,7 @@ export const useChildren = () => {
   })
 
   // エラーをチェックする
-  if (error) handleAppError(error, router)
+  if (error) throw error
 
   return {
     children: data?.children ?? [],

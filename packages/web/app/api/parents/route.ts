@@ -3,7 +3,7 @@ import { withAuth } from "@/app/(core)/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchParentsByFamilyId } from "./query"
-import { GetParentsResponse } from "./schema"
+import { GetParentsResponse } from "./scheme"
 import { fetchUserInfoByUserId } from "../users/query"
 
 
@@ -33,7 +33,7 @@ export async function GET(
 //   return withAuth(async (supabase, userId) => {
 //       // bodyから親を取得する
 //       const body = await request.json()
-//       const data  = PostParentinsertParentRequestSchema.parse(body)
+//       const data  = PostParentinsertParentRequestScheme.parse(body)
 
 //      // 家族IDを取得する
 //       const userInfo = await fetchUserInfo({userId, supabase})

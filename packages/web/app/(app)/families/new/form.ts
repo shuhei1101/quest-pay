@@ -4,7 +4,7 @@ import { IconId, IconColor } from "../../../api/icons/entity"
 import { Birthday, UserName } from "@/app/api/users/entity"
 
 /** 家族フォームスキーマ */
-export const FamilyRegisterFormSchema = z.object({
+export const FamilyRegisterFormScheme = z.object({
   displayId: DisplayId,
   localName: LocalName,
   onlineName: OnlineName,
@@ -17,4 +17,4 @@ export const FamilyRegisterFormSchema = z.object({
 })
 
 /** 家族フォームスキーマの型 */
-export type FamilyRegisterFormType = z.infer<typeof FamilyRegisterFormSchema>
+export type FamilyRegisterFormType = z.infer<typeof FamilyRegisterFormScheme>

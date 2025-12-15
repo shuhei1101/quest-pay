@@ -3,7 +3,7 @@ import { IconId, IconColor } from "../../../api/icons/entity"
 import { Birthday, UserName } from "@/app/api/users/entity"
 
 /** 子供フォームスキーマ */
-export const ChildFormSchema = z.object({
+export const ChildFormScheme = z.object({
   name: UserName,
   iconId: IconId,
   iconColor: IconColor,
@@ -11,4 +11,4 @@ export const ChildFormSchema = z.object({
 })
 
 /** 子供フォームスキーマの型 */
-export type ChildFormType = z.infer<typeof ChildFormSchema>
+export type ChildFormType = z.infer<typeof ChildFormScheme>

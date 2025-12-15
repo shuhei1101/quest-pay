@@ -3,24 +3,24 @@ import { devLog } from "@/app/(core)/util";
 import { z } from "zod";
 
 /** DBのアイコンスキーマ */
-export const IconEntitySchema = z.object({
+export const IconEntityScheme = z.object({
   id: z.number(),
   name: z.string(),
   category_id: z.number(),
   size: z.number().nullable(),
 })
-export type IconEntity = z.infer<typeof IconEntitySchema>
+export type IconEntity = z.infer<typeof IconEntityScheme>
 
 // 値オブジェクト
 export const IconId = z.number({error: "アイコンは必須です。"})
 export const IconColor = z.string({error: "アイコンカラーは必須です。"})
 
 // アイコン辞書スキーマ
-export const IconByIdSchema = z.record(
+export const IconByIdScheme = z.record(
   z.string(),
   z.custom<IconEntity>()
 )
-export type IconById = z.infer<typeof IconByIdSchema>
+export type IconById = z.infer<typeof IconByIdScheme>
 export const createIconById = (icons: IconEntity[]) => {
   // セッションストレージから取得する
   let iconById = appStorage.iconById.get()

@@ -1,93 +1,91 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { SupabaseClient } from "@supabase/supabase-js"
-import { QuestDelete, QuestInsert, QuestUpdate } from "@/app/api/quests/entity"
 import { questExclusiveControl } from "./dbHelper"
-import { QuestTagUpdate } from "@/app/(app)/quests/tag/entity"
-import { FamilyQuestEntitySchema, FamilyQuestInsert, FamilyQuestUpdate } from "./entity"
+import { FamilyQuestEntity, FamilyQuestEntityScheme } from "./entity"
 import { devLog } from "@/app/(core)/util"
+import { QuestEntity } from "../entity"
+import { QuestTagEntity } from "@/app/(app)/quests/tag/entity"
 
 /** クエストを挿入する */
-export const insertFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
-  quest: QuestInsert,
-  familyQuest: FamilyQuestInsert
-  tags: QuestTagUpdate[],
+export const insertFamilyQuest = async ({params, supabase}: {
+  params: {
+    _name: QuestEntity["name"],
+    _family_id: FamilyQuestEntity["family_id"],
+    _is_public: FamilyQuestEntity["is_public"],
+    _type: QuestEntity["type"],
+    _icon_id: QuestEntity["icon_id"],
+    _icon_color: QuestEntity["icon_color"],
+    _tags: QuestTagEntity["name"][],
+    _category_id: QuestEntity["category_id"],
+  }
   supabase: SupabaseClient
 }) => {
   // レコードを挿入する
-  const { data, error } = await supabase.rpc("insert_family_quest", {
-    _name: quest.name,
-    _family_id: familyQuest.family_id,
-    _is_public: familyQuest.is_public,
-    _type: quest.type,
-    _icon_id: quest.icon_id,
-    _icon_color: quest.icon_color,
-    _tags: tags.map(t => t.name),
-    _category_id: quest.category_id
-  })
+  const { data, error } = await supabase.rpc("insert_family_quest", params)
   
   // エラーをチェックする
   if (error) {
     throw new DatabaseError('クエストの作成に失敗しました。')
   }
 
-  const questId = FamilyQuestEntitySchema.shape.quest_id.parse(data)
+  const questId = FamilyQuestEntityScheme.shape.quest_id.parse(data)
 
   return questId
 }
 
 /** クエストを更新する */
-export const updateFamilyQuest = async ({quest, familyQuest, tags, supabase}: {
-  quest: QuestUpdate,
-  familyQuest: FamilyQuestUpdate
-  tags: QuestTagUpdate[],
+export const updateFamilyQuest = async ({params, updated_at, supabase}: {
+  params: {
+    _quest_id: QuestEntity["id"],
+    _name: QuestEntity["name"],
+    _is_public: FamilyQuestEntity["is_public"],
+    _type: QuestEntity["type"],
+    _icon_id: QuestEntity["icon_id"],
+    _icon_color: QuestEntity["icon_color"],
+    _tags: QuestTagEntity["name"][],
+    _category_id: QuestEntity["category_id"]
+  }
+  updated_at: string,
   supabase: SupabaseClient
 }) => {
   // 存在をチェックする
-  const beforeQuest = await questExclusiveControl.existsCheck({id: quest.id, supabase})
+  const beforeQuest = await questExclusiveControl.existsCheck({id: params._quest_id, supabase})
   
   // 更新日時による排他制御を行う
   questExclusiveControl.hasAlreadyUpdated({
     beforeDate: beforeQuest.updated_at, 
-    afterDate: quest.updated_at
+    afterDate: updated_at
   })
   
   // クエストを更新する
-  const {error} = await supabase.rpc('update_family_quest', {
-    _quest_id: quest.id,
-    _name: quest.name,
-    _is_public: familyQuest.is_public,
-    _type: quest.type,
-    _icon_id: quest.icon_id,
-    _icon_color: quest.icon_color,
-    _tags: tags.map(t => t.name),
-    _category_id: quest.category_id
-  })
+  const {error} = await supabase.rpc('update_family_quest', params)
 
   // エラーをチェックする
   if (error) {
     devLog("家族クエスト更新エラー: ", error)
-    devLog("更新データ: ", {quest, familyQuest, tags, supabase})
+    devLog("更新データ: ", {params, updated_at, supabase})
     throw new DatabaseError(`更新時にエラーが発生しました。`, )
   }
 }
 
 /** クエストを削除する */
-export const deleteFamilyQuest = async ({supabase, quest}: {
+export const deleteFamilyQuest = async ({supabase, params, updatedAt}: {
+  params: {
+    _quest_id: QuestEntity["id"]
+  }
+  updatedAt: QuestEntity["updated_at"],
   supabase: SupabaseClient, 
-  quest: QuestDelete
 }) => {
   // 存在をチェックする
-  const beforeQuest = await questExclusiveControl.existsCheck({id: quest.id, supabase})
+  const beforeQuest = await questExclusiveControl.existsCheck({id: params._quest_id, supabase})
   
   // 更新日時による排他制御を行う
   questExclusiveControl.hasAlreadyUpdated({
     beforeDate: beforeQuest.updated_at, 
-    afterDate: quest.updated_at
+    afterDate: updatedAt
   })
   
-  const { error } = await supabase.rpc('delete_family_quest', {
-    _quest_id: quest.id
-  })
+  const { error } = await supabase.rpc('delete_family_quest', params)
 
   // エラーをチェックする
   if (error) {

@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import { createIconById } from "../../../api/icons/entity"
 import { devLog } from "@/app/(core)/util"
 import { getIcons } from "@/app/api/icons/client"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 
 
 export const useIcons = () => {
@@ -42,7 +41,7 @@ export const useIcons = () => {
   })
 
   // エラーをチェックする
-  if (error) handleAppError(error, router)
+  if (error) throw error
 
   return { 
     icons: data?.icons ?? [], 

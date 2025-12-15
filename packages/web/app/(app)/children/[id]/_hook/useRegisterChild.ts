@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 import { postChild } from "@/app/api/children/client"
 import { ChildFormType } from "../form"
 
@@ -17,14 +16,7 @@ export const useRegisterChild = ({setId}: {
   /** 登録処理 */
   const mutation = useMutation({
     mutationFn: async ({form}: {form: ChildFormType}) => {
-      const data = await postChild({
-        child: {
-          name: form.name,
-          icon_id: form.iconId,
-          icon_color: form.iconColor,
-          birthday: form.birthday
-        }
-      })
+      const data = await postChild({form})
       return data
     },
     onSuccess: ( data ) => {
@@ -34,7 +26,7 @@ export const useRegisterChild = ({setId}: {
       toast('子供を登録しました', {duration: 1500})
     },
     onError: (err) => {
-      handleAppError(err, router)
+      throw err
     }
   })
 

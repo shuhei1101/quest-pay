@@ -1,9 +1,9 @@
 import { z } from "zod"
 
-import { IdSchema as Id } from "@/app/(core)/_schema/checkSchema"
+import { IdScheme as Id } from "@/app/(core)/_scheme/checkScheme"
 
 /** DBの家族スキーマ */
-export const FamilyEntitySchema = z.object({
+export const FamilyEntityScheme = z.object({
   id: z.string(),
   display_id: z.string(),
   local_name: z.string(),
@@ -15,15 +15,7 @@ export const FamilyEntitySchema = z.object({
   created_at: z.string(),
   updated_at: z.string()
 })
-export type FamilyEntity = z.infer<typeof FamilyEntitySchema>
-
-// 更新用
-export const FamilyInsertSchema = FamilyEntitySchema.omit({id: true, created_at: true, updated_at: true})
-export const FamilyUpdateSchema = FamilyEntitySchema.omit({created_at: true})
-export const FamilyDeleteSchema = FamilyEntitySchema.pick({id: true, updated_at: true})
-export type FamilyInsert = z.infer<typeof FamilyInsertSchema>
-export type FamilyUpdate = z.infer<typeof FamilyUpdateSchema>
-export type FamilyDelete = z.infer<typeof FamilyDeleteSchema>
+export type FamilyEntity = z.infer<typeof FamilyEntityScheme>
 
 // 値オブジェクト
 export const DisplayId = Id.min(5, { error: "IDは5文字以上で入力してください。"}).max(20, { error: "IDは20文字以下で入力してください。"})

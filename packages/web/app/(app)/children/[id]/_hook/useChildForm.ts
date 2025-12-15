@@ -2,12 +2,11 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ChildFormSchema, ChildFormType } from "../form"
+import { ChildFormScheme, ChildFormType } from "../form"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { devLog } from "@/app/(core)/util"
 import { useRouter } from "next/navigation"
-import { handleAppError } from "@/app/(core)/error/handler/client"
 import { getChild } from "@/app/api/children/[id]/client"
 
 /** 子供登録フォームを取得する */
@@ -30,7 +29,7 @@ export const useChildForm = ({childId}: {childId?: string}) => {
     watch,
     reset,
   } = useForm<ChildFormType>({
-    resolver: zodResolver(ChildFormSchema),
+    resolver: zodResolver(ChildFormScheme),
     defaultValues: defaultChild
   })
 
@@ -67,7 +66,7 @@ export const useChildForm = ({childId}: {childId?: string}) => {
   })
 
   // エラーをチェックする
-  if (error) handleAppError(error, router)
+  if (error) throw error
 
   /** 現在の入力データ */
   const current = watch()

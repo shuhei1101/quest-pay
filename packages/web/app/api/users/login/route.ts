@@ -2,7 +2,7 @@ import { withAuth } from "@/app/(core)/withAuth"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { NextResponse } from "next/server"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { GetLoginUserResponse } from "./schema"
+import { GetLoginUserResponse } from "./scheme"
 
 /** ユーザを取得する */
 export async function GET() {
