@@ -41,9 +41,10 @@ export async function POST(
       const body = await request.json()
       const data  = PostFamilyQuestRequestScheme.parse(body)
 
-      // 家族IDを取得する
+      // ユーザ情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo.parent_id) throw new ServerError("親ユーザのみクエストの作成が可能です。")
         
       // クエストを登録する
       const questId = await insertFamilyQuest({
@@ -54,8 +55,8 @@ export async function POST(
           _type: "family",
           _icon_id: data.form.iconId,
           _icon_color: data.form.iconColor,
-          _tags: [],
-          _category_id: 0
+          _tags: data.form.tags,
+          _category_id: data.form.categoryId
         },
         supabase
       })

@@ -21,5 +21,5 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
     router.push(`${parentScreen ?? ROOT_URL}`)
   }, [error, router])
 
-  return null
+  return (<>エラー画面</>)
 }

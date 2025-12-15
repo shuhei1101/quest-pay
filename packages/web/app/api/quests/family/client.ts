@@ -36,13 +36,12 @@ export const postFamilyQuest = async (request: PostFamilyQuestRequest) => {
     body: JSON.stringify(request)
   })
 
+  const data = await res.json()
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) {
-    const data = await res.json()
+    devLog("postFamilyQuest.API例外: ", data)
     throw AppError.fromResponse(data, res.status)
   }
-
-  const data = await res.json()
 
   devLog("postFamilyQuest.戻り値: ", data)
 
