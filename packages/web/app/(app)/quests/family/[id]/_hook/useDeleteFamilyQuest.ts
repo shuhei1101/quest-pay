@@ -6,6 +6,7 @@ import { FAMILY_QUESTS_URL } from "@/app/(core)/constants"
 import { useMutation } from "@tanstack/react-query"
 import { deleteFamilyQuest } from "@/app/api/quests/[id]/family/client"
 import { ClientValueError } from "@/app/(core)/error/appError"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** 削除ボタン押下時のハンドル */
 export const useDeleteFamilyQuest = () => {
@@ -23,7 +24,7 @@ export const useDeleteFamilyQuest = () => {
       // クエスト一覧画面に戻る
       router.push(FAMILY_QUESTS_URL)
     },
-    onError: (error) => { throw error }
+    onError: (error) => handleAppError(error, router)
   })
 
   /** 削除ハンドル */

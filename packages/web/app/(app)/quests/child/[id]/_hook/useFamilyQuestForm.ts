@@ -7,10 +7,12 @@ import { useState } from "react"
 import { devLog, isSameArray } from "@/app/(core)/util"
 import { useMantineTheme } from "@mantine/core"
 import { useRouter } from "next/navigation"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** クエストフォームを取得する */
 export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
   const thema = useMantineTheme()
+  const router = useRouter()
 
   /** クエストフォームのデフォルト値 */
   const defaultQuest: FamilyQuestFormType = {
@@ -67,7 +69,7 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
   })
 
   // エラーをチェックする
-  if (error) throw error
+  if (error) handleAppError(error, router)
 
   /** 現在の入力データ */
   const currentQuest = watch()

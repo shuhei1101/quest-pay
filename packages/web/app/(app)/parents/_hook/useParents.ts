@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { getParents } from "@/app/api/parents/client"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** 親リストを取得する */
 export const useParents = () => {
@@ -15,7 +16,7 @@ export const useParents = () => {
   })
 
   // エラーをチェックする
-  if (error) throw error
+  if (error) handleAppError(error, router)
 
   return {
     parents: data?.parents ?? [],

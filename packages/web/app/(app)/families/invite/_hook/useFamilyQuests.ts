@@ -6,6 +6,7 @@ import { FamilyQuestColumns } from "@/app/api/quests/family/view"
 import { getFamilyQuests } from "@/app/api/quests/family/client"
 import { useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** クエストリストを取得する */
 export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:{
@@ -32,7 +33,7 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   })
 
   // エラーをチェックする
-  if (error) throw error
+  if (error) handleAppError(error, router)
 
   return {
     fetchedQuests: data?.quests ?? [],

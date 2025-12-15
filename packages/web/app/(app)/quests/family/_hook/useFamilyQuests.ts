@@ -6,6 +6,7 @@ import { FamilyQuestFilterType } from "@/app/api/quests/family/scheme"
 import { FamilyQuestColumns } from "@/app/api/quests/family/view"
 import { getFamilyQuests } from "@/app/api/quests/family/client"
 import { useRouter } from "next/navigation"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** クエストリストを取得する */
 export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:{
@@ -15,6 +16,8 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   page: number, 
   pageSize: number
 }) => {
+  const router = useRouter()
+  
   // 検索条件に紐づくクエストリストを取得する
   const { data, error, mutate, isLoading } = useSWR(
     ["クエストリスト", filter, sortColumn, sortOrder, page, pageSize],
@@ -29,7 +32,7 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   )
 
   // エラーをチェックする
-  if (error) throw error
+  if (error) handleAppError(error, router)
 
   return {
     fetchedQuests: data?.quests ?? [],

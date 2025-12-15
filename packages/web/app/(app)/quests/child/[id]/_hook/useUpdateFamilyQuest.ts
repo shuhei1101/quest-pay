@@ -7,9 +7,11 @@ import toast from "react-hot-toast"
 import { putFamilyQuest } from "@/app/api/quests/[id]/family/client"
 import { ClientValueError } from "@/app/(core)/error/appError"
 import { PutFamilyQuestRequest } from "@/app/api/quests/[id]/family/scheme"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** 更新ボタン押下時のハンドル */
 export const useUpdateFamilyQuest = () => {
+  const router = useRouter()
   const queryClient = useQueryClient()
 
   /** 更新処理 */
@@ -21,7 +23,7 @@ export const useUpdateFamilyQuest = () => {
       // フィードバックメッセージを表示する
       toast('クエストを更新しました', {duration: 1500})
     },
-    onError: (error) => { throw error }
+    onError: (error) => handleAppError(error, router)
   })
 
   /** 更新ハンドル */

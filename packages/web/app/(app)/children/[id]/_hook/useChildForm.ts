@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query"
 import { devLog } from "@/app/(core)/util"
 import { useRouter } from "next/navigation"
 import { getChild } from "@/app/api/children/[id]/client"
+import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** 子供登録フォームを取得する */
 export const useChildForm = ({childId}: {childId?: string}) => {
@@ -66,7 +67,7 @@ export const useChildForm = ({childId}: {childId?: string}) => {
   })
 
   // エラーをチェックする
-  if (error) throw error
+  if (error) handleAppError(error, router)
 
   /** 現在の入力データ */
   const current = watch()
