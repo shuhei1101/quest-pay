@@ -40,9 +40,11 @@ export const fetchUserInfoByUserId = async ({userId, supabase}: {
     // エラーをチェックする
     if (error) throw error
 
+    devLog("fetchUserInfoByUserId.取得データ: ", data)
+
     return data.length !== 0 ? UserInfoViewScheme.parse(data[0]) : undefined
   } catch (error) {
-    devLog("fetchUserInfo.取得例外: ", error)
+    devLog("fetchUserInfoByUserId.取得例外: ", error)
     throw new QueryError("ユーザ情報の読み込みに失敗しました。")
   }
 }

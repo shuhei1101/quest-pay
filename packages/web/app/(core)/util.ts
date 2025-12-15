@@ -7,7 +7,13 @@ export const isSameArray = (a: string[], b: string[]) => {
   return b.every((item) => set.has(item));
 }
 
-/** 開発時ログ */
+/** スタックトレースを配列に変換する */
+const stackToArray = (stack: string): string[] => {
+  if (!stack) return [];
+  return stack.split("\n").map((line) => line.trim())
+}
+
+/** 開発時ログを出力する */
 export const devLog = (text: string, obj?: unknown) => {
   if (process.env.NODE_ENV !== "development") return;
 
@@ -16,10 +22,19 @@ export const devLog = (text: string, obj?: unknown) => {
 
     if (typeof obj === 'string') {
       try {
-        logObj = JSON.parse(obj);
+        logObj = JSON.parse(obj)
       } catch {
         // パースできなければそのまま文字列
         logObj = obj;
+      }
+    }
+
+    // Errorオブジェクトの場合はスタックトレースを除外する
+    if (obj instanceof Error) {
+      logObj = {
+        name: obj.name,
+        message: obj.message,
+        stack: obj.stack ? stackToArray(obj.stack) : [],
       }
     }
 
@@ -31,7 +46,7 @@ export const devLog = (text: string, obj?: unknown) => {
   } catch (e) {
     console.log(`【DEBUG】${getJstTimestamp()} ${text}`, obj ?? "");
   }
-};
+}
 
 const CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 /** 招待コードを生成する */

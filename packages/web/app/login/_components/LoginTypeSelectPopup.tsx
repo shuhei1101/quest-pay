@@ -1,10 +1,11 @@
 import { Button, Input, Modal, Space, Text } from "@mantine/core"
 import { useRouter } from "next/navigation"
-import { FAMILY_NEW_URL } from "@/app/(core)/constants"
+import { FAMILY_NEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/constants"
 import { useEffect, useState } from "react"
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"
 import { devLog } from "@/app/(core)/util"
-import { postJoinChild } from "@/app/api/children/join/client"
+import { useJoinAsParent } from "../_hooks/useJoinAsParent"
+import { useJoinAsChild } from "../_hooks/useJoinAsChild"
 
 
 /** ログインタイプ選択ポップアップ */
@@ -14,53 +15,36 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
 }) => {
   const router = useRouter()
 
-  /** ハンドル */
-  // const { handleCreateFamily } = useFamilyCreate({close})
-
   /** ユーザIDに紐づく家族情報 */
   const { userInfo, refetch } = useLoginUserInfo()
-
+  
   /** 親招待コード */
   const [parentInviteCode, setParentInviteCode] = useState("")
   /** 親招待コードのバリデーションエラー */
   const [parentInviteCodeError, setParentInviteCodeError] = useState("")
-
+  
   /** 子招待コード */
   const [childInviteCode, setChildInviteCode] = useState("")
   /** 子招待コードのバリデーションエラー */
   const [childInviteCodeError, setChildInviteCodeError] = useState("")
 
+  /** 親として家族に参加するハンドル */
+  const { handleJoinAsParent, isLoading: isJoiningAsParent } = useJoinAsParent({refetch, setParentInviteCodeError})
+  /** 子として家族に参加するハンドル */
+  const { handleJoinAsChild, isLoading: isJoiningAsChild } = useJoinAsChild({refetch, setChildInviteCodeError})
+
+  // ポップアップ起動時の処理
   useEffect(() => {
     if (!opened) return
-    devLog("ユーザ情報: ", JSON.stringify(userInfo))
+    // ユーザ情報を再取得する
     refetch()
-    // ポップアップが開いたときに状態をリセットする
+    devLog("ユーザ情報: ", JSON.stringify(userInfo))
+    // 状態をリセットする
     setParentInviteCode("")
     setParentInviteCodeError("")
     setChildInviteCode("")
     setChildInviteCodeError("")
   }, [opened])
-
-  /** 親として家族に参加するハンドル */
-  const handleJoinAsParent = () => {
-    if (!parentInviteCode.trim()) {
-      setParentInviteCodeError("親招待コードを入力してください")
-      return
-    }
-    setParentInviteCodeError("")
-    // TODO: 親として家族に参加する処理
-    devLog("親として参加: ", parentInviteCode)
-  }
-
-  /** 子として家族に参加するハンドル */
-  const handleJoinAsChild = () => {
-    if (!childInviteCode.trim()) {
-      setChildInviteCodeError("子招待コードを入力してください")
-      return
-    }
-    setChildInviteCodeError("")
-    postJoinChild({invite_code: childInviteCode})
-  }
 
   return (
     <Modal opened={opened} onClose={close} title="ログインタイプ選択"
@@ -74,7 +58,12 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
           {/* 家族名表示欄 */}
           <Text>{userInfo.family_local_name}</Text>
           {/* 親ユーザログインボタン */}
-          <Button variant="light">親でログイン</Button>
+          <Button
+            onClick={() => router.push(`${FAMILY_QUESTS_URL}`)}
+            variant="light"
+          >
+            親でログイン
+          </Button>
           {/* 子ユーザログインボタン */}
           <Button variant="light">子でログイン</Button>
         </div>
@@ -100,7 +89,7 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
               />
             </Input.Wrapper>
             {/* 親として家族に参加ボタン */}
-            <Button variant="light" onClick={handleJoinAsParent}>
+            <Button variant="light" onClick={() => handleJoinAsParent({inviteCode: parentInviteCode})}>
               親として家族に参加する
             </Button>
           </div>
@@ -119,7 +108,7 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
               />
             </Input.Wrapper>
             {/* 子として家族に参加ボタン */}
-            <Button variant="light" onClick={handleJoinAsChild}>
+            <Button variant="light" onClick={() => handleJoinAsChild({inviteCode: childInviteCode})}>
               子として家族に参加する
             </Button>
           </div>

@@ -25,6 +25,7 @@ export const insertFamilyQuest = async ({params, supabase}: {
   
   // エラーをチェックする
   if (error) {
+    devLog("insertFamilyQuest.エラー: ", error)
     throw new DatabaseError('クエストの作成に失敗しました。')
   }
 
@@ -62,8 +63,7 @@ export const updateFamilyQuest = async ({params, updated_at, supabase}: {
 
   // エラーをチェックする
   if (error) {
-    devLog("家族クエスト更新エラー: ", error)
-    devLog("更新データ: ", {params, updated_at, supabase})
+    devLog("updateFamilyQuest.エラー: ", error)
     throw new DatabaseError(`更新時にエラーが発生しました。`, )
   }
 }
@@ -89,7 +89,7 @@ export const deleteFamilyQuest = async ({supabase, params, updatedAt}: {
 
   // エラーをチェックする
   if (error) {
-    console.log(error)
+    devLog("deleteFamilyQuest.エラー: ", error)
     throw new DatabaseError(`クエストの削除に失敗しました。`)
   }
 }

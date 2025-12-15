@@ -1,10 +1,10 @@
-import { CHILD_JOIN_API_URL } from "@/app/(core)/constants";
+import { LOGIN_USER_API_URL } from "@/app/(core)/constants";
 import { AppError } from "@/app/(core)/error/appError";
 import { GetLoginUserResponseScheme } from "./scheme";
 
 export const getLoginUser = async () => {
   // APIを実行する
-  const res = await fetch(`${CHILD_JOIN_API_URL}`, {
+  const res = await fetch(`${LOGIN_USER_API_URL}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   })
