@@ -2,7 +2,7 @@ import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon";
 import { FamilyQuestView } from "@/app/api/quests/family/view";
 import { Badge, Card, Group, Text } from "@mantine/core";
 
-export const FamilyQuestCardLayout = ({quest, onClick}: {
+export const ChildQuestCardLayout = ({quest, onClick}: {
   quest: FamilyQuestView,
   onClick: (questId: string) => void
 }) => (

@@ -19,6 +19,19 @@
 # コーディングルール
 ## 全般
 - 文末のセミコロンはつけないこと`;`
+- YAGNI原則に従い、不要な分割や共通化は避けること（例えば、関数の引数の型をその場でしか使わないにも関わらず、typeでXxxParamsと定義したりすることはNG。必要になった際に定義しなおすこと）
+
+## 型
+- `entity.ts`ファイルにZodスキーマの型を共有しているため、必要であればこちらを利用すること（間違っても同じような型を生成しないこと）
+- DBのカラムと同じ意味の変数や引数を定義するときは、`entity.ts`の型内を参照すること。（もしくはUnionを使用）（Entity定義を変えたときに自動で変わるように）
+  - 例: 
+```ts
+type QuestItem = {
+  id: QuestEntity["id"]
+  category_id?: QuestEntity["category_id"]
+  [key: string]: any
+}
+```
 
 ## typeとinterface
 - 理由がない場合、typeを使用すること

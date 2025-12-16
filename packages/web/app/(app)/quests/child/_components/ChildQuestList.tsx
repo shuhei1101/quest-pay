@@ -9,7 +9,7 @@ import { SimpleGrid, Tabs, Button, Text, Input, ActionIcon, Box, Paper } from "@
 import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"
 import { RenderIcon } from "../../../icons/_components/RenderIcon"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
-import { FamilyQuestCardLayout } from "./FamilyQuestCardLayout"
+import { ChildQuestCardLayout } from "./ChildQuestCardLayout"
 import { devLog } from "@/app/(core)/util"
 import { FetchFamilyQuestsResultType } from "@/app/api/quests/family/query"
 import { IconArrowsSort, IconFilter, IconLogout, IconSearch } from "@tabler/icons-react"
@@ -239,7 +239,7 @@ export const ChildQuestList = () => {
           spacing="md"
         >
             {displayQuests.map((quest, index) => (
-              <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+              <ChildQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
             ))}
           </SimpleGrid>
           <div ref={sentinelRef} style={{ height: 1 }} />
@@ -253,7 +253,7 @@ export const ChildQuestList = () => {
             spacing="md"
           >
               {displayQuests.filter((quest) => quest.category_id === category.id).map((quest, index) => (
-                <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+                <ChildQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
               ))}
             </SimpleGrid>
           </Tabs.Panel>
@@ -266,7 +266,7 @@ export const ChildQuestList = () => {
           spacing="md"
           >
             {displayQuests.filter((quest) => quest.category_id == undefined).map((quest, index) => (
-              <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+              <ChildQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
             ))}
           </SimpleGrid>
         </Tabs.Panel>

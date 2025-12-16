@@ -7,9 +7,12 @@ import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 
 /** 取得結果の型 */
-export const FetchFamilyQuestsResult = z.array(FamilyQuestViewScheme.extend({
+export const FetchFamilyQuestResult = FamilyQuestViewScheme.extend({
   quest_tags: z.array(QuestTagEntityScheme)
-}))
+})
+export type FetchFamilyQuestResultType = z.infer<typeof FetchFamilyQuestResult>
+
+export const FetchFamilyQuestsResult = z.array(FetchFamilyQuestResult)
 export type FetchFamilyQuestsResultType = z.infer<typeof FetchFamilyQuestsResult>
 
 /** 検索条件に一致する家族クエストを取得する */
@@ -63,10 +66,6 @@ export const fetchFamilyQuests = async ({
     throw new QueryError("家族クエストの読み込みに失敗しました。")
   }
 }
-
-export const FetchFamilyQuestResult = FamilyQuestViewScheme.extend({
-  quest_tags: z.array(QuestTagEntityScheme)
-})
 
 /** 検索条件に一致する家族クエストを取得する */
 export const fetchFamilyQuest = async ({
