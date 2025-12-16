@@ -5,6 +5,7 @@ import { GetIconCategoriesResponseScheme } from "./scheme";
 
 /** 家族クエストをGETする */
 export const getIconCategories = async () => {
+  devLog("getIconCategories.API呼び出し: ", {URL: ICON_CATEGORIES_API_URL})
   // APIを実行する
   const res = await fetch(`${ICON_CATEGORIES_API_URL}`, {
     method: "GET",

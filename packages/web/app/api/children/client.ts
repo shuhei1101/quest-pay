@@ -5,6 +5,7 @@ import { AppError } from "@/app/(core)/error/appError";
 
 /** 子供をGETする */
 export const getChildren = async () => {
+  devLog("getChildren.API呼び出し: ", {URL: CHILDREN_API_URL})
   // APIを実行する
   const res = await fetch(`${CHILDREN_API_URL}`, {
     method: "GET",
@@ -23,7 +24,7 @@ export const getChildren = async () => {
 
 /** 子供をPOSTする */
 export const postChild = async (request: PostChildRequest) => {
-  devLog("postChild.実行APIエンドポイント: ", CHILDREN_API_URL)
+  devLog("postChild.API呼び出し: ", {URL: CHILDREN_API_URL, request})
   // APIを実行する
   const res = await fetch(`${CHILDREN_API_URL}`, {
     method: "POST",

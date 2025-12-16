@@ -15,22 +15,29 @@ const stackToArray = (stack: string): string[] => {
 
 /** 開発時ログを出力する */
 export const devLog = (text: string, obj?: unknown) => {
-  if (process.env.NODE_ENV !== "development") return;
+  if (process.env.NODE_ENV !== "development") return
 
   try {
-    let logObj = obj;
+    let logObj = obj
 
     if (typeof obj === 'string') {
       try {
         logObj = JSON.parse(obj)
       } catch {
         // パースできなければそのまま文字列
-        logObj = obj;
+        logObj = obj
       }
     }
 
-    // Errorオブジェクトの場合はスタックトレースを除外する
-    if (obj instanceof Error) {
+    // ZodErrorの場合はissuesを整形して表示する
+    if (obj && typeof obj === 'object' && 'name' in obj && obj.name === 'ZodError' && 'issues' in obj) {
+      logObj = {
+        name: obj.name,
+        issues: obj.issues,
+      }
+    }
+    // Errorオブジェクトの場合はスタックトレースを配列化する
+    else if (obj instanceof Error) {
       logObj = {
         name: obj.name,
         message: obj.message,
@@ -39,12 +46,12 @@ export const devLog = (text: string, obj?: unknown) => {
     }
 
     if (logObj === undefined) {
-      console.log(`【DEBUG】${getJstTimestamp()} ${text}`);
+      console.log(`【DEBUG】${getJstTimestamp()} ${text}`)
     } else {
-      console.log(`【DEBUG】${getJstTimestamp()} ${text}`, logObj);
+      console.log(`【DEBUG】${getJstTimestamp()} ${text}`, logObj)
     }
   } catch (e) {
-    console.log(`【DEBUG】${getJstTimestamp()} ${text}`, obj ?? "");
+    console.log(`【DEBUG】${getJstTimestamp()} ${text}`, obj ?? "")
   }
 }
 

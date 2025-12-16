@@ -4,9 +4,9 @@ import { ActionIcon, Button, ColorPicker, Input, Modal, Popover, Space, Tabs, Te
 import { useEffect, useState } from "react"
 import { RenderIcon } from "./RenderIcon"
 import { useIcons } from "../_hooks/useIcons"
-import { useIconCategories } from "../../../api/icons/category/_hook/useIconCategories"
 import { IconEntity } from "../../../api/icons/entity"
 import { devLog } from "@/app/(core)/util"
+import { useIconCategories } from "../category/_hook/useIconCategories"
 
 /** アイコン選択ポップアップ */
 export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor, currentColor}: {

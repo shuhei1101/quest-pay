@@ -1,6 +1,6 @@
 "use client"
 
-import { useConstants } from "@/app/(core)/useConstants"
+import { useWindow } from "@/app/(core)/useConstants"
 import { FamilyMemberList } from "./_components/FamilyMemberList"
 import { useEffect, useState } from "react"
 import { RadialActionButton, FloatingActionItem } from "@/app/(core)/_components/RadialActionButton"
@@ -13,7 +13,7 @@ export default function FamilyMembersLayout({ children }: {
 }) {
   const router = useRouter()
   const pathname = usePathname()
-  const { isMobile } = useConstants()
+  const { isMobile } = useWindow()
 
   /** URLから選択中のIDを取得する */
   const getSelectedIdFromPath = (): string | null => {

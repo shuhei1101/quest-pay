@@ -14,10 +14,10 @@ export const useSignOut = () => {
    // ログインしていない場合のハンドル
     if (error) {
       // 次画面で表示するメッセージを登録する
-      appStorage.feedbackMessage.set('サインアウト中にエラーが発生しました。')
+      appStorage.feedbackMessage.set({ message: "サインアウト中にエラーが発生しました。", type: "error" })
     } else {
       // 次画面で表示するメッセージを登録する
-      appStorage.feedbackMessage.set('サインアウトしました。')
+      appStorage.feedbackMessage.set({ message: "サインアウトしました。", type: "success" })
     }
     router.push(`${LOGIN_URL}`)
   }

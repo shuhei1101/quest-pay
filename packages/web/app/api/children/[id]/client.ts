@@ -5,6 +5,7 @@ import { GetChildResponseScheme } from "./scheme"
 
 /** 子供をGETする */
 export const getChild = async (childId: string) => {
+  devLog("getChild.API呼び出し: ", {URL: CHILD_API_URL(childId)})
   // APIを実行する
   const res = await fetch(`${CHILD_API_URL(childId)}`, {
     method: "GET",

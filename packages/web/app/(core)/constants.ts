@@ -19,10 +19,12 @@ export const QUEST_URL =(questId: string) => `${QUESTS_URL}/${questId}`
 export const QUESTS_API_URL = `/api${QUESTS_URL}`
 export const QUEST_API_URL = (questId: string) => `${QUESTS_API_URL}/${questId}`
 
+// 親クエスト
+export const PARENT_QUESTS_URL = `${QUESTS_URL}/parent`
+export const PARENT_QUEST_NEW_URL = `${PARENT_QUESTS_URL}/new`
+export const PARENT_QUEST_URL = (questId: string) => `${PARENT_QUESTS_URL}/${questId}`
+
 // 家族クエスト
-export const FAMILY_QUESTS_URL = `${QUESTS_URL}/family`
-export const FAMILY_QUEST_NEW_URL = `${FAMILY_QUESTS_URL}/new`
-export const FAMILY_QUEST_URL = (questId: string) => `${FAMILY_QUESTS_URL}/${questId}`
 export const FAMILY_QUESTS_API_URL = `${QUESTS_API_URL}/family`
 export const FAMILY_QUEST_API_URL = (questId: string) => `${QUEST_API_URL(questId)}/family`
 

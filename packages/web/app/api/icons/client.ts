@@ -6,6 +6,7 @@ import { GetIconsResponseScheme } from "./scheme";
 
 /** 家族クエストをGETする */
 export const getIcons = async () => {
+  devLog("getIcons.API呼び出し: ", {URL: ICONS_API_URL})
   // APIを実行する
   const res = await fetch(`${ICONS_API_URL}`, {
     method: "GET",

@@ -8,7 +8,7 @@ import { IconHome2, IconFiles, IconFilePlus, IconMenu2 } from '@tabler/icons-rea
 import { useRouter } from 'next/navigation'
 import { appStorage } from '../(core)/_sessionStorage/appStorage'
 import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../icon'
-import { useConstants } from '../(core)/useConstants'
+import { useWindow } from '../(core)/useConstants'
 import { createClient } from '../(core)/_supabase/client'
 import { useSystemTheme } from '../(core)/useSystemTheme'
 import { useEffect, useState } from 'react'
@@ -34,7 +34,7 @@ export default function AppLayout({
   const [opened, { toggle, close }] = useDisclosure()
   const router = useRouter()
   /** ブレークポイント */
-  const { isMobile, isDark } = useConstants()
+  const { isMobile, isDark } = useWindow()
   /** ログインユーザ情報（キャッシュを使用しない） */
   const { userInfo, isLoading, isGuest } = useLoginUserInfo({caching: false})
   /** メニュー */
@@ -121,7 +121,7 @@ export default function AppLayout({
     // ログアウトする
     await createClient().auth.signOut()
     // 次画面で表示するメッセージを登録する
-    appStorage.feedbackMessage.set('サインアウトしました')
+    appStorage.feedbackMessage.set({ message: "サインアウトしました", type: "success" })
     // ログイン画面に遷移する
     router.push(`${LOGIN_URL}`)
   }

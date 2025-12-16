@@ -26,7 +26,7 @@ export const useIcons = () => {
         fetchedIcons = data.icons
         if (!fetchedIcons) {
           // フィードバックメッセージを表示する
-          appStorage.feedbackMessage.set("アイコンのロードに失敗しました。再度ログインしてください。")
+          appStorage.feedbackMessage.set({ message: "アイコンのロードに失敗しました。再度ログインしてください。", type: "error" })
           // ログイン画面に遷移する
           router.push(LOGIN_URL)
         }

@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import { useChild } from "../_hook/useChild"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
-import { useConstants } from "@/app/(core)/useConstants"
+import { useWindow } from "@/app/(core)/useConstants"
 import { useRouter } from "next/navigation"
 import { FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/constants"
 import { useDisclosure } from "@mantine/hooks"
@@ -19,7 +19,7 @@ export const ChildView = ( params: {
 }) => {
   const router = useRouter()
   /** 定数 */
-  const { isDark } = useConstants()
+  const { isDark } = useWindow()
 
   /** 子供ID */
   const [id, setId] = useState<string>(params.id)

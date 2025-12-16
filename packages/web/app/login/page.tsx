@@ -9,6 +9,8 @@ import { useDisclosure } from "@mantine/hooks"
 import { LoginTypeSelectPopup } from "./_components/LoginTypeSelectPopup"
 import { useLogin } from "./_hooks/useLogin"
 import { useSignUp } from "./_hooks/useSignUp"
+import { useRouter } from "next/navigation"
+import { PARENT_QUESTS_URL } from "../(core)/constants"
 
 const guest = {
   email: process.env.NEXT_PUBLIC_GUEST_EMAIL ?? "",
@@ -21,27 +23,30 @@ export default function Page() {
     sessionStorage.clear()
   }, [])
 
-  /** ハンドラ */
-  const { handleLogin, userId } = useLogin()
-  const { handleSignUp } = useSignUp()
+  const router = useRouter()
+  
+  // 新規登録かサインインかを判定する状態
+  const [isLogin, setIsLogin] = useState<boolean>(true)
 
   /** 名前入力ポップアッププロパティ */
   const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false)
 
-  // 新規登録かサインインかを判定する状態
-  const [isLogin, setIsLogin] = useState<boolean>(true)
+  /** ログインハンドル */
+  const { login, error: loginError, isSuccess: loginSuccess, isLoading: loginLoading } = useLogin({onSuccess: (userInfo) => {
+    // ユーザ情報がない場合
+    if (!userInfo) {
+      openPopup() // タイプ選択ポップアップを表示する
+    } else {
+      router.push(PARENT_QUESTS_URL) // ホーム画面に遷移する
+    }
+  }})
+  
+  /** 新規登録ハンドル */
+  const { signUp } = useSignUp()
 
-  // ログインフォームを取得する
+  /** ログインフォーム状態 */
   const { register, handleSubmit } = useLoginForm()
-
-  // ゲストでログイン押下時のハンドル
-  // const handleGuestLogin = () => {
-  //   handleLogin({
-  //     form: {email: guest.email, password: guest.pass},
-  //     onSuccess: () => openPopup()
-  //   })
-  // }
-
+  
   return (
     <>
     <div className="h-screen flex flex-col items-center justify-center p-2">
@@ -55,7 +60,7 @@ export default function Page() {
         <Center p="md" className="flex flex-col gap-5">
           {/* タイトル */}
           <Title order={1} c={"white"}>クエストペイ</Title>
-          <form method="POST" onSubmit={handleSubmit((form) => isLogin ? handleLogin({form, onSuccess: () => openPopup()}) : handleSignUp(form))}>
+          <form method="POST" onSubmit={handleSubmit((form) => isLogin ? login(form) : signUp(form))}>
             {/* タブ */}
             <Tabs defaultValue="ログイン" variant="outline">
               <Tabs.List>
@@ -81,7 +86,6 @@ export default function Page() {
             <div className="m-3" />
             {/* サブミットボタン */}
             <div className="flex justify-end gap-5 w-full">
-              {/* <Button onClick={handleGuestLogin} variant="default" bg={"yellow"}>ゲストログイン</Button> */}
               <Button type="submit" variant="default">続行</Button>
             </div>
           </form>

@@ -19,7 +19,7 @@ export const useSession = () => {
       // セッション状態がない場合
       if (!data.session) {
         // フィードバックメッセージを表示する
-        appStorage.feedbackMessage.set("セッションが切れました。再度ログインしてください。")
+        appStorage.feedbackMessage.set({ message: "セッションが切れました。再度ログインしてください。", type: "error" })
         // ログイン画面に遷移する
         router.push(LOGIN_URL)
       }

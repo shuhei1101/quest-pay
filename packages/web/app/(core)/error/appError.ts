@@ -17,7 +17,7 @@ export class AppError extends Error {
     public status: number,
     message: string,
   ) {
-    super(JSON.stringify({ code, status, message }))
+    super(message)
   }
 
   public toResponse(): ErrorResponse {

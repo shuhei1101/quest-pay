@@ -44,7 +44,7 @@ export async function POST(
       // ユーザ情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
-      if (!userInfo.parent_id) throw new ServerError("親ユーザのみクエストの作成が可能です。")
+      if (userInfo.user_type !== "parent") throw new ServerError("親ユーザのみクエストの作成が可能です。")
         
       // クエストを登録する
       const questId = await insertFamilyQuest({

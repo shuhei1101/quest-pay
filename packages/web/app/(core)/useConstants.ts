@@ -4,7 +4,7 @@ import { useMantineColorScheme } from "@mantine/core"
 import { useMediaQuery } from "@mantine/hooks"
 import { useSystemTheme } from "./useSystemTheme"
 
-export const useConstants = () => {
+export const useWindow = () => {
   // 画面サイズごとのプラットフォーム判定
   const isMobile = useMediaQuery('(max-width: 600px)')
   const isTablet = useMediaQuery('(max-width: 900px)')

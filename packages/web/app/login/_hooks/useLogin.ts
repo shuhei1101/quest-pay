@@ -1,41 +1,42 @@
 "use client"
 
-import toast from "react-hot-toast"
-import { useState } from "react"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { LoginFormType } from "../form"
+import { useMutation } from "@tanstack/react-query"
+import toast from "react-hot-toast"
+import { queryClient } from "@/app/(core)/tanstack"
+import { getLoginUser } from "@/app/api/users/login/client"
+import { UserInfoView } from "@/app/api/users/view"
 
 /** ログイン時のハンドル */
-export const useLogin = () => {
-  const [userId, setUserId] = useState("")
-  const handleLogin = async ({onSuccess, form}: {
-    form: LoginFormType,
-    onSuccess: () => void
-  }) => {
+export const useLogin = ({onSuccess}: {
+  onSuccess: (userInfo: UserInfoView) => void
+}) => {
 
-    // ログインする
-    const { data, error } = await createClient().auth.signInWithPassword({
-      email: form.email,
-      password: form.password
-    })
-
-    // エラーをチェックする
-    if (error) {
-      console.error(error)
-      toast.error("メールアドレスまたはパスワードが間違っています。")
-      return
+  const mutation = useMutation({
+    mutationFn: async (form: LoginFormType) => createClient().auth.signInWithPassword({
+        email: form.email,
+        password: form.password
+    }),
+    onError: (err) => {
+      toast.error("ログインに失敗しました。")
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+      // ユーザ情報を取得する
+      const { userInfo } = await getLoginUser()
+      onSuccess(userInfo)
     }
-    
-    // ユーザIDをセットする
-    setUserId(data.user.id)
+  })
 
-    // 成功後の処理を実行する
-    onSuccess()
-  }
   return { 
     /** ログインハンドル */    
-    handleLogin, 
-    /** ユーザID */
-    userId
+    login: mutation.mutate,
+    /** ログイン処理中フラグ */
+    isLoading: mutation.isPending,
+    /** 成功フラグ */
+    isSuccess: mutation.isSuccess,
+    /** エラー */
+    error: mutation.error
   }
 }

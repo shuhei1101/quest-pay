@@ -5,6 +5,7 @@ import { AppError } from "@/app/(core)/error/appError";
 
 /** 家族招待メールをPOSTする */
 export const postFamilyInvite = async (request: PostFamilyInviteRequest) => {
+  devLog("postFamilyInvite.API呼び出し: ", {URL: FAMILY_INVITE_API_URL, request})
   // APIを実行する
   const res = await fetch(`${FAMILY_INVITE_API_URL}`, {
     method: "POST",

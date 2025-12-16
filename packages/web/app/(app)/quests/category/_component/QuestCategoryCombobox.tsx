@@ -1,5 +1,5 @@
 'use client'
-import { useQuestCategories } from "@/app/api/quests/category/_hook/useQuestCategories"
+import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"
 import { Combobox, Input, InputBase, useCombobox } from "@mantine/core"
 
 /** タスクステータスコンボボックス */

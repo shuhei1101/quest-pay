@@ -32,24 +32,23 @@ export const useLoginUserInfo = ({ caching = true }: {
       // ユーザ情報がない場合
       if (!userInfo) {
         // ユーザ情報を取得する
-        const data = await getLoginUser()
-        userInfo = data.userInfo
+        const { userInfo } = await getLoginUser()
         if (!userInfo) return { isGuest: true }
         // セッションストレージに格納する
         appStorage.user.set(userInfo)
       }
-    return {
-      userInfo,
-      isGuest: false
-    }
+      return {
+        userInfo,
+        isGuest: false,
+      }
     }
   })
-
-  if (query.data?.isGuest) devLog("ゲストフラグ: ", query.data?.isGuest ?? true)
 
   return {
     userInfo: query.data?.userInfo,
     isGuest: query.data?.isGuest ?? true,
+    isParent: query.data?.userInfo?.user_type === "parent",
+    isChild: query.data?.userInfo?.user_type === "child",
     isLoading: query.isLoading,
     refetch: query.refetch
   }

@@ -5,6 +5,7 @@ import { GetParentsResponseScheme } from "./scheme";
 
 /** 親をGETする */
 export const getParents = async () => {
+  devLog("getParents.API呼び出し: ", {URL: PARENTS_API_URL})
   // APIを実行する
   const res = await fetch(`${PARENTS_API_URL}`, {
     method: "GET",

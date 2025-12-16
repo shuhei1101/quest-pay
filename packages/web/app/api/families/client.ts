@@ -5,6 +5,7 @@ import { AppError } from "@/app/(core)/error/appError";
 
 /** 家族をPOSTする */
 export const postFamily = async (request: PostFamilyRequest) => {
+  devLog("postFamily.API呼び出し: ", {URL: FAMILY_API_URL, request})
   // APIを実行する
   const res = await fetch(`${FAMILY_API_URL}`, {
     method: "POST",

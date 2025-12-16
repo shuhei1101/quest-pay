@@ -3,7 +3,7 @@ import React from "react"
 import * as FaIcons from "react-icons/fa";
 import * as TbIcons from "react-icons/tb";
 import * as TablerIcons from '@tabler/icons-react';
-import { useConstants } from "@/app/(core)/useConstants";
+import { useWindow } from "@/app/(core)/useConstants";
 
 /** レンダリングされたアイコン */
 export const RenderIcon = ({iconName, iconSize, iconColor, ...props}: { 
@@ -12,7 +12,7 @@ export const RenderIcon = ({iconName, iconSize, iconColor, ...props}: {
   iconColor?: string | null,
 } & React.ComponentProps<typeof IconQuestionMark>) => {
 
-  const { isDark } = useConstants()
+  const { isDark } = useWindow()
 
   // アイコンが指定されていない場合、はてなマークを返却する
   if (!iconName || typeof iconName !== "string") return <IconQuestionMark {...props} />

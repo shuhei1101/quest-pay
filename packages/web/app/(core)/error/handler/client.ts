@@ -10,7 +10,7 @@ import { devLog } from "../../util"
 export const handleAppError = (error: Error, router: AppRouterInstance) => {
   devLog("handleAppError.エラー内容: ", error)
   // 次画面で表示するメッセージを登録
-  appStorage.feedbackMessage.set(error.message)
+  appStorage.feedbackMessage.set({ message: error.message, type: "error" })
   
   // 前画面がある場合、遷移する
   const parentScreen = appStorage.parentScreen.get()

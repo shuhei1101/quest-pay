@@ -28,7 +28,7 @@ export const useIconCategories = () => {
         fetchedIconCategories = data.iconCategories
         if (!fetchedIconCategories) {
           // フィードバックメッセージを表示する
-          appStorage.feedbackMessage.set("アイコンカテゴリのロードに失敗しました。再度ログインしてください。")
+          appStorage.feedbackMessage.set({ message: "アイコンカテゴリのロードに失敗しました。再度ログインしてください。", type: "error" })
           // ログイン画面に遷移する
           router.push(LOGIN_URL)
           // 認証エラーを発生させる

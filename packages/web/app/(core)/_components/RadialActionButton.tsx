@@ -3,7 +3,7 @@ import { useEffect, useRef, ReactNode } from "react"
 import { ActionIcon, MantineColor } from "@mantine/core"
 import { IconPlus } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useConstants } from "../useConstants"
+import { useWindow } from "../useConstants"
 
 export type FloatingActionItem = {
   /** アイコン要素 */
@@ -62,7 +62,7 @@ export const RadialActionButton = ({
   subButtonSize?: number
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const { isMobile } = useConstants()
+  const { isMobile } = useWindow()
 
   // 外側クリックで閉じる
   useEffect(() => {

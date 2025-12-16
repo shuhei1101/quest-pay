@@ -6,6 +6,7 @@ import { AppError } from "@/app/(core)/error/appError";
 
 /** 家族クエストをGETする */
 export const getFamilyQuests = async (params: FamilyQuestSearchParams) => {
+  devLog("getFamilyQuests.API呼び出し: ", {URL: FAMILY_QUESTS_API_URL, params})
 
   // クエリストリングを生成する
   const qs = queryString.stringify(params, { arrayFormat: "none" })
@@ -29,6 +30,7 @@ export const getFamilyQuests = async (params: FamilyQuestSearchParams) => {
 
 /** 家族クエストをPOSTする */
 export const postFamilyQuest = async (request: PostFamilyQuestRequest) => {
+  devLog("postFamilyQuest.API呼び出し: ", {URL: FAMILY_QUESTS_API_URL, request})
   // APIを実行する
   const res = await fetch(`${FAMILY_QUESTS_API_URL}`, {
     method: "POST",

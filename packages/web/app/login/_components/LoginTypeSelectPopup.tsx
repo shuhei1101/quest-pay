@@ -1,6 +1,6 @@
 import { Button, Input, Modal, Space, Text } from "@mantine/core"
 import { useRouter } from "next/navigation"
-import { FAMILY_NEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/constants"
+import { FAMILY_NEW_URL, PARENT_QUESTS_URL } from "@/app/(core)/constants"
 import { useEffect, useState } from "react"
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"
 import { devLog } from "@/app/(core)/util"
@@ -59,7 +59,7 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
           <Text>{userInfo.family_local_name}</Text>
           {/* 親ユーザログインボタン */}
           <Button
-            onClick={() => router.push(`${FAMILY_QUESTS_URL}`)}
+            onClick={() => router.push(`${PARENT_QUESTS_URL}`)}
             variant="light"
           >
             親でログイン

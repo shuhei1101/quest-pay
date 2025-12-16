@@ -3,10 +3,10 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
 import { FamilyQuestSort } from "../../../../api/quests/family/view"
 import { useFamilyQuests } from "../_hook/useFamilyQuests"
-import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL, LOGIN_URL } from "@/app/(core)/constants"
+import { PARENT_QUEST_URL, PARENT_QUESTS_URL, LOGIN_URL } from "@/app/(core)/constants"
 import { FamilyQuestFilterScheme, FamilyQuestFilterType } from "../../../../api/quests/family/scheme"
 import { SimpleGrid, Tabs, Button, Text, Input, ActionIcon, Box, Paper } from "@mantine/core"
-import { useQuestCategories } from "@/app/api/quests/category/_hook/useQuestCategories"
+import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"
 import { RenderIcon } from "../../../icons/_components/RenderIcon"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
 import { FamilyQuestCardLayout } from "./FamilyQuestCardLayout"
@@ -15,17 +15,18 @@ import { FetchFamilyQuestsResultType } from "@/app/api/quests/family/query"
 import { IconArrowsSort, IconFilter, IconLogout, IconSearch } from "@tabler/icons-react"
 import { FamilyQuestFilterPopup } from "./FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./FamilyQuestSortPopup"
-import { useConstants } from "@/app/(core)/useConstants"
+import { useWindow } from "@/app/(core)/useConstants"
+import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
 import { useSwipeable } from "react-swipeable"
 
-export const FamilyQuestList = () => {
+export const ChildQuestList = () => {
   const router = useRouter() 
 
   /** タブ状態 */
   const [tabValue, setTabValue] = useState<string | null>('すべて');
   
   /** 画面定数 */
-  const { isMobile, isTablet, isDesktop } = useConstants()
+  const { isMobile, isTablet, isDesktop } = useWindow()
 
   /**  フィルターポップアップ制御状態 */
   const [filterOpened, { open: openFilter, close: closeFilter }] = useDisclosure(false)
@@ -134,7 +135,7 @@ export const FamilyQuestList = () => {
     const params = new URLSearchParams(paramsObj)
 
     // フィルターをURLに反映する
-    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
+    router.push(`${PARENT_QUESTS_URL}?${params.toString()}`)
 
     // 検索フィルターを更新し、一覧を更新する
     setSearchFilter(questFilter)
@@ -151,7 +152,7 @@ export const FamilyQuestList = () => {
   }, [fetchedQuests, page])
 
   /** クエスト選択時のハンドル */
-  const handleQuestId = (questId: string) => router.push(FAMILY_QUEST_URL(questId))
+  const handleQuestId = (questId: string) => router.push(PARENT_QUEST_URL(questId))
 
   /** IME入力状態 */
   const [isComposing, setIsComposing] = useState(false)

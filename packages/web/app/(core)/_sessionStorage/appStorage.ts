@@ -3,22 +3,29 @@ import { IconById, IconByIdScheme, IconEntity, IconEntityScheme } from "@/app/ap
 import { QuestCategoryById, QuestCategoryByIdScheme, QuestCategoryEntity, QuestCategoryEntityScheme } from "@/app/api/quests/category/entity"
 import { UserInfoView } from "@/app/api/users/view"
 import toast from "react-hot-toast"
-import { devLog } from "../util"
+
+type FeedbackParams = {
+  message: string,
+  type?: 'success' | 'error'
+}
 
 export const appStorage = {
   // フィードバックメッセージ
   feedbackMessage: {
     /** メッセージを出力する */
     out: () => {
-      const message = sessionStorage.getItem('feedbackMessage')
-      if (message) {
-        toast(message, {duration: 1500})
+      const data = sessionStorage.getItem('feedbackMessage')
+      const params: FeedbackParams | null = data ? JSON.parse(data) : null
+      if (params) {
+        if (!params.type) toast(params.message)
+        else if (params.type === 'success') toast.success(params.message)
+        else if (params.type === 'error') toast.error(params.message)
         sessionStorage.removeItem('feedbackMessage')
       }
     },
     /** メッセージをセットする */
-    set: (message: string) => {
-      sessionStorage.setItem('feedbackMessage', message)
+    set: (params: FeedbackParams) => {
+      sessionStorage.setItem('feedbackMessage', JSON.stringify(params))
     }
   },
   // 親画面

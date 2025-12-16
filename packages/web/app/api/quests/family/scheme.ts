@@ -3,7 +3,7 @@ import { SortOrderScheme } from "@/app/(core)/scheme"
 import { FetchFamilyQuestsResult } from "./query"
 import { FamilyQuestEntityScheme } from "./entity"
 import { FamilyQuestColumnsScheme } from "./view"
-import { FamilyQuestFormScheme } from "@/app/(app)/quests/family/[id]/form"
+import { FamilyQuestFormScheme } from "@/app/(app)/quests/parent/[id]/form"
 
 /** 家族クエストフィルター */
 export const FamilyQuestFilterScheme = z.object({

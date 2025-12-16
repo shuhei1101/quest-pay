@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
-import { FAMILY_QUESTS_URL } from "@/app/(core)/constants"
+import { PARENT_QUESTS_URL } from "@/app/(core)/constants"
 import { useMutation } from "@tanstack/react-query"
 import { deleteFamilyQuest } from "@/app/api/quests/[id]/family/client"
 import { ClientValueError } from "@/app/(core)/error/appError"
@@ -19,10 +19,10 @@ export const useDeleteFamilyQuest = () => {
     }),
     onSuccess: () => {
       // 次画面で表示する成功メッセージを登録
-      appStorage.feedbackMessage.set('クエストを削除しました')
+      appStorage.feedbackMessage.set({ message: "クエストを削除しました", type: "success" })
       
       // クエスト一覧画面に戻る
-      router.push(FAMILY_QUESTS_URL)
+      router.push(PARENT_QUESTS_URL)
     },
     onError: (error) => handleAppError(error, router)
   })

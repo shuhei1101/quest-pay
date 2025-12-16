@@ -4,6 +4,7 @@ import { z } from "zod"
 export const ProfileEntityScheme = z.object({
   id: z.string(),
   user_id: z.string().nullable(),
+  type: z.enum(["parent", "child"]),
   name: z.string(),
   icon_id: z.number(),
   icon_color: z.string(),

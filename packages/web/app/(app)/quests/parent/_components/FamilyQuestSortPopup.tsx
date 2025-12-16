@@ -1,6 +1,6 @@
 "use client"
 
-import { useConstants } from "@/app/(core)/useConstants"
+import { useWindow } from "@/app/(core)/useConstants"
 import { FamilyQuestFilterType } from "@/app/api/quests/family/scheme"
 import { FamilyQuestColumns, FamilyQuestSort } from "@/app/api/quests/family/view"
 import { ActionIcon, Button, ColorPicker, Input, Modal, Pill, PillsInput, Popover, SimpleGrid, Space, Tabs, Text } from "@mantine/core"
@@ -31,7 +31,7 @@ export const FamilyQuestSortPopup = ({opened, close, currentSort, handleSearch}:
   handleSearch: (sort: FamilyQuestSort) => void
 }) => {
   /** 画面定数 */
-  const { isMobile, isTablet, isDesktop } = useConstants()
+  const { isMobile, isTablet, isDesktop } = useWindow()
 
   /** ソート状態 */
   const [sort, setSort] = useState<FamilyQuestSort>({column: "id", order: "asc"})

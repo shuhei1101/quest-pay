@@ -2,9 +2,9 @@
 import { useState, Suspense } from "react"
 import { Tabs, Paper, Text, Button } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
-import { useConstants } from "@/app/(core)/useConstants"
+import { useWindow } from "@/app/(core)/useConstants"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/constants"
+import { PARENT_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/constants"
 import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { RadialActionButton, FloatingActionItem } from "@/app/(core)/_components/RadialActionButton"
@@ -24,17 +24,17 @@ function QuestsContent() {
     { 
       icon: <IconAdjustments />, // 左
       x: -75, y: 10,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
+      onClick: () => router.push(PARENT_QUEST_NEW_URL)
     },
     { 
       icon: <IconTrash />, // 左上
       x: -55, y: -55,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
+      onClick: () => router.push(PARENT_QUEST_NEW_URL)
     },
     { 
       icon: <IconEdit />, // 上
       x: 10, y: -75,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
+      onClick: () => router.push(PARENT_QUEST_NEW_URL)
     },
   ]
 
