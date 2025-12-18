@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/withAuth"
+import { withAuth } from "@/app/(core)/_auth/withAuth"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchIcons } from "./query"
 import { GetIconsResponse } from "./scheme"

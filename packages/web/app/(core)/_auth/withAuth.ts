@@ -1,7 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js"
-import { createClient } from "./_supabase/server"
-import { AuthorizedError } from "./error/appError"
-import { devLog } from "./util"
+import { createClient } from "../_supabase/server"
+import { AuthorizedError } from "../error/appError"
+import { devLog } from "../util"
 
 /** Supabaseと認証済みuserIdを返す関数ラッパー */
 export async function withAuth<T>(

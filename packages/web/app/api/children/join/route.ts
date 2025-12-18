@@ -1,4 +1,4 @@
-import { withAuth } from "@/app/(core)/withAuth"
+import { withAuth } from "@/app/(core)/_auth/withAuth"
 import { NextRequest, NextResponse } from "next/server"
 import { JoinChildRequestScheme } from "./scheme"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"

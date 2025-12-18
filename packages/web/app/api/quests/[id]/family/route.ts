@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/withAuth"
+import { withAuth } from "@/app/(core)/_auth/withAuth"
 import { fetchFamilyQuest } from "../../family/query"
 import { DeleteFamilyQuestRequestScheme, GetFamilyQuestResponse, PutFamilyQuestRequestScheme } from "./scheme"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"

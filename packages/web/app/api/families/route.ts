@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/withAuth"
+import { withAuth } from "@/app/(core)/_auth/withAuth"
 import { PostFamilyRequestScheme, PostFamilyResponse } from "./scheme"
 import { insertFamilyAndParent } from "./db"
 import { generateUniqueInviteCode } from "./invite/service"

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/withAuth"
+import { withAuth } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "../../users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"

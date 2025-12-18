@@ -1,4 +1,4 @@
-import { withAuth } from "@/app/(core)/withAuth"
+import { withAuth } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { NextResponse } from "next/server"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
