@@ -1,3 +1,5 @@
+"use client"
+
 import { MantineProvider } from '@mantine/core'
 import { theme } from './theme'
 import { QueryClientProvider } from '@tanstack/react-query'

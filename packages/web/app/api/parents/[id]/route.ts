@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/_auth/withAuth"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "../../users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
@@ -13,7 +13,8 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
       const params = await context.params
       const parentId = params.id
@@ -33,7 +34,6 @@ export async function GET(
   
       return NextResponse.json({parent: data} as GetParentResponse)
     })
-  })
 }
 
 /** 親を登録する */

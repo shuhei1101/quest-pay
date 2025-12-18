@@ -3,23 +3,27 @@ import { createClient } from "../_supabase/server"
 import { AuthorizedError } from "../error/appError"
 import { devLog } from "../util"
 
-/** Supabaseと認証済みuserIdを返す関数ラッパー */
-export async function withAuth<T>(
-  fn: (supabase: SupabaseClient, userId: string) => Promise<T>
-): Promise<T> {
-
-  // supabaseクライアントを生成する
+/** 認証済みならsupabaseとuserIdを返す */
+export async function getAuthContext(): Promise<{
+  supabase: SupabaseClient
+  userId: string
+}> {
   const supabase = await createClient()
 
-  // ユーザIDを取得する
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const { data: { session }, error } =
+    await supabase.auth.getSession()
+
   if (error) {
-    devLog("withAuth.ユーザIDの取得に失敗: ", error)
+    devLog("getAuthContext.session取得失敗:", error)
     throw error
   }
-  const userId = user?.id
-  if (!userId) throw new AuthorizedError("ユーザIDが存在しませんでした。")
 
-  // supabaseとuserIdを渡して関数を実行する
-  return fn(supabase, userId)
+  if (!session?.user?.id) {
+    throw new AuthorizedError("ログインが必要です")
+  }
+
+  return {
+    supabase,
+    userId: session.user.id,
+  }
 }

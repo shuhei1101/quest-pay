@@ -1,4 +1,4 @@
-import { withAuth } from "@/app/(core)/_auth/withAuth"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { NextRequest, NextResponse } from "next/server"
 import { JoinChildRequestScheme } from "./scheme"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
@@ -11,25 +11,25 @@ export async function POST(
   req: NextRequest,
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
-      // bodyから家族クエストを取得する
-      const body = await req.json()
-      const data = JoinChildRequestScheme.parse(body)
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
+    // bodyから家族クエストを取得する
+    const body = await req.json()
+    const data = JoinChildRequestScheme.parse(body)
 
-      // 招待コードから子供情報を取得する
-      const child = await fetchChildByInviteCode({ supabase, invite_code: data.invite_code })
+    // 招待コードから子供情報を取得する
+    const child = await fetchChildByInviteCode({ supabase, invite_code: data.invite_code })
 
-      // 子供情報が存在しない場合
-      if (!child || !child.id) throw new ServerError("招待コードが無効です。")
+    // 子供情報が存在しない場合
+    if (!child || !child.id) throw new ServerError("招待コードが無効です。")
 
-      // 子供とユーザIDを紐づける
-      await linkProfileAndUser({
-        supabase,
-        profileId: child.profile_id,
-        userId
-      })
-
-      return NextResponse.json({})
+    // 子供とユーザIDを紐づける
+    await linkProfileAndUser({
+      supabase,
+      profileId: child.profile_id,
+      userId
     })
+
+    return NextResponse.json({})
   })
 }

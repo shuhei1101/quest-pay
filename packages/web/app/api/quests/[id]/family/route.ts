@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/_auth/withAuth"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchFamilyQuest } from "../../family/query"
 import { DeleteFamilyQuestRequestScheme, GetFamilyQuestResponse, PutFamilyQuestRequestScheme } from "./scheme"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
@@ -14,7 +14,8 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -28,7 +29,6 @@ export async function GET(
   
       return NextResponse.json({quest: data} as GetFamilyQuestResponse)
     })
-  })
 }
 
 /** 家族クエストを更新する */
@@ -37,7 +37,8 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -68,7 +69,6 @@ export async function PUT(
       
       return NextResponse.json({})
     })
-  })
 }
 
 /** 家族クエストを削除する */
@@ -77,7 +77,8 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -97,5 +98,4 @@ export async function DELETE(
 
       return NextResponse.json({})
     })
-  })
 }

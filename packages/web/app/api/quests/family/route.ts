@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/_auth/withAuth"
+import { getAuthContext,  } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { fetchFamilyQuests } from "./query"
@@ -13,7 +13,8 @@ export async function GET(
   req: NextRequest,
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // クエリパラメータを取得する
       const url = new URL(req.url)
       const query = queryString.parse(url.search)
@@ -28,7 +29,7 @@ export async function GET(
   
       return NextResponse.json(result as GetFamilyQuestsResponse)
     })
-  })
+
 }
 
 /** クエストを登録する */
@@ -36,7 +37,8 @@ export async function POST(
   request: NextRequest,
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // bodyからクエストを取得する
       const body = await request.json()
       const data  = PostFamilyQuestRequestScheme.parse(body)
@@ -63,5 +65,4 @@ export async function POST(
 
       return NextResponse.json({questId} as PostFamilyQuestResponse)
     })
-  })
 }

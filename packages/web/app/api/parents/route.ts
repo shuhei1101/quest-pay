@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/_auth/withAuth"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchParentsByFamilyId } from "./query"
@@ -12,7 +12,8 @@ export async function GET(
   req: NextRequest,
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
@@ -22,7 +23,6 @@ export async function GET(
   
       return NextResponse.json({parents: result} as GetParentsResponse)
     })
-  })
 }
 
 /** 親を登録する */

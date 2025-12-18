@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/_auth/withAuth"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { PostFamilyRequestScheme, PostFamilyResponse } from "./scheme"
 import { insertFamilyAndParent } from "./db"
 import { generateUniqueInviteCode } from "./invite/service"
@@ -10,7 +10,8 @@ export async function POST(
   request: NextRequest,
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // bodyから家族を取得する
       const body = await request.json()
       const data  = PostFamilyRequestScheme.parse(body)
@@ -37,5 +38,5 @@ export async function POST(
       })
       return NextResponse.json({})
     })
-  })
+
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { withAuth } from "@/app/(core)/_auth/withAuth"
+import { getAuthContext,  } from "@/app/(core)/_auth/withAuth"
 import { GetChildrenResponse, PostChildRequestScheme, PostChildResponse } from "./scheme"
 import { insertChild } from "./db"
 import { generateUniqueInviteCode } from "./invite/service"
@@ -14,7 +14,8 @@ export async function GET(
   req: NextRequest,
 ) {
   return withRouteErrorHandling(async () => {
-    return withAuth(async (supabase, userId) => {
+    // 認証コンテキストを取得する
+    const { supabase, userId } = await getAuthContext()
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, supabase})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
@@ -24,15 +25,15 @@ export async function GET(
   
       return NextResponse.json({children: result} as GetChildrenResponse)
     })
-  })
 }
 
 /** 子供を登録する */
 export async function POST(
   request: NextRequest,
 ) {
-  return withAuth(async (supabase, userId) => {
-    return withRouteErrorHandling(async () => {
+  // 認証コンテキストを取得する
+  return withRouteErrorHandling(async () => {
+      const { supabase, userId } = await getAuthContext()
       // bodyから子供を取得する
       const body = await request.json()
       const data  = PostChildRequestScheme.parse(body)
@@ -58,5 +59,4 @@ export async function POST(
       })
       return NextResponse.json({childId} as PostChildResponse)
     })
-  })
 }
