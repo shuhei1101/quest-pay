@@ -3,7 +3,7 @@
 import { HOME_URL, QUESTS_URL, QUESTS_NEW_URL, USERS_URL, FAMILY_MEMBERS_URL } from '@/app/(core)/constants'
 import { NavLink, ScrollArea, Drawer, ActionIcon } from '@mantine/core'
 import { IconFiles, IconFilePlus } from '@tabler/icons-react'
-import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../icon'
+import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_components/icon'
 import { useRouter } from 'next/navigation'
 
 /** サイドメニューを取得する */

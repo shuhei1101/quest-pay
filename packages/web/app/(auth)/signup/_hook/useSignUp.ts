@@ -2,7 +2,7 @@
 
 import toast from "react-hot-toast"
 import { createClient } from "@/app/(core)/_supabase/client"
-import { LoginFormType } from "../form"
+import { LoginFormType } from "../../login/form"
 import { useMutation } from "@tanstack/react-query"
 
 /** サインアップ時のハンドル */

@@ -12,6 +12,12 @@ export const AUTH_ERROR_URL = `${ERROR_URL}/authorized`
 // ログイン
 export const LOGIN_URL = `/login`
 
+// サインアップ
+export const SIGNUP_URL = `/signup`
+
+// メール確認待ち画面
+export const VERIFY_EMAIL_URL = `/verify-email`
+
 // クエスト
 export const QUESTS_URL = `/quests`
 export const QUESTS_NEW_URL = `${QUESTS_URL}/new`

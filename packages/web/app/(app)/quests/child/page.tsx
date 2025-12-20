@@ -4,7 +4,7 @@ import { Tabs, Input, ActionIcon, Box, Paper, Text, Button } from "@mantine/core
 import { ChildQuestList } from "./_components/ChildQuestList"
 import { useWindow } from "@/app/(core)/useConstants"
 import { useRouter } from "next/navigation"
-import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hook/useLoginUserInfo"
 
 function QuestsContent() {
   const router = useRouter()

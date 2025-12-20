@@ -6,7 +6,7 @@ import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, 
 import { useWindow } from "@/app/(core)/useConstants"
 import { useRouter } from "next/navigation"
 import { PARENT_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/constants"
-import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hook/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { RadialActionButton, FloatingActionItem } from "@/app/(core)/_components/RadialActionButton"
 

@@ -5,7 +5,7 @@ import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/dates/styles.css'
 import React from "react"
-import { Providers } from "./providers"
+import { Providers } from "./(core)/_components/providers"
 import "./globals.css"
 
 const geistSans = Geist({

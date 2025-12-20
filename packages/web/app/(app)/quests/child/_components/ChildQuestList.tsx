@@ -16,7 +16,7 @@ import { IconArrowsSort, IconFilter, IconLogout, IconSearch } from "@tabler/icon
 import { FamilyQuestFilterPopup } from "./FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./FamilyQuestSortPopup"
 import { useWindow } from "@/app/(core)/useConstants"
-import { useLoginUserInfo } from "@/app/login/_hooks/useLoginUserInfo"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hook/useLoginUserInfo"
 import { useSwipeable } from "react-swipeable"
 
 export const ChildQuestList = () => {

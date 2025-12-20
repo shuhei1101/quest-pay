@@ -2,7 +2,7 @@
 
 import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL } from '@/app/(core)/constants'
 import { Box, ActionIcon } from '@mantine/core'
-import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../icon'
+import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_components/icon'
 import { useRouter } from 'next/navigation'
 
 /** モバイル用ボトムバーを取得する */

@@ -2,10 +2,10 @@ import { Button, Input, Modal, Space, Text } from "@mantine/core"
 import { useRouter } from "next/navigation"
 import { FAMILY_NEW_URL, PARENT_QUESTS_URL } from "@/app/(core)/constants"
 import { useEffect, useState } from "react"
-import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"
+import { useLoginUserInfo } from "../_hook/useLoginUserInfo"
 import { devLog } from "@/app/(core)/util"
-import { useJoinAsParent } from "../_hooks/useJoinAsParent"
-import { useJoinAsChild } from "../_hooks/useJoinAsChild"
+import { useJoinAsParent } from "../_hook/useJoinAsParent"
+import { useJoinAsChild } from "../_hook/useJoinAsChild"
 
 
 /** ログインタイプ選択ポップアップ */
