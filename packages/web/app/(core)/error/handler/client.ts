@@ -1,7 +1,7 @@
 "use client"
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import { ROOT_URL } from "../../constants"
+import { ROOT_URL } from "../../endpoints"
 import { appStorage } from "../../_sessionStorage/appStorage"
 import { devLog } from "../../util"
 

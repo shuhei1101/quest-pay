@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks"
 import { LoginTypeSelectPopup } from "./_components/LoginTypeSelectPopup"
 import { useLogin } from "./_hook/useLogin"
 import { useRouter } from "next/navigation"
-import { PARENT_QUESTS_URL, SIGNUP_URL } from "../../(core)/constants"
+import { PARENT_QUESTS_URL, SIGNUP_URL } from "../../(core)/endpoints"
 import Link from "next/link"
 
 export const LoginScreen = () => {

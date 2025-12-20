@@ -1,4 +1,4 @@
-import { CHILD_JOIN_API_URL } from "@/app/(core)/constants";
+import { CHILD_JOIN_API_URL } from "@/app/(core)/endpoints";
 import { AppError } from "@/app/(core)/error/appError";
 import { JoinChildRequest, JoinChildRequestScheme } from "./scheme";
 import { devLog } from "@/app/(core)/util";

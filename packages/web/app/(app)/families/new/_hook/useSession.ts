@@ -3,7 +3,7 @@ import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { useRouter } from "next/navigation"
-import { LOGIN_URL } from "@/app/(core)/constants"
+import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** セッション情報を取得する */

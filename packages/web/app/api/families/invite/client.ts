@@ -1,4 +1,4 @@
-import { FAMILY_INVITE_API_URL } from "@/app/(core)/constants";
+import { FAMILY_INVITE_API_URL } from "@/app/(core)/endpoints";
 import { devLog } from "@/app/(core)/util";
 import { PostFamilyInviteRequest } from "./scheme";
 import { AppError } from "@/app/(core)/error/appError";

@@ -1,4 +1,4 @@
-import { FAMILY_QUEST_API_URL, QUESTS_API_URL } from "@/app/(core)/constants";
+import { FAMILY_QUEST_API_URL, QUESTS_API_URL } from "@/app/(core)/endpoints";
 import { DeleteFamilyQuestRequest, GetFamilyQuestResponseScheme, PutFamilyQuestRequest } from "./scheme";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";

@@ -1,4 +1,4 @@
-import { LOGIN_USER_API_URL } from "@/app/(core)/constants"
+import { LOGIN_USER_API_URL } from "@/app/(core)/endpoints"
 import { AppError } from "@/app/(core)/error/appError"
 import { GetLoginUserResponseScheme } from "./scheme"
 import { devLog } from "@/app/(core)/util"

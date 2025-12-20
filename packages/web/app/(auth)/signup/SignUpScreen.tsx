@@ -6,7 +6,7 @@ import { IconMail, IconLock, IconAlertCircle } from "@tabler/icons-react"
 import { useLoginForm } from "../login/_hook/useLoginForm"
 import { useSignUp } from "./_hook/useSignUp"
 import Link from "next/link"
-import { LOGIN_URL } from "@/app/(core)/constants"
+import { LOGIN_URL } from "@/app/(core)/endpoints"
 
 export const SignUpScreen = () => {
   /** 新規登録ハンドル */

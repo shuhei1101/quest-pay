@@ -1,4 +1,7 @@
 
+// ドメインURL
+export const APP_DOMAIN = process.env.APP_DOMAIN || `http://localhost:3000`
+
 // ルートURL
 export const ROOT_URL = `/`
 
@@ -16,7 +19,7 @@ export const LOGIN_URL = `/login`
 export const SIGNUP_URL = `/signup`
 
 // メール確認待ち画面
-export const VERIFY_EMAIL_URL = `/verify-email`
+export const VERIFY_EMAIL_URL = `${SIGNUP_URL}/verify-email`
 
 // クエスト
 export const QUESTS_URL = `/quests`

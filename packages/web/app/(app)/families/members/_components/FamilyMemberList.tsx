@@ -5,7 +5,7 @@ import { ChildCardLayout } from "../../../children/_components/ChildCardLayout"
 import { useChildren } from "@/app/(app)/children/_hook/useChildren"
 import { useParents } from "@/app/(app)/parents/_hook/useParents"
 import { ParentCardLayout } from "@/app/(app)/parents/_components/ParentCardLayout"
-import { FAMILIES_MEMBERS_CHILD_VIEW_URL, FAMILIES_MEMBERS_PARENT_VIEW_URL } from "@/app/(core)/constants"
+import { FAMILIES_MEMBERS_CHILD_VIEW_URL, FAMILIES_MEMBERS_PARENT_VIEW_URL } from "@/app/(core)/endpoints"
 
 export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
   const router = useRouter() 

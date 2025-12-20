@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { RadialActionButton, FloatingActionItem } from "@/app/(core)/_components/RadialActionButton"
 import { IconAdjustments } from "@tabler/icons-react"
 import { useRouter, usePathname } from "next/navigation"
-import { FAMILIES_MEMBERS_CHILD_NEW_URL } from "@/app/(core)/constants"
+import { FAMILIES_MEMBERS_CHILD_NEW_URL } from "@/app/(core)/endpoints"
 
 export default function FamilyMembersLayout({ children }: {
   children: React.ReactNode

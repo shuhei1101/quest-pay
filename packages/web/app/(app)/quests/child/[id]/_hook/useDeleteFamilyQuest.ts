@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
-import { PARENT_QUESTS_URL } from "@/app/(core)/constants"
+import { PARENT_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useMutation } from "@tanstack/react-query"
 import { deleteFamilyQuest } from "@/app/api/quests/[id]/family/client"
 import { ClientValueError } from "@/app/(core)/error/appError"

@@ -3,7 +3,7 @@
 import { fetchQuestCategories } from "../../../../api/quests/category/query"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
-import { LOGIN_URL } from "@/app/(core)/constants"
+import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { ClientAuthError } from "@/app/(core)/error/appError"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/app/(core)/_supabase/client"

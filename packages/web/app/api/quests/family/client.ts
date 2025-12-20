@@ -1,5 +1,5 @@
 import queryString from "query-string"
-import { FAMILY_QUESTS_API_URL } from "@/app/(core)/constants";
+import { FAMILY_QUESTS_API_URL } from "@/app/(core)/endpoints";
 import { FamilyQuestSearchParams, GetFamilyQuestsResponseScheme, PostFamilyQuestRequest, PostFamilyQuestResponseScheme } from "./scheme";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";

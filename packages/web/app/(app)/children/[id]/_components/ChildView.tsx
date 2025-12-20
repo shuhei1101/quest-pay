@@ -7,7 +7,7 @@ import { useChild } from "../_hook/useChild"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { useWindow } from "@/app/(core)/useConstants"
 import { useRouter } from "next/navigation"
-import { FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/constants"
+import { FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
 import { useDisclosure } from "@mantine/hooks"
 import { InviteCodePopup } from "@/app/(core)/_components/InviteCodePopup"
 // dayjs のロケールを日本語に設定

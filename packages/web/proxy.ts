@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { PARENT_QUESTS_URL } from './app/(core)/constants'
+import { PARENT_QUESTS_URL } from './app/(core)/endpoints'
 
 export default function(request: NextRequest) {
   // ルートパスにアクセスした場合、ログイン画面にリダイレクトする

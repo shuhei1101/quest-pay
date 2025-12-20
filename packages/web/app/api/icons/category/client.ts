@@ -1,4 +1,4 @@
-import { ICON_CATEGORIES_API_URL } from "@/app/(core)/constants";
+import { ICON_CATEGORIES_API_URL } from "@/app/(core)/endpoints";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
 import { GetIconCategoriesResponseScheme } from "./scheme";

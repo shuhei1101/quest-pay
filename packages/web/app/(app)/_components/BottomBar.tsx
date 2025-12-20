@@ -1,6 +1,6 @@
 "use client"
 
-import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL } from '@/app/(core)/constants'
+import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL } from '@/app/(core)/endpoints'
 import { Box, ActionIcon } from '@mantine/core'
 import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_components/icon'
 import { useRouter } from 'next/navigation'

@@ -1,5 +1,5 @@
 import { devLog } from "@/app/(core)/util";
-import { FAMILY_API_URL } from "@/app/(core)/constants";
+import { FAMILY_API_URL } from "@/app/(core)/endpoints";
 import { PostFamilyRequest, PostFamilyResponseScheme } from "./scheme";
 import { AppError } from "@/app/(core)/error/appError";
 

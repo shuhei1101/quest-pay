@@ -1,5 +1,5 @@
 import queryString from "query-string"
-import { ICONS_API_URL } from "@/app/(core)/constants";
+import { ICONS_API_URL } from "@/app/(core)/endpoints";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
 import { GetIconsResponseScheme } from "./scheme";

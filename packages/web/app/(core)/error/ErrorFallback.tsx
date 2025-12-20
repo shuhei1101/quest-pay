@@ -1,17 +1,20 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
 import { FallbackProps } from 'react-error-boundary'
-import { handleAppError } from './handler/client'
+import { appStorage } from '../_sessionStorage/appStorage'
+import { LOGIN_URL } from '../endpoints'
 
 /** エラー時のフォールバックコンポーネント */
 export const ErrorFallback = ({ error }: FallbackProps) => {
-  const router = useRouter()
 
   useEffect(() => {
-    handleAppError(error, router)
-  }, [error, router])
+    // 次画面で表示するメッセージを登録
+    appStorage.feedbackMessage.set({ message: error.message, type: "error" })
+    // ログイン画面にリダイレクトする
+    redirect(LOGIN_URL)
+  }, [error])
 
   return null
 }
