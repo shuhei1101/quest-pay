@@ -57,7 +57,7 @@ export const MockUnauthorizedA = () => {
 /** パターンB: 403エラー風のデザイン */
 export const MockUnauthorizedB = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100 p-4">
       <div className="w-full max-w-2xl">
         <Paper shadow="sm" p="xl" radius="md">
           <div className="flex flex-col md:flex-row items-center gap-8">
@@ -167,7 +167,7 @@ export const MockUnauthorizedD = () => {
         <Paper shadow="sm" p="lg" radius="md" className="mb-4">
           {/* アイコンとタイトル */}
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
               <IconLock size={24} color="#ef4444" />
             </div>
             <div>

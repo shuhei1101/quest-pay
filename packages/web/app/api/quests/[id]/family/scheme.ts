@@ -1,7 +1,7 @@
 import { QuestEntityScheme } from "@/app/api/quests/entity"
 import { z } from "zod"
 import { FetchFamilyQuestResult } from "../../family/query"
-import { FamilyQuestFormScheme } from "@/app/(app)/quests/child/[id]/form"
+import { FamilyQuestFormScheme } from "@/app/(app)/quests/parent/[id]/form"
 
 /** 家族クエスト取得レスポンススキーマ */
 export const GetFamilyQuestResponseScheme = z.object({

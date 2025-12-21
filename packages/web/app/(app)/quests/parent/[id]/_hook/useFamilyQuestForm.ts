@@ -22,15 +22,21 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
     isPublic: false,
     iconColor: thema.colors.blue[ 5 ],
     categoryId: null,
-    details: [{
-        level: 1,
-        successCondition: "",
-        targetCount: 0,
-        reward: 0,
-        childExp: 0,
-        questExp: 0,
-        requiredExp: 0,
-      }]
+    details: [ {
+      level: 1,
+      successCondition: "",
+      targetCount: 0,
+      reward: 0,
+      childExp: 0,
+      questExp: 0,
+      requiredExp: 0,
+    } ],
+    ageFrom: null,
+    ageTo: null,
+    monthFrom: null,
+    monthTo: null,
+    client: "",
+    requestDetail: ""
   }
 
   // クエストフォームの状態を作成する
@@ -63,7 +69,7 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
         isPublic: quest.is_public,
         iconColor: quest.icon_color,
         categoryId: quest.category_id,
-        details: quest.quest_details.map(( detail ) => ({
+        details: quest.quest_details.map( ( detail ) => ( {
           level: detail.level,
           successCondition: detail.success_condition,
           targetCount: detail.target_count,
@@ -71,7 +77,13 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
           childExp: detail.child_exp,
           questExp: detail.quest_exp,
           requiredExp: detail.required_exp,
-        }))
+        } ) ),
+        ageFrom: quest.age_from,
+        ageTo: quest.age_to,
+        monthFrom: quest.month_from,
+        monthTo: quest.month_to,
+        client: quest.client,
+        requestDetail: quest.request_detail
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)
@@ -98,7 +110,14 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
     currentQuest.iconColor !== fetchedQuest.iconColor ||
     !isSameArray(currentQuest.tags, fetchedQuest.tags) ||
     currentQuest.isPublic !== fetchedQuest.isPublic ||
-    currentQuest.categoryId !== fetchedQuest.categoryId
+    currentQuest.categoryId !== fetchedQuest.categoryId ||
+    currentQuest.ageFrom !== fetchedQuest.ageFrom ||
+    currentQuest.ageTo !== fetchedQuest.ageTo ||
+    currentQuest.monthFrom !== fetchedQuest.monthFrom ||
+    currentQuest.monthTo !== fetchedQuest.monthTo ||
+    currentQuest.client !== fetchedQuest.client ||
+    currentQuest.requestDetail !== fetchedQuest.requestDetail ||
+    JSON.stringify(currentQuest.details) !== JSON.stringify(fetchedQuest.details)
 
   return {
     register,

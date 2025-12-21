@@ -10,13 +10,12 @@ export const QuestEntityScheme = z.object({
   category_id: z.number().nullable(),
   icon_id: z.number(),
   icon_color: z.string(),
-  age_from: z.number().nullable(),
-  age_to: z.number().nullable(),
-  has_published_month: z.boolean(),
-  month_from: z.number().nullable(),
-  month_to: z.number().nullable(),
-  client: z.string(),
-  request_detail: z.string(),
+  age_from: z.number().nullable(), // 年齢制限開始
+  age_to: z.number().nullable(), // 年齢制限終了
+  month_from: z.number().nullable(), // 月指定開始月
+  month_to: z.number().nullable(), // 月指定終了月
+  client: z.string(), // 依頼者氏名（任意の名前を設定可能）
+  request_detail: z.string(),  // 依頼詳細
 })
 export type QuestEntity = z.infer<typeof QuestEntityScheme>
 

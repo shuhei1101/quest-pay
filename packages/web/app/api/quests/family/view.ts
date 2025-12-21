@@ -12,7 +12,13 @@ export const FamilyQuestViewScheme = QuestEntityScheme.pick({
     created_at: true,
     updated_at: true,
     category_id: true,
-    icon_color: true
+    icon_color: true,
+    age_from: true,
+    age_to: true,
+    month_from: true,
+    month_to: true,
+    client: true,
+    request_detail: true,
   }).extend(FamilyQuestEntityScheme.pick({
     family_id: true,
     is_public: true,
