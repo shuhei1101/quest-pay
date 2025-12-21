@@ -52,13 +52,21 @@ export async function POST(
       const questId = await insertFamilyQuest({
         params: {
           _name: data.form.name,
-          _family_id: userInfo.family_id,
           _is_public: data.form.isPublic,
           _type: "family",
           _icon_id: data.form.iconId,
           _icon_color: data.form.iconColor,
           _tags: data.form.tags,
-          _category_id: data.form.categoryId
+          _category_id: data.form.categoryId,
+          _details: data.form.details.map(detail => ({
+            level: detail.level,
+            success_condition: detail.successCondition,
+            target_count: detail.targetCount,
+            reward: detail.reward,
+            child_exp: detail.childExp,
+            quest_exp: detail.questExp,
+            required_exp: detail.requiredExp,
+          }))
         },
         supabase
       })

@@ -3,20 +3,28 @@ import { SupabaseClient } from "@supabase/supabase-js"
 import { questExclusiveControl } from "./dbHelper"
 import { FamilyQuestEntity, FamilyQuestEntityScheme } from "./entity"
 import { devLog } from "@/app/(core)/util"
-import { QuestEntity } from "../entity"
+import { QuestDetailsEntity, QuestEntity } from "../entity"
 import { QuestTagEntity } from "@/app/(app)/quests/tag/entity"
 
 /** クエストを挿入する */
 export const insertFamilyQuest = async ({params, supabase}: {
   params: {
     _name: QuestEntity["name"],
-    _family_id: FamilyQuestEntity["family_id"],
     _is_public: FamilyQuestEntity["is_public"],
     _type: QuestEntity["type"],
     _icon_id: QuestEntity["icon_id"],
     _icon_color: QuestEntity["icon_color"],
     _tags: QuestTagEntity["name"][],
     _category_id: QuestEntity["category_id"],
+    _details: {
+      level: QuestDetailsEntity["level"],
+      success_condition: QuestDetailsEntity["success_condition"],
+      target_count: QuestDetailsEntity["target_count"],
+      reward: QuestDetailsEntity["reward"],
+      child_exp: QuestDetailsEntity["child_exp"],
+      quest_exp: QuestDetailsEntity["quest_exp"],
+      required_exp: QuestDetailsEntity["required_exp"],
+    }[]
   }
   supabase: SupabaseClient
 }) => {

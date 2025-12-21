@@ -10,7 +10,7 @@ export const HOME_URL = `/home`
 
 // 権限エラー画面
 export const ERROR_URL = `/error`
-export const AUTH_ERROR_URL = `${ERROR_URL}/authorized`
+export const AUTH_ERROR_URL = `${ERROR_URL}/unauthorized`
 
 // ログイン
 export const LOGIN_URL = `/login`

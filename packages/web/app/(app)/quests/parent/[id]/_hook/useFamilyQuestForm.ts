@@ -21,7 +21,16 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
     tags: [],
     isPublic: false,
     iconColor: thema.colors.blue[ 5 ],
-    categoryId: null
+    categoryId: null,
+    details: [{
+        level: 1,
+        successCondition: "",
+        targetCount: 0,
+        reward: 0,
+        childExp: 0,
+        questExp: 0,
+        requiredExp: 0,
+      }]
   }
 
   // クエストフォームの状態を作成する
@@ -53,7 +62,16 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
         iconId: quest.icon_id,
         isPublic: quest.is_public,
         iconColor: quest.icon_color,
-        categoryId: null
+        categoryId: quest.category_id,
+        details: quest.quest_details.map(( detail ) => ({
+          level: detail.level,
+          successCondition: detail.success_condition,
+          targetCount: detail.target_count,
+          reward: detail.reward,
+          childExp: detail.child_exp,
+          questExp: detail.quest_exp,
+          requiredExp: detail.required_exp,
+        }))
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)
