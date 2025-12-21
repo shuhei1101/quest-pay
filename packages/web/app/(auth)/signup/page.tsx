@@ -5,12 +5,11 @@ import { SignUpScreen } from "./SignUpScreen"
 export default function Page() {
   return (
     <>
-    <Suspense fallback={null}>
       <SignUpScreen />
       {/* <MockRegistA />
       <MockRegistB />
       <MockRegistC /> */}
-    </Suspense>
+
     </>
 )
 }
