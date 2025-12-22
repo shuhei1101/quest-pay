@@ -6,11 +6,13 @@ import { FamilyQuestSearchParams, GetFamilyQuestsResponse } from "./scheme"
 import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { QuestDetailsEntityScheme } from "../entity"
+import { QuestChildrenEntityScheme } from "../child/entity"
 
 /** 取得結果の型 */
 export const FetchFamilyQuestResult = FamilyQuestViewScheme.extend({
   quest_tags: z.array(QuestTagEntityScheme),
-  quest_details: z.array(QuestDetailsEntityScheme)
+  quest_details: z.array(QuestDetailsEntityScheme),
+  quest_children: z.array(QuestChildrenEntityScheme),
 })
 export type FetchFamilyQuestResultType = z.infer<typeof FetchFamilyQuestResult>
 
@@ -34,7 +36,8 @@ export const fetchFamilyQuests = async ({
       .select(`
           *,
           quest_tags (*),
-          quest_detail_by_level (*)
+          quest_details (*),
+          quest_children (*)
         `, { count: 'exact' })
 
       // フィルター
@@ -84,7 +87,8 @@ export const fetchFamilyQuest = async ({
       .select(`
           *,
           quest_tags (*),
-          quest_detail_by_level (*)
+          quest_details (*),
+          quest_children (*)
         `, { count: 'exact' })
       .eq("id", questId)
 

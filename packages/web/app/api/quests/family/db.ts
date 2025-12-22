@@ -5,6 +5,7 @@ import { FamilyQuestEntity, FamilyQuestEntityScheme } from "./entity"
 import { devLog } from "@/app/(core)/util"
 import { QuestDetailsEntity, QuestEntity } from "../entity"
 import { QuestTagEntity } from "@/app/(app)/quests/tag/entity"
+import { ChildEntity } from "../../children/entity"
 
 /** クエストを挿入する */
 export const insertFamilyQuest = async ({params, supabase}: {
@@ -24,7 +25,8 @@ export const insertFamilyQuest = async ({params, supabase}: {
       child_exp: QuestDetailsEntity["child_exp"],
       quest_exp: QuestDetailsEntity["quest_exp"],
       required_exp: QuestDetailsEntity["required_exp"],
-    }[]
+    }[],
+    _child_ids: ChildEntity["id"][],
   }
   supabase: SupabaseClient
 }) => {

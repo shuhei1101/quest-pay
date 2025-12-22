@@ -11,8 +11,8 @@ import { createClient } from '../../(core)/_supabase/client'
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
-  /** ログインユーザ情報（キャッシュを使用しない） */
-  const { userInfo, isLoading, isGuest } = useLoginUserInfo({caching: false})
+  /** ログインユーザ情報 */
+  const { userInfo, isLoading, isGuest } = useLoginUserInfo()
 
   /** ログアウトボタン押下時のハンドル */
   const handleLogout = async () => {

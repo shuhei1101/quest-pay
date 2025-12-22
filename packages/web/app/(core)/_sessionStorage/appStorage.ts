@@ -17,9 +17,9 @@ export const appStorage = {
       const data = sessionStorage.getItem('feedbackMessage')
       const params: FeedbackParams | null = data ? JSON.parse(data) : null
       if (params) {
-        if (!params.type) toast(params.message)
-        else if (params.type === 'success') toast.success(params.message)
-        else if (params.type === 'error') toast.error(params.message)
+        if (!params.type) toast(params.message, { duration: 2000 })
+        else if (params.type === 'success') toast.success(params.message, { duration: 2000 })
+        else if (params.type === 'error') toast.error(params.message, { duration: 2000 })
         sessionStorage.removeItem('feedbackMessage')
       }
     },

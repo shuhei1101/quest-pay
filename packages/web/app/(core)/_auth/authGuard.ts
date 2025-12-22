@@ -3,7 +3,7 @@ import { getAuthContext } from "./withAuth"
 import { AUTH_ERROR_URL } from "../endpoints"
 import { redirect } from "next/navigation"
 
-export const authGuard = async ({parentNG, childNG, guestNG}: {
+export const authGuard = async ({parentNG = false, childNG = false, guestNG = false}: {
   parentNG?: boolean
   childNG?: boolean
   guestNG?: boolean

@@ -79,7 +79,7 @@ export const LoginScreen = () => {
               
               {/* 新規登録リンク */}
               <Text size="sm" className="text-center">
-                アカウントをお持ちでない場合は <Link href={SIGNUP_URL}><Anchor>新規登録</Anchor></Link>
+                アカウントをお持ちでない場合は <Anchor component={Link} href={SIGNUP_URL}>新規登録</Anchor>
               </Text>
             </div>
           </form>

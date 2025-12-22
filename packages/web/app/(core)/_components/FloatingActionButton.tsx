@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, ReactNode } from "react"
 import { ActionIcon, MantineColor } from "@mantine/core"
-import { IconPlus } from "@tabler/icons-react"
+import { IconPlus, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useWindow } from "../useConstants"
 
@@ -19,7 +19,7 @@ export type FloatingActionItem = {
 }
 
 /** 展開型フローティングアクションボタンを表示する */
-export const RadialActionButton = ({
+export const FloatingActionButton = ({
   items,
   open,
   onToggle,
@@ -132,7 +132,7 @@ export const RadialActionButton = ({
           boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
         }}
       >
-        {mainIcon}
+        {open ? <IconX style={{ width: "70%", height: "70%" }} /> : mainIcon}
       </ActionIcon>
     </div>
   )

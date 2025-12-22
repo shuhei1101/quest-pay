@@ -3,7 +3,7 @@
 import { useWindow } from "@/app/(core)/useConstants"
 import { FamilyMemberList } from "./_components/FamilyMemberList"
 import { useEffect, useState } from "react"
-import { RadialActionButton, FloatingActionItem } from "@/app/(core)/_components/RadialActionButton"
+import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
 import { IconAdjustments } from "@tabler/icons-react"
 import { useRouter, usePathname } from "next/navigation"
 import { FAMILIES_MEMBERS_CHILD_NEW_URL } from "@/app/(core)/endpoints"
@@ -64,7 +64,7 @@ export default function FamilyMembersLayout({ children }: {
           {children}
         </main>
       </div>
-      <RadialActionButton
+      <FloatingActionButton
         items={actionItems}
         open={open}
         onToggle={setOpen}

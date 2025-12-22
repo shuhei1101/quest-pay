@@ -7,26 +7,12 @@ import { Session } from "@supabase/supabase-js"
 import { devLog } from "@/app/(core)/util"
 
 /** ログインユーザの情報を取得する */
-export const useLoginUserInfo = ({ caching = true }: {
-  caching?: boolean
-} = {}) => {
+export const useLoginUserInfo = () => {
 
   const query = useQuery({
     queryKey: ["loginUser"],
     retry: false,
     queryFn: async () => {
-      // let session: Session | null = null
-      // // キャッシュ有効の場合、セッションストレージからセッションを取得する
-      // if (caching) session = appStorage.supabaseSession.get()
-      // // セッションがない場合、Supabaseからセッション状態を取得する
-      // if (!session) {
-      //   const { data } = await createClient().auth.getSession()
-      //   // セッション状態がない場合
-      //   if (!data.session) return { isGuest: true }
-      //   // セッションを設定する
-      //   session = data.session
-      // }
-      
       // セッションストレージからユーザ情報を取得する
       let userInfo = appStorage.user.get()
       // ユーザ情報がない場合

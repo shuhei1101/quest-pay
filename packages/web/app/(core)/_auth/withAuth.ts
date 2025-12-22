@@ -10,20 +10,20 @@ export async function getAuthContext(): Promise<{
 }> {
   const supabase = await createClient()
 
-  const { data: { session }, error } =
-    await supabase.auth.getSession()
+  const { data: { user }, error } =
+    await supabase.auth.getUser()
 
   if (error) {
-    devLog("getAuthContext.session取得失敗:", error)
+    devLog("getAuthContext.user取得失敗:", error)
     throw error
   }
 
-  if (!session?.user?.id) {
+  if (!user?.id) {
     throw new AuthorizedError("ログインが必要です")
   }
 
   return {
     supabase,
-    userId: session.user.id,
+    userId: user.id,
   }
 }
