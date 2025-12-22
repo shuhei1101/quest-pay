@@ -94,12 +94,21 @@ export const DetailSettings = ({
             {visibleLevels.map((level) => {
               const levelStr = level.toString()
               const isCompleted = levels[levelStr]
+              
+              // 該当レベルのdetailインデックスを取得する
+              const detailIndex = watch().details.findIndex(d => d.level === level)
+              // 該当レベルにエラーがあるかチェックする
+              const hasError = detailIndex !== -1 && errors.details?.[detailIndex]
 
               return (
                 <Tabs.Tab 
                   key={level} 
                   value={levelStr}
-                  rightSection={isCompleted ? <IconCheck size={14} color="green" /> : null}
+                  rightSection={
+                    hasError ? <IconAlertCircle size={14} color="red" /> :
+                    isCompleted ? <IconCheck size={14} color="green" /> : 
+                    null
+                  }
                 >
                   <Group gap={4}>
                     <Text size="sm">レベル {level}</Text>

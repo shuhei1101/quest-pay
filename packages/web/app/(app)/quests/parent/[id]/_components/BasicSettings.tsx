@@ -5,6 +5,7 @@ import { FamilyQuestFormType } from "../form"
 import { useIcons } from "@/app/(app)/icons/_hooks/useIcons"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { QuestCategoryCombobox } from "../../../category/_component/QuestCategoryCombobox"
+import { RequiredMark } from "@/app/(core)/_components/RequiredMark"
 
 
 export const BasicSettings = ({register, errors, setValue, watch, openIconPopup, tagInputValue, setTagInputValue, handleTag, isComposing, setIsComposing}: {
@@ -29,14 +30,14 @@ export const BasicSettings = ({register, errors, setValue, watch, openIconPopup,
     <div className="flex flex-col gap-4 max-w-lg p-4">
       {/* 家族クエスト名入力 */}
       <div>
-        <Input.Wrapper label="家族クエスト名" required error={errors.name?.message}>
+        <Input.Wrapper label={<>家族クエスト名 <RequiredMark /></>} error={errors.name?.message}>
           <Input placeholder="例: お皿洗い" {...register("name")} />
         </Input.Wrapper>
       </div>
       
       {/* アイコン選択 */}
       <div>
-        <Input.Wrapper label="家族クエストアイコン" required error={errors.iconId?.message}>
+        <Input.Wrapper label="家族クエストアイコン" error={errors.iconId?.message}>
           <div>
             <ActionIcon
               variant="default"

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { IconCircleCheck, IconLock } from "@tabler/icons-react"
 import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { FamilyQuestFormType } from "../form"
+import { RequiredMark } from "@/app/(core)/_components/RequiredMark"
 
 
 export const LevelDetailForm = ({ level, onSave, register, errors, setValue, watch }: { 
@@ -32,36 +33,48 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
       <Text fw={700} size="lg">レベル {level} の設定</Text>
       
       <div className="flex flex-col gap-2">
-        <Textarea 
-          label="成功条件" 
-          placeholder="例: お皿を割らずに洗う" 
-          required 
-          autosize
-          minRows={2}
-          value={detail.successCondition}
-          onChange={(e) => updateDetail("successCondition", e.target.value)}
+        <Input.Wrapper 
+          label={
+            <span>
+              成功条件 <RequiredMark />
+            </span>
+          } 
           error={errors.details?.[detailIndex]?.successCondition?.message}
-        />
+        >
+          <Textarea 
+            placeholder="例: お皿を割らずに洗う" 
+            autosize
+            minRows={2}
+            value={detail.successCondition}
+            onChange={(e) => updateDetail("successCondition", e.target.value)}
+          />
+        </Input.Wrapper>
 
         <Group grow>
           <NumberInput 
-            label="目標回数" 
+            label={
+              <span>
+                目標回数 <RequiredMark />
+              </span>
+            }
             description="成功条件を何回達成したらクリアか"
             value={detail.requiredClearCount}
             onChange={(value) => updateDetail("requiredClearCount", typeof value === "number" ? value : 1)}
             min={1} 
             suffix="回" 
-            required
             error={errors.details?.[detailIndex]?.requiredClearCount?.message}
           />
           <NumberInput 
-            label="報酬額" 
+            label={
+              <span>
+                報酬額 <RequiredMark />
+              </span>
+            }
             description="クリア時に獲得できるお小遣い額"
             value={detail.reward}
             onChange={(value) => updateDetail("reward", typeof value === "number" ? value : 0)}
             min={0} 
             prefix="¥" 
-            required
             error={errors.details?.[detailIndex]?.reward?.message}
           />
         </Group>
@@ -77,15 +90,15 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
             error={errors.details?.[detailIndex]?.childExp?.message}
           />
         </Group>
-          <NumberInput 
-            label="次レベルまでに必要なクエストクリア回数" 
-            description="クエストクリア時にクエストが獲得する経験値"
-            value={detail.requiredCompletionCount}
-            onChange={(value) => updateDetail("requiredCompletionCount", typeof value === "number" ? value : 0)}
-            min={0} 
-            suffix="exp"
-            error={errors.details?.[detailIndex]?.requiredCompletionCount?.message}
-          />
+        <NumberInput 
+          label="次レベルまでに必要なクエストクリア回数" 
+          description="クエストクリア時にクエストが獲得する経験値"
+          value={detail.requiredCompletionCount}
+          onChange={(value) => updateDetail("requiredCompletionCount", typeof value === "number" ? value : 0)}
+          min={0} 
+          suffix="exp"
+          error={errors.details?.[detailIndex]?.requiredCompletionCount?.message}
+        />
       </div>
     </Paper>
   )

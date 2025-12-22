@@ -12,6 +12,7 @@ import { useUpdateFamilyQuest } from "./_hook/useUpdateFamilyQuest"
 import { useDeleteFamilyQuest } from "./_hook/useDeleteFamilyQuest"
 import { useDisclosure } from "@mantine/hooks"
 import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
+import { IconAlertCircle } from "@tabler/icons-react"
 
 export const FamilyQuestForm = ({id}: {id?: string}) => {
   const [activeTab, setActiveTab] = useState<string | null>("basic")
@@ -37,8 +38,10 @@ export const FamilyQuestForm = ({id}: {id?: string}) => {
   /** 家族クエストフォームを取得する */
   const { register, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({questId})
 
+  // エンティティ取得時のハンドル
   useEffect(() => {
     if (fetchedEntity?.id) {
+      // 全体の家族クエストIDを設定する
       setQuestId(fetchedEntity.id)
     }
   }, [fetchedEntity])
@@ -91,6 +94,12 @@ export const FamilyQuestForm = ({id}: {id?: string}) => {
     }
   })
 
+  /** 各タブのエラーチェックフラグ */
+  const hasBasicErrors = !!(errors.name || errors.iconId || errors.iconColor || errors.categoryId || errors.tags || errors.client || errors.requestDetail || errors.ageFrom || errors.ageTo || errors.monthFrom || errors.monthTo)
+  const hasDetailErrors = !!(errors.details)
+  const hasChildErrors = !!(errors.childIds)
+  const hasOnlineErrors = !!(errors.isPublic || errors.isClientPublic || errors.isRequestDetailPublic)
+
   return (
     <>
       <Box pos="relative">
@@ -102,10 +111,30 @@ export const FamilyQuestForm = ({id}: {id?: string}) => {
           <Paper p="md" withBorder style={{ height: 'calc(100vh - 60px - 2rem)', display: 'flex', flexDirection: 'column' }}>
             <Tabs value={activeTab} onChange={setActiveTab} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
               <Tabs.List>
-                <Tabs.Tab value="basic">基本設定</Tabs.Tab>
-                <Tabs.Tab value="details">詳細設定</Tabs.Tab>
-                <Tabs.Tab value="children">子供設定</Tabs.Tab>
-                <Tabs.Tab value="online">オンライン設定</Tabs.Tab>
+                <Tabs.Tab 
+                  value="basic" 
+                  rightSection={hasBasicErrors ? <IconAlertCircle size={16} color="red" /> : null}
+                >
+                  基本設定
+                </Tabs.Tab>
+                <Tabs.Tab 
+                  value="details"
+                  rightSection={hasDetailErrors ? <IconAlertCircle size={16} color="red" /> : null}
+                >
+                  詳細設定
+                </Tabs.Tab>
+                <Tabs.Tab 
+                  value="children"
+                  rightSection={hasChildErrors ? <IconAlertCircle size={16} color="red" /> : null}
+                >
+                  子供設定
+                </Tabs.Tab>
+                <Tabs.Tab 
+                  value="online"
+                  rightSection={hasOnlineErrors ? <IconAlertCircle size={16} color="red" /> : null}
+                >
+                  オンライン設定
+                </Tabs.Tab>
               </Tabs.List>
 
               <Tabs.Panel value="basic" pt="xs" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
