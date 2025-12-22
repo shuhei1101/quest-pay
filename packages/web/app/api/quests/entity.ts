@@ -44,11 +44,10 @@ export const QuestDetailsEntityScheme = z.object({
   quest_id: z.string(),
   level: z.number(),
   success_condition: z.string(), // 成功条件
-  target_count: z.number(), // 目標達成までの回数
+  required_completion_count: z.number(), // 目標達成までの回数
   reward: z.number(), // 報酬額
   child_exp: z.number(), // 獲得経験値
-  quest_exp: z.number(), // クエスト経験値
-  required_exp: z.number(), // 必要経験値
+  required_clear_count: z.number(), // 次レベルまでに必要なクエストクリア回数
 })
 export type QuestDetailsEntity = z.infer<typeof QuestDetailsEntityScheme>
 
@@ -58,11 +57,10 @@ const QuestDetailsArray = [
   "quest_id",
   "level",
   "success_condition",
-  "target_count",
+  "required_completion_count",
   "reward",
   "child_exp",
-  "quest_exp",
-  "required_exp",
+  "required_clear_count",
 ] as const
 export const QuestDetailsColumnsScheme = z.enum(QuestDetailsArray)
 export type QuestDetailsColumns = z.infer<typeof QuestDetailsColumnsScheme>

@@ -25,18 +25,20 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
     details: [ {
       level: 1,
       successCondition: "",
-      targetCount: 0,
+      requiredClearCount: 0,
       reward: 0,
       childExp: 0,
-      questExp: 0,
-      requiredExp: 0,
+      requiredCompletionCount: 1,
     } ],
     ageFrom: null,
     ageTo: null,
     monthFrom: null,
     monthTo: null,
     client: "",
-    requestDetail: ""
+    requestDetail: "",
+    isClientPublic: false,
+    isRequestDetailPublic: false,
+    childIds: []
   }
 
   // クエストフォームの状態を作成する
@@ -72,18 +74,20 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
         details: quest.quest_details.map( ( detail ) => ( {
           level: detail.level,
           successCondition: detail.success_condition,
-          targetCount: detail.target_count,
+          requiredClearCount: detail.required_clear_count,
           reward: detail.reward,
           childExp: detail.child_exp,
-          questExp: detail.quest_exp,
-          requiredExp: detail.required_exp,
+          requiredCompletionCount: detail.required_completion_count,
         } ) ),
         ageFrom: quest.age_from,
         ageTo: quest.age_to,
         monthFrom: quest.month_from,
         monthTo: quest.month_to,
         client: quest.client,
-        requestDetail: quest.request_detail
+        requestDetail: quest.request_detail,
+        childIds: quest.quest_children.map(( child ) => child.child_id ),
+        isClientPublic: quest.is_client_public,
+        isRequestDetailPublic: quest.is_request_detail_public,
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)

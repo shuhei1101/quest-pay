@@ -2,7 +2,6 @@
 
 import { useParams } from "next/navigation"
 import { FamilyQuestForm } from "./FamilyQuestForm"
-import { MockQuestFormA } from "./MockFamilyQuestForm"
 
 export default function Page() {
   const params = useParams()
@@ -11,7 +10,6 @@ export default function Page() {
   return (
     <>
       <FamilyQuestForm id={id} />
-      <MockQuestFormA />
     </>
   )
 }

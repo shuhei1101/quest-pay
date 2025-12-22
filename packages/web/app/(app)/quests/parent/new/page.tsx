@@ -1,11 +1,9 @@
-import { FamilyQuestForm } from "../[id]/FamilyQuestForm";
-import { MockQuestFormA } from "../[id]/MockFamilyQuestForm";
+import { FamilyQuestForm } from "../[id]/FamilyQuestForm"
 
 export default function Page() {
   return (
     <>
-      {/* <FamilyQuestForm/> */}
-      <MockQuestFormA />
+      <FamilyQuestForm />
     </>
   )
 }

@@ -20,11 +20,10 @@ export const insertFamilyQuest = async ({params, supabase}: {
     _details: {
       level: QuestDetailsEntity["level"],
       success_condition: QuestDetailsEntity["success_condition"],
-      target_count: QuestDetailsEntity["target_count"],
+      required_completion_count: QuestDetailsEntity["required_completion_count"],
       reward: QuestDetailsEntity["reward"],
       child_exp: QuestDetailsEntity["child_exp"],
-      quest_exp: QuestDetailsEntity["quest_exp"],
-      required_exp: QuestDetailsEntity["required_exp"],
+      required_clear_count: QuestDetailsEntity["required_clear_count"],
     }[],
     _child_ids: ChildEntity["id"][],
   }

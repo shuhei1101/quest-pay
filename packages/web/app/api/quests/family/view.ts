@@ -22,8 +22,11 @@ export const FamilyQuestViewScheme = QuestEntityScheme.pick({
   }).extend(FamilyQuestEntityScheme.pick({
     family_id: true,
     is_public: true,
+    is_client_public: true,
+    is_request_detail_public: true,
   }).shape
 ).extend({
+  family_quest_id: FamilyQuestEntityScheme.shape.id,
   icon_name: IconEntityScheme.shape.name,
   icon_size: IconEntityScheme.shape.size,
 })

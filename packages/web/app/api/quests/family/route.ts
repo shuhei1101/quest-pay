@@ -61,12 +61,12 @@ export async function POST(
           _details: data.form.details.map(detail => ({
             level: detail.level,
             success_condition: detail.successCondition,
-            target_count: detail.targetCount,
+            required_completion_count: detail.requiredCompletionCount,
             reward: detail.reward,
             child_exp: detail.childExp,
-            quest_exp: detail.questExp,
-            required_exp: detail.requiredExp,
-          }))
+            required_clear_count: detail.requiredClearCount,
+          })),
+          _child_ids: data.form.childIds,
         },
         supabase
       })

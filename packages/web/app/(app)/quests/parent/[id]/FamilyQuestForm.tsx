@@ -1,32 +1,31 @@
-'use client'
+"use client"
 
-import { ActionIcon, Box, Text, Button, Checkbox, Group, Input, Loader, LoadingOverlay, Pill, PillsInput, Space, Textarea} from "@mantine/core"
-import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
-import { useDisclosure } from "@mantine/hooks"
-import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { Box, Button, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
 import { useEffect, useState } from "react"
-import { useDeleteFamilyQuest } from "./_hook/useDeleteFamilyQuest"
-import { useUpdateFamilyQuest } from "./_hook/useUpdateFamilyQuest"
+import { DetailSettings } from "./_components/DetailSettings"
+import { BasicSettings } from "./_components/BasicSettings"
+import { OnlineSettings } from "./_components/OnlineSettings"
+import { ChildSettings } from "./_components/ChildSettings"
 import { useFamilyQuestForm } from "./_hook/useFamilyQuestForm"
-import { devLog } from "@/app/(core)/util"
-import { useIcons } from "@/app/(app)/icons/_hooks/useIcons"
 import { useRegisterFamilyQuest } from "./_hook/useRegisterFamilyQuest"
-import { QuestCategoryCombobox } from "../../category/_component/QuestCategoryCombobox"
+import { useUpdateFamilyQuest } from "./_hook/useUpdateFamilyQuest"
+import { useDeleteFamilyQuest } from "./_hook/useDeleteFamilyQuest"
+import { useDisclosure } from "@mantine/hooks"
+import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
 
-/** 家族クエストフォーム */
-export const FamilyQuestForm = ( params: {
-  id?: string
-}) => {
+export const FamilyQuestForm = ({id}: {id?: string}) => {
+  const [activeTab, setActiveTab] = useState<string | null>("basic")
+  const [activeLevel, setActiveLevel] = useState<string | null>("1")
 
   /** 家族クエストID */
-  const [id, setId] = useState<string | undefined>(params.id)
+  const [questId, setQuestId] = useState<string | undefined>(id)
 
-  /** ポップアップ制御状態 */
-  const [popupOpened, { open: openPopup, close: closePopup }] = useDisclosure(false)
-  
+  /** アイコン選択ポップアップ制御状態 */
+  const [iconPopupOpened, { open: openIconPopup, close: closeIconPopup }] = useDisclosure(false)
+
   /** ハンドラ */
   const { handleDelete, isLoading: deleteLoading } = useDeleteFamilyQuest()
-  const { handleRegister, isLoading: registerLoading } = useRegisterFamilyQuest({setId})
+  const { handleRegister, isLoading: registerLoading } = useRegisterFamilyQuest({setId: setQuestId})
   const { handleUpdate, isLoading: updateLoading } = useUpdateFamilyQuest()
 
   /** 更新中のローダ状態 */
@@ -35,136 +34,147 @@ export const FamilyQuestForm = ( params: {
     setSubmitLoading(deleteLoading || registerLoading || updateLoading)
   }, [deleteLoading, registerLoading, updateLoading])
 
-  // 家族クエストフォームを取得する
-  const { register: questRegister, errors, setValue: setFamilyQuestValue, watch: watchFamilyQuest, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({questId: id})
- 
-  /** アイコン情報 */
-  const { iconById } = useIcons()
-  
+  /** 家族クエストフォームを取得する */
+  const { register, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({questId})
+
   useEffect(() => {
     if (fetchedEntity?.id) {
-      setId(fetchedEntity.id)
-      devLog("FamilyQuestForm.useEffect.ID: ", id)
+      setQuestId(fetchedEntity.id)
     }
   }, [fetchedEntity])
 
   /** タグ入力状態 */
   const [tagInputValue, setTagInputValue] = useState("")
 
-  // タグ入力時のハンドル
+  /** IME入力状態 */
+  const [isComposing, setIsComposing] = useState(false)
+
+  // レベル別の保存状態を管理
+  const [levels, setLevels] = useState<Record<string, boolean>>({
+    "1": false, 
+    "2": false,
+    "3": false,
+    "4": false,
+    "5": false,
+  })
+
+  /** レベル保存ハンドル */
+  const handleLevelSave = (level: string) => {
+    // 現在のレベルを完了としてマークする
+    setLevels(prev => ({ ...prev, [level]: true }))
+    
+    // 可能な場合は次のレベルに切り替える
+    const nextLevel = (parseInt(level) + 1).toString()
+    if (parseInt(nextLevel) <= 5) {
+      setActiveLevel(nextLevel)
+    }
+  }
+
+  /** タグ入力時のハンドル */
   const handleTag = () => {
     const newTag = tagInputValue.trim()
     // タグが空白もしくは既に登録済みの場合、処理を終了する
-    if (newTag && !watchFamilyQuest().tags.includes(newTag)) {
+    if (newTag && !watch().tags.includes(newTag)) {
       // タグを追加する
-      setFamilyQuestValue("tags", [...watchFamilyQuest().tags, newTag])
+      setValue("tags", [...watch().tags, newTag])
     }
     // タグ入力状態を初期化する
     setTagInputValue("")
   }
-  
-  /** IME入力状態 */
-  const [isComposing, setIsComposing] = useState(false)
+
+  /** フォーム送信ハンドル */
+  const onSubmit = handleSubmit((form) => {
+    if (questId) {
+      handleUpdate({form, questId, updatedAt: fetchedEntity?.updated_at})
+    } else {
+      handleRegister({form})
+    }
+  })
 
   return (
     <>
-    
-      <div>
-        <Box pos="relative" className="max-w-120">
-          {/* ロード中のオーバーレイ */}
-          <LoadingOverlay visible={questLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
-          {/* 家族クエスト入力フォーム */}
-          <form onSubmit={handleSubmit((form) => id ?
-            handleUpdate({form, questId: id, updatedAt: fetchedEntity?.updated_at})
-            :handleRegister({form}))}
-          >
-            {/* 入力欄のコンテナ */}
-            <div className="flex flex-col gap-2">
-              {/* 家族クエスト名入力 */}
-              <div>
-                <Input.Wrapper label="家族クエスト名" required error={errors.name?.message}>
-                  <Input className="max-w-120" {...questRegister("name")} />
-                </Input.Wrapper>
-              </div>
-              {/* アイコン選択 */}
-              <div>
-                <Input.Wrapper label="家族クエストアイコン" required error={errors.iconId?.message}>
-                  <div>
-                    <ActionIcon variant="default" radius="xl"
-                      onClick={ () => openPopup() }>
-                      <RenderIcon 
-                        iconName={iconById && iconById[watchFamilyQuest().iconId]?.name} 
-                        iconSize={iconById && iconById[watchFamilyQuest().iconId]?.size}
-                        color={watchFamilyQuest().iconColor}
-                      />
-                    </ActionIcon>
-                  </div>
-                </Input.Wrapper>
-              </div>
-              {/* カテゴリ選択リストボックス */}
-            <Input.Wrapper label="カテゴリ" error={errors.categoryId?.message}>
-              <QuestCategoryCombobox
-                currentValue={watchFamilyQuest().categoryId}
-                onChanged={(id: number | null) => setFamilyQuestValue("categoryId", id)}
-              />
-            </Input.Wrapper>
+      <Box pos="relative">
+        {/* ロード中のオーバーレイ */}
+        <LoadingOverlay visible={questLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+        
+        {/* 家族クエスト入力フォーム */}
+        <form onSubmit={onSubmit}>
+          <Paper p="md" withBorder style={{ height: 'calc(100vh - 60px - 2rem)', display: 'flex', flexDirection: 'column' }}>
+            <Tabs value={activeTab} onChange={setActiveTab} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+              <Tabs.List>
+                <Tabs.Tab value="basic">基本設定</Tabs.Tab>
+                <Tabs.Tab value="details">詳細設定</Tabs.Tab>
+                <Tabs.Tab value="children">子供設定</Tabs.Tab>
+                <Tabs.Tab value="online">オンライン設定</Tabs.Tab>
+              </Tabs.List>
 
-              {/* タグ選択 */}
-              <div>
-                <PillsInput label="タグ"
-                description={"条件絞り込みで使用"}
-                error={errors.tags?.message}>
-                  <Pill.Group>
-                    {watchFamilyQuest().tags.map((tag) => (
-                      <Pill key={tag} withRemoveButton
-                        onRemove={() => {
-                          setFamilyQuestValue("tags", watchFamilyQuest().tags.filter((t) => t !== tag))
-                        }}
-                      >{tag}</Pill>
-                    ))}
-                    <PillsInput.Field placeholder="タグを追加"
-                      value={tagInputValue}
-                      onChange={(e) => setTagInputValue(e.target.value)}
-                      onBlur={() => handleTag()}
-                      onCompositionStart={() => setIsComposing(true)}
-                      onCompositionEnd={() => setIsComposing(false)}
-                      onKeyDown={(e) => {
-                        if (e.key == "Enter" && !isComposing) {
-                          e.preventDefault()
-                          handleTag()
-                        }
-                      }}
-                    />
-                  </Pill.Group>
-                </PillsInput>
-              </div>
-                <Input.Wrapper label="公開">
-                    <Checkbox
-                      {...questRegister("isPublic")}
-                    />
-                </Input.Wrapper>
-            </div>
-            <Space h="md" />
+              <Tabs.Panel value="basic" pt="xs" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+                <BasicSettings
+                  register={register}
+                  errors={errors}
+                  setValue={setValue}
+                  watch={watch}
+                  openIconPopup={openIconPopup}
+                  tagInputValue={tagInputValue}
+                  setTagInputValue={setTagInputValue}
+                  handleTag={handleTag}
+                  isComposing={isComposing}
+                  setIsComposing={setIsComposing}
+                />
+              </Tabs.Panel>
+
+              <Tabs.Panel value="details" pt="xs" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+                <DetailSettings
+                  activeLevel={activeLevel} 
+                  setActiveLevel={setActiveLevel} 
+                  levels={levels}
+                  onSave={handleLevelSave}
+                  register={register}
+                  errors={errors}
+                  setValue={setValue}
+                  watch={watch}
+                />
+              </Tabs.Panel>
+
+              <Tabs.Panel value="children" pt="xs" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+                <ChildSettings
+                  watch={watch}
+                  setValue={setValue}
+                />
+              </Tabs.Panel>
+
+              <Tabs.Panel value="online" pt="xs" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+                <OnlineSettings
+                  register={register}
+                  watch={watch}
+                />
+              </Tabs.Panel>
+
+            </Tabs>
+
             {/* サブミットボタン */}
-            <Group>
-              {id ? 
+            <Group mt="md" justify="flex-end">
+              {questId ? 
               <>
-                <Button hidden={false} loading={questLoading || submitLoading} color="red.7" onClick={() => handleDelete({questId: id, updatedAt: fetchedEntity?.updated_at})} >削除</Button>
-                <Button hidden={false} type="submit" loading={questLoading || submitLoading} disabled={!isValueChanged} >更新</Button>
+                <Button color="red.7" onClick={() => handleDelete({questId, updatedAt: fetchedEntity?.updated_at})} loading={submitLoading}>削除</Button>
+                <Button type="submit" loading={submitLoading} disabled={!isValueChanged}>更新</Button>
               </>
               :
-                <Button hidden={false} type="submit" loading={questLoading || submitLoading} >登録</Button>
+                <Button type="submit" loading={submitLoading}>登録</Button>
               }
             </Group>
-          </form>
-        </Box>
-      </div>
+          </Paper>
+        </form>
+      </Box>
+
       {/* アイコン選択ポップアップ */}
-      <IconSelectPopup opened={ popupOpened } close={ closePopup } 
-        setIcon={ (iconId) => setFamilyQuestValue("iconId", iconId) }
-        setColor={ (iconColor) => setFamilyQuestValue("iconColor", iconColor) }
-        currentIconId={watchFamilyQuest().iconId} 
-        currentColor={watchFamilyQuest().iconColor} 
+      <IconSelectPopup 
+        opened={iconPopupOpened} 
+        close={closeIconPopup} 
+        setIcon={(iconId) => setValue("iconId", iconId)}
+        setColor={(iconColor) => setValue("iconColor", iconColor)}
+        currentIconId={watch().iconId} 
+        currentColor={watch().iconColor} 
       />
     </>
   )
