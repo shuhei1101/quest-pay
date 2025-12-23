@@ -10,7 +10,7 @@ export async function withRouteErrorHandling(
     // コールバックを実行する
     return await fn()
   } catch (error) {
-    devLog("withErrorHandling.サーバ内例外: ", error)
+    devLog("withRouteErrorHandling.サーバ内例外: ", error)
     if (error instanceof AppError) {
       // アプリ固有エラーのハンドル
       return NextResponse.json(error.toResponse(), { status: error.status })

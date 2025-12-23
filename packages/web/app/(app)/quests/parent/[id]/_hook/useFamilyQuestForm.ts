@@ -25,7 +25,7 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
     details: [ {
       level: 1,
       successCondition: "",
-      requiredClearCount: 0,
+      requiredClearCount: 1,
       reward: 0,
       childExp: 0,
       requiredCompletionCount: 1,

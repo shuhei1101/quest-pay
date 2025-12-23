@@ -94,8 +94,8 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
           label="次レベルまでに必要なクエストクリア回数" 
           description="クエストクリア時にクエストが獲得する経験値"
           value={detail.requiredCompletionCount}
-          onChange={(value) => updateDetail("requiredCompletionCount", typeof value === "number" ? value : 0)}
-          min={0} 
+          onChange={(value) => updateDetail("requiredCompletionCount", typeof value === "number" ? value : 1)}
+          min={1} 
           suffix="exp"
           error={errors.details?.[detailIndex]?.requiredCompletionCount?.message}
         />
