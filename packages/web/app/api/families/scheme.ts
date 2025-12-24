@@ -1,10 +1,10 @@
 import { z } from "zod"
 import { FamilyEntityScheme } from "./entity"
-import { FamilyRegisterFormScheme } from "@/app/(app)/families/new/form"
+import { FamilyRegisterFormSchema } from "@/app/(app)/families/new/form"
 
 /** クエスト挿入リクエストスキーマ */
 export const PostFamilyRequestScheme = z.object({
-  form: FamilyRegisterFormScheme
+  form: FamilyRegisterFormSchema
 })
 export type PostFamilyRequest = z.infer<typeof PostFamilyRequestScheme>
 

@@ -2,7 +2,7 @@ import { z } from "zod"
 import { QuestEntityScheme } from "../entity"
 import { FamilyQuestEntityScheme } from "./entity"
 import { IconEntityScheme } from "@/app/api/icons/entity"
-import { SortOrder } from "@/app/(core)/scheme"
+import { SortOrder } from "@/app/(core)/schema"
 
 /** 家族クエストビュー */
 export const FamilyQuestViewScheme = QuestEntityScheme.pick({

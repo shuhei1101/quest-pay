@@ -1,28 +1,27 @@
 import { SupabaseClient } from "@supabase/supabase-js"
 import { devLog, generateInviteCode } from "@/app/(core)/util"
-import { FamilyEntityScheme } from "./entity"
 import { QueryError } from "@/app/(core)/error/appError"
+import { Db, db, Tx } from "@/index"
+import { families } from "@/drizzle/schema"
+import { and, eq } from "drizzle-orm"
 
 /** 家族を取得する */
-export const fetchFamily = async ({
-  supabase,
-  familyId
-}: {
-  supabase: SupabaseClient,
+export const fetchFamily = async ({ db, familyId }: {
+  db: Db | Tx,
   familyId: string
 }) => {
   try {
 
     // データを取得する
-    const { data, error } = await supabase.from("families")
-      .select(`*`)
-      .eq("id", familyId)
+    const user = await db
+      .select()
+      .from(families)
+      .where(eq(families.id, familyId))
+      .limit(1)
 
-      if (error) throw error
+      devLog("fetchFamily.取得データ: ", user)
 
-      devLog("fetchFamily.取得データ: ", data)
-
-      return data.length > 0 ? FamilyEntityScheme.parse(data[0]) : undefined
+      return user.length > 0 ? user[0] : null
   } catch (error) {
     devLog("fetchFamily.取得例外: ", error)
     throw new QueryError("家族情報の読み込みに失敗しました。")

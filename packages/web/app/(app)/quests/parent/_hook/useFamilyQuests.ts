@@ -1,7 +1,7 @@
 "use client"
 
 import useSWR from "swr"
-import { SortOrder } from "@/app/(core)/scheme"
+import { SortOrder } from "@/app/(core)/schema"
 import { FamilyQuestFilterType } from "@/app/api/quests/family/scheme"
 import { FamilyQuestColumns } from "@/app/api/quests/family/view"
 import { getFamilyQuests } from "@/app/api/quests/family/client"

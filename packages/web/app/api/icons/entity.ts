@@ -11,11 +11,7 @@ export const IconEntityScheme = z.object({
 })
 export type IconEntity = z.infer<typeof IconEntityScheme>
 
-// 値オブジェクト
-export const IconId = z.number({error: "アイコンは必須です。"})
-export const IconColor = z.string({error: "アイコンカラーは必須です。"})
-
-// アイコン辞書スキーマ
+/** アイコン辞書スキーマ */
 export const IconByIdScheme = z.record(
   z.string(),
   z.custom<IconEntity>()

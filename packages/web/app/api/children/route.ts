@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext,  } from "@/app/(core)/_auth/withAuth"
 import { GetChildrenResponse, PostChildRequestScheme, PostChildResponse } from "./scheme"
-import { insertChild } from "./db"
+import { registerChild } from "./service"
 import { generateUniqueInviteCode } from "./invite/service"
 import { fetchUserInfoByUserId } from "../users/query"
 import { ServerError } from "@/app/(core)/error/appError"
@@ -46,16 +46,16 @@ export async function POST(
       const inviteCode = await generateUniqueInviteCode({supabase})
         
       // 子供を登録する
-      const childId = await insertChild({
-        params: {
-          _name: data.form.name,
-          _icon_id: data.form.iconId,
-          _icon_color: data.form.iconColor,
-          _birthday: data.form.birthday,
-          _invite_code: inviteCode,
-          _family_id: userInfo.family_id
+      const childId = await registerChild({
+        child: {
+          inviteCode: inviteCode
         },
-        supabase,
+        profile: {
+          name: data.form.name,
+          iconColor: data.form.iconColor,
+          iconId: data.form.iconId,
+          familyId: userInfo.family_id
+        }
       })
       return NextResponse.json({childId} as PostChildResponse)
     })

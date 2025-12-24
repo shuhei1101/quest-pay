@@ -19,7 +19,3 @@ export type ProfileEntity = z.infer<typeof ProfileEntityScheme>
 export type ProfileColumns = keyof ProfileEntity
 
 // 値オブジェクト
-export const UserName = z.string().nonempty({error: "氏名は必須です。"})
-export const Birthday = z.string().nonempty({error: "誕生日は必須です。"}).refine((val) => !isNaN(Date.parse(val)), {
-  message: "有効な日付文字列ではありません",
-})

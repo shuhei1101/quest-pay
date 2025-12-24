@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { SortOrderScheme } from "@/app/(core)/scheme"
+import { SortOrderScheme } from "@/app/(core)/schema"
 import { FetchFamilyQuestsResult } from "./query"
 import { FamilyQuestEntityScheme } from "./entity"
 import { FamilyQuestColumnsScheme } from "./view"

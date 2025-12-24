@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ChildFormScheme, ChildFormType } from "../form"
+import { ChildFormSchema, ChildFormType } from "../form"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { devLog } from "@/app/(core)/util"
@@ -30,7 +30,7 @@ export const useChildForm = ({childId}: {childId?: string}) => {
     watch,
     reset,
   } = useForm<ChildFormType>({
-    resolver: zodResolver(ChildFormScheme),
+    resolver: zodResolver(ChildFormSchema),
     defaultValues: defaultChild
   })
 
