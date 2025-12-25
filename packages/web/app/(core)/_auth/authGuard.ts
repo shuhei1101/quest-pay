@@ -9,13 +9,13 @@ export const authGuard = async ({parentNG = false, childNG = false, guestNG = fa
   guestNG?: boolean
 }) => {
   // 認証コンテキストを取得する
-  const { supabase, userId } = await getAuthContext()
+  const { db, userId } = await getAuthContext()
   // ユーザ情報を取得する
-  const userInfo = await fetchUserInfoByUserId({supabase, userId})
+  const userInfo = await fetchUserInfoByUserId({db, userId})
 
   if ((guestNG && !userInfo) ||
-    (parentNG && userInfo?.user_type === "parent") || 
-    (childNG && userInfo?.user_type === "child")
+    (parentNG && userInfo?.profiles.type === "parent") || 
+    (childNG && userInfo?.profiles.type === "child")
   ) {
     // 権限エラー画面に遷移する
     redirect(AUTH_ERROR_URL)

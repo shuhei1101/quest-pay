@@ -15,13 +15,13 @@ export async function GET(
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
-    const { supabase, userId } = await getAuthContext()
+    const { db, userId } = await getAuthContext()
       // 家族IDを取得する
-      const userInfo = await fetchUserInfoByUserId({userId, supabase})
-      if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
+      const userInfo = await fetchUserInfoByUserId({userId, db})
+      if (!userInfo?.families?.id) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 子供を取得する
-      const result = await fetchChildrenByFamilyId({supabase, familyId: userInfo.family_id })
+      const result = await fetchChildrenByFamilyId({db, familyId: userInfo.families.id })
   
       return NextResponse.json({children: result} as GetChildrenResponse)
     })
@@ -33,17 +33,17 @@ export async function POST(
 ) {
   // 認証コンテキストを取得する
   return withRouteErrorHandling(async () => {
-      const { supabase, userId } = await getAuthContext()
+      const { db, userId } = await getAuthContext()
       // bodyから子供を取得する
       const body = await request.json()
       const data  = PostChildRequestScheme.parse(body)
 
      // 家族IDを取得する
-      const userInfo = await fetchUserInfoByUserId({userId, supabase})
-      if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
+      const userInfo = await fetchUserInfoByUserId({userId, db})
+      if (!userInfo?.families?.id) throw new ServerError("家族IDの取得に失敗しました。")
         
       // 招待コードを生成する
-      const inviteCode = await generateUniqueInviteCode({supabase})
+      const inviteCode = await generateUniqueInviteCode({db})
         
       // 子供を登録する
       const childId = await registerChild({
@@ -54,7 +54,7 @@ export async function POST(
           name: data.form.name,
           iconColor: data.form.iconColor,
           iconId: data.form.iconId,
-          familyId: userInfo.family_id
+          familyId: userInfo.profiles.familyId
         }
       })
       return NextResponse.json({childId} as PostChildResponse)

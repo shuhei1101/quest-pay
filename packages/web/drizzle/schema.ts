@@ -9,16 +9,17 @@ import {
   pgSchema,
   boolean,
 } from "drizzle-orm/pg-core"
-import { createInsertSchema, createSelectSchema } from "drizzle-zod"
+import { getTableColumns, asc, desc } from "drizzle-orm"
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
 import { sql, relations } from "drizzle-orm"
 import z from "zod"
 
 /** 作成日時と更新日時のタイムスタンプ */
 export const timestamps = {
   /** 作成日時 */
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).notNull().defaultNow(),
   /** 更新日時 */
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }).notNull().defaultNow(),
 }
 
 /** ユーザタイプ */
@@ -119,6 +120,7 @@ export const profiles = pgTable("profiles", {
 })
 export const ProfileSelectSchema = createSelectSchema(profiles)
 export const ProfileInsertSchema = createInsertSchema(profiles)
+export const ProfileUpdateSchema = createUpdateSchema(profiles)
 export type ProfileInsert = z.infer<typeof ProfileInsertSchema>
 
 /** 親テーブル */
@@ -207,6 +209,12 @@ export const quests = pgTable("quests", {
 })
 export const QuestSelectSchema = createSelectSchema(quests)
 export const QuestInsertSchema = createInsertSchema(quests)
+export const QuestUpdateSchema = createUpdateSchema(quests)
+export type QuestSelect = z.infer<typeof QuestSelectSchema>
+export type QuestInsert = z.infer<typeof QuestInsertSchema>
+export type QuestUpdate = z.infer<typeof QuestUpdateSchema>
+export type QuestColumns = keyof QuestSelect;
+
 
 /** ファミリークエストテーブル */
 export const familyQuests = pgTable("family_quests", {
@@ -227,6 +235,11 @@ export const familyQuests = pgTable("family_quests", {
 })
 export const FamilyQuestSelectSchema = createSelectSchema(familyQuests)
 export const FamilyQuestInsertSchema = createInsertSchema(familyQuests)
+export const FamilyQuestUpdateSchema = createUpdateSchema(familyQuests)
+export type FamilyQuestInsert = z.infer<typeof FamilyQuestInsertSchema>
+export type FamilyQuestSelect = z.infer<typeof FamilyQuestSelectSchema>
+export type FamilyQuestUpdate = z.infer<typeof FamilyQuestUpdateSchema>
+
 
 /** クエスト詳細テーブル */
 export const questDetails = pgTable("quest_details", {
@@ -253,6 +266,8 @@ export const questDetails = pgTable("quest_details", {
 ])
 export const QuestDetailSelectSchema = createSelectSchema(questDetails)
 export const QuestDetailInsertSchema = createInsertSchema(questDetails)
+export type QuestDetailInsert = z.infer<typeof QuestDetailInsertSchema>
+export type QuestDetailSelect = z.infer<typeof QuestDetailSelectSchema>
 
 /** クエストタグテーブル */
 export const questTags = pgTable("quest_tags", {
@@ -267,6 +282,8 @@ export const questTags = pgTable("quest_tags", {
 ])
 export const QuestTagSelectSchema = createSelectSchema(questTags)
 export const QuestTagInsertSchema = createInsertSchema(questTags)
+export type QuestTagsInsert = z.infer<typeof QuestTagInsertSchema>
+export type QuestTagSelect = z.infer<typeof QuestTagSelectSchema>
 
 /** クエスト子供テーブル */
 export const questChildren = pgTable("quest_children", {
@@ -283,3 +300,5 @@ export const questChildren = pgTable("quest_children", {
 })
 export const QuestChildSelectSchema = createSelectSchema(questChildren)
 export const QuestChildInsertSchema = createInsertSchema(questChildren)
+export type QuestChildrenInsert = z.infer<typeof QuestChildInsertSchema>
+export type QuestChildSelect = z.infer<typeof QuestChildSelectSchema>

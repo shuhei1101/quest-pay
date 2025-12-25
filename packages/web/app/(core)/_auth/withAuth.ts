@@ -1,13 +1,10 @@
-import { SupabaseClient } from "@supabase/supabase-js"
 import { createClient } from "../_supabase/server"
 import { AuthorizedError } from "../error/appError"
 import { devLog } from "../util"
+import { db } from "@/index"
 
 /** 認証済みならsupabaseとuserIdを返す */
-export async function getAuthContext(): Promise<{
-  supabase: SupabaseClient
-  userId: string
-}> {
+export async function getAuthContext() {
   const supabase = await createClient()
 
   const { data: { user }, error } =
@@ -23,7 +20,7 @@ export async function getAuthContext(): Promise<{
   }
 
   return {
-    supabase,
+    db: db,
     userId: user.id,
   }
 }

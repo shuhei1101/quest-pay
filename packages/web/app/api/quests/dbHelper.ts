@@ -1,18 +1,18 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { fetchFamilyQuest } from "./query"
 import { Db } from "@/index"
+import { fetchQuest } from "./query"
 
-export const familyQuestExclusiveControl = {
+export const questExclusiveControl = {
   /** 既に存在するかどうかを確認する */
   existsCheck: async ({id, db}: {
     id: string, 
     db: Db
   }) => {
-    const record = await fetchFamilyQuest({id, db})
-    if (!record) throw new DatabaseError("既に削除された家族クエストです。")
+    const record = await fetchQuest({id, db})
+    if (!record) throw new DatabaseError("既に削除されたクエストです。")
     return record
   },
-  /** 他のユーザに更新されたか確認する（更新日時による排他チェック） */
+  /** 他のクエストに更新されたか確認する（更新日時による排他チェック） */
   hasAlreadyUpdated: ({beforeDate, afterDate}: {
     beforeDate: string,
     afterDate: string
@@ -20,7 +20,7 @@ export const familyQuestExclusiveControl = {
 
     if (beforeDate !== afterDate) {
       // 排他例外を発生させる
-      throw new DatabaseError("他のユーザによって更新されました。")
+      throw new DatabaseError("他のクエストによって更新されました。")
     }
   }
 }

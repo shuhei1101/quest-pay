@@ -1,14 +1,14 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { SupabaseClient } from "@supabase/supabase-js"
 import { fetchProfile } from "./query"
+import { Db } from "@/index"
 
 export const profileExclusiveControl = {
   /** 既に存在するかどうかを確認する */
-  existsCheck: async ({id, supabase}: {
+  existsCheck: async ({id, db}: {
     id: string, 
-    supabase: SupabaseClient
+    db: Db
   }) => {
-    const record = await fetchProfile({id, supabase})
+    const record = await fetchProfile({id, db})
     if (!record) throw new DatabaseError("既に削除されたユーザです。")
     return record
   },

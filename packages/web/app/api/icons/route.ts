@@ -10,9 +10,9 @@ export async function GET(
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
-    const { supabase, userId } = await getAuthContext()
+    const { db, userId } = await getAuthContext()
       // アイコンを取得する
-      const result = await fetchIcons({supabase})
+      const result = await fetchIcons({db})
   
       return NextResponse.json({icons: result} as GetIconsResponse)
     })

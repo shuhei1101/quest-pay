@@ -11,16 +11,17 @@ export async function POST(
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
-    const { supabase, userId } = await getAuthContext()
+    const { db, userId } = await getAuthContext()
       // bodyから家族を取得する
       const body = await request.json()
       const data  = PostFamilyRequestScheme.parse(body)
 
       // 招待コードを生成する
-      const inviteCode = await generateUniqueInviteCode({supabase})
+      const inviteCode = await generateUniqueInviteCode({db})
         
       // 家族を登録する
       await registerFamilyAndParent({
+        db,
         family: {
           displayId: data.form.displayId,
           inviteCode: inviteCode,

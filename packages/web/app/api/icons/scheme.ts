@@ -1,8 +1,8 @@
 import { z } from "zod"
-import { IconEntityScheme } from "./entity"
+import { IconSelectSchema } from "@/drizzle/schema"
 
 /** アイコン取得レスポンススキーマ */
 export const GetIconsResponseScheme = z.object({
-  icons: IconEntityScheme.array(),
+  icons: IconSelectSchema.array(),
 })
 export type GetIconsResponse = z.infer<typeof GetIconsResponseScheme>

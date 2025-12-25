@@ -1,8 +1,8 @@
 import { z } from "zod"
-import { FetchParentsResult } from "./query"
+import { FetchParentsResultSchema } from "./query"
 
 /** 親取得レスポンススキーマ */
 export const GetParentsResponseScheme = z.object({
-  parents: FetchParentsResult,
+  parents: FetchParentsResultSchema,
 })
 export type GetParentsResponse = z.infer<typeof GetParentsResponseScheme>

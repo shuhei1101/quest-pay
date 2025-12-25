@@ -4,7 +4,7 @@ import { fetchFamilyQuest } from "../../family/query"
 import { DeleteFamilyQuestRequestScheme, GetFamilyQuestResponse, PutFamilyQuestRequestScheme } from "./scheme"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
-import { deleteFamilyQuest, updateFamilyQuest } from "../../family/db"
+import { deleteFamilyQuest, editFamilyQuest } from "../../family/service"
 import { devLog } from "@/app/(core)/util"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 
@@ -15,7 +15,7 @@ export async function GET(
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
-    const { supabase, userId } = await getAuthContext()
+    const { db, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -23,7 +23,7 @@ export async function GET(
       devLog("GetFamilyQuest.パラメータ.ID: ", params.id)
       
       // 家族クエストを取得する
-      const data = await fetchFamilyQuest({ supabase, questId })
+      const data = await fetchFamilyQuest({ db, questId })
       
       devLog("取得した家族クエスト: ", data)
   
@@ -38,7 +38,7 @@ export async function PUT(
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
-    const { supabase, userId } = await getAuthContext()
+    const { db, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -48,11 +48,11 @@ export async function PUT(
       const data = PutFamilyQuestRequestScheme.parse(body)
 
       // 家族IDを取得する
-      const userInfo = await fetchUserInfoByUserId({userId, supabase})
+      const userInfo = await fetchUserInfoByUserId({userId, db})
       if (!userInfo?.family_id) throw new ServerError("家族IDの取得に失敗しました。")
         
       // 家族クエストを更新する
-      await updateFamilyQuest({
+      await editFamilyQuest({
         params: {
           _quest_id: data.questId,
           _name: data.form.name,
@@ -64,7 +64,7 @@ export async function PUT(
           _category_id: 0
         },
         updated_at: data.updatedAt,
-        supabase,
+        db,
       })
       
       return NextResponse.json({})
@@ -78,7 +78,7 @@ export async function DELETE(
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
-    const { supabase, userId } = await getAuthContext()
+    const { db, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
       const params = await context.params
       const questId = params.id
@@ -89,7 +89,7 @@ export async function DELETE(
 
       // 家族クエストを削除する
       await deleteFamilyQuest({
-        supabase,
+        db,
         params: {
           _quest_id: data.questId
         },

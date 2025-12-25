@@ -1,4 +1,3 @@
-import { UserInfoViewScheme } from "@/app/api/users/view"
 import { z } from "zod"
 
 /** 子として参加リクエストスキーマ */

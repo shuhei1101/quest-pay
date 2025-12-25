@@ -7,6 +7,9 @@ import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { QuestDetailsEntityScheme } from "../entity"
 import { QuestChildrenEntityScheme } from "../child/entity"
+import { Db } from "@/index"
+import { familyQuests, FamilyQuestSelect, QuestSelect } from "@/drizzle/schema"
+import { and, eq } from "drizzle-orm"
 
 /** 取得結果の型 */
 export const FetchFamilyQuestResult = FamilyQuestViewScheme.extend({
@@ -20,13 +23,9 @@ export const FetchFamilyQuestsResult = z.array(FetchFamilyQuestResult)
 export type FetchFamilyQuestsResultType = z.infer<typeof FetchFamilyQuestsResult>
 
 /** 検索条件に一致する家族クエストを取得する */
-export const fetchFamilyQuests = async ({
-  params,
-  supabase,
-  familyId,
-}: {
+export const fetchFamilyQuests = async ({ params, db, familyId }: {
   params: FamilyQuestSearchParams,
-  supabase: SupabaseClient,
+  db: Db,
   familyId: string
 }) => {
   try {
@@ -73,32 +72,21 @@ export const fetchFamilyQuests = async ({
   }
 }
 
-/** 検索条件に一致する家族クエストを取得する */
-export const fetchFamilyQuest = async ({
-  supabase,
-  questId
-}: {
-  supabase: SupabaseClient,
-  questId: string
+/** 家族クエストを取得する */
+export const fetchFamilyQuest = async ({id, db}: {
+  id: FamilyQuestSelect["id"],
+  db: Db
 }) => {
   try {
     // データを取得する
-    const { data, error } = await supabase.from("family_quest_view")
-      .select(`
-          *,
-          quest_tags (*),
-          quest_details (*),
-          quest_children (*)
-        `, { count: 'exact' })
-      .eq("id", questId)
+    const data = await db
+      .select()
+      .from(familyQuests)
+      .where(eq(familyQuests.id, id))
 
-      if (error) throw error
-
-      devLog("fetchFamilyQuest.取得データ: ", data)
-
-      return data.length > 0 ? FetchFamilyQuestResult.parse(data[0]) : undefined
+    return data[0]
   } catch (error) {
     devLog("fetchFamilyQuest.取得例外: ", error)
-    throw new QueryError("家族クエストの読み込みに失敗しました。")
+    throw new QueryError("ユーザ情報の読み込みに失敗しました。")
   }
 }

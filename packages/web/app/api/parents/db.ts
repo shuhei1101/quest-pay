@@ -1,14 +1,14 @@
 import { ParentInsert, parents } from "@/drizzle/schema"
-import { Db, Tx } from "@/index"
+import { Db } from "@/index"
 
-export type InsertParentEntity = Omit<ParentInsert, "id" | "createdAt" | "updatedAt">
+export type InsertParentRecord = Omit<ParentInsert, "id" | "createdAt" | "updatedAt">
 
-export const insertParent = async ({db, entity}: {
-  db: Db | Tx,
-  entity: InsertParentEntity
+export const insertParent = async ({db, record}: {
+  db: Db,
+  record: InsertParentRecord
 }) => {
   // 親を挿入する
-  const [newParent] = await db.insert(parents).values(entity).returning({ id: parents.id })
+  const [newParent] = await db.insert(parents).values(record).returning({ id: parents.id })
 
   return {
     id: newParent.id
