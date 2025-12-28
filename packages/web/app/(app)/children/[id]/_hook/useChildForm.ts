@@ -49,10 +49,10 @@ export const useChildForm = ({childId}: {childId?: string}) => {
 
       // 子供フォームに変換する
       const fetchedChildForm: ChildFormType = {
-        name: child.name,
-        iconId: child.icon_id,
-        iconColor: child.icon_color,
-        birthday: child.birthday
+        name: child.profiles?.name || "",
+        iconId: child.icons?.id || 1,
+        iconColor: child.profiles?.iconColor || "",
+        birthday: child.profiles?.birthday || ""
       }
       // 取得フォームを状態にセットする
       setFetchedChild(fetchedChildForm)

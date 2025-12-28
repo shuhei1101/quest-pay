@@ -1,15 +1,14 @@
 "use client"
 
 import { useWindow } from "@/app/(core)/useConstants"
-import { FamilyQuestFilterType } from "@/app/api/quests/family/scheme"
-import { FamilyQuestColumns, FamilyQuestSort } from "@/app/api/quests/family/view"
+import { FamilyQuestSort, QuestColumn } from "@/drizzle/schema"
 import { ActionIcon, Button, ColorPicker, Input, Modal, Pill, PillsInput, Popover, SimpleGrid, Space, Tabs, Text } from "@mantine/core"
 import { IconArrowDown, IconArrowsSort, IconArrowUp, IconCheck, IconGrid3x3, IconWorld } from "@tabler/icons-react"
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
 
 const ColumnButton = ({name, column, leftSection, sort, onClick}: {
   name: string,
-  column: FamilyQuestColumns,
+  column: QuestColumn,
   leftSection: ReactNode,
   sort: FamilyQuestSort,
   onClick: () => void
@@ -48,7 +47,7 @@ export const FamilyQuestSortPopup = ({opened, close, currentSort, handleSearch}:
     close()
   }
 
-  const onColumnClick = (column: FamilyQuestColumns) => setSort(prev => ({
+  const onColumnClick = (column: QuestColumn) => setSort(prev => ({
       order: prev.column !== column ? "asc" : prev.order === "asc" ? "desc" : "asc",
       column: column
     }))
@@ -61,7 +60,6 @@ export const FamilyQuestSortPopup = ({opened, close, currentSort, handleSearch}:
             spacing="md"
           >
             <ColumnButton column="id" name="ID" leftSection={<IconGrid3x3 size={18}/>} onClick={() => onColumnClick("id")} sort={sort} />
-            <ColumnButton column="is_public" name="公開" leftSection={<IconWorld size={18}/>} onClick={() => onColumnClick("is_public")} sort={sort} />
             <ColumnButton column="name" name="クエスト名" leftSection={<IconArrowsSort size={18}/>} onClick={() => onColumnClick("name")} sort={sort} />
           </SimpleGrid>
           <div className="mb-5" />

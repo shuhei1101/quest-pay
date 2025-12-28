@@ -1,23 +1,23 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
-import { FamilyQuestSort } from "../../../api/quests/family/view"
 import { useFamilyQuests } from "./_hook/useFamilyQuests"
-import { PARENT_QUEST_URL, PARENT_QUESTS_URL, LOGIN_URL } from "@/app/(core)/endpoints"
-import { FamilyQuestFilterScheme, FamilyQuestFilterType } from "../../../api/quests/family/scheme"
 import { SimpleGrid, Tabs, Button, Text, Input, ActionIcon, Box, Paper } from "@mantine/core"
 import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"
 import { RenderIcon } from "../../icons/_components/RenderIcon"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
 import { FamilyQuestCardLayout } from "./_components/FamilyQuestCardLayout"
 import { devLog } from "@/app/(core)/util"
-import { FetchFamilyQuestsResultType } from "@/app/api/quests/family/query"
 import { IconArrowsSort, IconFilter, IconLogout, IconSearch } from "@tabler/icons-react"
 import { FamilyQuestFilterPopup } from "./_components/FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./_components/FamilyQuestSortPopup"
 import { useWindow } from "@/app/(core)/useConstants"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hook/useLoginUserInfo"
 import { useSwipeable } from "react-swipeable"
+import type { FamilyQuest } from "@/app/api/quests/family/query"
+import type { FamilyQuestSort } from "@/drizzle/schema"
+import { FamilyQuestFilterScheme, type FamilyQuestFilterType } from "@/app/api/quests/family/schema"
+import { FAMILY_QUEST_NEW_URL, FAMILY_QUEST_URL } from "@/app/(core)/endpoints"
 
 export const FamilyQuests = () => {
   const router = useRouter() 
@@ -34,7 +34,7 @@ export const FamilyQuests = () => {
   const [sortOpened, { open: openSort, close: closeSort }] = useDisclosure(false)
 
   /** 現在のクエスト一覧状態 */
-  const [displayQuests, setDisplayQuests] = useState<FetchFamilyQuestsResultType>([])
+  const [displayQuests, setDisplayQuests] = useState<FamilyQuest[]>([])
 
   /** クエストフィルター状態 */
   const [questFilter, setQuestFilter] = useState<FamilyQuestFilterType>({tags: []})
@@ -135,7 +135,7 @@ export const FamilyQuests = () => {
     const params = new URLSearchParams(paramsObj)
 
     // フィルターをURLに反映する
-    router.push(`${PARENT_QUESTS_URL}?${params.toString()}`)
+    router.push(`${FAMILY_QUEST_NEW_URL}?${params.toString()}`)
 
     // 検索フィルターを更新し、一覧を更新する
     setSearchFilter(questFilter)
@@ -152,7 +152,7 @@ export const FamilyQuests = () => {
   }, [fetchedQuests, page])
 
   /** クエスト選択時のハンドル */
-  const handleQuestId = (questId: string) => router.push(PARENT_QUEST_URL(questId))
+  const handleQuestId = (questId: string) => router.push(FAMILY_QUEST_URL(questId))
 
   /** IME入力状態 */
   const [isComposing, setIsComposing] = useState(false)
@@ -175,7 +175,7 @@ export const FamilyQuests = () => {
                 <Tabs.Tab
                   key={category.id}
                   value={category.name}
-                  leftSection={<RenderIcon iconName={category.icon_name} size={category.icon_size ?? undefined} iconColor={category.icon_color} />}
+                  leftSection={<RenderIcon iconName={category.iconName} size={category.iconSize ?? undefined} iconColor={category.iconColor} />}
                 >
                 {category.name}
                 </Tabs.Tab>
@@ -239,7 +239,7 @@ export const FamilyQuests = () => {
           spacing="md"
         >
             {displayQuests.map((quest, index) => (
-              <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+              <FamilyQuestCardLayout key={index} familyQuest={quest} onClick={handleQuestId} />
             ))}
           </SimpleGrid>
           <div ref={sentinelRef} style={{ height: 1 }} />
@@ -252,8 +252,8 @@ export const FamilyQuests = () => {
             cols={isMobile ? 1 : isTablet ? 2 : isDesktop ? 3 : 4}
             spacing="md"
           >
-              {displayQuests.filter((quest) => quest.category_id === category.id).map((quest, index) => (
-                <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+              {displayQuests.filter((familyQuest) => familyQuest.quest.categoryId === category.id).map((quest, index) => (
+                <FamilyQuestCardLayout key={index} familyQuest={quest} onClick={handleQuestId} />
               ))}
             </SimpleGrid>
           </Tabs.Panel>
@@ -265,8 +265,8 @@ export const FamilyQuests = () => {
           cols={isMobile ? 1 : isTablet ? 2 : isDesktop ? 3 : 4}
           spacing="md"
           >
-            {displayQuests.filter((quest) => quest.category_id == undefined).map((quest, index) => (
-              <FamilyQuestCardLayout key={index} quest={quest} onClick={handleQuestId} />
+            {displayQuests.filter((familyQuest) => familyQuest.quest.categoryId == undefined).map((quest, index) => (
+              <FamilyQuestCardLayout key={index} familyQuest={quest} onClick={handleQuestId} />
             ))}
           </SimpleGrid>
         </Tabs.Panel>

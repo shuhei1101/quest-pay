@@ -1,7 +1,7 @@
 import { CHILD_API_URL, CHILDREN_API_URL, PARENT_API_URL, PARENTS_API_URL } from "@/app/(core)/endpoints";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
-import { GetParentResponseScheme } from "./scheme";
+import type { GetParentResponse } from "./route";
 
 /** 親をGETする */
 export const getParent = async (parentId: string) => {
@@ -18,7 +18,7 @@ export const getParent = async (parentId: string) => {
     
   devLog("getParent.戻り値: ", data)
 
-  return GetParentResponseScheme.parse(data)
+  return data as GetParentResponse
 }
 
 /** 親をPOSTする */

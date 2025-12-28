@@ -1,6 +1,6 @@
 import { CHILD_JOIN_API_URL } from "@/app/(core)/endpoints";
 import { AppError } from "@/app/(core)/error/appError";
-import { JoinChildRequest, JoinChildRequestScheme } from "./scheme";
+import type { JoinChildRequest } from "./route";
 import { devLog } from "@/app/(core)/util";
 
 export const postJoinChild = async (request: JoinChildRequest) => {

@@ -1,19 +1,17 @@
 "use client"
 
-import { fetchQuestCategories } from "../../../../api/quests/category/query"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { ClientAuthError } from "@/app/(core)/error/appError"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/app/(core)/_supabase/client"
 import { devLog } from "@/app/(core)/util"
-import { createQuestCategoryById } from "../../../../api/quests/category/entity"
+import { createQuestCategoryById } from "@/app/api/quests/category/service"
+import { getQuestCategories } from "@/app/api/quests/category/client"
 
 
 export const useQuestCategories = () => {
   const router = useRouter()
-  const supabase = createClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ["questCategories"],
@@ -26,7 +24,7 @@ export const useQuestCategories = () => {
       // 取得できなかった場合
       if (fetchedQuestCategories.length == 0) {
         // クエストカテゴリを取得する
-        fetchedQuestCategories = await fetchQuestCategories({supabase})
+        fetchedQuestCategories = await getQuestCategories()
         if (!fetchedQuestCategories) {
           // フィードバックメッセージを表示する
           appStorage.feedbackMessage.set({ message: "クエストカテゴリのロードに失敗しました。再度ログインしてください。", type: "error" })

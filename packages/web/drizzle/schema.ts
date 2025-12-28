@@ -9,10 +9,9 @@ import {
   pgSchema,
   boolean,
 } from "drizzle-orm/pg-core"
-import { getTableColumns, asc, desc } from "drizzle-orm"
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
 import { sql, relations } from "drizzle-orm"
 import z from "zod"
+import { SortOrder } from "@/app/(core)/schema"
 
 /** 作成日時と更新日時のタイムスタンプ */
 export const timestamps = {
@@ -27,6 +26,7 @@ export const userType = pgEnum("user_type", [
   "parent",
   "child",
 ])
+export type UserType = (typeof userType.enumValues)[number]
 
 /** クエスト種別 */
 export const questType = pgEnum("quest_type", [
@@ -43,6 +43,7 @@ export const authUsers = authSchema.table("users", {
   /** ID */
   id: uuid("id").primaryKey().notNull(),
 })
+export type AuthUsersSelect = typeof authUsers.$inferSelect
 
 /** アイコンカテゴリテーブル（マスター） */
 export const iconCategories = pgTable("icon_categories", {
@@ -57,7 +58,8 @@ export const iconCategories = pgTable("icon_categories", {
   /** 表示順 */
   sortOrder: integer("sort_order").notNull().default(999), 
 })
-export const IconCategorySelectSchema = createSelectSchema(iconCategories)
+export type IconCategorySelect = typeof iconCategories.$inferSelect
+
 
 /** アイコンテーブル（マスター） */
 export const icons = pgTable("icons", {
@@ -70,7 +72,7 @@ export const icons = pgTable("icons", {
   /** アイコンサイズ */
   size: integer("size"), 
 })
-export const IconSelectSchema = createSelectSchema(icons)
+export type IconSelect = typeof icons.$inferSelect
 
 /** ファミリーテーブル */
 export const families = pgTable("families", {
@@ -93,9 +95,9 @@ export const families = pgTable("families", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export const FamilySelectSchema = createSelectSchema(families)
-export const FamilyInsertSchema = createInsertSchema(families)
-export type FamilyInsert = z.infer<typeof FamilyInsertSchema>
+export type FamilySelect = typeof families.$inferSelect
+export type FamilyInsert = Omit<typeof families.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type FamilyUpdate = Partial<FamilyInsert>
 
 /** プロフィールテーブル */
 export const profiles = pgTable("profiles", {
@@ -118,10 +120,28 @@ export const profiles = pgTable("profiles", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export const ProfileSelectSchema = createSelectSchema(profiles)
-export const ProfileInsertSchema = createInsertSchema(profiles)
-export const ProfileUpdateSchema = createUpdateSchema(profiles)
-export type ProfileInsert = z.infer<typeof ProfileInsertSchema>
+export type ProfileSelect = typeof profiles.$inferSelect
+export type ProfileInsert = Omit<typeof profiles.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type ProfileUpdate = Partial<ProfileInsert>
+
+export const profileRelations = relations(profiles, ({ one, many }) => ({
+  family: one(families, {
+    fields: [profiles.familyId],
+    references: [families.id],
+  }),
+  parent: one(parents, {
+    fields: [profiles.id],
+    references: [parents.profileId],
+  }),
+  child: one(children, {
+    fields: [profiles.id],
+    references: [children.profileId],
+  }),
+  icon: one(icons, {
+    fields: [profiles.iconId],
+    references: [icons.id],
+  }),
+}))
 
 /** 親テーブル */
 export const parents = pgTable("parents", {
@@ -134,9 +154,16 @@ export const parents = pgTable("parents", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export const ParentSelectSchema = createSelectSchema(parents)
-export const ParentInsertSchema = createInsertSchema(parents)
-export type ParentInsert = z.infer<typeof ParentInsertSchema>
+export type ParentSelect = typeof parents.$inferSelect
+export type ParentInsert = Omit<typeof parents.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type ParentUpdate = Partial<ParentInsert>
+
+export const parentRelations = relations(parents, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [parents.profileId],
+    references: [profiles.id],
+  }),
+}))
 
 /** 子供テーブル */
 export const children = pgTable("children", {
@@ -157,9 +184,13 @@ export const children = pgTable("children", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export const ChildSelectSchema = createSelectSchema(children)
-export const ChildInsertSchema = createInsertSchema(children)
-export type ChildInsert = z.infer<typeof ChildInsertSchema>
+export type ChildSelect = typeof children.$inferSelect
+export type ChildInsert = Omit<typeof children.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type ChildUpdate = Partial<ChildInsert>
+
+export const childRelations = relations(children, ({ many }) => ({
+  questChildren: many(questChildren),
+}))
 
 /** クエストカテゴリテーブル（マスター） */
 export const questCategories = pgTable("quest_categories", {
@@ -176,7 +207,7 @@ export const questCategories = pgTable("quest_categories", {
   /** 表示順 */
   sortOrder: integer("sort_order").notNull().default(999),
 })
-export const QuestCategorySelectSchema = createSelectSchema(questCategories)
+export type QuestCategorySelect = typeof questCategories.$inferSelect
 
 /** クエストテーブル */
 export const quests = pgTable("quests", {
@@ -207,13 +238,20 @@ export const quests = pgTable("quests", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export const QuestSelectSchema = createSelectSchema(quests)
-export const QuestInsertSchema = createInsertSchema(quests)
-export const QuestUpdateSchema = createUpdateSchema(quests)
-export type QuestSelect = z.infer<typeof QuestSelectSchema>
-export type QuestInsert = z.infer<typeof QuestInsertSchema>
-export type QuestUpdate = z.infer<typeof QuestUpdateSchema>
-export type QuestColumns = keyof QuestSelect;
+export type QuestSelect = typeof quests.$inferSelect
+export type QuestInsert = Omit<typeof quests.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type QuestUpdate = Omit<Partial<QuestInsert>, "type">
+export const questColumns = quests._.columns;
+export const QuestColumnSchema = z.enum(
+  Object.keys(questColumns) as [keyof typeof questColumns, ...(keyof typeof questColumns)[]]
+)
+export type QuestColumn = z.infer<typeof QuestColumnSchema>
+export type FamilyQuestSort = {column: QuestColumn, order: SortOrder}
+export const questRelations = relations(quests, ({ many, one }) => ({
+  details: many(questDetails),
+  tags: many(questTags),
+  icon: one(icons),
+}))
 
 
 /** ファミリークエストテーブル */
@@ -233,13 +271,16 @@ export const familyQuests = pgTable("family_quests", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export const FamilyQuestSelectSchema = createSelectSchema(familyQuests)
-export const FamilyQuestInsertSchema = createInsertSchema(familyQuests)
-export const FamilyQuestUpdateSchema = createUpdateSchema(familyQuests)
-export type FamilyQuestInsert = z.infer<typeof FamilyQuestInsertSchema>
-export type FamilyQuestSelect = z.infer<typeof FamilyQuestSelectSchema>
-export type FamilyQuestUpdate = z.infer<typeof FamilyQuestUpdateSchema>
-
+export type FamilyQuestSelect = typeof familyQuests.$inferSelect
+export type FamilyQuestInsert = Omit<typeof familyQuests.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type FamilyQuestUpdate = Omit<Partial<FamilyQuestInsert>, "questId">
+export const familyQuestRelations = relations(familyQuests, ({ many, one }) => ({
+  questChildren: many(questChildren),
+  quest: one(quests, {
+    fields: [familyQuests.questId],
+    references: [quests.id],
+  }),
+}))
 
 /** クエスト詳細テーブル */
 export const questDetails = pgTable("quest_details", {
@@ -264,13 +305,13 @@ export const questDetails = pgTable("quest_details", {
 }, (table) => [
   sql`PRIMARY KEY (${table.id}, ${table.questId}, ${table.level})`,
 ])
-export const QuestDetailSelectSchema = createSelectSchema(questDetails)
-export const QuestDetailInsertSchema = createInsertSchema(questDetails)
-export type QuestDetailInsert = z.infer<typeof QuestDetailInsertSchema>
-export type QuestDetailSelect = z.infer<typeof QuestDetailSelectSchema>
+export type QuestDetailSelect = typeof questDetails.$inferSelect
+export type QuestDetailInsert = Omit<typeof questDetails.$inferInsert, "id" | "createdAt" | "updatedAt">
 
 /** クエストタグテーブル */
 export const questTags = pgTable("quest_tags", {
+  /** ID */
+  id: uuid("id").notNull().default(sql`gen_random_uuid()`),
   /** クエストタグ名 */
   name: text("name").notNull().default(""),
   /** クエストID */
@@ -278,12 +319,10 @@ export const questTags = pgTable("quest_tags", {
   /** タイムスタンプ */
   ...timestamps,
 }, (table) => [
-  sql`PRIMARY KEY (${table.name}, ${table.questId})`,
+  sql`PRIMARY KEY (${table.id}, ${table.name}, ${table.questId})`,
 ])
-export const QuestTagSelectSchema = createSelectSchema(questTags)
-export const QuestTagInsertSchema = createInsertSchema(questTags)
-export type QuestTagsInsert = z.infer<typeof QuestTagInsertSchema>
-export type QuestTagSelect = z.infer<typeof QuestTagSelectSchema>
+export type QuestTagSelect = typeof questTags.$inferSelect
+export type QuestTagInsert = Omit<typeof questTags.$inferInsert, "id" | "createdAt" | "updatedAt">
 
 /** クエスト子供テーブル */
 export const questChildren = pgTable("quest_children", {
@@ -298,7 +337,15 @@ export const questChildren = pgTable("quest_children", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export const QuestChildSelectSchema = createSelectSchema(questChildren)
-export const QuestChildInsertSchema = createInsertSchema(questChildren)
-export type QuestChildrenInsert = z.infer<typeof QuestChildInsertSchema>
-export type QuestChildSelect = z.infer<typeof QuestChildSelectSchema>
+export type QuestChildrenSelect = typeof questChildren.$inferSelect
+export type QuestChildrenInsert = Omit<typeof questChildren.$inferInsert, "id" | "createdAt" | "updatedAt">
+export const questChildrenRelations = relations(questChildren, ({ one }) => ({
+  familyQuest: one(familyQuests, {
+    fields: [questChildren.familyQuestId],
+    references: [familyQuests.id],
+  }),
+  children: one(children, {
+    fields: [questChildren.childId],
+    references: [children.id],
+  }),
+}))

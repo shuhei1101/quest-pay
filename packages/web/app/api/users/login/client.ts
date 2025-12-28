@@ -1,7 +1,7 @@
 import { LOGIN_USER_API_URL } from "@/app/(core)/endpoints"
 import { AppError } from "@/app/(core)/error/appError"
-import { GetLoginUserResponseScheme } from "./scheme"
 import { devLog } from "@/app/(core)/util"
+import type { GetLoginUserResponse } from "./route"
 
 export const getLoginUser = async () => {
   devLog("getLoginUser.API呼び出し: ", {URL: LOGIN_USER_API_URL})
@@ -18,5 +18,5 @@ export const getLoginUser = async () => {
   }
   const data = await res.json()
 
-  return GetLoginUserResponseScheme.parse(data)
+  return data as GetLoginUserResponse
 }

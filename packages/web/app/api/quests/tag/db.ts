@@ -1,10 +1,10 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
-import { QuestSelect, questTags, QuestTagsInsert } from "@/drizzle/schema"
+import { QuestSelect, QuestTagInsert, questTags } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq } from "drizzle-orm"
 
-export type InsertQuestTagsRecord = Omit<QuestTagsInsert, "id" | "createdAt" | "updatedAt">
+export type InsertQuestTagsRecord = Omit<QuestTagInsert, "questId">
 
 /** クエストタグをバルクインサートする */
 export const insertQuestTags = async ({db, records, questId}: {

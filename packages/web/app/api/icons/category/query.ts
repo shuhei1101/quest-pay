@@ -1,11 +1,11 @@
 import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
-import { Db, Tx } from "@/index"
+import { Db } from "@/index"
 import { iconCategories } from "@/drizzle/schema"
 
 /** 全てのアイコンカテゴリを取得する */
 export const fetchIconCategories = async ({db}: {
-  db: Db | Tx
+  db: Db
 }) => {
   try {
     // データを取得する

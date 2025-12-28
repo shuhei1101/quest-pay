@@ -1,27 +1,21 @@
 import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
-import { Db, Tx } from "@/index"
-import { children, ChildSelectSchema, profiles, ProfileSelectSchema } from "@/drizzle/schema"
-import { and, eq } from "drizzle-orm"
-import z from "zod"
+import { Db } from "@/index"
+import { children, icons, profiles } from "@/drizzle/schema"
+import { eq } from "drizzle-orm"
 
-export const FetchChildResultSchema = z.object({
-  children: ChildSelectSchema,
-  profiles: ProfileSelectSchema.nullable()
-})
-export const FetchChildrenResultSchema = z.array(FetchChildResultSchema)
-export type FetchChildrenResult = z.infer<typeof FetchChildrenResultSchema>
 /** 家族IDに一致する子供を取得する */
 export const fetchChildrenByFamilyId = async ({ db, familyId }: {
-  db: Db | Tx,
+  db: Db,
   familyId: string
-}): Promise<FetchChildrenResult> => {
+}) => {
   try {
     // データを取得する
     const data = await db
       .select()
       .from(children)
       .leftJoin(profiles, eq(children.profileId, profiles.id))
+      .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(profiles.familyId, familyId))
 
     devLog("fetchChildrenByFamilyId.取得データ: ", data)
@@ -33,9 +27,11 @@ export const fetchChildrenByFamilyId = async ({ db, familyId }: {
   }
 }
 
+export type Child = Awaited<ReturnType<typeof fetchChild>>
+
 /** 子供IDに一致する子供を取得する */
 export const fetchChild = async ({ db,  childId }: {
-  db: Db | Tx,
+  db: Db,
   childId: string
 }) => {
   try {
@@ -44,6 +40,7 @@ export const fetchChild = async ({ db,  childId }: {
       .select()
       .from(children)
       .leftJoin(profiles, eq(children.profileId, profiles.id))
+      .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(children.id, childId))
 
     devLog("fetchChild.取得データ: ", data)
@@ -57,7 +54,7 @@ export const fetchChild = async ({ db,  childId }: {
 
 /** 招待コードに紐づく子供を取得する */
 export const fetchChildByInviteCode = async ({db, invite_code}: {
-  db: Db | Tx,
+  db: Db,
   invite_code: string
 }) => {
   try {

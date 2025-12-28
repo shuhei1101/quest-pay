@@ -1,7 +1,7 @@
 import { ICON_CATEGORIES_API_URL } from "@/app/(core)/endpoints";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
-import { GetIconCategoriesResponseScheme } from "./scheme";
+import type { GetIconCategoriesResponse } from "./route";
 
 /** 家族クエストをGETする */
 export const getIconCategories = async () => {
@@ -20,5 +20,5 @@ export const getIconCategories = async () => {
 
   devLog("getIconCategories.戻り値: ", data)
 
-  return GetIconCategoriesResponseScheme.parse(data)
+  return data as GetIconCategoriesResponse
 }

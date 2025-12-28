@@ -4,17 +4,20 @@ import { FamilyQuestSelect, questChildren, QuestChildrenInsert, QuestSelect } fr
 import { Db } from "@/index"
 import { eq } from "drizzle-orm"
 
-export type InsertQuestChildrenRecord = Omit<QuestChildrenInsert, "id" | "createdAt" | "updatedAt">
+export type InsertQuestChildrenRecord = Omit<QuestChildrenInsert, "familyQuestId">
 
 /** クエスト対象の子供をバルクインサートする */
 export const insertQuestChildren = async ({db, records, familyQuestId}: {
   db: Db,
-  records: InsertQuestChildrenRecord[]
+  records: InsertQuestChildrenRecord[],
   familyQuestId: FamilyQuestSelect["id"]
 }) => {
   try {
     // クエスト対象の子供を挿入する
-    await db.insert(questChildren).values(records.map(record => ({ ...record, familyQuestId }))).execute()
+    await db.insert(questChildren).values(records.map(record => ({ 
+      ...record,
+      familyQuestId
+     }))).execute()
   } catch (error) {
     devLog("insertQuestChildren error:", error)
     throw new DatabaseError("クエスト対象の子供の登録に失敗しました。")

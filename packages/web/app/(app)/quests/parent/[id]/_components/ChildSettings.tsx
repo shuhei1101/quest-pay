@@ -37,7 +37,7 @@ export const ChildSettings = ({watch, setValue}: {
       </Text>
 
       {children.map((child) => (
-        <Paper key={child.id} p="md" withBorder>
+        <Paper key={child.children.id} p="md" withBorder>
           <Group justify="space-between" align="center">
             {/* 子供のアイコンと名前 */}
             <Group gap="md">
@@ -45,17 +45,17 @@ export const ChildSettings = ({watch, setValue}: {
                 size="lg" 
                 radius="xl" 
                 variant="filled"
-                style={{ backgroundColor: child.icon_color }}
+                style={{ backgroundColor: child.profiles?.iconColor }}
               >
                 <IconUser size={20} />
               </ActionIcon>
               
               <Anchor 
-                href={`/children/${child.id}`} 
+                href={`/children/${child.children.id}`} 
                 size="md"
                 fw={500}
               >
-                {child.name}
+                {child.profiles?.name}
               </Anchor>
             </Group>
 
@@ -63,8 +63,8 @@ export const ChildSettings = ({watch, setValue}: {
             <Switch 
               label="公開"
               labelPosition="left"
-              checked={watch().childIds.includes(child.id)}
-              onChange={(e) => toggleChild(child.id, e.currentTarget.checked)}
+              checked={watch().childIds.includes(child.children.id)}
+              onChange={(e) => toggleChild(child.children.id, e.currentTarget.checked)}
             />
           </Group>
         </Paper>

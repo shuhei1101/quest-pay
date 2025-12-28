@@ -4,7 +4,7 @@ import { QuestDetailInsert, questDetails, QuestSelect } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq } from "drizzle-orm"
 
-export type InsertQuestDetailRecord = Omit<QuestDetailInsert, "id" | "createdAt" | "updatedAt" | "questId">
+export type InsertQuestDetailRecord = Omit<QuestDetailInsert, "questId">
 
 /** クエスト詳細をバルクインサートする */
 export const insertQuestDetails = async ({db, records, questId}: {

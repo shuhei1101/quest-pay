@@ -33,7 +33,7 @@ export const ChildView = ( params: {
   /** 子供情報が取得できて、user_idが存在しない場合 */
   useEffect(() => {
     if (!child) return
-    if (!child.user_id) {
+    if (!child.profiles?.userId) {
       // 通知ポップアップを表示する
       openInviteCode()
     }
@@ -47,7 +47,7 @@ export const ChildView = ( params: {
         {/* トップバー */}
         <div className="flex items-center gap-3 justify-end">
           {/* 招待コードボタン（user_idが存在しない場合のみ表示） */}
-          {child?.user_id ?? (
+          {child?.profiles?.userId ?? (
             <Button 
               variant="outline"
               onClick={openInviteCode}
@@ -68,12 +68,12 @@ export const ChildView = ( params: {
           {/* アイコン、子供名 */}
           <div className="flex">
             {/* アイコン */}
-            <RenderIcon iconName={child?.icon_name} />
+            <RenderIcon iconName={child?.icons?.name} />
             {/* 子供名 */}
-            <Text>{child?.name}</Text>
+            <Text>{child?.profiles?.name}</Text>
           </div>
           {/* 誕生日 */}
-          <Text>{child?.birthday}</Text>
+          <Text>{child?.profiles?.birthday}</Text>
           {/* 年齢 */}
           
           
@@ -81,11 +81,11 @@ export const ChildView = ( params: {
       </div>
 
       {/* 招待コードポップアップ */}
-      {child?.invite_code && (
+      {child?.children.inviteCode && (
         <InviteCodePopup 
           opened={inviteCodeOpened}
           close={closeInviteCode}
-          inviteCode={child.invite_code}
+          inviteCode={child.children.inviteCode}
           message="子供の端末でこの招待コードを入力して、アカウントと紐づけてください"
         />
       )}

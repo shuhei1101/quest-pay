@@ -1,15 +1,14 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
-import { QuestDetailInsert, questDetails, QuestInsert, quests, QuestUpdate } from "@/drizzle/schema"
+import { QuestInsert, quests, QuestUpdate } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { questExclusiveControl } from "./dbHelper"
 import { eq } from "drizzle-orm"
 
 /** クエストを挿入する */
-export type InsertQuestRecord = Omit<QuestInsert, "id" | "createdAt" | "updatedAt">
 export const insertQuest = async ({db, record}: {
   db: Db,
-  record: InsertQuestRecord
+  record: QuestInsert
 }) => {
   try {
     // クエストを挿入する
@@ -24,10 +23,9 @@ export const insertQuest = async ({db, record}: {
 }
 
 /** クエストを更新する */
-export type UpdateQuestRecord = Partial<Omit<QuestUpdate, "createdAt">>
 export const updateQuest = async ({db, record, id, updatedAt}: {
   db: Db,
-  record: UpdateQuestRecord
+  record: QuestUpdate
   id: string
   updatedAt: string
 }) => {
@@ -47,5 +45,30 @@ export const updateQuest = async ({db, record, id, updatedAt}: {
   } catch (error) {
     devLog("updateQuest error:", error)
     throw new DatabaseError("クエストの更新に失敗しました。")
+  }
+}
+
+/** クエストを削除する */
+export const deleteQuest = async ({db, id, updatedAt}: {
+  db: Db,
+  id: string
+  updatedAt: string
+}) => {
+  try {
+    // 存在チェックを行う
+    const beforeQuest = await questExclusiveControl.existsCheck({id, db})
+
+    // 更新日による排他チェックを行う
+    await questExclusiveControl.hasAlreadyUpdated({
+      beforeDate: beforeQuest.updatedAt,
+      afterDate: updatedAt,
+    })
+
+    // クエストを削除する
+    await db.delete(quests).where(eq(quests.id, id)).execute()
+    
+  } catch (error) {
+    devLog("deleteQuest error:", error)
+    throw new DatabaseError("クエストの削除に失敗しました。")
   }
 }

@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchIcons } from "./query"
-import { GetIconsResponse } from "./scheme"
 
 /** アイコンを取得する */
+export type GetIconsResponse = {
+  icons: Awaited<ReturnType<typeof fetchIcons>>
+}
+
 export async function GET(
   req: NextRequest,
 ) {

@@ -4,9 +4,9 @@ import { ActionIcon, Button, ColorPicker, Input, Modal, Popover, Space, Tabs, Te
 import { useEffect, useState } from "react"
 import { RenderIcon } from "./RenderIcon"
 import { useIcons } from "../_hooks/useIcons"
-import { IconEntity } from "../../../api/icons/entity"
 import { devLog } from "@/app/(core)/util"
 import { useIconCategories } from "../category/_hook/useIconCategories"
+import { IconSelect } from "@/drizzle/schema"
 
 /** アイコン選択ポップアップ */
 export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor, currentColor}: {
@@ -37,7 +37,7 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
   }, [opened])
 
   /** アイコン選択時のハンドル */
-  const onIconSelect = (icon: IconEntity) => {
+  const onIconSelect = (icon: IconSelect) => {
     setSelectedIconId(icon.id)
   }
   
@@ -65,7 +65,7 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
                 <Tabs.Tab
                   key={category.name}
                   value={category.name}
-                  leftSection={<RenderIcon iconName={category.icon_name} iconSize={category.icon_size} />}
+                  leftSection={<RenderIcon iconName={category.iconName} iconSize={category.iconSize} />}
                 >
                 {category.name}
                 </Tabs.Tab>
@@ -77,7 +77,7 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
         {iconCategories.map((category) => 
           <Tabs.Panel value={category.name} key={category.id}>
             <div className="flex flex-wrap justify-start gap-3 m-3">
-              {icons.filter((icon) => icon.category_id === category.id).map((icon) => (
+              {icons.filter((icon) => icon.categoryId === category.id).map((icon) => (
                 <ActionIcon key={icon.id} variant={selectedIconId === icon.id ? "outline" : "white"} radius="sm" onClick={() => onIconSelect(icon)}>
                   <RenderIcon iconName={icon.name} iconColor={selectedColor} />
                 </ActionIcon>

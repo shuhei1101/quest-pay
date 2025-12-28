@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { ClientAuthError } from "@/app/(core)/error/appError"
-import { createClient } from "@/app/(core)/_supabase/client"
 import { devLog } from "@/app/(core)/util"
 import { getIconCategories } from "@/app/api/icons/category/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"
@@ -13,7 +12,6 @@ import { handleAppError } from "@/app/(core)/error/handler/client"
 
 export const useIconCategories = () => {
   const router = useRouter()
-  const supabase = createClient()
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["iconCategories"],

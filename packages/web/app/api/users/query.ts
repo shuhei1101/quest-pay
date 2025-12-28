@@ -2,7 +2,7 @@ import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { children, families, parents, profiles } from "@/drizzle/schema"
-import { and, eq } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 
 /** プロフィールを取得する */
 export const fetchProfile = async ({id, db}: {
@@ -23,6 +23,7 @@ export const fetchProfile = async ({id, db}: {
   }
 }
 
+export type UserInfo = Awaited<ReturnType<typeof fetchUserInfoByUserId>>
 
 /** ユーザIDに紐づくユーザ情報を取得する */
 export const fetchUserInfoByUserId = async ({userId, db}: {
@@ -31,17 +32,18 @@ export const fetchUserInfoByUserId = async ({userId, db}: {
 }) => {
   try {
     // データを取得する
-    const data = await db
-      .select()
-      .from(profiles)
-      .where(eq(profiles.userId, userId))
-      .leftJoin(children, eq(children.profileId, profiles.id))
-      .leftJoin(parents, eq(parents.profileId, profiles.id))
-      .leftJoin(families, eq(families.id, profiles.familyId))
+    const data = await db.query.profiles.findFirst({
+      where: eq(profiles.userId, userId),
+      with: {
+        child: true,
+        parent: true,
+        family: true,
+      }
+    })
 
     devLog("fetchUserInfoByUserId.取得データ: ", data)
 
-    return data[0]
+    return data
   } catch (error) {
     devLog("fetchUserInfoByUserId.取得例外: ", error)
     throw new QueryError("ユーザ情報の読み込みに失敗しました。")

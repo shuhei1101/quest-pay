@@ -3,11 +3,13 @@ import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchParentsByFamilyId } from "./query"
-import { GetParentsResponse } from "./scheme"
 import { fetchUserInfoByUserId } from "../users/query"
 
 
 /** 家族の親を取得する */
+export type GetParentsResponse = {
+  parents: Awaited<ReturnType<typeof fetchParentsByFamilyId>>
+}
 export async function GET(
   req: NextRequest,
 ) {
@@ -16,10 +18,10 @@ export async function GET(
     const { db, userId } = await getAuthContext()
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.families?.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.family?.id) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 親を取得する
-      const result = await fetchParentsByFamilyId({db, familyId: userInfo.families.id })
+      const result = await fetchParentsByFamilyId({db, familyId: userInfo.family.id })
   
       return NextResponse.json({parents: result} as GetParentsResponse)
     })

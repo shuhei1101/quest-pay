@@ -1,21 +1,22 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
 import { Db } from "@/index"
-import { insertQuest, InsertQuestRecord, updateQuest, UpdateQuestRecord } from "../db"
-import { insertFamilyQuest, InsertFamilyQuestRecord, updateFamilyQuest, UpdateFamilyQuestRecord } from "./db"
+import { deleteQuest, insertQuest, updateQuest } from "../db"
+import { deleteFamilyQuest, insertFamilyQuest, InsertFamilyQuestRecord, updateFamilyQuest, UpdateFamilyQuestRecord } from "./db"
 import { deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord } from "../child/db"
 import { deleteQuestTags, insertQuestTags, InsertQuestTagsRecord } from "../tag/db"
 import { deleteQuestDetails, InsertQuestDetailRecord, insertQuestDetails } from "../detail/db"
-import { FamilyQuestSelect, QuestSelect } from "@/drizzle/schema"
+import { FamilyQuestSelect, FamilyQuestUpdate, QuestInsert, QuestSelect, QuestUpdate } from "@/drizzle/schema"
+import { fetchFamilyQuest } from "./query"
 
 /** 家族クエストを登録する */
 export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest, questChildren, questTags}: {
   db: Db
-  quests: Omit<InsertQuestRecord, "type">
+  quests: Omit<QuestInsert, "type">
   questDetails: InsertQuestDetailRecord[]
-  questChildren: InsertQuestChildrenRecord[]
-  questTags: InsertQuestTagsRecord[]
-  familyQuest: Omit<InsertFamilyQuestRecord, "questId">
+  questChildren: Omit<InsertQuestChildrenRecord, "familyQuestId">[]
+  questTags: Omit<InsertQuestTagsRecord, "questId">[]
+  familyQuest: InsertFamilyQuestRecord
 }) => {
   try {
     return await db.transaction(async (tx) => {
@@ -30,11 +31,7 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
       await insertQuestDetails({db: tx, records: questDetails, questId})
 
       // 家族クエストを挿入する
-      const { id: familyQuestId } = await insertFamilyQuest({db: tx, record: {
-          questId,
-          ...familyQuest,
-        }
-      })
+      const { id: familyQuestId } = await insertFamilyQuest({db: tx, record: familyQuest, questId })
 
       // クエスト対象の子供を挿入する
       await insertQuestChildren({db: tx, records: questChildren, familyQuestId})
@@ -54,7 +51,7 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
 export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, questChildren, questTags}: {
   db: Db
   quest: {
-    record: UpdateQuestRecord
+    record: QuestUpdate
     id: QuestSelect["id"]
     updatedAt: QuestSelect["updatedAt"]
   }
@@ -108,8 +105,39 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
 }
 
 /** クエストを削除する */
-export const deleteFamilyQuest = async ({}: {
-
+export const removeFamilyQuest = async ({db, familyQuest, quest}: {
+  db: Db
+  familyQuest: {
+    id: FamilyQuestSelect["id"]
+    updatedAt: FamilyQuestSelect["updatedAt"]
+  }
+  quest: {
+    updatedAt: QuestSelect["updatedAt"]
+  }
 }) => {
+  try {
+    return await db.transaction(async (tx) => {
+      // 家族クエストに紐づくクエストを取得する
+      const currentFamilyQuest = await fetchFamilyQuest({ db: tx, id: familyQuest.id })
 
+      // 家族クエストを削除する
+      await deleteFamilyQuest({db: tx, id: familyQuest.id, updatedAt: familyQuest.updatedAt})
+
+      // タグを削除する
+      await deleteQuestTags({db: tx, questId: currentFamilyQuest.questId})
+
+      // クエスト対象の子供を削除する
+      await deleteQuestChildren({db: tx, familyQuestId: familyQuest.id})
+
+      // 詳細を削除する
+      await deleteQuestDetails({db: tx, questId: currentFamilyQuest.questId})
+
+      // クエストを削除する
+      await deleteQuest({db: tx, id: currentFamilyQuest.questId, updatedAt: quest.updatedAt})
+    })
+
+  } catch (error) {
+    devLog("deleteFamilyQuest error:", error)
+    throw new DatabaseError("家族クエストの削除に失敗しました。")
+  }
 }

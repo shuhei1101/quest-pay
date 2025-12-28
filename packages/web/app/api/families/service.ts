@@ -3,11 +3,11 @@ import { devLog } from "@/app/(core)/util"
 import { insertFamily, InsertFamilyRecord } from "./db"
 import { insertParentProfile, InsertParentProfileRecord } from "../users/db"
 import { insertParent, InsertParentRecord } from "../parents/db"
-import { Db, Tx } from "@/index"
+import { Db } from "@/index"
 
 /** 家族と親を挿入する */
 export const registerFamilyAndParent = async ({db, family, profile, parent}: {
-  db: Tx | Db,
+  db: Db,
   family: InsertFamilyRecord,
   profile: Omit<InsertParentProfileRecord, "familyId">,
   parent: Omit<InsertParentRecord, "profileId">

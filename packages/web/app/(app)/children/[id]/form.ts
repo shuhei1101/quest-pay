@@ -1,10 +1,9 @@
 import { z } from "zod"
-import { ProfileInsertSchema } from "@/drizzle/schema"
 import { BirthdaySchema, IconColorSchema, IconIdSchema } from "@/app/(core)/schema"
 
 /** 子供フォームスキーマ */
 export const ChildFormSchema = z.object({
-  name: ProfileInsertSchema.shape.name.nonempty({error: "氏名は必須です。"}),
+  name: z.string({error: "氏名は必須です。"}),
   iconId: IconIdSchema,
   iconColor: IconColorSchema,
   birthday: BirthdaySchema,

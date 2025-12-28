@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
-import { PostFamilyRequestScheme, PostFamilyResponse } from "./scheme"
 import { registerFamilyAndParent } from "./service"
 import { generateUniqueInviteCode } from "./invite/service"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
+import { FamilyRegisterFormSchema, FamilyRegisterFormType } from "@/app/(app)/families/new/form"
+import z from "zod"
 
 /** 家族を登録する */
+export const PostFamilyRequestSchema = z.object({
+  form: FamilyRegisterFormSchema
+})
+export type PostFamilyRequest = z.infer<typeof PostFamilyRequestSchema>
 export async function POST(
   request: NextRequest,
 ) {
@@ -14,8 +19,7 @@ export async function POST(
     const { db, userId } = await getAuthContext()
       // bodyから家族を取得する
       const body = await request.json()
-      const data  = PostFamilyRequestScheme.parse(body)
-
+      const data = PostFamilyRequestSchema.parse(body)
       // 招待コードを生成する
       const inviteCode = await generateUniqueInviteCode({db})
         

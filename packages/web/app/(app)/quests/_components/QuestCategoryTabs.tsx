@@ -3,7 +3,7 @@ import { Tabs } from "@mantine/core"
 import { RenderIcon } from "../../icons/_components/RenderIcon"
 import { useSwipeable } from "react-swipeable"
 import { ReactNode } from "react"
-import { QuestCategoryEntity } from "@/app/api/quests/category/entity"
+import { QuestCategorySelect } from "@/drizzle/schema"
 
 const TAB_ALL = "すべて"
 const TAB_OTHERS = "その他"
@@ -15,7 +15,7 @@ export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children,
   /** タブ変更時のハンドル */
   onTabChange: (value: string | null) => void
   /** クエストカテゴリ一覧 */
-  categories: QuestCategoryEntity[]
+  categories: QuestCategorySelect[]
   /** タブパネルの内容 */
   children: ReactNode
   /** スワイプ操作を有効にするか */
@@ -68,9 +68,9 @@ export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children,
                 value={category.name}
                 leftSection={
                   <RenderIcon 
-                    iconName={category.icon_name} 
-                    size={category.icon_size ?? undefined} 
-                    iconColor={category.icon_color} 
+                    iconName={category.iconName} 
+                    size={category.iconSize ?? undefined} 
+                    iconColor={category.iconColor} 
                   />
                 }
               >

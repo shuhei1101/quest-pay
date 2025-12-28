@@ -1,11 +1,11 @@
 import { ServerError } from "@/app/(core)/error/appError"
 import { generateInviteCode } from "@/app/(core)/util"
 import { fetchChildByInviteCode } from "../query"
-import { Db, Tx } from "@/index"
+import { Db } from "@/index"
 
 /** 使用可能な家族招待コードを生成する */
 export const generateUniqueInviteCode = async ({db}: {
-  db: Db | Tx,
+  db: Db,
 }) => {
   for (let i = 0; i < 10; i++) {
     // 招待コードを生成する
