@@ -2,13 +2,11 @@
 import { SimpleGrid, Tabs } from "@mantine/core"
 import { useWindow } from "@/app/(core)/useConstants"
 import { ReactNode } from "react"
-import { QuestCategoryById } from "@/app/api/quests/category/entity"
-import { QuestEntity } from "@/app/api/quests/entity"
+import { QuestSelect } from "@/drizzle/schema"
+import { QuestCategoryById } from "@/app/api/quests/category/service"
 
 type QuestItem = {
-  id: QuestEntity["id"]
-  category_id?: QuestEntity["category_id"]
-  [key: string]: any
+  quest: QuestSelect
 }
 
 type QuestGridProps<T extends QuestItem> = {
@@ -53,14 +51,14 @@ export const QuestGrid = <T extends QuestItem>({
     }
     
     if (tabValue === "その他") {
-      return quests.filter((quest) => quest.category_id === undefined)
+      return quests.filter((quest) => quest.quest.categoryId === null)
     }
     
     // カテゴリ名からIDを逆引き
     const categoryId = Object.entries(questCategoryById ?? {})
       .find(([_, category]) => category.name === tabValue)?.[0]
     
-    return quests.filter((quest) => quest.category_id === categoryId)
+    return quests.filter((quest) => String(quest.quest.categoryId) === categoryId)
   }
 
   const filteredQuests = getFilteredQuests()

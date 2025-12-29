@@ -1,40 +1,49 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
-import { PostFamilyRequestScheme, PostFamilyResponse } from "./scheme"
-import { insertFamilyAndParent } from "./db"
+import { registerFamilyAndParent } from "./service"
 import { generateUniqueInviteCode } from "./invite/service"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
+import { FamilyRegisterFormSchema, FamilyRegisterFormType } from "@/app/(app)/families/new/form"
+import z from "zod"
 
 /** 家族を登録する */
+export const PostFamilyRequestSchema = z.object({
+  form: FamilyRegisterFormSchema
+})
+export type PostFamilyRequest = z.infer<typeof PostFamilyRequestSchema>
 export async function POST(
   request: NextRequest,
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
-    const { supabase, userId } = await getAuthContext()
+    const { db, userId } = await getAuthContext()
       // bodyから家族を取得する
       const body = await request.json()
-      const data  = PostFamilyRequestScheme.parse(body)
-
+      const data = PostFamilyRequestSchema.parse(body)
       // 招待コードを生成する
-      const inviteCode = await generateUniqueInviteCode({supabase})
+      const inviteCode = await generateUniqueInviteCode({db})
         
       // 家族を登録する
-      await insertFamilyAndParent({
-        params: {
-          _user_id: userId,
-          _display_id: data.form.displayId,
-          _local_name: data.form.localName,
-          _online_name: data.form.onlineName,
-          _family_icon_id: data.form.familyIconId,
-          _family_icon_color: data.form.familyIconColor,
-          _family_invite_code: inviteCode,
-          _parent_name: data.form.parentName,
-          _parent_icon_id: data.form.parentIconId,
-          _parent_icon_color: data.form.parentIconColor,
-          _parent_birthday: data.form.parentBirthday,
+      await registerFamilyAndParent({
+        db,
+        family: {
+          displayId: data.form.displayId,
+          inviteCode: inviteCode,
+          iconColor: data.form.familyIconColor,
+          iconId: data.form.familyIconId,
+          localName: data.form.localName,
+          onlineName: data.form.onlineName,
         },
-        supabase: supabase,
+        profile: {
+          userId: userId,
+          birthday: data.form.parentBirthday,
+          name: data.form.parentName,
+          iconId: data.form.parentIconId,
+          iconColor: data.form.parentIconColor,
+        },
+        parent: {
+          inviteCode: inviteCode,
+        }
       })
       return NextResponse.json({})
     })

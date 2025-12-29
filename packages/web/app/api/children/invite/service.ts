@@ -1,17 +1,17 @@
-import { SupabaseClient } from "@supabase/supabase-js"
 import { ServerError } from "@/app/(core)/error/appError"
 import { generateInviteCode } from "@/app/(core)/util"
 import { fetchChildByInviteCode } from "../query"
+import { Db } from "@/index"
 
 /** 使用可能な家族招待コードを生成する */
-export const generateUniqueInviteCode = async ({supabase}: {
-  supabase: SupabaseClient,
+export const generateUniqueInviteCode = async ({db}: {
+  db: Db,
 }) => {
   for (let i = 0; i < 10; i++) {
     // 招待コードを生成する
     const code = generateInviteCode()
 
-    const child = await fetchChildByInviteCode({invite_code: code, supabase})
+    const child = await fetchChildByInviteCode({invite_code: code, db})
 
     // 招待コードが存在していない場合
     if (child === null) {

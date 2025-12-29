@@ -27,7 +27,7 @@ export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
               <ParentCardLayout 
                 key={ index } 
                 parent={ parent } 
-                isSelected={selectedId === parent.id}
+                isSelected={selectedId === parent.parents.id}
                 onClick={(parentId) => {
                   router.push(FAMILIES_MEMBERS_PARENT_VIEW_URL(parentId)) // 親閲覧画面へ遷移する
                 }}
@@ -42,7 +42,7 @@ export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
               <ChildCardLayout 
                 key={ index } 
                 child={ child } 
-                isSelected={selectedId === child.id}
+                isSelected={selectedId === child.children.id}
                 onClick={(childId) => {
                   router.push(FAMILIES_MEMBERS_CHILD_VIEW_URL(childId)) // 子供閲覧画面へ遷移する
                 }}

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { FamilyQuestFormType } from "../form"
 import toast from "react-hot-toast"
-import { putFamilyQuest } from "@/app/api/quests/[id]/family/client"
+import { putFamilyQuest } from "@/app/api/quests/family/[id]/client"
 import { ClientValueError } from "@/app/(core)/error/appError"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 
@@ -15,14 +15,16 @@ export const useUpdateFamilyQuest = () => {
 
   /** 更新処理 */
   const mutation = useMutation({
-    mutationFn: ({form, questId, updatedAt}: {form: FamilyQuestFormType, questId: string, updatedAt: string}) => putFamilyQuest({
-      form,
-      questId,
-      updatedAt
+    mutationFn: ({form, familyQuestId, updatedAt}: {form: FamilyQuestFormType, familyQuestId: string, updatedAt: string}) => putFamilyQuest({
+      request: {
+        form,
+        updatedAt
+      },
+      familyQuestId
     }),
     onSuccess: (_data, variables) => {
       // 家族クエストをリフレッシュする
-      queryClient.invalidateQueries({ queryKey: ["familyQuest", variables.questId] })
+      queryClient.invalidateQueries({ queryKey: ["familyQuest", variables.familyQuestId] })
       // フィードバックメッセージを表示する
       toast('クエストを更新しました', {duration: 1500})
     },
@@ -30,10 +32,10 @@ export const useUpdateFamilyQuest = () => {
   })
 
   /** 更新ハンドル */
-  const handleUpdate = ({form, questId, updatedAt}: {form: FamilyQuestFormType, questId?: string, updatedAt?: string}) => {
-    if (!questId || !updatedAt) throw new ClientValueError()
+  const handleUpdate = ({form, familyQuestId, updatedAt}: {form: FamilyQuestFormType, familyQuestId?: string, updatedAt?: string}) => {
+    if (!familyQuestId || !updatedAt) throw new ClientValueError()
     if (!window.confirm('更新します。よろしいですか？')) return
-    mutation.mutate({form, questId, updatedAt})
+    mutation.mutate({form, familyQuestId, updatedAt})
   }
 
   return {

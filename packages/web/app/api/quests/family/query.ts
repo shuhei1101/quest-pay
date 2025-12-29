@@ -1,104 +1,123 @@
-import { SupabaseClient } from "@supabase/supabase-js"
-import { z } from "zod"
-import { FamilyQuestViewScheme } from "./view"
-import { QuestTagEntityScheme } from "@/app/(app)/quests/tag/entity"
-import { FamilyQuestSearchParams, GetFamilyQuestsResponse } from "./scheme"
-import { devLog } from "@/app/(core)/util"
+import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
-import { QuestDetailsEntityScheme } from "../entity"
-import { QuestChildrenEntityScheme } from "../child/entity"
+import { Db } from "@/index"
+import { familyQuests, FamilyQuestSelect, icons, IconSelect, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect } from "@/drizzle/schema"
+import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
+import { FamilyQuestSearchParams } from "./route"
 
-/** 取得結果の型 */
-export const FetchFamilyQuestResult = FamilyQuestViewScheme.extend({
-  quest_tags: z.array(QuestTagEntityScheme),
-  quest_details: z.array(QuestDetailsEntityScheme),
-  quest_children: z.array(QuestChildrenEntityScheme),
-})
-export type FetchFamilyQuestResultType = z.infer<typeof FetchFamilyQuestResult>
+export type FamilyQuests = Awaited<ReturnType<typeof fetchFamilyQuests>>
 
-export const FetchFamilyQuestsResult = z.array(FetchFamilyQuestResult)
-export type FetchFamilyQuestsResultType = z.infer<typeof FetchFamilyQuestsResult>
+export type FetchFamilyQuestsItem = {
+  familyQuest: FamilyQuestSelect
+  quest: QuestSelect
+  tags: QuestTagSelect[]
+  details: QuestDetailSelect[]
+  icon: IconSelect | null
+}
 
 /** 検索条件に一致する家族クエストを取得する */
-export const fetchFamilyQuests = async ({
-  params,
-  supabase,
-  familyId,
-}: {
+export const fetchFamilyQuests = async ({ params, db, familyId }: {
   params: FamilyQuestSearchParams,
-  supabase: SupabaseClient,
+  db: Db,
   familyId: string
 }) => {
   try {
+    const { pageSize, offset } = calculatePagination({ page: params.page, pageSize: params.pageSize })
+    const conditions = []
+
+    if (params.name !== undefined) conditions.push(like(quests.name, `%${params.name}%`))
+    if (params.tags.length !== 0) conditions.push(inArray(questTags.name, params.tags))
 
     // データを取得する
-    let query = supabase.from("family_quest_view")
-      .select(`
-          *,
-          quest_tags (*),
-          quest_details (*),
-          quest_children (*)
-        `, { count: 'exact' })
-
-      // フィルター
-      if (params.name !== undefined) query = query.ilike("name", `%${params.name}%`)
-      if (params.tags.length !== 0) query = query.in("quest_tags.name", params.tags)
-      query = query.eq("family_id", familyId) // 家族クエストを取得する
-      
-      // ソート
-      query = query.order(params.sortColumn, {ascending: params.sortOrder === "asc"})
-      
-      // ページネーション
-      query = query.range((params.page-1)*params.pageSize, params.page*params.pageSize-1)
-      
-      // クエリを実行する
-      const { data, error, count } = await query
-
-      if (error) throw error
-
-      const fetchedQuests = FetchFamilyQuestsResult.parse(data ?? [])
-
-      // 指定タグに完全一致している家族クエストを絞り込む
-      const questsWithAllTags = fetchedQuests.filter(quest =>
-        params.tags.every(tag => quest.quest_tags.some(t => t.name === tag))
+    const [rows, [{ total }]] = await Promise.all([
+      db
+      .select()
+      .from(familyQuests)
+      .innerJoin(quests, eq(familyQuests.questId, quests.id))
+      .leftJoin(questDetails, eq(questDetails.questId, quests.id))
+      .leftJoin(questTags, eq(questTags.questId, quests.id))
+      .leftJoin(icons, eq(quests.iconId, icons.id))
+      .where(and(...conditions, eq(familyQuests.familyId, familyId)))
+      .orderBy(params.sortOrder === "asc" ? 
+        asc(quests[params.sortColumn]) :
+        desc(quests[params.sortColumn])
       )
+      .limit(pageSize)
+      .offset(offset),
+      db
+      .select({ total: count() })
+      .from(familyQuests)
+      .innerJoin(quests, eq(familyQuests.questId, quests.id))
+      .leftJoin(questDetails, eq(questDetails.questId, quests.id))
+      .leftJoin(questTags, eq(questTags.questId, quests.id))
+      .leftJoin(icons, eq(quests.iconId, icons.id))
+      .where(and(...conditions, eq(familyQuests.familyId, familyId)))
+    ])
 
-      return {
-        quests: questsWithAllTags ?? [],
-        totalRecords: count ?? 0
-      } as GetFamilyQuestsResponse
+  const map = new Map<string, FetchFamilyQuestsItem>()
+
+  for (const row of rows) {
+    const fqId = row.family_quests.id
+
+    // mapを初期化する
+    if (!map.has(fqId)) {
+      map.set(fqId, {
+        familyQuest: row.family_quests,
+        quest: row.quests,
+        tags: [],
+        details: [],
+        icon: row.icons
+      })
+    }
+
+    // tagがあれば追加する
+    if (row.quest_tags)  map.get(fqId)!.tags.push(row.quest_tags)
+    // detailがあれば追加する
+    if (row.quest_details) map.get(fqId)!.details.push(row.quest_details)
+  }
+
+  const result: FetchFamilyQuestsItem[] = Array.from(map.values())
+
+    return {
+      rows: result,
+      totalRecords: total ?? 0
+    }
   } catch (error) {
     devLog("fetchFamilyQuests.取得例外: ", error)
     throw new QueryError("家族クエストの読み込みに失敗しました。")
   }
 }
 
-/** 検索条件に一致する家族クエストを取得する */
-export const fetchFamilyQuest = async ({
-  supabase,
-  questId
-}: {
-  supabase: SupabaseClient,
-  questId: string
+export type FamilyQuest = Awaited<ReturnType<typeof fetchFamilyQuest>>
+
+/** 家族クエストを取得する */
+export const fetchFamilyQuest = async ({id, db}: {
+  id: FamilyQuestSelect["id"],
+  db: Db
 }) => {
   try {
     // データを取得する
-    const { data, error } = await supabase.from("family_quest_view")
-      .select(`
-          *,
-          quest_tags (*),
-          quest_details (*),
-          quest_children (*)
-        `, { count: 'exact' })
-      .eq("id", questId)
+    const data = await db.query.familyQuests.findMany({
+      where: eq(familyQuests.id, id),
+      with: {
+        questChildren: {
+          with: {
+            child: true
+          }
+        },
+        quest: {
+          with: {
+            details: true,
+            tags: true,
+            icon: true
+          }
+        }
+      }
+    })
 
-      if (error) throw error
-
-      devLog("fetchFamilyQuest.取得データ: ", data)
-
-      return data.length > 0 ? FetchFamilyQuestResult.parse(data[0]) : undefined
+    return data[0]
   } catch (error) {
     devLog("fetchFamilyQuest.取得例外: ", error)
-    throw new QueryError("家族クエストの読み込みに失敗しました。")
+    throw new QueryError("ユーザ情報の読み込みに失敗しました。")
   }
 }

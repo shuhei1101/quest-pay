@@ -85,3 +85,14 @@ export const getJstTimestamp = () => {
     timeZone: "Asia/Tokyo",
   }).replace(/\//g, "-")
 }
+
+/** ページネーション用の値を計算する */
+export const calculatePagination = (params: {
+  page?: number, 
+  pageSize?: number
+}) => {
+  const page = Math.max(1, params.page ?? 1)
+  const pageSize = Math.min(100, params.pageSize ?? 20)
+  const offset = (page - 1) * pageSize
+  return { pageSize, offset }
+}

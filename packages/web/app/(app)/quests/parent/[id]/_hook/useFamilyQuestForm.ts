@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { FamilyQuestFormScheme, FamilyQuestFormType } from "../form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { getFamilyQuest } from "@/app/api/quests/[id]/family/client"
+import { getFamilyQuest } from "@/app/api/quests/family/[id]/client"
 import { useState } from "react"
 import { devLog, isSameArray } from "@/app/(core)/util"
 import { useMantineTheme } from "@mantine/core"
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** クエストフォームを取得する */
-export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
+export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) => {
   const thema = useMantineTheme()
   const router = useRouter()
 
@@ -58,36 +58,36 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
 
   // IDに紐づくクエストを取得する
   const { data, error, isLoading } = useQuery({
-    queryKey: ["familyQuest", questId],
+    queryKey: ["familyQuest", familyQuestId],
     retry: false,
     queryFn: async () => {
-      const { quest } = await getFamilyQuest(questId!)
-      devLog("useFamilyQuestForm.取得処理: ", quest)
+      const { familyQuest } = await getFamilyQuest({familyQuestId: familyQuestId!})
+      devLog("useFamilyQuestForm.取得処理: ", familyQuest)
       // クエストフォームに変換する
       const fetchedFamilyQuestForm: FamilyQuestFormType = {
-        name: quest.name,
-        tags: quest.quest_tags.map( ( t ) => t.name ),
-        iconId: quest.icon_id,
-        isPublic: quest.is_public,
-        iconColor: quest.icon_color,
-        categoryId: quest.category_id,
-        details: quest.quest_details.map( ( detail ) => ( {
+        name: familyQuest.quest.name || "",
+        tags: familyQuest.quest.tags?.map( ( t ) => t.name ),
+        iconId: familyQuest.quest.iconId,
+        isPublic: familyQuest.isPublic,
+        iconColor: familyQuest.quest.iconColor,
+        categoryId: familyQuest.quest.categoryId,
+        details: familyQuest.quest.details.map( ( detail ) => ( {
           level: detail.level,
-          successCondition: detail.success_condition,
-          requiredClearCount: detail.required_clear_count,
+          successCondition: detail.successCondition,
+          requiredClearCount: detail.requiredClearCount,
           reward: detail.reward,
-          childExp: detail.child_exp,
-          requiredCompletionCount: detail.required_completion_count,
+          childExp: detail.childExp,
+          requiredCompletionCount: detail.requiredCompletionCount,
         } ) ),
-        ageFrom: quest.age_from,
-        ageTo: quest.age_to,
-        monthFrom: quest.month_from,
-        monthTo: quest.month_to,
-        client: quest.client,
-        requestDetail: quest.request_detail,
-        childIds: quest.quest_children.map(( child ) => child.child_id ),
-        isClientPublic: quest.is_client_public,
-        isRequestDetailPublic: quest.is_request_detail_public,
+        ageFrom: familyQuest.quest.ageFrom,
+        ageTo: familyQuest.quest.ageTo,
+        monthFrom: familyQuest.quest.monthFrom,
+        monthTo: familyQuest.quest.monthTo,
+        client: familyQuest.quest.client,
+        requestDetail: familyQuest.quest.requestDetail,
+        childIds: familyQuest.questChildren.map(( child ) => child.childId ),
+        isClientPublic: familyQuest.isClientPublic,
+        isRequestDetailPublic: familyQuest.isRequestDetailPublic,
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)
@@ -95,10 +95,10 @@ export const useFamilyQuestForm = ({questId}: {questId?: string}) => {
 
       // 取得データを返却する
       return {
-        questEntity: quest
+        questEntity: familyQuest
       }
     },
-    enabled: !!questId
+    enabled: !!familyQuestId
   })
 
   // エラーをチェックする

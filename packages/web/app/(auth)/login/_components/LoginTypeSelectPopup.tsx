@@ -1,6 +1,6 @@
 import { Button, Input, Modal, Space, Text } from "@mantine/core"
 import { useRouter } from "next/navigation"
-import { FAMILY_NEW_URL, PARENT_QUESTS_URL } from "@/app/(core)/endpoints"
+import { FAMILY_NEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useEffect, useState } from "react"
 import { useLoginUserInfo } from "../_hook/useLoginUserInfo"
 import { devLog } from "@/app/(core)/util"
@@ -52,14 +52,14 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
     closeOnClickOutside={true}  // モーダル外クリックの無効化
     closeOnEscape={true}  // ESCキーで閉じない
     >
-      {userInfo?.family_id ? <>
+      {userInfo?.family.id ? <>
       {/* 家族が取得できた場合 */}
         <div className="flex flex-col gap-2">
           {/* 家族名表示欄 */}
-          <Text>{userInfo.family_local_name}</Text>
+          <Text>{userInfo.family.localName}</Text>
           {/* 親ユーザログインボタン */}
           <Button
-            onClick={() => router.push(`${PARENT_QUESTS_URL}`)}
+            onClick={() => router.push(`${FAMILY_QUESTS_URL}`)}
             variant="light"
           >
             親でログイン

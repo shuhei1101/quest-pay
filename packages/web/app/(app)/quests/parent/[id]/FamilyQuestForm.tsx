@@ -19,14 +19,14 @@ export const FamilyQuestForm = ({id}: {id?: string}) => {
   const [activeLevel, setActiveLevel] = useState<string | null>("1")
 
   /** 家族クエストID */
-  const [questId, setQuestId] = useState<string | undefined>(id)
+  const [familyQuestId, setFamilyQuestId] = useState<string | undefined>(id)
 
   /** アイコン選択ポップアップ制御状態 */
   const [iconPopupOpened, { open: openIconPopup, close: closeIconPopup }] = useDisclosure(false)
 
   /** ハンドラ */
   const { handleDelete, isLoading: deleteLoading } = useDeleteFamilyQuest()
-  const { handleRegister, isLoading: registerLoading } = useRegisterFamilyQuest({setId: setQuestId})
+  const { handleRegister, isLoading: registerLoading } = useRegisterFamilyQuest({setId: setFamilyQuestId})
   const { handleUpdate, isLoading: updateLoading } = useUpdateFamilyQuest()
 
   /** 更新中のローダ状態 */
@@ -36,13 +36,13 @@ export const FamilyQuestForm = ({id}: {id?: string}) => {
   }, [deleteLoading, registerLoading, updateLoading])
 
   /** 家族クエストフォームを取得する */
-  const { register, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({questId})
+  const { register, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({familyQuestId})
 
   // エンティティ取得時のハンドル
   useEffect(() => {
     if (fetchedEntity?.id) {
       // 全体の家族クエストIDを設定する
-      setQuestId(fetchedEntity.id)
+      setFamilyQuestId(fetchedEntity.id)
     }
   }, [fetchedEntity])
 
@@ -87,8 +87,8 @@ export const FamilyQuestForm = ({id}: {id?: string}) => {
 
   /** フォーム送信ハンドル */
   const onSubmit = handleSubmit((form) => {
-    if (questId) {
-      handleUpdate({form, questId, updatedAt: fetchedEntity?.updated_at})
+    if (familyQuestId) {
+      handleUpdate({form, familyQuestId, updatedAt: fetchedEntity?.updatedAt})
     } else {
       handleRegister({form})
     }
@@ -183,9 +183,9 @@ export const FamilyQuestForm = ({id}: {id?: string}) => {
 
             {/* サブミットボタン */}
             <Group mt="md" justify="flex-end">
-              {questId ? 
+              {familyQuestId ? 
               <>
-                <Button color="red.7" onClick={() => handleDelete({questId, updatedAt: fetchedEntity?.updated_at})} loading={submitLoading}>削除</Button>
+                <Button color="red.7" onClick={() => handleDelete({familyQuestId, updatedAt: fetchedEntity?.updatedAt})} loading={submitLoading}>削除</Button>
                 <Button type="submit" loading={submitLoading} disabled={!isValueChanged}>更新</Button>
               </>
               :

@@ -1,20 +1,18 @@
-import { DisplayId, LocalName, OnlineName } from "@/app/api/families/entity"
+import { BirthdaySchema, DisplayIdSchema, IconColorSchema, IconIdSchema, LocalNameSchema, OnlineNameSchema, UserNameSchema } from "@/app/(core)/schema"
 import { z } from "zod"
-import { IconId, IconColor } from "../../../api/icons/entity"
-import { Birthday, UserName } from "@/app/api/users/entity"
 
 /** 家族フォームスキーマ */
-export const FamilyRegisterFormScheme = z.object({
-  displayId: DisplayId,
-  localName: LocalName,
-  onlineName: OnlineName,
-  familyIconId: IconId,
-  familyIconColor: IconColor,
-  parentName: UserName,
-  parentIconId: IconId,
-  parentIconColor: IconColor,
-  parentBirthday: Birthday,
+export const FamilyRegisterFormSchema = z.object({
+  displayId: DisplayIdSchema,
+  localName: LocalNameSchema,
+  onlineName: OnlineNameSchema,
+  familyIconId: IconIdSchema,
+  familyIconColor: IconColorSchema,
+  parentName: UserNameSchema,
+  parentIconId: IconIdSchema,
+  parentIconColor: IconColorSchema,
+  parentBirthday: BirthdaySchema,
 })
 
 /** 家族フォームスキーマの型 */
-export type FamilyRegisterFormType = z.infer<typeof FamilyRegisterFormScheme>
+export type FamilyRegisterFormType = z.infer<typeof FamilyRegisterFormSchema>

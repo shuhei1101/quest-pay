@@ -1,21 +1,21 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { FamilyQuestSort } from "../../../../api/quests/family/view"
 import { useFamilyQuests } from "../_hook/useFamilyQuests"
-import { PARENT_QUEST_URL, PARENT_QUESTS_URL } from "@/app/(core)/endpoints"
-import { FamilyQuestFilterScheme, FamilyQuestFilterType } from "../../../../api/quests/family/scheme"
 import { Tabs } from "@mantine/core"
 import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
 import { FamilyQuestCardLayout } from "./FamilyQuestCardLayout"
 import { devLog } from "@/app/(core)/util"
-import { FetchFamilyQuestResultType, FetchFamilyQuestsResultType } from "@/app/api/quests/family/query"
 import { FamilyQuestFilterPopup } from "./FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./FamilyQuestSortPopup"
 import { QuestCategoryTabs } from "../../_components/QuestCategoryTabs"
 import { QuestSearchBar } from "../../_components/QuestSearchBar"
 import { QuestGrid } from "../../_components/QuestGrid"
+import type { FamilyQuest, FetchFamilyQuestsItem } from "@/app/api/quests/family/query"
+import type { FamilyQuestSort } from "@/drizzle/schema"
+import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
+import { FamilyQuestFilterScheme, type FamilyQuestFilterType } from "@/app/api/quests/family/schema"
 
 export const FamilyQuestList = () => {
   const router = useRouter() 
@@ -29,7 +29,7 @@ export const FamilyQuestList = () => {
   const [sortOpened, { open: openSort, close: closeSort }] = useDisclosure(false)
 
   /** 現在のクエスト一覧状態 */
-  const [displayQuests, setDisplayQuests] = useState<FetchFamilyQuestsResultType>([])
+  const [displayQuests, setDisplayQuests] = useState<FetchFamilyQuestsItem[]>([])
 
   /** クエストフィルター状態 */
   const [questFilter, setQuestFilter] = useState<FamilyQuestFilterType>({tags: []})
@@ -103,7 +103,7 @@ export const FamilyQuestList = () => {
     const params = new URLSearchParams(paramsObj)
 
     // フィルターをURLに反映する
-    router.push(`${PARENT_QUESTS_URL}?${params.toString()}`)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
 
     // 検索フィルターを更新し、一覧を更新する
     setSearchFilter(questFilter)
@@ -120,7 +120,7 @@ export const FamilyQuestList = () => {
   }, [fetchedQuests, page])
 
   /** クエスト選択時のハンドル */
-  const handleQuestId = (questId: string) => router.push(PARENT_QUEST_URL(questId))
+  const handleFamilyQuestId = (familyQuestId: string) => router.push(FAMILY_QUEST_URL(familyQuestId))
 
   /** 検索テキスト変更時のハンドル */
   const handleSearchTextChange = (searchText: string) => {
@@ -154,13 +154,13 @@ export const FamilyQuestList = () => {
 
         {/* すべてタブのパネル */}
         <Tabs.Panel value={"すべて"} key={0}>
-          <QuestGrid<FetchFamilyQuestResultType>
+          <QuestGrid<FetchFamilyQuestsItem>
             quests={displayQuests}
             renderQuest={(quest, index) => (
               <FamilyQuestCardLayout 
                 key={index} 
-                quest={quest} 
-                onClick={handleQuestId} 
+                familyQuest={quest} 
+                onClick={handleFamilyQuestId} 
               />
             )}
             sentinelRef={sentinelRef}
@@ -172,13 +172,13 @@ export const FamilyQuestList = () => {
         {/* カテゴリごとのパネル */}
         {questCategories.map((category) => (
           <Tabs.Panel value={category.name} key={category.id}>
-            <QuestGrid<FetchFamilyQuestResultType>
+            <QuestGrid
               quests={displayQuests}
               renderQuest={(quest, index) => (
                 <FamilyQuestCardLayout 
                   key={index} 
-                  quest={quest} 
-                  onClick={handleQuestId} 
+                  familyQuest={quest} 
+                  onClick={handleFamilyQuestId} 
                 />
               )}
               sentinelRef={sentinelRef}
@@ -190,13 +190,13 @@ export const FamilyQuestList = () => {
 
         {/* その他タブのパネル */}
         <Tabs.Panel value={"その他"} key={-1}>
-          <QuestGrid<FetchFamilyQuestResultType>
+          <QuestGrid
             quests={displayQuests}
             renderQuest={(quest, index) => (
               <FamilyQuestCardLayout 
                 key={index} 
-                quest={quest} 
-                onClick={handleQuestId} 
+                familyQuest={quest} 
+                onClick={handleFamilyQuestId} 
               />
             )}
             sentinelRef={sentinelRef}

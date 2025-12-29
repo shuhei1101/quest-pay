@@ -48,7 +48,7 @@ export const QuestCategoryCombobox = ({ onChanged, currentValue }: {
           pointer rightSection={<Combobox.Chevron />} rightSectionPointerEvents="none"
           onClick={() => combobox.toggleDropdown()} className="min-w-30 max-w-50"
         >
-          {currentValue && questCategoryById ? questCategoryById[String(currentValue)].name : <Input.Placeholder>-</Input.Placeholder>}
+          {currentValue && questCategoryById ? questCategoryById[currentValue].name : <Input.Placeholder>-</Input.Placeholder>}
         </InputBase>
       </Combobox.Target>
 

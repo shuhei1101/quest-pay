@@ -1,7 +1,7 @@
 import { CHILD_API_URL, CHILDREN_API_URL } from "@/app/(core)/endpoints";
-import { GetChildrenResponseScheme, PostChildRequest, PostChildResponseScheme } from "./scheme";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
+import type { GetChildrenResponse, PostChildRequest, PostChildResponse } from "./route";
 
 /** 子供をGETする */
 export const getChildren = async () => {
@@ -19,7 +19,7 @@ export const getChildren = async () => {
   }
   devLog("getChildren.戻り値: ", data)
 
-  return GetChildrenResponseScheme.parse(data)
+  return data as GetChildrenResponse
 }
 
 /** 子供をPOSTする */
@@ -38,7 +38,8 @@ export const postChild = async (request: PostChildRequest) => {
     const data = await res.json()
     throw AppError.fromResponse(data, res.status)
   }
-  const data = await res
+  const data = await res.json()
+  devLog("postChild.戻り値: ", data)
 
-  return PostChildResponseScheme.parse(data)
+  return data as PostChildResponse
 }

@@ -1,19 +1,19 @@
-import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon";
-import { FamilyQuestView } from "@/app/api/quests/family/view";
-import { Badge, Card, Group, Text } from "@mantine/core";
+import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { FetchFamilyQuestsItem } from "@/app/api/quests/family/query"
+import { Badge, Card, Group, Text } from "@mantine/core"
 
-export const FamilyQuestCardLayout = ({quest, onClick}: {
-  quest: FamilyQuestView,
+export const FamilyQuestCardLayout = ({familyQuest, onClick}: {
+  familyQuest: FetchFamilyQuestsItem,
   onClick: (questId: string) => void
 }) => (
   <Card shadow="sm" padding="md" radius="md" withBorder
-    onClick={() => onClick(quest.id)}
+    onClick={() => onClick(familyQuest.familyQuest.id)}
     className="cursor-pointer quest-card"
   >
     <Group mb="xs">
-      <Badge color="pink">{quest.name}</Badge>
-      <RenderIcon iconName={quest.icon_name} size={quest.icon_size ?? undefined}  iconColor={quest.icon_color}/>
+      <Badge color="pink">{familyQuest.quest.name}</Badge>
+      <RenderIcon iconName={familyQuest.icon?.name} size={familyQuest.icon?.size ?? undefined}  iconColor={familyQuest.quest.iconColor}/>
     </Group>
-    <Text size="sm" mb="xs">{quest.name}</Text>
+    <Text size="sm" mb="xs">{familyQuest.quest.name}</Text>
   </Card>
 )

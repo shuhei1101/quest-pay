@@ -1,14 +1,12 @@
 import { z } from "zod"
-import { IconId, IconColor } from "../../../api/icons/entity"
-import { Birthday, UserName } from "@/app/api/users/entity"
+import { BirthdaySchema, IconColorSchema, IconIdSchema } from "@/app/(core)/schema"
 
 /** 子供フォームスキーマ */
-export const ChildFormScheme = z.object({
-  name: UserName,
-  iconId: IconId,
-  iconColor: IconColor,
-  birthday: Birthday,
+export const ChildFormSchema = z.object({
+  name: z.string({error: "氏名は必須です。"}),
+  iconId: IconIdSchema,
+  iconColor: IconColorSchema,
+  birthday: BirthdaySchema,
 })
-
 /** 子供フォームスキーマの型 */
-export type ChildFormType = z.infer<typeof ChildFormScheme>
+export type ChildFormType = z.infer<typeof ChildFormSchema>

@@ -2,9 +2,6 @@
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { getLoginUser } from "@/app/api/users/login/client"
 import { useQuery } from "@tanstack/react-query"
-import { createClient } from "@/app/(core)/_supabase/client"
-import { Session } from "@supabase/supabase-js"
-import { devLog } from "@/app/(core)/util"
 
 /** ログインユーザの情報を取得する */
 export const useLoginUserInfo = () => {
@@ -33,8 +30,8 @@ export const useLoginUserInfo = () => {
   return {
     userInfo: query.data?.userInfo,
     isGuest: query.data?.isGuest ?? true,
-    isParent: query.data?.userInfo?.user_type === "parent",
-    isChild: query.data?.userInfo?.user_type === "child",
+    isParent: query.data?.userInfo?.type === "parent",
+    isChild: query.data?.userInfo?.type === "child",
     isLoading: query.isLoading,
     refetch: query.refetch
   }

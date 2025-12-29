@@ -1,23 +1,21 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { QuestCategoryEntityScheme } from "./entity";
 import { devLog } from "@/app/(core)/util";
 import { QueryError } from "@/app/(core)/error/appError";
+import { Db } from "@/index";
+import { questCategories } from "@/drizzle/schema";
 
 /** 全てのクエストカテゴリを取得する */
-export const fetchQuestCategories = async ({supabase}: {
-  supabase: SupabaseClient,
+export const fetchQuestCategories = async ({db}: {
+  db: Db
 }) => {
   try {
     // データを取得する
-    const { data, error } = await supabase.from("quest_categories")
-        .select(`*`)
+    const data = await db
+      .select()
+      .from(questCategories)
+    
+    devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
 
-      // エラーをチェックする
-      if (error) throw error
-
-      devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
-
-      return QuestCategoryEntityScheme.array().parse(data)
+    return data
   } catch (error) {
     devLog("fetchQuestCategories.取得例外: ", error)
     throw new QueryError("クエストカテゴリの読み込みに失敗しました。")

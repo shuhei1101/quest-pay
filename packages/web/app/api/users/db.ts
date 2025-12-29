@@ -1,77 +1,94 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { SupabaseClient } from "@supabase/supabase-js"
 import { devLog } from "@/app/(core)/util"
 import { profileExclusiveControl } from "./dbHelper"
+import { ProfileInsert, profiles } from "@/drizzle/schema"
+import { Db } from "@/index"
+import { eq } from "drizzle-orm"
 
-// /** プロフィールを挿入する */
-// export const insertProfile = async ({profile, supabase}: {
-//   profile: ProfileInsert
-//   supabase: SupabaseClient
-// }) => {
-//   // レコードを挿入する
-//   const { data, error } = await supabase.rpc("insert_family_quest", {
-//     _name: quest.name,
-//     _family_id: profile.family_id,
-//     _is_public: profile.is_public,
-//     _type: quest.type,
-//     _icon_id: quest.icon_id,
-//     _icon_color: quest.icon_color,
-//     _tags: tags.map(t => t.name),
-//     _category_id: quest.category_id
-//   })
-  
-//   // エラーをチェックする
-//   if (error) {
-//     throw new DatabaseError('プロフィールの作成に失敗しました。')
-//   }
+export type InsertProfileRecord = Omit<ProfileInsert, "id" | "createdAt" | "updatedAt">
 
-//   const questId = ProfileEntityScheme.shape.quest_id.parse(data)
-
-//   return questId
-// }
-
-/** プロフィールとユーザを紐づける */
-export const linkProfileAndUser = async ({profileId, userId, supabase}: {
-  profileId: string,
-  userId: string,
-  supabase: SupabaseClient
+/** プロフィールを挿入する（汎用） */
+export const insertProfile = async ({db, record}: {
+  db: Db,
+  record: InsertProfileRecord
 }) => {
-  // 存在をチェックする
-  const _ = await profileExclusiveControl.existsCheck({id: profileId, supabase})
-  
-  // プロフィールを更新する
-  const {error} = await supabase.from('profiles')
-    .update({user_id: userId})
-    .eq('id', profileId)
+  try {
+    // プロフィールを挿入する
+    const [newProfile] = await db.insert(profiles).values(record).returning({ id: profiles.id })
 
-  // エラーをチェックする
-  if (error) {
-    devLog("linkProfileAndUser.エラー: ", error)
-    throw new DatabaseError(`更新時にエラーが発生しました。`, )
+    return {
+      id: newProfile.id
+    } 
+  } catch (error) {
+    devLog("insertProfile error:", error)
+    throw new DatabaseError("プロフィールの作成に失敗しました。")
   }
 }
 
-// /** プロフィールを削除する */
-// export const deleteProfile = async ({supabase, quest}: {
-//   supabase: SupabaseClient, 
-//   quest: ProfileDelete
-// }) => {
-//   // 存在をチェックする
-//   const beforeProfile = await profileExclusiveControl.existsCheck({id: quest.id, supabase})
-  
-//   // 更新日時による排他制御を行う
-//   profileExclusiveControl.hasAlreadyUpdated({
-//     beforeDate: beforeProfile.updated_at, 
-//     afterDate: quest.updated_at
-//   })
-  
-//   const { error } = await supabase.rpc('delete_family_quest', {
-//     _quest_id: quest.id
-//   })
+export type InsertParentProfileRecord = Omit<InsertProfileRecord, "type">
 
-//   // エラーをチェックする
-//   if (error) {
-//     console.log(error)
-//     throw new DatabaseError(`プロフィールの削除に失敗しました。`)
-//   }
-// }
+/** 親プロフィールを挿入する */
+export const insertParentProfile = async ({db, record}: {
+  db: Db,
+  record: InsertParentProfileRecord
+}) => {
+  try {
+    // プロフィールを挿入する
+    const [newProfile] = await db.insert(profiles).values({
+      type: "parent",
+      ...record
+    }).returning({ id: profiles.id })
+
+    return {
+      id: newProfile.id
+    }
+  } catch (error) {
+    devLog("insertParentProfile error:", error)
+    throw new DatabaseError("親プロフィールの作成に失敗しました。")
+  }
+}
+
+export type InsertChildProfileRecord = Omit<InsertProfileRecord, "type">
+
+/** 子プロフィールを挿入する */
+export const insertChildProfile = async ({db, record}: {
+  db: Db,
+  record: InsertChildProfileRecord
+}) => {
+  try {
+    // プロフィールを挿入する
+    const [newProfile] = await db.insert(profiles).values({
+      type: "child",
+      ...record
+    }).returning({ id: profiles.id })
+
+    return {
+      id: newProfile.id
+    }
+  } catch (error) {
+    devLog("insertChildProfile error:", error)
+    throw new DatabaseError("子プロフィールの作成に失敗しました。")
+  }
+}
+
+/** プロフィールとユーザを紐づける */
+export const linkProfileAndUser = async ({profileId, userId, db}: {
+  profileId: string,
+  userId: string,
+  db: Db
+}) => {
+  try {
+    // 存在をチェックする
+    const _ = await profileExclusiveControl.existsCheck({id: profileId, db})
+    
+    // プロフィールを更新する
+    await db.update(profiles)
+      .set({ userId })
+      .where(eq(profiles.id, profileId))
+
+  } catch (error) {
+    devLog("linkProfileAndUser error:", error)
+    throw new DatabaseError("プロフィールとユーザの紐づけに失敗しました。")
+  }
+
+}

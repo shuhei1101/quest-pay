@@ -1,81 +1,54 @@
-import { SupabaseClient } from "@supabase/supabase-js"
-import { z } from "zod"
 import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
-import { ParentViewScheme } from "@/app/api/parents/view"
+import { Db } from "@/index"
+import { icons, parents, profiles } from "@/drizzle/schema"
+import { eq } from "drizzle-orm"
 
-export const FetchParentsResult = ParentViewScheme.array()
+export type Parents = Parent[]
 
 /** 家族IDに一致する親を取得する */
-export const fetchParentsByFamilyId = async ({
-  supabase,
-  familyId
-}: {
-  supabase: SupabaseClient,
+export const fetchParentsByFamilyId = async ({ db, familyId }: {
+  db: Db,
   familyId: string
 }) => {
   try {
     // データを取得する
-    const { data, error } = await supabase.from("parent_view")
-      .select(`*`)
-      .eq("family_id", familyId)
-      .not("id", "is", null)
-
-    // エラーをチェックする
-    if (error) throw error
+    const data = await db
+      .select()
+      .from(parents)
+      .leftJoin(profiles, eq(profiles.id, parents.profileId))
+      .leftJoin(icons, eq(profiles.iconId, icons.id))
+      .where(eq(profiles.familyId, familyId))
 
     devLog("fetchParentsByFamilyId.取得データ: ", data)
 
-    return data.length > 0 ? FetchParentsResult.parse(data) : []
+    return data as Parents
   } catch (error) {
     devLog("fetchParentsByFamilyId.取得例外: ", error)
     throw new QueryError("親情報の読み込みに失敗しました。")
   }
 }
 
-export const FetchParentResult = ParentViewScheme
+export type Parent = Awaited<ReturnType<typeof fetchParent>>
 
 /** IDに一致する親を取得する */
-export const fetchParent = async ({
-  supabase,
-  parentId
-}: {
-  supabase: SupabaseClient,
+export const fetchParent = async ({ db, parentId }: {
+  db: Db,
   parentId: string
 }) => {
   try {
     // データを取得する
-    const { data, error } = await supabase.from("parent_view")
-      .select(`*`)
-      .eq("id", parentId)
-
-    // エラーをチェックする
-    if (error) throw error
-
+    const data = await db
+      .select()
+      .from(parents)
+      .leftJoin(profiles, eq(profiles.id, parents.profileId))
+      .leftJoin(icons, eq(profiles.iconId, icons.id))
+      .where(eq(parents.id, parentId))
     devLog("fetchParent.取得データ: ", data)
 
-    return data.length > 0 ? FetchParentResult.parse(data[0]) : undefined
+    return data[0]
   } catch (error) {
     devLog("fetchParent.取得例外: ", error)
-    throw new QueryError("子供情報の読み込みに失敗しました。")
+    throw new QueryError("親情報の読み込みに失敗しました。")
   }
 }
-
-// /** 使用可能な親招待コードか確認する */
-// export const getParentByInviteCode = async ({supabase, code}: {
-//   supabase: SupabaseClient,
-//   code: string
-// }) => {
-//   try {
-//   const { data } = await supabase
-//     .from("children")
-//     .select("*")
-//     .eq("invite_code", code)
-//     .maybeSingle()
-
-//   return data ? ParentEntityScheme.parse(data) : null
-//   } catch (error) {
-//     devLog("getParentByInviteCode.取得例外: ", error)
-//     throw new QueryError("招待コードの生成に失敗しました。")
-//   }
-// }

@@ -6,11 +6,11 @@ import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 import { queryClient } from "@/app/(core)/tanstack"
 import { getLoginUser } from "@/app/api/users/login/client"
-import { UserInfoView } from "@/app/api/users/view"
+import { UserInfo } from "@/app/api/users/query"
 
 /** ログイン時のハンドル */
 export const useLogin = ({onSuccess}: {
-  onSuccess: (userInfo: UserInfoView) => void
+  onSuccess: (userInfo: UserInfo) => void
 }) => {
 
   const mutation = useMutation({
