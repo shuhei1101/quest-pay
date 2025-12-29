@@ -3,6 +3,7 @@ import { QuestCategoryById } from "@/app/api/quests/category/service"
 import type { UserInfo } from "@/app/api/users/query"
 import type { IconCategorySelect, IconSelect, QuestCategorySelect } from "@/drizzle/schema"
 import toast from "react-hot-toast"
+import { devLog } from "../util"
 
 type FeedbackParams = {
   message: string,
@@ -112,6 +113,7 @@ export const appStorage = {
     /** クエストカテゴリ辞書を取得する */
     get: () => {
       const questCategoryById = sessionStorage.getItem("questCategoryById")
+      devLog("appStorage.questCategoryById.get.取得クエストカテゴリ辞書: ", questCategoryById)
       return questCategoryById ? JSON.parse(questCategoryById) as QuestCategoryById : undefined
     },
     /** クエストカテゴリ辞書をセットする */

@@ -34,11 +34,9 @@ export const getFamilyByInviteCode = async ({db, code}: {
 }) => {
   try {
     // データを取得する
-    const family = await db
-      .select()
-      .from(families)
-      .where(eq(families.inviteCode, code))
-      .limit(1)
+    const family = await db.query.families.findFirst({
+      where: eq(families.inviteCode, code)
+    })
 
     return family
   } catch (error) {

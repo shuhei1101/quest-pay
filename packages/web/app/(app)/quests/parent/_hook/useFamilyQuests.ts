@@ -35,7 +35,7 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
   if (error) handleAppError(error, router)
 
   return {
-    fetchedQuests: data?.quests ?? [],
+    fetchedQuests: data?.rows ?? [],
     totalRecords: data?.totalRecords ?? 0,
     maxPage: Math.ceil((data?.totalRecords ?? 0) / pageSize),
     isLoading,

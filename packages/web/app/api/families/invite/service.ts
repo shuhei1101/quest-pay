@@ -40,7 +40,7 @@ export const generateUniqueInviteCode = async ({db}: {
     const family = await getFamilyByInviteCode({code, db})
 
     // 招待コードが存在していない場合
-    if (family === null) {
+    if (!family) {
       // コードを返却する
       return code
     }

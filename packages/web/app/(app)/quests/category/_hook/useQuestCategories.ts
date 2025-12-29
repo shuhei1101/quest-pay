@@ -44,6 +44,8 @@ export const useQuestCategories = () => {
     }
   })
 
+  devLog("useQuestCategories.取得データ: ", data)
+
   return { 
     questCategories: data?.questCategories ?? [], 
     isLoading,

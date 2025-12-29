@@ -7,17 +7,24 @@ export type QuestCategoryById = Record<string, QuestCategorySelect>
 
 /** カテゴリ辞書を作成する */
 export const createQuestCategoryById = (categories: QuestCategorySelect[]) => {
-  // セッションストレージから取得する
-  let questCategoryById = appStorage.questCategoryById.get()
-  devLog("クエストカテゴリ辞書取得: ", questCategoryById)
-  // 取得できなかった場合
-  if (!questCategoryById) {
-    // 生成する
-    questCategoryById = Object.fromEntries(
+  try {
+    devLog("createQuestCategoryById.引数: ", categories)
+    // セッションストレージから取得する
+    let questCategoryById = appStorage.questCategoryById.get()
+    devLog("クエストカテゴリ辞書取得: ", questCategoryById)
+    // 取得できなかった場合
+    if (!questCategoryById) {
+      // 生成する
+      questCategoryById = Object.fromEntries(
         categories.map(category => [String(category.id), category])
       ) as QuestCategoryById
-    // セッションストレージに格納する
-    appStorage.questCategoryById.set(questCategoryById)
+      devLog("クエストカテゴリ辞書生成: ", questCategoryById)
+      // セッションストレージに格納する
+      appStorage.questCategoryById.set(questCategoryById)
+    }
+    return questCategoryById
+  } catch (error) {
+    devLog("createQuestCategoryById.例外: ", error)
+    throw error
   }
-  return questCategoryById
 }

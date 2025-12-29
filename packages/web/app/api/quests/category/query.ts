@@ -13,9 +13,9 @@ export const fetchQuestCategories = async ({db}: {
       .select()
       .from(questCategories)
     
-      devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
+    devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
 
-      return data
+    return data
   } catch (error) {
     devLog("fetchQuestCategories.取得例外: ", error)
     throw new QueryError("クエストカテゴリの読み込みに失敗しました。")

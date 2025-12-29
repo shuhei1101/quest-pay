@@ -29,14 +29,14 @@ export const QUESTS_API_URL = `/api${QUESTS_URL}`
 export const QUEST_API_URL = (questId: string) => `${QUESTS_API_URL}/${questId}`
 
 // クエストカテゴリ
-export const QUEST_CATEGORIES_URL = `${QUESTS_URL}/category`
+export const QUEST_CATEGORIES_URL = `${QUESTS_API_URL}/category`
 
 // 家族クエスト
-export const FAMILY_QUESTS_URL = `${QUESTS_URL}/family`
+export const FAMILY_QUESTS_URL = `${QUESTS_URL}/parent`
 export const FAMILY_QUEST_URL = (familyQuestId: string) => `${FAMILY_QUESTS_URL}/${familyQuestId}`
 export const FAMILY_QUEST_NEW_URL = `${FAMILY_QUESTS_URL}/new`
 export const FAMILY_QUESTS_API_URL = `${QUESTS_API_URL}/family`
-export const FAMILY_QUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUESTS_API_URL}/family/${familyQuestId}`
+export const FAMILY_QUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUESTS_API_URL}/${familyQuestId}`
 
 // 家族
 export const FAMILIES_URL = `/families`

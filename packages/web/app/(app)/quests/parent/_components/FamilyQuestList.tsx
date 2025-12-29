@@ -12,7 +12,7 @@ import { FamilyQuestSortPopup } from "./FamilyQuestSortPopup"
 import { QuestCategoryTabs } from "../../_components/QuestCategoryTabs"
 import { QuestSearchBar } from "../../_components/QuestSearchBar"
 import { QuestGrid } from "../../_components/QuestGrid"
-import type { FamilyQuest } from "@/app/api/quests/family/query"
+import type { FamilyQuest, FetchFamilyQuestsItem } from "@/app/api/quests/family/query"
 import type { FamilyQuestSort } from "@/drizzle/schema"
 import { FAMILY_QUEST_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 import { FamilyQuestFilterScheme, type FamilyQuestFilterType } from "@/app/api/quests/family/schema"
@@ -29,7 +29,7 @@ export const FamilyQuestList = () => {
   const [sortOpened, { open: openSort, close: closeSort }] = useDisclosure(false)
 
   /** 現在のクエスト一覧状態 */
-  const [displayQuests, setDisplayQuests] = useState<FamilyQuest[]>([])
+  const [displayQuests, setDisplayQuests] = useState<FetchFamilyQuestsItem[]>([])
 
   /** クエストフィルター状態 */
   const [questFilter, setQuestFilter] = useState<FamilyQuestFilterType>({tags: []})
@@ -120,7 +120,7 @@ export const FamilyQuestList = () => {
   }, [fetchedQuests, page])
 
   /** クエスト選択時のハンドル */
-  const handleQuestId = (questId: string) => router.push(FAMILY_QUEST_URL(questId))
+  const handleFamilyQuestId = (familyQuestId: string) => router.push(FAMILY_QUEST_URL(familyQuestId))
 
   /** 検索テキスト変更時のハンドル */
   const handleSearchTextChange = (searchText: string) => {
@@ -154,13 +154,13 @@ export const FamilyQuestList = () => {
 
         {/* すべてタブのパネル */}
         <Tabs.Panel value={"すべて"} key={0}>
-          <QuestGrid<FamilyQuest>
+          <QuestGrid<FetchFamilyQuestsItem>
             quests={displayQuests}
             renderQuest={(quest, index) => (
               <FamilyQuestCardLayout 
                 key={index} 
                 familyQuest={quest} 
-                onClick={handleQuestId} 
+                onClick={handleFamilyQuestId} 
               />
             )}
             sentinelRef={sentinelRef}
@@ -178,7 +178,7 @@ export const FamilyQuestList = () => {
                 <FamilyQuestCardLayout 
                   key={index} 
                   familyQuest={quest} 
-                  onClick={handleQuestId} 
+                  onClick={handleFamilyQuestId} 
                 />
               )}
               sentinelRef={sentinelRef}
@@ -196,7 +196,7 @@ export const FamilyQuestList = () => {
               <FamilyQuestCardLayout 
                 key={index} 
                 familyQuest={quest} 
-                onClick={handleQuestId} 
+                onClick={handleFamilyQuestId} 
               />
             )}
             sentinelRef={sentinelRef}

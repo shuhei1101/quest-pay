@@ -20,6 +20,7 @@ export const insertQuestChildren = async ({db, records, familyQuestId}: {
      }))).execute()
   } catch (error) {
     devLog("insertQuestChildren error:", error)
+    devLog("insertQuestChildren records:", records)
     throw new DatabaseError("クエスト対象の子供の登録に失敗しました。")
   }
 }

@@ -14,7 +14,7 @@ import { FamilyQuestSortPopup } from "./_components/FamilyQuestSortPopup"
 import { useWindow } from "@/app/(core)/useConstants"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hook/useLoginUserInfo"
 import { useSwipeable } from "react-swipeable"
-import type { FamilyQuest } from "@/app/api/quests/family/query"
+import type { FamilyQuest, FetchFamilyQuestsItem } from "@/app/api/quests/family/query"
 import type { FamilyQuestSort } from "@/drizzle/schema"
 import { FamilyQuestFilterScheme, type FamilyQuestFilterType } from "@/app/api/quests/family/schema"
 import { FAMILY_QUEST_NEW_URL, FAMILY_QUEST_URL } from "@/app/(core)/endpoints"
@@ -34,7 +34,7 @@ export const FamilyQuests = () => {
   const [sortOpened, { open: openSort, close: closeSort }] = useDisclosure(false)
 
   /** 現在のクエスト一覧状態 */
-  const [displayQuests, setDisplayQuests] = useState<FamilyQuest[]>([])
+  const [displayQuests, setDisplayQuests] = useState<FetchFamilyQuestsItem[]>([])
 
   /** クエストフィルター状態 */
   const [questFilter, setQuestFilter] = useState<FamilyQuestFilterType>({tags: []})

@@ -9,7 +9,7 @@ import {
   pgSchema,
   boolean,
 } from "drizzle-orm/pg-core"
-import { sql, relations } from "drizzle-orm"
+import { sql, relations, getTableColumns } from "drizzle-orm"
 import z from "zod"
 import { SortOrder } from "@/app/(core)/schema"
 
@@ -124,24 +124,7 @@ export type ProfileSelect = typeof profiles.$inferSelect
 export type ProfileInsert = Omit<typeof profiles.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type ProfileUpdate = Partial<ProfileInsert>
 
-export const profileRelations = relations(profiles, ({ one, many }) => ({
-  family: one(families, {
-    fields: [profiles.familyId],
-    references: [families.id],
-  }),
-  parent: one(parents, {
-    fields: [profiles.id],
-    references: [parents.profileId],
-  }),
-  child: one(children, {
-    fields: [profiles.id],
-    references: [children.profileId],
-  }),
-  icon: one(icons, {
-    fields: [profiles.iconId],
-    references: [icons.id],
-  }),
-}))
+
 
 /** 親テーブル */
 export const parents = pgTable("parents", {
@@ -158,12 +141,7 @@ export type ParentSelect = typeof parents.$inferSelect
 export type ParentInsert = Omit<typeof parents.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type ParentUpdate = Partial<ParentInsert>
 
-export const parentRelations = relations(parents, ({ one }) => ({
-  profile: one(profiles, {
-    fields: [parents.profileId],
-    references: [profiles.id],
-  }),
-}))
+
 
 /** 子供テーブル */
 export const children = pgTable("children", {
@@ -188,9 +166,6 @@ export type ChildSelect = typeof children.$inferSelect
 export type ChildInsert = Omit<typeof children.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type ChildUpdate = Partial<ChildInsert>
 
-export const childRelations = relations(children, ({ many }) => ({
-  questChildren: many(questChildren),
-}))
 
 /** クエストカテゴリテーブル（マスター） */
 export const questCategories = pgTable("quest_categories", {
@@ -241,17 +216,13 @@ export const quests = pgTable("quests", {
 export type QuestSelect = typeof quests.$inferSelect
 export type QuestInsert = Omit<typeof quests.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type QuestUpdate = Omit<Partial<QuestInsert>, "type">
-export const questColumns = quests._.columns;
+export const questColumns = getTableColumns(quests)
 export const QuestColumnSchema = z.enum(
   Object.keys(questColumns) as [keyof typeof questColumns, ...(keyof typeof questColumns)[]]
 )
 export type QuestColumn = z.infer<typeof QuestColumnSchema>
 export type FamilyQuestSort = {column: QuestColumn, order: SortOrder}
-export const questRelations = relations(quests, ({ many, one }) => ({
-  details: many(questDetails),
-  tags: many(questTags),
-  icon: one(icons),
-}))
+
 
 
 /** ファミリークエストテーブル */
@@ -274,13 +245,7 @@ export const familyQuests = pgTable("family_quests", {
 export type FamilyQuestSelect = typeof familyQuests.$inferSelect
 export type FamilyQuestInsert = Omit<typeof familyQuests.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type FamilyQuestUpdate = Omit<Partial<FamilyQuestInsert>, "questId">
-export const familyQuestRelations = relations(familyQuests, ({ many, one }) => ({
-  questChildren: many(questChildren),
-  quest: one(quests, {
-    fields: [familyQuests.questId],
-    references: [quests.id],
-  }),
-}))
+
 
 /** クエスト詳細テーブル */
 export const questDetails = pgTable("quest_details", {
@@ -339,13 +304,102 @@ export const questChildren = pgTable("quest_children", {
 })
 export type QuestChildrenSelect = typeof questChildren.$inferSelect
 export type QuestChildrenInsert = Omit<typeof questChildren.$inferInsert, "id" | "createdAt" | "updatedAt">
+
+export const familyQuestRelations = relations(familyQuests, ({ many, one }) => ({
+  questChildren: many(questChildren),
+  quest: one(quests, {
+    fields: [familyQuests.questId],
+    references: [quests.id],
+  }),
+}))
+
+export const questRelations = relations(quests, ({ many, one }) => ({
+  details: many(questDetails),
+  tags: many(questTags),
+  icon: one(icons, {
+    fields: [quests.iconId],
+    references: [icons.id],
+  }),
+}))
+
+export const parentRelations = relations(parents, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [parents.profileId],
+    references: [profiles.id],
+  }),
+}))
+
+export const profileRelations = relations(profiles, ({ one, many }) => ({
+  family: one(families, {
+    fields: [profiles.familyId],
+    references: [families.id],
+  }),
+  parent: one(parents, {
+    fields: [profiles.id],
+    references: [parents.profileId],
+  }),
+  child: one(children, {
+    fields: [profiles.id],
+    references: [children.profileId],
+  }),
+  icon: one(icons, {
+    fields: [profiles.iconId],
+    references: [icons.id],
+  }),
+}))
+
+export const childRelations = relations(children, ({ many, one }) => ({
+  questChildren: many(questChildren),
+  profile: one(profiles, {
+    fields: [children.profileId],
+    references: [profiles.id],
+  }),
+}))
+
 export const questChildrenRelations = relations(questChildren, ({ one }) => ({
   familyQuest: one(familyQuests, {
     fields: [questChildren.familyQuestId],
     references: [familyQuests.id],
   }),
-  children: one(children, {
+  child: one(children, {
     fields: [questChildren.childId],
     references: [children.id],
+  }),
+}))
+
+export const familiesRelations = relations(families, ({ many }) => ({
+  profiles: many(profiles),
+  familyQuests: many(familyQuests),
+}))
+
+export const iconsRelations = relations(icons, ({ many, one }) => ({
+  category: one(iconCategories, {
+    fields: [icons.categoryId],
+    references: [iconCategories.id],
+  }),
+  families: many(families),
+  profiles: many(profiles),
+  quests: many(quests),
+}))
+
+export const iconCategoriesRelations = relations(iconCategories, ({ many }) => ({
+  icons: many(icons),
+}))
+
+export const questCategoriesRelations = relations(questCategories, ({ many }) => ({
+  quests: many(quests),
+}))
+
+export const questDetailsRelations = relations(questDetails, ({ one }) => ({
+  quest: one(quests, {
+    fields: [questDetails.questId],
+    references: [quests.id],
+  }),
+}))
+
+export const questTagsRelations = relations(questTags, ({ one }) => ({
+  quest: one(quests, {
+    fields: [questTags.questId],
+    references: [quests.id],
   }),
 }))

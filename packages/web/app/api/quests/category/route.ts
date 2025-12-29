@@ -10,15 +10,10 @@ export type GetQuestCategoriesResponse = {
 }
 export async function GET(
   req: Request,
-  context: { params: Promise<{ id: string }> }
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
     const { db, userId } = await getAuthContext()
-      // パスパラメータからIDを取得する
-      const params = await context.params
-      
-      devLog("GetQuestCategories.パラメータ.ID: ", params.id)
       
       // クエストカテゴリを取得する
       const data = await fetchQuestCategories({ db })

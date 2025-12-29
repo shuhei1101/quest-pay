@@ -32,15 +32,17 @@ export async function POST(
           iconColor: data.form.familyIconColor,
           iconId: data.form.familyIconId,
           localName: data.form.localName,
-          onlineName: data.form.onlineName
+          onlineName: data.form.onlineName,
         },
         profile: {
+          userId: userId,
+          birthday: data.form.parentBirthday,
           name: data.form.parentName,
           iconId: data.form.parentIconId,
           iconColor: data.form.parentIconColor,
         },
         parent: {
-          inviteCode: inviteCode
+          inviteCode: inviteCode,
         }
       })
       return NextResponse.json({})

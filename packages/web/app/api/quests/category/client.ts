@@ -1,7 +1,7 @@
 import { FAMILY_QUEST_API_URL, QUEST_CATEGORIES_URL, QUESTS_API_URL } from "@/app/(core)/endpoints";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
-import { QuestCategorySelect } from "@/drizzle/schema";
+import { GetQuestCategoriesResponse } from "./route";
 
 
 /** クエストカテゴリを取得する */
@@ -19,9 +19,9 @@ export const getQuestCategories = async () => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getQuestCategories.取得データ: ", `${QUEST_CATEGORIES_URL}`)
+  const data: GetQuestCategoriesResponse = await res.json()
+  devLog("getQuestCategories.取得データ: ", `${data}`)
 
-  const data = await res.json()
 
-  return data as QuestCategorySelect[]
+  return data.questCategories
 }

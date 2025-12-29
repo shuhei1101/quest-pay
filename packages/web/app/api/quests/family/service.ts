@@ -28,16 +28,16 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
       })
 
       // 詳細を挿入する
-      await insertQuestDetails({db: tx, records: questDetails, questId})
+      if (questDetails.length > 0) await insertQuestDetails({db: tx, records: questDetails, questId})
 
       // 家族クエストを挿入する
       const { id: familyQuestId } = await insertFamilyQuest({db: tx, record: familyQuest, questId })
 
       // クエスト対象の子供を挿入する
-      await insertQuestChildren({db: tx, records: questChildren, familyQuestId})
+      if (questChildren.length > 0) await insertQuestChildren({db: tx, records: questChildren, familyQuestId})
       
       // タグを挿入する
-      await insertQuestTags({db: tx, records: questTags, questId})
+      if (questTags.length > 0) await insertQuestTags({db: tx, records: questTags, questId})
 
       return questId
     })
@@ -77,7 +77,7 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
       await deleteQuestDetails({db: tx, questId: quest.id})
 
       // 詳細を挿入する
-      await insertQuestDetails({db: tx, records: questDetails, questId: quest.id})
+      if (questDetails.length > 0) await insertQuestDetails({db: tx, records: questDetails, questId: quest.id})
 
       // 家族クエストを更新する
       await updateFamilyQuest({db: tx, 
@@ -90,13 +90,13 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
       await deleteQuestChildren({db: tx, familyQuestId: familyQuest.id})
 
       // クエスト対象の子供を挿入する
-      await insertQuestChildren({db: tx, records: questChildren, familyQuestId: familyQuest.id})
+      if (questChildren.length > 0) await insertQuestChildren({db: tx, records: questChildren, familyQuestId: familyQuest.id})
       
       // タグを削除する
       await deleteQuestTags({db: tx, questId: quest.id})
 
       // タグを挿入する
-      await insertQuestTags({db: tx, records: questTags, questId: quest.id})
+      if (questTags.length > 0) await insertQuestTags({db: tx, records: questTags, questId: quest.id})
     })
   } catch (error) {
     devLog("registerFamilyQuest error:", error)
