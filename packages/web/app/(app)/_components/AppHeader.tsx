@@ -48,7 +48,7 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       {/* スペース */}
       <div className='w-full' />
       {/* ユーザ情報を表示する */}
-      <Text c="var(--mantine-color-text)" className='text-nowrap text-sm'>{userInfo?.name}</Text>
+      <Text c="var(--mantine-color-text)" className='text-nowrap text-sm'>{userInfo?.profiles?.name}</Text>
       {/* サインアウトボタン */}
       {isGuest ? 
         <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>

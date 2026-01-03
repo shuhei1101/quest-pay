@@ -18,10 +18,10 @@ export async function GET(
     const { db, userId } = await getAuthContext()
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family?.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 親を取得する
-      const result = await fetchParentsByFamilyId({db, familyId: userInfo.family.id })
+      const result = await fetchParentsByFamilyId({db, familyId: userInfo.profiles.familyId })
   
       return NextResponse.json({parents: result} as GetParentsResponse)
     })

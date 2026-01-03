@@ -56,11 +56,12 @@ export const MockQuestViewA = () => {
           {/* クエスト条件タブ */}
           <Tabs.Panel value="condition" pt="md">
             <QuestConditionTab 
-              level={4}
+              level={ 4 }
               category="社会活動"
               successCondition="週末に溜まっている洗濯ものを洗濯して、取り込む"
-              reward={100}
-              exp={50}
+              reward={ 100 }
+              exp={ 50 } 
+              requiredCompletionCount={ 0 }
             />
           </Tabs.Panel>
 
@@ -79,9 +80,7 @@ export const MockQuestViewA = () => {
               ageTo={12}
               monthFrom={4}
               monthTo={10}
-              requiredCompletionCount={5}
               requiredClearCount={10}
-              currentClearCount={3}
               tags={["家事", "洗濯", "週末"]}
             />
           </Tabs.Panel>
@@ -151,12 +150,11 @@ export const MockQuestViewB = () => {
           {/* クエスト条件タブ */}
           <Tabs.Panel value="condition" pt="md">
             <QuestConditionTab 
-              level={4}
+              level={ 4 }
               category="社会活動"
               successCondition="週末に溜まっている洗濯ものを洗濯して、取り込む"
-              reward={100}
-              exp={50}
-            />
+              reward={ 100 }
+              exp={ 50 } requiredCompletionCount={ 0 }            />
           </Tabs.Panel>
 
           {/* 依頼情報タブ */}
@@ -174,7 +172,6 @@ export const MockQuestViewB = () => {
               ageTo={12}
               monthFrom={4}
               monthTo={10}
-              requiredCompletionCount={5}
               requiredClearCount={10}
               tags={["家事", "洗濯", "週末"]}
             />

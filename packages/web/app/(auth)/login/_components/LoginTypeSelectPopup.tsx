@@ -52,11 +52,11 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
     closeOnClickOutside={true}  // モーダル外クリックの無効化
     closeOnEscape={true}  // ESCキーで閉じない
     >
-      {userInfo?.family.id ? <>
+      {userInfo?.families?.id ? <>
       {/* 家族が取得できた場合 */}
         <div className="flex flex-col gap-2">
           {/* 家族名表示欄 */}
-          <Text>{userInfo.family.localName}</Text>
+          <Text>{userInfo.families.localName}</Text>
           {/* 親ユーザログインボタン */}
           <Button
             onClick={() => router.push(`${FAMILY_QUESTS_URL}`)}

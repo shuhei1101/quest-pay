@@ -5,9 +5,6 @@ export default function Page() {
   return (
     <>
       <LoginScreen />
-      {/* <MockLoginA />
-      <MockLoginB />
-      <MockLoginC /> */}
     </>
 )
 }

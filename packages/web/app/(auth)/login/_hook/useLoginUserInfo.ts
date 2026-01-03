@@ -30,8 +30,8 @@ export const useLoginUserInfo = () => {
   return {
     userInfo: query.data?.userInfo,
     isGuest: query.data?.isGuest ?? true,
-    isParent: query.data?.userInfo?.type === "parent",
-    isChild: query.data?.userInfo?.type === "child",
+    isParent: query.data?.userInfo?.profiles?.type === "parent",
+    isChild: query.data?.userInfo?.profiles?.type === "child",
     isLoading: query.isLoading,
     refetch: query.refetch
   }

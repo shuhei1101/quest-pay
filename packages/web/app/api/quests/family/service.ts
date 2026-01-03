@@ -124,16 +124,16 @@ export const removeFamilyQuest = async ({db, familyQuest, quest}: {
       await deleteFamilyQuest({db: tx, id: familyQuest.id, updatedAt: familyQuest.updatedAt})
 
       // タグを削除する
-      await deleteQuestTags({db: tx, questId: currentFamilyQuest.questId})
+      await deleteQuestTags({db: tx, questId: currentFamilyQuest.quest.id})
 
       // クエスト対象の子供を削除する
       await deleteQuestChildren({db: tx, familyQuestId: familyQuest.id})
 
       // 詳細を削除する
-      await deleteQuestDetails({db: tx, questId: currentFamilyQuest.questId})
+      await deleteQuestDetails({db: tx, questId: currentFamilyQuest.quest.id})
 
       // クエストを削除する
-      await deleteQuest({db: tx, id: currentFamilyQuest.questId, updatedAt: quest.updatedAt})
+      await deleteQuest({db: tx, id: currentFamilyQuest.quest.id, updatedAt: quest.updatedAt})
     })
 
   } catch (error) {

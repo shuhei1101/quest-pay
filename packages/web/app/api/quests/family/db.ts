@@ -43,7 +43,7 @@ export const updateFamilyQuest = async ({db, record, id, updatedAt}: {
 
     // 更新日による排他チェックを行う
     await familyQuestExclusiveControl.hasAlreadyUpdated({
-      beforeDate: beforeFamilyQuest.updatedAt,
+      beforeDate: beforeFamilyQuest.base.updatedAt,
       afterDate: updatedAt,
     })
 
@@ -68,7 +68,7 @@ export const deleteFamilyQuest = async ({db, id, updatedAt}: {
 
     // 更新日による排他チェックを行う
     await familyQuestExclusiveControl.hasAlreadyUpdated({
-      beforeDate: beforeFamilyQuest.updatedAt,
+      beforeDate: beforeFamilyQuest.base.updatedAt,
       afterDate: updatedAt,
     })
 

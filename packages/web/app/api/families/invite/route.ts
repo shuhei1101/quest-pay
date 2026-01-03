@@ -20,11 +20,11 @@ export async function POST(
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
         
       // 家族情報を取得する
       const family = await fetchFamily({
-        familyId: userInfo.family.id,
+        familyId: userInfo.profiles.familyId,
         db
       })
 

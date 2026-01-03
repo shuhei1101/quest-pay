@@ -2,26 +2,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext,  } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
-import { fetchFamilyQuests } from "./query"
+import { FamilyQuestSearchParamsScheme, fetchFamilyQuests } from "./query"
 import queryString from "query-string"
 import { registerFamilyQuest } from "./service"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { FamilyQuestFormScheme, FamilyQuestFormType } from "@/app/(app)/quests/parent/[id]/form"
+import { FamilyQuestFormScheme, FamilyQuestFormType } from "@/app/(app)/quests/family/[id]/form"
 import z from "zod"
 import { QuestColumnSchema } from "@/drizzle/schema"
 import { SortOrderScheme } from "@/app/(core)/schema"
-import { FamilyQuestFilterScheme } from "./schema"
-
-/** 家族クエスト検索パラメータ */
-export const FamilyQuestSearchParamsScheme = FamilyQuestFilterScheme.extend({
-  sortColumn: QuestColumnSchema,
-  sortOrder: SortOrderScheme,
-}).extend({
-  page: z.string().transform((val) => Number(val)),
-  pageSize: z.string().transform((val) => Number(val))
-})
-export type FamilyQuestSearchParams = z.infer<typeof FamilyQuestSearchParamsScheme>
-
 
 /** 家族のクエストを取得する */
 export type GetFamilyQuestsResponse = Awaited<ReturnType<typeof fetchFamilyQuests>>
@@ -38,10 +26,10 @@ export async function GET(
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
   
       // クエストを取得する
-      const result = await fetchFamilyQuests({db, familyId: userInfo.family.id, params })
+      const result = await fetchFamilyQuests({db, familyId: userInfo.profiles.familyId, params })
   
       return NextResponse.json(result as GetFamilyQuestsResponse)
   })
@@ -67,8 +55,8 @@ export async function POST(
 
       // ユーザ情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family.id) throw new ServerError("家族IDの取得に失敗しました。")
-      if (userInfo.type !== "parent") throw new ServerError("親ユーザのみクエストの作成が可能です。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
+      if (userInfo.profiles.type !== "parent") throw new ServerError("親ユーザのみクエストの作成が可能です。")
         
       // クエストを登録する
       const questId = await registerFamilyQuest({
@@ -94,7 +82,7 @@ export async function POST(
           requiredClearCount: detail.requiredClearCount,
         })),
         familyQuest: {
-          familyId: userInfo.family.id,
+          familyId: userInfo.profiles.familyId,
           isPublic: data.form.isPublic,
           isClientPublic: data.form.isClientPublic,
           isRequestDetailPublic: data.form.isRequestDetailPublic,

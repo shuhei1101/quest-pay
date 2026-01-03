@@ -32,18 +32,17 @@ export const fetchUserInfoByUserId = async ({userId, db}: {
 }) => {
   try {
     // データを取得する
-    const data = await db.query.profiles.findFirst({
-      where: eq(profiles.userId, userId),
-      with: {
-        child: true,
-        parent: true,
-        family: true,
-      }
-    })
+    const rows = await db
+      .select()
+      .from(profiles)
+      .leftJoin(children, eq(profiles.id, children.profileId))
+      .leftJoin(parents, eq(profiles.id, parents.profileId))
+      .leftJoin(families, eq(profiles.familyId, families.id))
+      .where(eq(profiles.userId, userId))
 
-    devLog("fetchUserInfoByUserId.取得データ: ", data)
+    devLog("fetchUserInfoByUserId.取得データ: ", rows)
 
-    return data
+    return rows[0]
   } catch (error) {
     devLog("fetchUserInfoByUserId.取得例外: ", error)
     throw new QueryError("ユーザ情報の読み込みに失敗しました。")

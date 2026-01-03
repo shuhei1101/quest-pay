@@ -20,7 +20,7 @@ export const QuestDetailTab = ({
           <IconUser size={20} />
           <Text fw={500}>依頼主</Text>
         </Group>
-        <Text ta="right" c="dimmed">{client}</Text>
+        <Text ta="right">{client}</Text>
       </Box>
 
       <Divider />

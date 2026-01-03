@@ -22,10 +22,10 @@ export async function GET(
     const { db, userId } = await getAuthContext()
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 子供を取得する
-      const result = await fetchChildrenByFamilyId({db, familyId: userInfo.family.id })
+      const result = await fetchChildrenByFamilyId({db, familyId: userInfo.profiles.familyId })
   
       return NextResponse.json({children: result} as GetChildrenResponse)
     })
@@ -51,7 +51,7 @@ export async function POST(
 
      // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
         
       // 招待コードを生成する
       const inviteCode = await generateUniqueInviteCode({db})
@@ -65,7 +65,7 @@ export async function POST(
           name: data.form.name,
           iconColor: data.form.iconColor,
           iconId: data.form.iconId,
-          familyId: userInfo.family.id
+          familyId: userInfo.profiles.familyId
         }
       })
       return NextResponse.json({childId} as PostChildResponse)

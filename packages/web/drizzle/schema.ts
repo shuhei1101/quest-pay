@@ -35,6 +35,14 @@ export const questType = pgEnum("quest_type", [
   "family",
 ])
 
+/** 子供クエストステータス */
+export const childQuestStatus = pgEnum("child_quest_status", [
+  "not_started",          // 未着手
+  "in_progress",          // 進行中
+  "reporting",            // 報告中
+  "completed",            // 完了
+])
+
 /** authスキーマ */
 const authSchema = pgSchema("auth")
 
@@ -250,7 +258,7 @@ export type FamilyQuestUpdate = Omit<Partial<FamilyQuestInsert>, "questId">
 /** クエスト詳細テーブル */
 export const questDetails = pgTable("quest_details", {
   /** ID */
-  id: uuid("id").notNull().default(sql`gen_random_uuid()`),
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
   /** クエストID */
   questId: uuid("quest_id").notNull().references(() => quests.id, { onDelete: "restrict" }),
   /** レベル */
@@ -276,7 +284,7 @@ export type QuestDetailInsert = Omit<typeof questDetails.$inferInsert, "id" | "c
 /** クエストタグテーブル */
 export const questTags = pgTable("quest_tags", {
   /** ID */
-  id: uuid("id").notNull().default(sql`gen_random_uuid()`),
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
   /** クエストタグ名 */
   name: text("name").notNull().default(""),
   /** クエストID */
@@ -299,107 +307,46 @@ export const questChildren = pgTable("quest_children", {
   childId: uuid("child_id").notNull().references(() => children.id, { onDelete: "restrict" }),
   /** 現在のレベル */
   currentLevel: integer("current_level").notNull().default(1),
+  /** ステータス */
+  status: childQuestStatus("status").notNull().default("not_started"),
+  /** ステータス更新日時 */
+  statusUpdatedAt: timestamp("status_updated_at", { withTimezone: true, mode: "string" }),
   /** タイムスタンプ */
   ...timestamps,
 })
 export type QuestChildrenSelect = typeof questChildren.$inferSelect
 export type QuestChildrenInsert = Omit<typeof questChildren.$inferInsert, "id" | "createdAt" | "updatedAt">
 
-export const familyQuestRelations = relations(familyQuests, ({ many, one }) => ({
-  questChildren: many(questChildren),
-  quest: one(quests, {
-    fields: [familyQuests.questId],
-    references: [quests.id],
-  }),
-}))
+/** テンプレートクエストテーブル */
+export const templateQuests = pgTable("template_quests", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** クエストID */
+  questId: uuid("quest_id").notNull().unique().references(() => quests.id, { onDelete: "restrict" }),
+  /** 保存した家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type TemplateQuestSelect = typeof templateQuests.$inferSelect
+export type TemplateQuestInsert = Omit<typeof templateQuests.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type TemplateQuestUpdate = Partial<TemplateQuestInsert>
 
-export const questRelations = relations(quests, ({ many, one }) => ({
-  details: many(questDetails),
-  tags: many(questTags),
-  icon: one(icons, {
-    fields: [quests.iconId],
-    references: [icons.id],
-  }),
-}))
-
-export const parentRelations = relations(parents, ({ one }) => ({
-  profile: one(profiles, {
-    fields: [parents.profileId],
-    references: [profiles.id],
-  }),
-}))
-
-export const profileRelations = relations(profiles, ({ one, many }) => ({
-  family: one(families, {
-    fields: [profiles.familyId],
-    references: [families.id],
-  }),
-  parent: one(parents, {
-    fields: [profiles.id],
-    references: [parents.profileId],
-  }),
-  child: one(children, {
-    fields: [profiles.id],
-    references: [children.profileId],
-  }),
-  icon: one(icons, {
-    fields: [profiles.iconId],
-    references: [icons.id],
-  }),
-}))
-
-export const childRelations = relations(children, ({ many, one }) => ({
-  questChildren: many(questChildren),
-  profile: one(profiles, {
-    fields: [children.profileId],
-    references: [profiles.id],
-  }),
-}))
-
-export const questChildrenRelations = relations(questChildren, ({ one }) => ({
-  familyQuest: one(familyQuests, {
-    fields: [questChildren.familyQuestId],
-    references: [familyQuests.id],
-  }),
-  child: one(children, {
-    fields: [questChildren.childId],
-    references: [children.id],
-  }),
-}))
-
-export const familiesRelations = relations(families, ({ many }) => ({
-  profiles: many(profiles),
-  familyQuests: many(familyQuests),
-}))
-
-export const iconsRelations = relations(icons, ({ many, one }) => ({
-  category: one(iconCategories, {
-    fields: [icons.categoryId],
-    references: [iconCategories.id],
-  }),
-  families: many(families),
-  profiles: many(profiles),
-  quests: many(quests),
-}))
-
-export const iconCategoriesRelations = relations(iconCategories, ({ many }) => ({
-  icons: many(icons),
-}))
-
-export const questCategoriesRelations = relations(questCategories, ({ many }) => ({
-  quests: many(quests),
-}))
-
-export const questDetailsRelations = relations(questDetails, ({ one }) => ({
-  quest: one(quests, {
-    fields: [questDetails.questId],
-    references: [quests.id],
-  }),
-}))
-
-export const questTagsRelations = relations(questTags, ({ one }) => ({
-  quest: one(quests, {
-    fields: [questTags.questId],
-    references: [quests.id],
-  }),
-}))
+/** 公開クエストテーブル */
+export const publicQuests = pgTable("public_quests", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** クエストID */
+  questId: uuid("quest_id").notNull().unique().references(() => quests.id, { onDelete: "restrict" }),
+  /** 共有元の家族クエストID */
+  familyQuestId: uuid("family_quest_id").notNull().references(() => familyQuests.id, { onDelete: "restrict" }),
+  /** ピン留めコメントID */
+  // TODO: 将来的に実装
+  /** 共有フラグ */
+  isShared: boolean("is_shared").notNull().default(false),
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type PublicQuestSelect = typeof publicQuests.$inferSelect
+export type PublicQuestInsert = Omit<typeof publicQuests.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type PublicQuestUpdate = Partial<PublicQuestInsert>
