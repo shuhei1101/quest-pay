@@ -26,6 +26,7 @@ export const FamilyQuestList = () => {
   const [searchFilter, setSearchFilter] = useState<FamilyQuestFilterType>({ tags: [] })
   /** ソート状態 */
   const [sort, setSort] = useState<FamilyQuestSort>({ column: "id", order: "asc" })
+
   /** クエリストリングの状態 */
   const searchParams = useSearchParams()
   const searchParamsString = searchParams.toString()
