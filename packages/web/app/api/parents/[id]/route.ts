@@ -23,7 +23,7 @@ export async function GET(
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 親を取得する
       const data = await fetchParent({db, parentId })
@@ -32,7 +32,7 @@ export async function GET(
       if (!data) throw new ServerError("親情報の取得に失敗しました。")
 
       // 家族IDが一致しない場合
-      if (userInfo.family.id !== data.profiles?.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
+      if (userInfo.profiles.familyId !== data.profiles?.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
   
       return NextResponse.json({parent: data} as GetParentResponse)
     })

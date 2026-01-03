@@ -14,8 +14,8 @@ export const authGuard = async ({parentNG = false, childNG = false, guestNG = fa
   const userInfo = await fetchUserInfoByUserId({db, userId})
 
   if ((guestNG && !userInfo) ||
-    (parentNG && userInfo?.type === "parent") || 
-    (childNG && userInfo?.type === "child")
+    (parentNG && userInfo?.profiles?.type === "parent") || 
+    (childNG && userInfo?.profiles?.type === "child")
   ) {
     // 権限エラー画面に遷移する
     redirect(AUTH_ERROR_URL)

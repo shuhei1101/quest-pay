@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { QuestColumn } from "@/drizzle/schema"
-import { FamilyQuestFilterType } from "@/app/api/quests/family/schema"
+import { FamilyQuestFilterType } from "@/app/api/quests/family/query"
 
 /** クエストリストを取得する */
 export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:{

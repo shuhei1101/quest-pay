@@ -9,9 +9,7 @@ export const QuestOtherTab = ({
   ageTo,
   monthFrom,
   monthTo,
-  requiredCompletionCount,
   requiredClearCount,
-  currentClearCount,
   tags,
   type,
 }: {
@@ -19,9 +17,8 @@ export const QuestOtherTab = ({
   ageTo?: number | null
   monthFrom?: number | null
   monthTo?: number | null
-  requiredCompletionCount: number
   requiredClearCount: number
-  currentClearCount?: number
+  
   tags: string[]
   type?: "parent" | "child" | "online"
 }) => {
@@ -49,7 +46,7 @@ export const QuestOtherTab = ({
           <IconUsers size={20} />
           <Text fw={500}>受注可能年齢</Text>
         </Group>
-        <Text ta="right" c="dimmed">{formatAge()}</Text>
+        <Text ta="right">{formatAge()}</Text>
       </Box>
 
       <Divider />
@@ -60,18 +57,7 @@ export const QuestOtherTab = ({
           <IconCalendar size={20} />
           <Text fw={500}>掲載期間</Text>
         </Group>
-        <Text ta="right" c="dimmed">{formatPeriod()}</Text>
-      </Box>
-
-      <Divider />
-
-      {/* 必要達成回数 */}
-      <Box>
-        <Group gap="xs" mb={4}>
-          <IconRepeat size={20} />
-          <Text fw={500}>必要達成回数</Text>
-        </Group>
-        <Text ta="right" c="dimmed">{requiredCompletionCount}回</Text>
+        <Text ta="right">{formatPeriod()}</Text>
       </Box>
 
       <Divider />
@@ -82,26 +68,10 @@ export const QuestOtherTab = ({
           <IconTrophy size={20} />
           <Text fw={500}>レベルUPに必要なクリア回数</Text>
         </Group>
-        <Text ta="right" c="dimmed">{requiredClearCount}回</Text>
+        <Text ta="right">{requiredClearCount}回</Text>
       </Box>
 
-      {/* 現在の達成状況（子供のみ表示） */}
-      {type === "child" && (
-        <>
-          <Divider />
-          <Box>
-            <Group gap="xs" mb={4}>
-              <IconChartBar size={20} />
-              <Text fw={500}>あなたの達成状況</Text>
-            </Group>
-            <Group justify="flex-end" gap="xs">
-              <Badge variant="filled" color="green" size="lg">
-                {currentClearCount}/{requiredCompletionCount}回クリア
-              </Badge>
-            </Group>
-          </Box>
-        </>
-      )}
+
 
       {/* タグ */}
       {tags.length > 0 && (

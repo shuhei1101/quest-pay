@@ -12,15 +12,15 @@ export const fetchFamily = async ({ db, familyId }: {
   try {
 
     // データを取得する
-    const family = await db
+    const rows = await db
       .select()
       .from(families)
       .where(eq(families.id, familyId))
       .limit(1)
 
-      devLog("fetchFamily.取得データ: ", family)
+      devLog("fetchFamily.取得データ: ", rows)
 
-      return family[0]
+      return rows[0]
   } catch (error) {
     devLog("fetchFamily.取得例外: ", error)
     throw new QueryError("家族情報の読み込みに失敗しました。")
@@ -34,11 +34,12 @@ export const getFamilyByInviteCode = async ({db, code}: {
 }) => {
   try {
     // データを取得する
-    const family = await db.query.families.findFirst({
-      where: eq(families.inviteCode, code)
-    })
+    const rows = await db
+      .select()
+      .from(families)
+      .where(eq(families.inviteCode, code))
 
-    return family
+    return rows[0]
   } catch (error) {
     devLog("getFamilyByInviteCode.取得例外: ", error)
     throw new QueryError("家族招待コードの生成に失敗しました。")

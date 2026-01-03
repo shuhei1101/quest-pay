@@ -2,7 +2,8 @@ import queryString from "query-string"
 import { FAMILY_QUESTS_API_URL } from "@/app/(core)/endpoints";
 import { devLog } from "@/app/(core)/util";
 import { AppError } from "@/app/(core)/error/appError";
-import type { FamilyQuestSearchParams, GetFamilyQuestsResponse, PostFamilyQuestRequest, PostFamilyQuestResponse } from "./route";
+import type { GetFamilyQuestsResponse, PostFamilyQuestRequest, PostFamilyQuestResponse } from "./route";
+import { FamilyQuestSearchParams } from "./query";
 
 /** 家族クエストをGETする */
 export const getFamilyQuests = async (params: FamilyQuestSearchParams) => {

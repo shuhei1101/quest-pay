@@ -81,3 +81,7 @@ export const useChildForm = ({childId}: {childId?: string}) => {
               <div>
               ...
 ```
+
+## DBクエリ
+- drizzleの高レベルクエリ（db.query.xxx.findFirstなど）は使用せず、低レベルクエリ（db.select().from(...).where(...)など）を使用すること
+  - なお、オブジェクトが入れ子担っている場合は、変換するプライベート関数を作成し、そこに変換ロジックを集約すること

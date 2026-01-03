@@ -15,6 +15,27 @@
       "when": 1766977384108,
       "tag": "0001_daffy_killer_shrike",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767437451874,
+      "tag": "0002_bumpy_exodus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1767437670774,
+      "tag": "0003_narrow_william_stryker",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1767438015740,
+      "tag": "0004_certain_johnny_storm",
+      "breakpoints": true
     }
   ]
 }

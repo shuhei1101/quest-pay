@@ -7,7 +7,7 @@ import { removeFamilyQuest, editFamilyQuest } from "../service"
 import { devLog } from "@/app/(core)/util"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import z from "zod"
-import { FamilyQuestFormScheme } from "@/app/(app)/quests/parent/[id]/form"
+import { FamilyQuestFormScheme } from "@/app/(app)/quests/family/[id]/form"
 
 /** 家族クエストを取得する */
 export type GetFamilyQuestResponse = {
@@ -56,13 +56,13 @@ export async function PUT(
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.family?.id) throw new ServerError("家族IDの取得に失敗しました。")
+      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
 
       // 現在の家族クエストを取得する
       const currentFamilyQuest = await fetchFamilyQuest({ db, id: params.id })
 
       // 家族IDが一致しない場合
-      if (userInfo.family.id !== currentFamilyQuest?.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
+      if (userInfo.profiles.familyId !== currentFamilyQuest?.base.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
         
       // 家族クエストを更新する
       await editFamilyQuest({
@@ -70,7 +70,7 @@ export async function PUT(
         familyQuest: {
           id: params.id,
           record: {
-            familyId: userInfo.family.id,
+            familyId: userInfo.profiles.familyId,
             isClientPublic: data.form.isClientPublic,
             isPublic: data.form.isPublic,
             isRequestDetailPublic: data.form.isRequestDetailPublic,
@@ -86,7 +86,7 @@ export async function PUT(
           requiredClearCount: detail.requiredClearCount,
         })),
         quest: {
-          id: currentFamilyQuest.questId,
+          id: currentFamilyQuest.quest.id,
           record: {
             iconColor: data.form.iconColor,
             name: data.form.name,
