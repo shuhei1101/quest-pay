@@ -14,7 +14,7 @@ const stackToArray = (stack: string): string[] => {
 }
 
 /** 開発時ログを出力する */
-export const devLog = (text: string, obj?: unknown) => {
+export const devLog = (text: string, obj?: unknown, path?: string) => {
   if (process.env.NODE_ENV !== "development") return
 
   try {
@@ -46,12 +46,12 @@ export const devLog = (text: string, obj?: unknown) => {
     }
 
     if (logObj === undefined) {
-      console.log(`【DEBUG】${getJstTimestamp()} ${text}`)
+      console.log(`【DEBUG】${getJstTimestamp()}`, path ? `[${path}]->` : "", `${text}`)
     } else {
-      console.log(`【DEBUG】${getJstTimestamp()} ${text}`, logObj)
+      console.log(`【DEBUG】${getJstTimestamp()}`, path ? `[${path}]->` : "", `${text}`, logObj)
     }
   } catch (e) {
-    console.log(`【DEBUG】${getJstTimestamp()} ${text}`, obj ?? "")
+    console.log(`【DEBUG】${getJstTimestamp()}`, path ? `[${path}]->` : "", `${text}`, obj ?? "")
   }
 }
 

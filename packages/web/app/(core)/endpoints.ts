@@ -38,6 +38,10 @@ export const FAMILY_QUEST_NEW_URL = `${FAMILY_QUESTS_URL}/new`
 export const FAMILY_QUESTS_API_URL = `${QUESTS_API_URL}/family`
 export const FAMILY_QUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUESTS_API_URL}/${familyQuestId}`
 
+// 子供クエスト
+export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
+export const CHILD_QUESTS_API_URL = `${QUESTS_API_URL}/child`
+
 // 家族
 export const FAMILIES_URL = `/families`
 export const FAMILY_NEW_URL = `${FAMILIES_URL}/new`

@@ -97,6 +97,7 @@ export async function PUT(
             monthFrom: data.form.monthFrom,
             monthTo: data.form.monthTo,
             requestDetail: data.form.requestDetail,
+            client: data.form.client,
           },
           updatedAt: data.updatedAt,
         },

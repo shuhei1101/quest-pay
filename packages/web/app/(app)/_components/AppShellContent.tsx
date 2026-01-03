@@ -30,8 +30,13 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
         padding="md"
         styles={{
           main: {
-            height: "100%",
+            height: isMobile 
+              ? "calc(100dvh - var(--app-shell-header-offset, 60px) - 60px)"
+              : "calc(100dvh - var(--app-shell-header-offset, 60px))",
             overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: isMobile ? "60px" : undefined,
           },
         }}
       >

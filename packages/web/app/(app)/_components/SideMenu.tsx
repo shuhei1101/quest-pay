@@ -1,6 +1,6 @@
 "use client"
 
-import { HOME_URL, QUESTS_URL, QUESTS_NEW_URL, USERS_URL, FAMILY_MEMBERS_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, QUESTS_URL, QUESTS_NEW_URL, USERS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon } from '@mantine/core'
 import { IconFiles, IconFilePlus } from '@tabler/icons-react'
 import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_components/icon'
@@ -76,11 +76,11 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
         <HomeIcon stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_QUESTS_URL)}>
         <ClipboardIcon stroke={1.4} />
       </ActionIcon>
       {/* 地球アイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_QUESTS_URL)}>
         <WorldIcon stroke={1.4} />
       </ActionIcon>
       {/* 人アイコン */}

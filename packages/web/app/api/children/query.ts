@@ -18,11 +18,11 @@ export const fetchChildrenByFamilyId = async ({ db, familyId }: {
       .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(profiles.familyId, familyId))
 
-    devLog("fetchChildrenByFamilyId.取得データ: ", data)
+    devLog("fetchChildrenByFamilyId.取得データ: ", data, "app/api/children/query.ts")
 
     return data
   } catch (error) {
-    devLog("fetchChildrenByFamilyId.取得例外: ", error)
+    devLog("fetchChildrenByFamilyId.取得例外: ", error, "app/api/children/query.ts")
     throw new QueryError("子供情報の読み込みに失敗しました。")
   }
 }
@@ -47,7 +47,7 @@ export const fetchChild = async ({ db,  childId }: {
 
     return data[0]
   } catch (error) {
-    devLog("fetchChild.取得例外: ", error)
+    devLog("fetchChild.取得例外: ", error, "app/api/children/query.ts")
     throw new QueryError("子供情報の読み込みに失敗しました。")
   }
 }
@@ -68,6 +68,6 @@ export const fetchChildByInviteCode = async ({db, invite_code}: {
   return data[0]
   } catch (error) {
     devLog("getChildByInviteCode.取得例外: ", error)
-    throw new QueryError("招待コードの生成に失敗しました。")
+    throw new QueryError("招待コードの生成に失敗しました。", "app/api/children/query.ts")
   }
 }

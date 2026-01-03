@@ -19,7 +19,7 @@ import type { FamilyQuestSort } from "@/drizzle/schema"
 import { FamilyQuestFilterScheme, type FamilyQuestFilterType } from "@/app/api/quests/family/schema"
 import { FAMILY_QUEST_NEW_URL, FAMILY_QUEST_URL } from "@/app/(core)/endpoints"
 
-export const FamilyQuests = () => {
+export const FamilyQuestsScreen = () => {
   const router = useRouter() 
 
   /** タブ状態 */
@@ -109,11 +109,11 @@ export const FamilyQuests = () => {
   const { ref: sentinelRef, entry } = useIntersection({
     threshold: 1,
   })
-  /** 下まで来たら次ページを取得 */
+  /** 下まで来たら次ページを取得する */
   useEffect(() => {
     if (entry?.isIntersecting) {
       devLog("ページ最下層検知。現在のページ: ", {page, maxPage, totalRecords})
-      // 次のページが存在するときだけセット
+      // 次のページが存在するときだけセットする
       if (page < maxPage && !isLoading) {
         setPage((prev) => prev + 1)
       }
@@ -158,7 +158,7 @@ export const FamilyQuests = () => {
   const [isComposing, setIsComposing] = useState(false)
 
   return (
-      <div {...handlers} className="w-full h-[80vh]">
+      <div className="w-full h-[80vh]">
       {/* クエスト一覧 */}
       <Tabs value={tabValue} onChange={setTabValue}>
         {/* アイコンカテゴリ */}
@@ -227,7 +227,7 @@ export const FamilyQuests = () => {
             <IconArrowsSort style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>
         </div>
-        <div className="m-3" />
+        <div className="m-3" {...handlers} />
         {/* 全件表示 */}
         <Tabs.Panel value={"すべて"} key={0} style={{
           height: "calc(100vh - 200px",

@@ -80,7 +80,7 @@ export async function POST(
           ageFrom: data.form.ageFrom,
           ageTo: data.form.ageTo,
           categoryId: data.form.categoryId,
-          client: userId,
+          client: data.form.client,
           monthFrom: data.form.monthFrom,
           monthTo: data.form.monthTo,
           requestDetail: data.form.requestDetail,

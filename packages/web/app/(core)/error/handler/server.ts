@@ -10,11 +10,12 @@ export async function withRouteErrorHandling(
     // コールバックを実行する
     return await fn()
   } catch (error) {
-    devLog("withRouteErrorHandling.サーバ内例外: ", error)
     if (error instanceof AppError) {
       // アプリ固有エラーのハンドル
+      devLog("withRouteErrorHandling.サーバ内例外: ", error, error.path)
       return NextResponse.json(error.toResponse(), { status: error.status })
     } else {
+      devLog("withRouteErrorHandling.想定外の例外: ", error, "app/(core)/error/handler/server.ts")
       // 想定外のエラー
       return NextResponse.json({
         code: UNKNOWN_ERROR, 

@@ -118,6 +118,6 @@ export const fetchFamilyQuest = async ({id, db}: {
     return data[0]
   } catch (error) {
     devLog("fetchFamilyQuest.取得例外: ", error)
-    throw new QueryError("ユーザ情報の読み込みに失敗しました。")
+    throw new QueryError("家族クエストの読み込みに失敗しました。")
   }
 }

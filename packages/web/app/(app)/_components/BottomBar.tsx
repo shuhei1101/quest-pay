@@ -1,6 +1,6 @@
 "use client"
 
-import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL } from '@/app/(core)/endpoints'
 import { Box, ActionIcon } from '@mantine/core'
 import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_components/icon'
 import { useRouter } from 'next/navigation'
@@ -31,7 +31,7 @@ export const BottomBar = () => {
         <HomeIcon stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_QUESTS_URL)}>
         <ClipboardIcon stroke={1.4} />
       </ActionIcon>
       {/* 地球アイコン */}

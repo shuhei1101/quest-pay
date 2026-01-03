@@ -14,7 +14,6 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
   const { setColorScheme } = useMantineColorScheme()
   
   useEffect(() => {
-    devLog("カラー: ", isSystemDark ? "dark" : "light")
     setColorScheme(isSystemDark ? "dark" : "light")
   }, [isSystemDark, setColorScheme])
 

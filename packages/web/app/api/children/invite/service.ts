@@ -14,10 +14,10 @@ export const generateUniqueInviteCode = async ({db}: {
     const child = await fetchChildByInviteCode({invite_code: code, db})
 
     // 招待コードが存在していない場合
-    if (child === null) {
+    if (!child) {
       // コードを返却する
       return code
     }
   }
-  throw new ServerError("招待コードの生成に失敗しました")
+  throw new ServerError("招待コードの生成に失敗しました", "app/api/children/invite/service.ts")
 }
