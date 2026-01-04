@@ -1,7 +1,7 @@
 import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
-import { publicQuests, PublicQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect } from "@/drizzle/schema"
+import { publicQuests, PublicQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, familyQuests, FamilyQuestSelect } from "@/drizzle/schema"
 import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
@@ -30,6 +30,7 @@ export type PublicQuest = {
   tags: QuestTagSelect[]
   details: QuestDetailSelect[]
   icon: IconSelect | null
+  familyQuest: FamilyQuestSelect | null
 }
 
 /** クエリ結果をFetchPublicQuestsItemの配列に変換する */
@@ -39,6 +40,7 @@ const buildResult = (rows: {
   quest_details?: QuestDetailSelect | null
   quest_tags?: QuestTagSelect | null
   icons: IconSelect | null
+  family_quests?: FamilyQuestSelect | null
 }[]): PublicQuest[] => {
   const map = new Map<string, PublicQuest>()
 
@@ -52,14 +54,15 @@ const buildResult = (rows: {
         quest: row.quests,
         tags: [],
         details: [],
-        icon: row.icons
+        icon: row.icons,
+        familyQuest: row.family_quests || null,
       })
     }
 
     // tagがあれば追加する
-    if (row.quest_tags) map.get(publicQuestId)!.tags.push(row.quest_tags)
+    if (row.quest_tags && !map.get(publicQuestId)!.tags.some(tag => tag.id === row.quest_tags!.id)) map.get(publicQuestId)!.tags.push(row.quest_tags)
     // detailがあれば追加する
-    if (row.quest_details) map.get(publicQuestId)!.details.push(row.quest_details)
+    if (row.quest_details && !map.get(publicQuestId)!.details.some(detail => detail.id === row.quest_details!.id)) map.get(publicQuestId)!.details.push(row.quest_details)
   }
 
   return Array.from(map.values())
@@ -86,7 +89,8 @@ export const fetchPublicQuests = async ({ params, db }: {
       .leftJoin(questDetails, eq(questDetails.questId, quests.id))
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
-      .where(and(...conditions))
+      
+      .where(and(...conditions, eq(publicQuests.isActivate, true)))
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
         desc(quests[params.sortColumn])
@@ -101,6 +105,8 @@ export const fetchPublicQuests = async ({ params, db }: {
 
     // データをオブジェクトに変換する
     const result = buildResult(rows)
+
+    devLog("fetchPublicQuests.取得データ: ", result)
 
     return {
       rows: result,
@@ -126,11 +132,14 @@ export const fetchPublicQuest = async ({id, db}: {
       .leftJoin(questDetails, eq(questDetails.questId, quests.id))
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
+      .leftJoin(familyQuests, eq(familyQuests.id, publicQuests.familyQuestId))
       .where(eq(publicQuests.id, id))
 
     // データを結果オブジェクトに変換する
     const result = buildResult(rows)
-    
+
+    devLog("fetchPublicQuest.取得データ: ", result)
+
     return result[0]
   } catch (error) {
     devLog("fetchPublicQuest.取得例外: ", error)

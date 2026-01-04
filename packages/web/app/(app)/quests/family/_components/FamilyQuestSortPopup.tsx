@@ -1,7 +1,7 @@
 "use client"
 
 import { useWindow } from "@/app/(core)/useConstants"
-import { FamilyQuestSort, QuestColumn } from "@/drizzle/schema"
+import { QuestSort, QuestColumn } from "@/drizzle/schema"
 import { ActionIcon, Button, ColorPicker, Input, Modal, Pill, PillsInput, Popover, SimpleGrid, Space, Tabs, Text } from "@mantine/core"
 import { IconArrowDown, IconArrowsSort, IconArrowUp, IconCheck, IconGrid3x3, IconWorld } from "@tabler/icons-react"
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
@@ -10,7 +10,7 @@ const ColumnButton = ({name, column, leftSection, sort, onClick}: {
   name: string,
   column: QuestColumn,
   leftSection: ReactNode,
-  sort: FamilyQuestSort,
+  sort: QuestSort,
   onClick: () => void
 }) => (
   <Button variant={sort.column == column ? "outline" : "default"} justify="space-between"
@@ -26,14 +26,14 @@ const ColumnButton = ({name, column, leftSection, sort, onClick}: {
 export const FamilyQuestSortPopup = ({opened, close, currentSort, handleSearch}: {
   opened: boolean,
   close: () => void,
-  currentSort: FamilyQuestSort,
-  handleSearch: (sort: FamilyQuestSort) => void
+  currentSort: QuestSort,
+  handleSearch: (sort: QuestSort) => void
 }) => {
   /** 画面定数 */
   const { isMobile, isTablet, isDesktop } = useWindow()
 
   /** ソート状態 */
-  const [sort, setSort] = useState<FamilyQuestSort>({column: "id", order: "asc"})
+  const [sort, setSort] = useState<QuestSort>({column: "id", order: "asc"})
 
   // ポップアップ起動時のイベント
   useEffect(() => {

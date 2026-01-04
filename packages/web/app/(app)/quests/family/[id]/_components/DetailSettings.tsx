@@ -3,9 +3,10 @@ import { IconAlertCircle, IconCheck, IconCircleCheck, IconCopy, IconLock, IconMi
 import { LevelDetailForm } from "./LevelDetailForm"
 import { LevelCopyButton } from "./LevelCopyButton"
 import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form"
-import { FamilyQuestFormType, isDefaultDetail } from "../form"
 import { modals } from "@mantine/modals"
+import { BaseQuestFormType, isDefaultDetail } from "../../../form"
 
+/** 詳細設定コンポーネント */
 export const DetailSettings = ({ 
   activeLevel, 
   setActiveLevel, 
@@ -20,10 +21,10 @@ export const DetailSettings = ({
   setActiveLevel: (v: string | null) => void
   levels: Record<string, boolean>
   onSave: (level: string) => void
-  register: UseFormRegister<FamilyQuestFormType>
-  errors: FieldErrors<FamilyQuestFormType>
-  setValue: UseFormSetValue<FamilyQuestFormType>
-  watch: UseFormWatch<FamilyQuestFormType>
+  register: UseFormRegister<BaseQuestFormType>
+  errors: FieldErrors<BaseQuestFormType>
+  setValue: UseFormSetValue<BaseQuestFormType>
+  watch: UseFormWatch<BaseQuestFormType>
 }) => {
   // 表示するレベルのリスト
   const visibleLevels = watch().details.map(d => d.level).sort((a, b) => a - b)

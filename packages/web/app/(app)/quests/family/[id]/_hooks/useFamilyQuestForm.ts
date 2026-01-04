@@ -19,7 +19,6 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
     name: "",
     iconId: 1,
     tags: [],
-    isPublic: false,
     iconColor: thema.colors.blue[ 5 ],
     categoryId: null,
     details: [ {
@@ -36,8 +35,6 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
     monthTo: null,
     client: "",
     requestDetail: "",
-    isClientPublic: false,
-    isRequestDetailPublic: false,
     childIds: []
   }
 
@@ -68,7 +65,6 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
         name: familyQuest.quest.name || "",
         tags: familyQuest.tags?.map( ( t ) => t.name ),
         iconId: familyQuest.quest.iconId,
-        isPublic: familyQuest.base.isPublic,
         iconColor: familyQuest.quest.iconColor,
         categoryId: familyQuest.quest.categoryId,
         details: familyQuest.details.map( ( detail ) => ( {
@@ -86,8 +82,6 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
         client: familyQuest.quest.client,
         requestDetail: familyQuest.quest.requestDetail,
         childIds: familyQuest.children.map(( child ) => child.childId ),
-        isClientPublic: familyQuest.base.isClientPublic,
-        isRequestDetailPublic: familyQuest.base.isRequestDetailPublic,
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)
@@ -98,6 +92,8 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
         questEntity: familyQuest
       }
     },
+    staleTime: 0,
+    refetchOnMount: "always",
     enabled: !!familyQuestId
   })
 
@@ -113,7 +109,6 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
     currentQuest.iconId !== fetchedQuest.iconId ||
     currentQuest.iconColor !== fetchedQuest.iconColor ||
     !isSameArray(currentQuest.tags, fetchedQuest.tags) ||
-    currentQuest.isPublic !== fetchedQuest.isPublic ||
     currentQuest.categoryId !== fetchedQuest.categoryId ||
     currentQuest.ageFrom !== fetchedQuest.ageFrom ||
     currentQuest.ageTo !== fetchedQuest.ageTo ||

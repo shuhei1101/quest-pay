@@ -76,11 +76,11 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
         <HomeIcon stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_QUESTS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
         <ClipboardIcon stroke={1.4} />
       </ActionIcon>
       {/* 地球アイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_QUESTS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
         <WorldIcon stroke={1.4} />
       </ActionIcon>
       {/* 人アイコン */}

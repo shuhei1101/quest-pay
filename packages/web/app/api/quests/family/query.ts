@@ -60,11 +60,11 @@ const buildResult = (rows: {
     }
 
     // tagがあれば追加する
-    if (row.quest_tags) map.get(familyQuestId)!.tags.push(row.quest_tags)
+    if (row.quest_tags && !map.get(familyQuestId)!.tags.some(tag => tag.id === row.quest_tags!.id)) map.get(familyQuestId)!.tags.push(row.quest_tags)
     // detailがあれば追加する
-    if (row.quest_details) map.get(familyQuestId)!.details.push(row.quest_details)
+    if (row.quest_details && !map.get(familyQuestId)!.details.some(detail => detail.id === row.quest_details!.id)) map.get(familyQuestId)!.details.push(row.quest_details)
     // childがあれば追加する
-    if (row.quest_children) map.get(familyQuestId)!.children.push(row.quest_children)
+    if (row.quest_children && !map.get(familyQuestId)!.children.some(child => child.id === row.quest_children!.id)) map.get(familyQuestId)!.children.push(row.quest_children)
   }
 
   return Array.from(map.values())

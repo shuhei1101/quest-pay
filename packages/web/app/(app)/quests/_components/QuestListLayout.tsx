@@ -23,7 +23,6 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   onPageChange,
   onSearchTextChange,
   onSearch,
-  onQuestSelect,
   renderQuestCard,
   questCategories,
   questCategoryById,
@@ -48,8 +47,6 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   onSearchTextChange: (searchText: string) => void
   /** 検索実行時のハンドル */
   onSearch: () => void
-  /** クエスト選択時のハンドル */
-  onQuestSelect: (quest: T) => void
   /** クエストカード描画関数 */
   renderQuestCard: (quest: T, index: number) => ReactNode
   /** クエストカテゴリ一覧 */

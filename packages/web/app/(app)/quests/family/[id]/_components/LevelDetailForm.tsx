@@ -2,17 +2,17 @@ import { Box, Button, Checkbox, Group, Input, NumberInput, Paper, PillsInput, Se
 import { useState } from "react"
 import { IconCircleCheck, IconLock } from "@tabler/icons-react"
 import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form"
-import { FamilyQuestFormType } from "../form"
 import { RequiredMark } from "@/app/(core)/_components/RequiredMark"
+import { BaseQuestFormType } from "../../../form"
 
-
+/** レベル詳細フォームコンポーネント */
 export const LevelDetailForm = ({ level, onSave, register, errors, setValue, watch }: { 
   level: number
   onSave: () => void
-  register: UseFormRegister<FamilyQuestFormType>
-  errors: FieldErrors<FamilyQuestFormType>
-  setValue: UseFormSetValue<FamilyQuestFormType>
-  watch: UseFormWatch<FamilyQuestFormType>
+  register: UseFormRegister<BaseQuestFormType>
+  errors: FieldErrors<BaseQuestFormType>
+  setValue: UseFormSetValue<BaseQuestFormType>
+  watch: UseFormWatch<BaseQuestFormType>
 }) => {
   /** 現在のレベルのdetailインデックスを取得する */
   const detailIndex = watch().details.findIndex(d => d.level === level)
@@ -22,7 +22,7 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
   const detail = watch().details[detailIndex]
 
   /** detailの値を更新する */
-  const updateDetail = (field: keyof FamilyQuestFormType["details"][number], value: any) => {
+  const updateDetail = (field: keyof BaseQuestFormType["details"][number], value: unknown) => {
     const newDetails = [...watch().details]
     newDetails[detailIndex] = { ...newDetails[detailIndex], [field]: value }
     setValue("details", newDetails)

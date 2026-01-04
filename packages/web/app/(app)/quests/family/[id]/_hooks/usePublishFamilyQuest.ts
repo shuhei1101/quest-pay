@@ -3,18 +3,17 @@
 import { useRouter } from "next/navigation"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useMutation } from "@tanstack/react-query"
-import { deleteFamilyQuest } from "@/app/api/quests/family/[id]/client"
 import { ClientValueError } from "@/app/(core)/error/appError"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
-import { postFamilyQuestPublic } from "@/app/api/quests/family/[id]/public/client"
+import { publishFamilyQuestPublic } from "@/app/api/quests/family/[id]/publish/client"
 
 /** 公開ボタン押下時のハンドル */
 export const usePublishFamilyQuest = () => {
   const router = useRouter()
   /** 公開処理 */
   const mutation = useMutation({
-    mutationFn: ({familyQuestId}: {familyQuestId: string}) => postFamilyQuestPublic({
+    mutationFn: ({familyQuestId}: {familyQuestId: string}) => publishFamilyQuestPublic({
       familyQuestId,
     }),
     onSuccess: () => {

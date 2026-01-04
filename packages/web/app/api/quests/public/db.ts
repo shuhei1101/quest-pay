@@ -28,7 +28,7 @@ export const insertPublicQuest = async ({db, record, questId}: {
   }
 }
 
-export type UpdatePublicQuestRecord = Omit<PublicQuestUpdate, "questId">
+export type UpdatePublicQuestRecord = Omit<PublicQuestUpdate, "questId" | "familyQuestId">
 
 /** 公開クエストを更新する */
 export const updatePublicQuest = async ({db, record, id, updatedAt}: {

@@ -36,6 +36,20 @@
       "when": 1767438015740,
       "tag": "0004_certain_johnny_storm",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1767467142434,
+      "tag": "0005_adorable_johnny_blaze",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1767469656633,
+      "tag": "0006_careful_lethal_legion",
+      "breakpoints": true
     }
   ]
 }

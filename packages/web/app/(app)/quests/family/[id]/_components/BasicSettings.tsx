@@ -1,18 +1,18 @@
 import { ActionIcon, Group, Input, NumberInput, Pill, PillsInput, Select, Switch, Textarea, TextInput } from "@mantine/core"
 import { useState } from "react"
 import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form"
-import { FamilyQuestFormType } from "../form"
 import { useIcons } from "@/app/(app)/icons/_hooks/useIcons"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { QuestCategoryCombobox } from "../../../category/_component/QuestCategoryCombobox"
 import { RequiredMark } from "@/app/(core)/_components/RequiredMark"
+import { BaseQuestFormType } from "../../../form"
 
-
-export const BasicSettings = ({register, errors, setValue, watch, openIconPopup, tagInputValue, setTagInputValue, handleTag, isComposing, setIsComposing}: {
-  register: UseFormRegister<FamilyQuestFormType>
-  errors: FieldErrors<FamilyQuestFormType>
-  setValue: UseFormSetValue<FamilyQuestFormType>
-  watch: UseFormWatch<FamilyQuestFormType>
+/** 基本設定コンポーネント */
+export const BasicSettings = ({ register, errors, setValue, watch, openIconPopup, tagInputValue, setTagInputValue, handleTag, isComposing, setIsComposing }: {
+  register: UseFormRegister<BaseQuestFormType>
+  errors: FieldErrors<BaseQuestFormType>
+  setValue: UseFormSetValue<BaseQuestFormType>
+  watch: UseFormWatch<BaseQuestFormType>
   openIconPopup: () => void
   tagInputValue: string
   setTagInputValue: (value: string) => void

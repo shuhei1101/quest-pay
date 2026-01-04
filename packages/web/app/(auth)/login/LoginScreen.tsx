@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks"
 import { LoginTypeSelectPopup } from "./_components/LoginTypeSelectPopup"
 import { useLogin } from "./_hook/useLogin"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUESTS_URL, SIGNUP_URL } from "../../(core)/endpoints"
+import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL } from "../../(core)/endpoints"
 import Link from "next/link"
 
 export const LoginScreen = () => {
@@ -29,7 +29,7 @@ export const LoginScreen = () => {
     if (!userInfo) {
       openPopup() // タイプ選択ポップアップを表示する
     } else {
-      router.push(FAMILY_QUESTS_URL) // ホーム画面に遷移する
+      router.push(QUESTS_URL) // ホーム画面に遷移する
     }
   }})
 

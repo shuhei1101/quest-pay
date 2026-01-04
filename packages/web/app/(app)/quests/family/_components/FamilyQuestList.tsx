@@ -9,7 +9,7 @@ import { FamilyQuestFilterPopup } from "./FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./FamilyQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
 import { FamilyQuestFilterScheme, type FamilyQuest, type FamilyQuestFilterType } from "@/app/api/quests/family/query"
-import type { FamilyQuestSort } from "@/drizzle/schema"
+import type { QuestSort } from "@/drizzle/schema"
 import { FAMILY_QUEST_EDIT_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 
 /** 家族クエストリストコンポーネント */
@@ -25,7 +25,7 @@ export const FamilyQuestList = () => {
   /** 検索実行用フィルター状態 */
   const [searchFilter, setSearchFilter] = useState<FamilyQuestFilterType>({ tags: [] })
   /** ソート状態 */
-  const [sort, setSort] = useState<FamilyQuestSort>({ column: "id", order: "asc" })
+  const [sort, setSort] = useState<QuestSort>({ column: "id", order: "asc" })
 
   /** クエリストリングの状態 */
   const searchParams = useSearchParams()
@@ -79,11 +79,6 @@ export const FamilyQuestList = () => {
     setPage(newPage)
   }, [])
 
-  /** クエスト選択時のハンドル */
-  const handleQuestSelect = useCallback((quest: FamilyQuest) => {
-    router.push(FAMILY_QUEST_EDIT_URL(quest.base.id))
-  }, [router])
-
   /** 検索テキスト変更時のハンドル */
   const handleSearchTextChange = useCallback((searchText: string) => {
     setQuestFilter((prev) => ({
@@ -108,13 +103,13 @@ export const FamilyQuestList = () => {
   }, [handleSearch])
 
   /** ソート検索時のハンドル */
-  const handleSortSearch = useCallback((newSort: FamilyQuestSort) => {
+  const handleSortSearch = useCallback((newSort: QuestSort) => {
     setSort(newSort)
     handleSearch()
   }, [handleSearch])
 
   return (
-    <QuestListLayout<FamilyQuest, FamilyQuestFilterType, FamilyQuestSort>
+    <QuestListLayout<FamilyQuest, FamilyQuestFilterType, QuestSort>
       quests={fetchedQuests}
       page={page}
       maxPage={maxPage}
@@ -123,7 +118,6 @@ export const FamilyQuestList = () => {
       onPageChange={handlePageChange}
       onSearchTextChange={handleSearchTextChange}
       onSearch={handleSearch}
-      onQuestSelect={handleQuestSelect}
       renderQuestCard={renderFamilyQuestCard}
       questCategories={questCategories}
       questCategoryById={questCategoryById}

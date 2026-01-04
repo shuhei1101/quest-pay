@@ -1,0 +1,1 @@
+ALTER TABLE "public_quests" RENAME COLUMN "is_shared" TO "is_activate";

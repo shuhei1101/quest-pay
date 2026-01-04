@@ -16,7 +16,7 @@ export async function POST(
     // 認証コンテキストを取得する
     const { db, userId } = await getAuthContext()
       // パスパラメータからIDを取得する
-      const id = (await context.params).id
+      const { id } = await context.params
 
       // 家族IDを取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})

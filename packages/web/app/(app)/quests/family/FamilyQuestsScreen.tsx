@@ -8,6 +8,7 @@ import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hook/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
+import { PublicQuestList } from "../public/_components/PublicQuestList"
 
 export function FamilyQuestsScreen() {
   const router = useRouter()
@@ -83,7 +84,7 @@ export function FamilyQuestsScreen() {
       <Paper p="xs" withBorder>
 
       <Tabs.Panel value="public">
-        公開クエスト
+        {isGuest ? <GuestScreen/> : <PublicQuestList />}
       </Tabs.Panel>
       <Tabs.Panel value="family">
         {isGuest ? <GuestScreen/> : <FamilyQuestList />}

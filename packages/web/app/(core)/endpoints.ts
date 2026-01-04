@@ -38,8 +38,22 @@ export const FAMILY_QUEST_VIEW_URL = (familyQuestId: string) => `${FAMILY_QUEST_
 export const FAMILY_QUEST_NEW_URL = `${FAMILY_QUESTS_URL}/new`
 export const FAMILY_QUESTS_API_URL = `${QUESTS_API_URL}/family`
 export const FAMILY_QUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUESTS_API_URL}/${familyQuestId}`
-// 家族クエスト公開API
-export const FAMILY_QUEST_PUBLIC_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/public`
+export const FAMILY_QUEST_PUBLISH_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/publish`
+
+// 公開クエスト
+export const PUBLIC_QUESTS_URL = `${QUESTS_URL}/public`
+export const PUBLIC_QUEST_EDIT_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`
+export const PUBLIC_QUEST_VIEW_URL = (publicQuestId: string) => `${PUBLIC_QUEST_EDIT_URL(publicQuestId)}/view`
+export const PUBLIC_QUESTS_API_URL = `${QUESTS_API_URL}/public`
+export const PUBLIC_QUEST_API_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_API_URL}/${publicQuestId}`
+export const PUBLIC_QUEST_ACTIVATE_API_URL = (publicQuestId: string) => `${PUBLIC_QUEST_API_URL(publicQuestId)}/activate`
+export const PUBLIC_QUEST_DEACTIVATE_API_URL = (publicQuestId: string) => `${PUBLIC_QUEST_API_URL(publicQuestId)}/deactivate`
+
+
+
+
+
+
 
 // 子供クエスト
 export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`

@@ -2,12 +2,17 @@ import { ActionIcon, Anchor, Box, Group, Paper, Switch, Text } from "@mantine/co
 import { useState } from "react"
 import { IconUser } from "@tabler/icons-react"
 import { UseFormSetValue, UseFormWatch } from "react-hook-form"
-import { FamilyQuestFormType } from "../form"
 import { useChildren } from "@/app/(app)/children/_hook/useChildren"
 
-export const ChildSettings = ({watch, setValue}: {
-  watch: UseFormWatch<FamilyQuestFormType>
-  setValue: UseFormSetValue<FamilyQuestFormType>
+/** childIdsを持つフォーム型 */
+export type FormWithChildIds = {
+  childIds: string[]
+}
+
+/** 子供設定コンポーネント */
+export const ChildSettings = ({ watch, setValue }: {
+  watch: UseFormWatch<FormWithChildIds>
+  setValue: UseFormSetValue<FormWithChildIds>
 }) => {
   /** 子供リストを取得する */
   const { children, isLoading } = useChildren()

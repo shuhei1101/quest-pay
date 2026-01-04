@@ -2,29 +2,30 @@
 
 import { useRouter } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { FamilyQuestFormType } from "../form"
+import { PublicQuestFormType } from "../form"
 import toast from "react-hot-toast"
-import { putFamilyQuest } from "@/app/api/quests/family/[id]/client"
+import { putPublicQuest } from "@/app/api/quests/public/[id]/client"
 import { ClientValueError } from "@/app/(core)/error/appError"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** 更新ボタン押下時のハンドル */
-export const useUpdateFamilyQuest = () => {
+export const useUpdatePublicQuest = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
 
   /** 更新処理 */
   const mutation = useMutation({
-    mutationFn: ({form, familyQuestId, updatedAt}: {form: FamilyQuestFormType, familyQuestId: string, updatedAt: string}) => putFamilyQuest({
+    mutationFn: ({form, publicQuestId, updatedAt}: {form: PublicQuestFormType, publicQuestId: string, updatedAt: string}) => putPublicQuest({
       request: {
         form,
         updatedAt
       },
-      familyQuestId
+      publicQuestId
     }),
     onSuccess: (_data, variables) => {
-      // 家族クエストをリフレッシュする
-      queryClient.invalidateQueries({ queryKey: ["familyQuest", variables.familyQuestId] })
+      // 公開クエストをリフレッシュする
+      queryClient.invalidateQueries({ queryKey: ["publicQuest", variables.publicQuestId] })
+      
       // フィードバックメッセージを表示する
       toast('クエストを更新しました', {duration: 1500})
     },
@@ -32,10 +33,10 @@ export const useUpdateFamilyQuest = () => {
   })
 
   /** 更新ハンドル */
-  const handleUpdate = ({form, familyQuestId, updatedAt}: {form: FamilyQuestFormType, familyQuestId?: string, updatedAt?: string}) => {
-    if (!familyQuestId || !updatedAt) throw new ClientValueError()
+  const handleUpdate = ({form, publicQuestId, updatedAt}: {form: PublicQuestFormType, publicQuestId?: string, updatedAt?: string}) => {
+    if (!publicQuestId || !updatedAt) throw new ClientValueError()
     if (!window.confirm('更新します。よろしいですか？')) return
-    mutation.mutate({form, familyQuestId, updatedAt})
+    mutation.mutate({form, publicQuestId, updatedAt})
   }
 
   return {

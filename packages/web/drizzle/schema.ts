@@ -229,8 +229,7 @@ export const QuestColumnSchema = z.enum(
   Object.keys(questColumns) as [keyof typeof questColumns, ...(keyof typeof questColumns)[]]
 )
 export type QuestColumn = z.infer<typeof QuestColumnSchema>
-export type FamilyQuestSort = {column: QuestColumn, order: SortOrder}
-
+export type QuestSort = {column: QuestColumn, order: SortOrder}
 
 
 /** ファミリークエストテーブル */
@@ -241,12 +240,6 @@ export const familyQuests = pgTable("family_quests", {
   questId: uuid("quest_id").notNull().unique().references(() => quests.id, { onDelete: "restrict" }),
   /** 家族ID */
   familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
-  /** 公開設定 */
-  isPublic: boolean("is_public").notNull().default(false),
-  /** 依頼者氏名公開設定 */
-  isClientPublic: boolean("is_client_public").notNull().default(false),
-  /** 依頼詳細公開設定 */
-  isRequestDetailPublic: boolean("is_request_detail_public").notNull().default(false),
   /** タイムスタンプ */
   ...timestamps,
 })
@@ -341,9 +334,9 @@ export const publicQuests = pgTable("public_quests", {
   /** 共有元の家族クエストID */
   familyQuestId: uuid("family_quest_id").notNull().references(() => familyQuests.id, { onDelete: "restrict" }),
   /** ピン留めコメントID */
-  // TODO: 将来的に実装
-  /** 共有フラグ */
-  isShared: boolean("is_shared").notNull().default(false),
+  // TODO: 将来的に実装（コメントテーブル作成後）
+  /** 有効フラグ */
+  isActivate: boolean("is_activate").notNull().default(false),
   /** タイムスタンプ */
   ...timestamps,
 })

@@ -71,9 +71,6 @@ export async function PUT(
           id: params.id,
           record: {
             familyId: userInfo.profiles.familyId,
-            isClientPublic: data.form.isClientPublic,
-            isPublic: data.form.isPublic,
-            isRequestDetailPublic: data.form.isRequestDetailPublic,
           },
           updatedAt: data.updatedAt,
         },

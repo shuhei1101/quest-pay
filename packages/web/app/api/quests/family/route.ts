@@ -83,9 +83,6 @@ export async function POST(
         })),
         familyQuest: {
           familyId: userInfo.profiles.familyId,
-          isPublic: data.form.isPublic,
-          isClientPublic: data.form.isClientPublic,
-          isRequestDetailPublic: data.form.isRequestDetailPublic,
         },
         questChildren: data.form.childIds.map((childId) => ({
           childId: childId,

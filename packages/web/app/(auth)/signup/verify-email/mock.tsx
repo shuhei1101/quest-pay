@@ -83,19 +83,19 @@ export const MockVerifyEmailB = () => {
           <Text size="sm" fw={600} c="dark.1" className="mb-3">次のステップ:</Text>
           <div className="flex flex-col gap-3">
             <div className="flex gap-3 items-start">
-              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
                 <Text size="xs" fw={700} c="blue">1</Text>
               </div>
               <Text size="sm" c="dark.2">メールボックスを開く</Text>
             </div>
             <div className="flex gap-3 items-start">
-              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
                 <Text size="xs" fw={700} c="blue">2</Text>
               </div>
               <Text size="sm" c="dark.2">確認メール内のリンクをクリック</Text>
             </div>
             <div className="flex gap-3 items-start">
-              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
                 <Text size="xs" fw={700} c="blue">3</Text>
               </div>
               <Text size="sm" c="dark.2">アカウントが有効化されます</Text>
@@ -124,7 +124,7 @@ export const MockVerifyEmailB = () => {
 /** メール認証待ち画面C: シンプルでミニマル */
 export const MockVerifyEmailC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-slate-50 to-slate-100 p-4">
       <div className="w-full max-w-lg">
         {/* メインカード */}
         <Paper shadow="sm" p="xl" radius="md" className="mb-4">

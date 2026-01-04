@@ -1,9 +1,9 @@
 "use client"
 
-import useSWR from "swr"
 import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { getFamilyQuest } from "@/app/api/quests/family/[id]/client"
+import { useQuery } from "@tanstack/react-query"
 
 /** クエストを取得する */
 export const useFamilyQuest = ({
@@ -14,12 +14,12 @@ export const useFamilyQuest = ({
   const router = useRouter()
   
   // 検索条件に紐づくクエストリストを取得する
-  const { data, error, mutate, isLoading } = useSWR(
-    ["クエストリスト", id],
-    () => getFamilyQuest({
-      familyQuestId: id
-    })
-  )
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["familyQuest", id],
+    retry: false,
+    queryFn: () => getFamilyQuest({ familyQuestId: id }),
+    enabled: !!id
+  })
 
   // エラーをチェックする
   if (error) handleAppError(error, router)
@@ -27,6 +27,5 @@ export const useFamilyQuest = ({
   return {
     familyQuest: data?.familyQuest,
     isLoading,
-    refresh :mutate
   }
 }

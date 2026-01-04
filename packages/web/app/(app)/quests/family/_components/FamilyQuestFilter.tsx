@@ -4,6 +4,7 @@ import { FamilyQuestFilterType } from "@/app/api/quests/family/query"
 import { Accordion, Button, Input, Pill, PillsInput } from "@mantine/core"
 import { Dispatch, SetStateAction, useState } from "react"
 
+/** 公開クエストフィルターコンポーネント */
 export const FamilyQuestFilter = ({filter, setFilter, handleSearch}: {
   filter: FamilyQuestFilterType,
   setFilter: Dispatch<SetStateAction<FamilyQuestFilterType>> ,
