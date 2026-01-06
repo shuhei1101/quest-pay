@@ -24,7 +24,7 @@ export async function GET(
       if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
   
       // クエストを取得する
-      const result = await fetchPublicQuests({db, params})
+      const result = await fetchPublicQuests({db, params, familyId: userInfo.profiles.familyId})
   
       return NextResponse.json(result as GetPublicQuestsResponse)
   })

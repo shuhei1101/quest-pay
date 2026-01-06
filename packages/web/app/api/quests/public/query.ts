@@ -2,7 +2,7 @@ import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { publicQuests, PublicQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, familyQuests, FamilyQuestSelect, FamilyInsert, FamilySelect, families } from "@/drizzle/schema"
-import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
+import { and, asc, count, desc, eq, inArray, like, or } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
 import { alias } from "drizzle-orm/pg-core"
@@ -76,9 +76,10 @@ const buildResult = (rows: {
 }
 
 /** 検索条件に一致する公開クエストを取得する */
-export const fetchPublicQuests = async ({ params, db }: {
+export const fetchPublicQuests = async ({ params, db, familyId }: {
   params: PublicQuestSearchParams,
   db: Db,
+  familyId?: FamilySelect["id"]
 }) => {
   try {
     const { pageSize, offset } = calculatePagination({ page: params.page, pageSize: params.pageSize })
@@ -86,6 +87,13 @@ export const fetchPublicQuests = async ({ params, db }: {
 
     if (params.name !== undefined) conditions.push(like(quests.name, `%${params.name}%`))
     if (params.tags.length !== 0) conditions.push(inArray(questTags.name, params.tags))
+    conditions.push(familyId 
+          ? or(
+              eq(publicQuests.isActivate, true),
+              eq(publicQuests.familyId, familyId)
+            )
+          : eq(publicQuests.isActivate, true)
+    )
 
     // データを取得する
     const [rows, [{ total }]] = await Promise.all([
@@ -96,8 +104,8 @@ export const fetchPublicQuests = async ({ params, db }: {
       .leftJoin(questDetails, eq(questDetails.questId, quests.id))
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
-      
-      .where(and(...conditions, eq(publicQuests.isActivate, true)))
+      .leftJoin(familyQuests, eq(familyQuests.id, publicQuests.familyQuestId))
+      .where(and(...conditions))
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
         desc(quests[params.sortColumn])

@@ -129,7 +129,7 @@ export const fetchFamilyQuest = async ({id, db}: {
       .select()
       .from(familyQuests)
       .innerJoin(quests, eq(familyQuests.questId, quests.id))
-      .innerJoin(questChildren, eq(questChildren.familyQuestId, familyQuests.id))
+      .leftJoin(questChildren, eq(questChildren.familyQuestId, familyQuests.id))
       .leftJoin(questDetails, eq(questDetails.questId, quests.id))
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))

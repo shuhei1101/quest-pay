@@ -1,0 +1,1 @@
+ALTER TABLE "public_quests" ALTER COLUMN "family_id" SET NOT NULL;

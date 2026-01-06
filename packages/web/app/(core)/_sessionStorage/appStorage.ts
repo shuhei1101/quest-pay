@@ -4,6 +4,7 @@ import type { UserInfo } from "@/app/api/users/query"
 import type { IconCategorySelect, IconSelect, QuestCategorySelect } from "@/drizzle/schema"
 import toast from "react-hot-toast"
 import { devLog } from "../util"
+import { FamilyQuestFormType } from "@/app/(app)/quests/family/[id]/form"
 
 type FeedbackParams = {
   message: string,
@@ -119,6 +120,19 @@ export const appStorage = {
     /** クエストカテゴリ辞書をセットする */
     set: (questCategoryById: QuestCategoryById) => {
       sessionStorage.setItem('questCategoryById', JSON.stringify(questCategoryById))
+    },
+  },
+  // 家族クエスト作成画面フォームのデータ
+  familyQuestForm: {
+    /** 家族クエストフォームを取得する（取得後に破棄） */
+    pop: () => {
+      const data = sessionStorage.getItem("familyQuestForm")
+      sessionStorage.removeItem("familyQuestForm")
+      return data ? JSON.parse(data) as FamilyQuestFormType : undefined
+    },
+    /** 家族クエストフォームをセットする */
+    set: (questData: FamilyQuestFormType) => {
+      sessionStorage.setItem('familyQuestForm', JSON.stringify(questData))
     },
   },
 }

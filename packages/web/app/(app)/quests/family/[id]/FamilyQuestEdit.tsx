@@ -17,6 +17,7 @@ import { QuestEditLayout } from "../../_components/QuestEditLayout"
 import { FamilyQuestFormType } from "./form"
 import { UseFormRegister, UseFormSetValue, UseFormWatch, FieldErrors } from "react-hook-form"
 import { BaseQuestFormType } from "../../form"
+import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 
 /** 家族クエスト編集コンポーネント */
 export const FamilyQuestEdit = ({ id }: { id?: string }) => {
@@ -41,7 +42,17 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   }, [deleteLoading, registerLoading, updateLoading])
 
   /** 家族クエストフォームを取得する */
-  const { register, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({ familyQuestId })
+  const { register, setForm, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({ familyQuestId })
+
+  /** 起動時のハンドル */
+  useEffect(() => {
+    // セッションストレージから家族クエストフォームの初期値を取得する
+    const form = appStorage.familyQuestForm.pop()
+    if (form) {
+      // 取得できた場合、フォームにセットする
+      setForm(form)
+    }
+  }, [])
 
   /** アクティブレベル */
   const [activeLevel, setActiveLevel] = useState<string | null>(() => {

@@ -6,7 +6,7 @@ import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, 
 import { useRouter } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
-import { PublicQuestList } from "../public/_components/PublicQuestList"
+import { PublicQuestList } from "../public/PublicQuestList"
 
 export function GuestQuestsScreen() {
   const router = useRouter()

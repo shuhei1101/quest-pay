@@ -1,5 +1,5 @@
 import { ActionIcon, Avatar, Button, Group, Indicator, Tooltip } from "@mantine/core"
-import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage } from "@tabler/icons-react"
+import { IconArrowLeft, IconFilePencil, IconFileSearch, IconHeart, IconHeartFilled, IconMessage, IconSearch, IconTrash } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 
@@ -13,6 +13,9 @@ export const TemplateQuestViewFooter = ({
   onLevelChange,
   onBack,
   onDelete,
+  onCreateFromTemplate,
+  onCheckSource,
+  hasSourceQuest
 }: {
   familyIcon?: string
   onLikeToggle?: () => void
@@ -22,6 +25,9 @@ export const TemplateQuestViewFooter = ({
   onLevelChange?: (level: number) => void
   onBack?: () => void
   onDelete?: () => void
+  onCreateFromTemplate?: () => void
+  hasSourceQuest: boolean
+  onCheckSource?: () => void
 }) => {
   return (
     <Group justify="center" mt="xl" gap="xl">
@@ -31,27 +37,38 @@ export const TemplateQuestViewFooter = ({
         selectedLevel={selectedLevel || 1}
         onLevelChange={onLevelChange || (() => {})}
       />
-      {/* 作成者家族アイコン */}
-      <ActionIcon 
-        variant="light" 
-        color="gray"
-        size={56} 
-        radius="xl"
-        onClick={onLikeToggle}
-      >
-        <RenderIcon 
-          iconName={familyIcon} 
-          onClick={onFamilyClick} 
-        />
-      </ActionIcon>
 
-      {/* 削除ボタン */}
+      {/* テンプレートから作成 */}
+      <Button 
+        size="md" 
+        radius="xl" 
+        color="blue"
+        variant="outline"
+        leftSection={<IconFilePencil size={18} />}
+        onClick={onCreateFromTemplate}
+      >
+        テンプレートから作成
+      </Button>
+      {/* 元のクエストを確認する(元のクエストがある場合のみ表示) */}
+      {hasSourceQuest && (
       <Button 
         size="md" 
         radius="xl" 
         color="gray"
         variant="outline"
-        leftSection={<IconArrowLeft size={18} />}
+        leftSection={<IconFileSearch size={18} />}
+        onClick={onCheckSource}
+      >
+        元のクエスト確認
+      </Button>
+      )}
+      {/* 削除ボタン */}
+      <Button 
+        size="md" 
+        radius="xl" 
+        color="red"
+        leftSection={<IconTrash size={18} />}
+        variant="outline"
         onClick={onDelete}
       >
         削除

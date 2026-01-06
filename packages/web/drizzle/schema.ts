@@ -334,7 +334,9 @@ export const publicQuests = pgTable("public_quests", {
   /** クエストID */
   questId: uuid("quest_id").notNull().unique().references(() => quests.id, { onDelete: "restrict" }),
   /** 共有元の家族クエストID */
-  familyQuestId: uuid("family_quest_id").notNull().references(() => familyQuests.id, { onDelete: "restrict" }),
+  familyQuestId: uuid("family_quest_id").notNull().references(() => familyQuests.id, { onDelete: "no action" }),
+  /** 共有元の家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
   /** ピン留めコメントID */
   // TODO: 将来的に実装（コメントテーブル作成後）
   /** 有効フラグ */

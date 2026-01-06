@@ -38,6 +38,7 @@ export const registerPublicQuestByFamilyQuest = async ({
       // 公開クエストを挿入する
       const { id: publicQuestId } = await insertPublicQuest({db: tx, record: {
         familyQuestId: familyQuest.base.id,
+        familyId: familyQuest.base.familyId,
         isActivate: false,
       }, questId })
 

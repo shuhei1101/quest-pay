@@ -11,6 +11,9 @@ import { useWindow } from "@/app/(core)/useConstants"
 import { useTemplateQuest } from "./_hooks/useTemplateQuest"
 import { useRouter } from "next/navigation"
 import { TemplateQuestViewFooter } from "./_components/TemplateQuestViewFooter"
+import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
+import { FAMILY_QUEST_NEW_URL, PUBLIC_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import toast from "react-hot-toast"
 
 /** テンプレートクエスト閲覧画面 */
 export const TemplateQuestViewScreen = ({id}: {id: string}) => {
@@ -33,6 +36,44 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   /** クエスト削除ハンドル */
   const onDelete = () => {
 
+  }
+
+  /** テンプレートから作成ハンドル */
+  const onCreateFromTemplate = () => {
+    appStorage.familyQuestForm.set({
+      name: templateQuest?.quest?.name || "",
+      iconId: templateQuest?.quest?.iconId || 0,
+      iconColor: templateQuest?.quest?.iconColor || "blue",
+      tags: templateQuest?.tags?.map(tag => tag.name) || [],
+      categoryId: templateQuest?.quest?.categoryId || 0,
+      ageFrom: templateQuest?.quest?.ageFrom || null,
+      ageTo: templateQuest?.quest?.ageTo || null,
+      monthFrom: templateQuest?.quest?.monthFrom || null,
+      monthTo: templateQuest?.quest?.monthTo || null,
+      client: templateQuest?.quest?.client || "",
+      requestDetail: templateQuest?.quest?.requestDetail || "",
+      details: templateQuest?.details.map(detail => ({
+        level: detail.level,
+        successCondition: detail.successCondition,
+        requiredCompletionCount: detail.requiredCompletionCount,
+        childExp: detail.childExp,
+        reward: detail.reward,
+        requiredClearCount: detail.requiredClearCount,
+      })) || [],
+      childIds: []
+    })
+
+    // 家族クエスト作成画面へ遷移する
+    router.push(FAMILY_QUEST_NEW_URL)
+  }
+
+  /** 元のクエストを確認するハンドル */
+  const onCheckSource = () => {
+    if (templateQuest?.publicQuest) {
+      router.push(PUBLIC_QUEST_VIEW_URL(templateQuest.publicQuest.id))
+    } else {
+      toast.error("元のクエスト情報が見つかりません。")
+    }
   }
 
   return (
@@ -113,6 +154,9 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         onBack={ () => router.back() } 
         familyIcon={ templateQuest?.familyIcon?.name }
         onDelete={ onDelete }
+        onCreateFromTemplate={ onCreateFromTemplate }
+        onCheckSource={ onCheckSource }
+        hasSourceQuest={ !!templateQuest?.base.publicQuestId }
       />
     </div>
   )

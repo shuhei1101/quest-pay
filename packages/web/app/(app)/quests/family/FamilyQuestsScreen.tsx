@@ -8,7 +8,7 @@ import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
-import { PublicQuestList } from "../public/_components/PublicQuestList"
+import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
 
 export function FamilyQuestsScreen() {
