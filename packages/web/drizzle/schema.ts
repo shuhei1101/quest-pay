@@ -316,6 +316,8 @@ export const templateQuests = pgTable("template_quests", {
   id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
   /** クエストID */
   questId: uuid("quest_id").notNull().unique().references(() => quests.id, { onDelete: "restrict" }),
+  /** 保存元の共有クエストID */
+  publicQuestId: uuid("public_quest_id").references(() => publicQuests.id, { onDelete: "restrict" }), 
   /** 保存した家族ID */
   familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
   /** タイムスタンプ */

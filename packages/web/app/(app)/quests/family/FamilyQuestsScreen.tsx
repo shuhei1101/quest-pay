@@ -5,10 +5,11 @@ import { Tabs, Paper, Text, Button } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
-import { useLoginUserInfo } from "@/app/(auth)/login/_hook/useLoginUserInfo"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
 import { PublicQuestList } from "../public/_components/PublicQuestList"
+import { TemplateQuestList } from "../template/_components/TemplateQuestList"
 
 export function FamilyQuestsScreen() {
   const router = useRouter()
@@ -84,16 +85,16 @@ export function FamilyQuestsScreen() {
       <Paper p="xs" withBorder>
 
       <Tabs.Panel value="public">
-        {isGuest ? <GuestScreen/> : <PublicQuestList />}
+        <PublicQuestList />
       </Tabs.Panel>
       <Tabs.Panel value="family">
-        {isGuest ? <GuestScreen/> : <FamilyQuestList />}
+        <FamilyQuestList />
       </Tabs.Panel>
       <Tabs.Panel value="penalty">
         違反リスト
       </Tabs.Panel>
       <Tabs.Panel value="template">
-        テンプレート
+        <TemplateQuestList />
       </Tabs.Panel>
     </Paper>
     </div>

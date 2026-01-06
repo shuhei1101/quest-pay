@@ -1,0 +1,2 @@
+ALTER TABLE "template_quests" ADD COLUMN "public_quest_id" uuid;--> statement-breakpoint
+ALTER TABLE "template_quests" ADD CONSTRAINT "template_quests_public_quest_id_public_quests_id_fk" FOREIGN KEY ("public_quest_id") REFERENCES "public"."public_quests"("id") ON DELETE restrict ON UPDATE no action;

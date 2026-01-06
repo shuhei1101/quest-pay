@@ -10,11 +10,15 @@ import { PublicQuestSortPopup } from "./PublicQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
 import { PublicQuestFilterScheme, type PublicQuest, type PublicQuestFilterType } from "@/app/api/quests/public/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { FAMILY_QUEST_EDIT_URL, FAMILY_QUESTS_URL, PUBLIC_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUESTS_URL, PUBLIC_QUEST_EDIT_URL, PUBLIC_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 公開クエストリストコンポーネント */
 export const PublicQuestList = () => {
   const router = useRouter()
+
+  // ログインユーザ情報を取得する
+  const { userInfo } = useLoginUserInfo()
 
   /** フィルターポップアップ制御状態 */
   const [filterOpened, { open: openFilter, close: closeFilter }] = useDisclosure(false)
@@ -87,12 +91,22 @@ export const PublicQuestList = () => {
     }))
   }, [])
 
-  /** クエストカードレンダリング用の関数 */
+  /** クエストカードの関数 */
   const renderPublicQuestCard = useCallback((quest: PublicQuest, index: number) => (
     <PublicQuestCardLayout
       key={index}
       publicQuest={quest}
-      onClick={(id) => router.push(PUBLIC_QUEST_EDIT_URL(id))}
+      onClick={(id) => {
+        // 作成者の場合、編集画面に遷移する
+        if (userInfo && userInfo?.profiles.familyId === quest.familyQuest?.familyId) {
+          router.push(PUBLIC_QUEST_EDIT_URL(id))
+          return
+        } else {
+          // 作成者でない場合、閲覧画面に遷移する
+          router.push(PUBLIC_QUEST_VIEW_URL(id))
+          return
+        }
+      }}
     />
   ), [router])
 

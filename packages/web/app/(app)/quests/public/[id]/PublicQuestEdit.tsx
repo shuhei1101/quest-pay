@@ -6,7 +6,6 @@ import { useUpdatePublicQuest } from "./_hooks/useUpdatePublicQuest"
 import { useDeletePublicQuest } from "./_hooks/useDeletePublicQuest"
 import { useDisclosure } from "@mantine/hooks"
 import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
-import { useRouter } from "next/navigation"
 import { QuestEditLayout } from "../../_components/QuestEditLayout"
 import { PublicQuestFormType } from "./form"
 import { BasicSettings } from "../../family/[id]/_components/BasicSettings"
@@ -16,8 +15,6 @@ import { useDeactivatePublicQuest } from "./_hooks/useDeactivatePublicQuest"
 
 /** 公開クエスト編集コンポーネント */
 export const PublicQuestEdit = ({ id }: { id: string }) => {
-  const router = useRouter()
-
   /** 公開クエストID */
   const [publicQuestId, setPublicQuestId] = useState(id)
 
@@ -141,6 +138,7 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
         },
       ]}
       editActions={[
+        // 公開・非公開切替ボタン
         fetchedEntity?.base.isActivate ? 
         {
           label: "非公開にする",
@@ -153,12 +151,14 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
           loading: activateLoading,
           onClick: () => handleActivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
         },
+        // 削除ボタン
         {
           label: "削除",
           color: "red.7",
           loading: submitLoading,
           onClick: () => handleDelete({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
         },
+        // 更新ボタン
         {
           label: "更新",
           type: "submit",

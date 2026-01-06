@@ -1,10 +1,11 @@
 import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
-import { publicQuests, PublicQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, familyQuests, FamilyQuestSelect } from "@/drizzle/schema"
+import { publicQuests, PublicQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, familyQuests, FamilyQuestSelect, FamilyInsert, FamilySelect, families } from "@/drizzle/schema"
 import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
+import { alias } from "drizzle-orm/pg-core"
 
 /** 公開クエストフィルター */
 export const PublicQuestFilterScheme = z.object({
@@ -29,8 +30,10 @@ export type PublicQuest = {
   quest: QuestSelect
   tags: QuestTagSelect[]
   details: QuestDetailSelect[]
-  icon: IconSelect | null
-  familyQuest: FamilyQuestSelect | null
+  icon?: IconSelect
+  familyQuest?: FamilyQuestSelect
+  family?: FamilySelect
+  familyIcon?: IconSelect
 }
 
 /** クエリ結果をFetchPublicQuestsItemの配列に変換する */
@@ -41,6 +44,8 @@ const buildResult = (rows: {
   quest_tags?: QuestTagSelect | null
   icons: IconSelect | null
   family_quests?: FamilyQuestSelect | null
+  families?: FamilySelect | null
+  family_icons?: IconSelect | null
 }[]): PublicQuest[] => {
   const map = new Map<string, PublicQuest>()
 
@@ -54,8 +59,10 @@ const buildResult = (rows: {
         quest: row.quests,
         tags: [],
         details: [],
-        icon: row.icons,
-        familyQuest: row.family_quests || null,
+        icon: row.icons || undefined,
+        familyQuest: row.family_quests || undefined,
+        family: row.families || undefined,
+        familyIcon: row.family_icons || undefined
       })
     }
 
@@ -124,6 +131,9 @@ export const fetchPublicQuest = async ({id, db}: {
   db: Db
 }) => {
   try {
+
+    const familyIcons = alias(icons, "family_icons")
+
     // データを取得する
     const rows = await db
       .select()
@@ -133,6 +143,8 @@ export const fetchPublicQuest = async ({id, db}: {
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
       .leftJoin(familyQuests, eq(familyQuests.id, publicQuests.familyQuestId))
+      .leftJoin(families, eq(families.id, familyQuests.familyId))
+      .leftJoin(familyIcons, eq(families.iconId, familyIcons.id))
       .where(eq(publicQuests.id, id))
 
     // データを結果オブジェクトに変換する

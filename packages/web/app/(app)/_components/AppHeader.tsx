@@ -1,6 +1,6 @@
 "use client"
 
-import { useLoginUserInfo } from '@/app/(auth)/login/_hook/useLoginUserInfo'
+import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { HOME_URL, LOGIN_URL } from '@/app/(core)/endpoints'
 import { ActionIcon, Title, Text, Button, LoadingOverlay } from '@mantine/core'
 import { IconHome2, IconMenu2 } from '@tabler/icons-react'

@@ -1,19 +1,17 @@
 'use client'
 import { ActionIcon, Box, Button, Checkbox, Group, Input, LoadingOverlay, Space, Textarea} from "@mantine/core"
-import { DateInput } from '@mantine/dates';
+import { DateInput } from '@mantine/dates'
 import { IconAt } from "@tabler/icons-react"
 import { useDisclosure } from '@mantine/hooks'
-import { useState } from "react"
-import dayjs from 'dayjs';
-import 'dayjs/locale/ja';
-import { useSession } from "./_hook/useSession";
-import { useRegisterFamily } from "./_hook/useRegisterFamily";
-import { useFamilyRegisterForm } from "./_hook/useFamilyRegisterForm";
-import { RenderIcon } from "../../icons/_components/RenderIcon";
-import { IconSelectPopup } from "../../icons/_components/IconSelectPopup";
-import { useIcons } from "../../icons/_hooks/useIcons";
+import dayjs from 'dayjs'
+import 'dayjs/locale/ja'
+import { useRegisterFamily } from "./_hooks/useRegisterFamily"
+import { useFamilyRegisterForm } from "./_hooks/useFamilyRegisterForm"
+import { RenderIcon } from "../../icons/_components/RenderIcon"
+import { IconSelectPopup } from "../../icons/_components/IconSelectPopup"
+import { useIcons } from "../../icons/_hooks/useIcons"
 // dayjs のロケールを日本語に設定
-dayjs.locale('ja');
+dayjs.locale('ja')
 
 export default function Page() {
   /** ハンドル */

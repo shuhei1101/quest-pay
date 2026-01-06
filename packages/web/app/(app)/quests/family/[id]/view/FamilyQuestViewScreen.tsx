@@ -2,14 +2,14 @@
 
 import { Box, Paper, Tabs } from "@mantine/core"
 import { useState } from "react"
-import { QuestViewHeader } from "../../../view/_component/QuestViewHeader"
-import { QuestViewIcon } from "../../../view/_component/QuestViewIcon"
-import { QuestConditionTab } from "../../../view/_component/QuestConditionTab"
-import { QuestDetailTab } from "../../../view/_component/QuestDetailTab"
-import { QuestOtherTab } from "../../../view/_component/QuestOtherTab"
-import { ParentQuestViewFooter } from "../../../view/_component/ParentQuestViewFooter"
+import { QuestViewHeader } from "../../../view/_components/QuestViewHeader"
+import { QuestViewIcon } from "../../../view/_components/QuestViewIcon"
+import { QuestConditionTab } from "../../../view/_components/QuestConditionTab"
+import { QuestDetailTab } from "../../../view/_components/QuestDetailTab"
+import { QuestOtherTab } from "../../../view/_components/QuestOtherTab"
+import { ParentQuestViewFooter } from "./_components/ParentQuestViewFooter"
 import { useWindow } from "@/app/(core)/useConstants"
-import { useFamilyQuest } from "./_hook/useFamilyQuest"
+import { useFamilyQuest } from "./_hooks/useFamilyQuest"
 import { useRouter } from "next/navigation"
 
 /** 家族クエスト閲覧画面 */

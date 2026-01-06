@@ -3,7 +3,7 @@
 import { Button, Paper, PasswordInput, TextInput, Title, Text, Anchor, Alert } from "@mantine/core"
 import { FeedbackMessage } from "../../(core)/_components/FeedbackMessageWrapper"
 import { IconMail, IconLock, IconAlertCircle } from "@tabler/icons-react"
-import { useLoginForm } from "../login/_hook/useLoginForm"
+import { useLoginForm } from "../login/_hooks/useLoginForm"
 import { useSignUp } from "./_hook/useSignUp"
 import Link from "next/link"
 import { LOGIN_URL } from "@/app/(core)/endpoints"

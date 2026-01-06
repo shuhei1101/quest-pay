@@ -1,6 +1,6 @@
 "use client"
 
-import { PublicQuestFilterType } from "@/app/api/quests/public/query"
+import type { PublicQuestFilterType } from "@/app/api/quests/public/query"
 import { ActionIcon, Button, ColorPicker, Input, Modal, Pill, PillsInput, Popover, Space, Tabs, Text } from "@mantine/core"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
