@@ -1,8 +1,9 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
-import { FamilyQuestSelect, questChildren, QuestChildrenInsert, QuestSelect } from "@/drizzle/schema"
+import { FamilyQuestSelect, questChildren, QuestChildrenInsert, QuestChildrenSelect, QuestChildrenUpdate, QuestSelect } from "@/drizzle/schema"
 import { Db } from "@/index"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
+import { questChildExclusiveControl } from "./dbHelper"
 
 export type InsertQuestChildrenRecord = Omit<QuestChildrenInsert, "familyQuestId">
 
@@ -22,6 +23,36 @@ export const insertQuestChildren = async ({db, records, familyQuestId}: {
     devLog("insertQuestChildren error:", error)
     devLog("insertQuestChildren records:", records)
     throw new DatabaseError("クエスト対象の子供の登録に失敗しました。")
+  }
+}
+
+/** クエスト対象の子供のステータスを更新する */
+export const updateQuestChild = async ({db, familyQuestId, updatedAt, record, childId}: {
+  db: Db,
+  record: QuestChildrenUpdate,
+  childId: QuestChildrenSelect["childId"],
+  familyQuestId: QuestChildrenSelect["familyQuestId"],
+  updatedAt: QuestChildrenSelect["updatedAt"]
+}) => {
+  try {
+    // 存在チェックを行う
+    const beforeFamilyQuest = await questChildExclusiveControl.existsCheck({familyQuestId, db, childId})
+
+    // 更新日による排他チェックを行う
+    await questChildExclusiveControl.hasAlreadyUpdated({
+      beforeDate: beforeFamilyQuest.base.updatedAt,
+      afterDate: updatedAt,
+    })
+
+    // 子供クエストを更新する
+    await db.update(questChildren).set(record).where(and(
+      eq(questChildren.familyQuestId, familyQuestId),
+      eq(questChildren.childId, childId)
+    ))
+    
+  } catch (error) {
+    devLog("updateQuestChild error:", error)
+    throw new DatabaseError("クエスト対象の子供の更新に失敗しました。")
   }
 }
 

@@ -2,8 +2,7 @@
 
 import { HOME_URL, QUESTS_URL, QUESTS_NEW_URL, USERS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon } from '@mantine/core'
-import { IconFiles, IconFilePlus } from '@tabler/icons-react'
-import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_components/icon'
+import { IconFiles, IconFilePlus, IconBell, IconHome2, IconClipboard, IconUsers, IconWorld } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 
 /** サイドメニューを取得する */
@@ -17,13 +16,13 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
         className='side-nav'
         href={`${HOME_URL}`}
         label="ホーム"
-        leftSection={<HomeIcon size={18} stroke={1.2} />}
+        leftSection={<IconHome2 className='home-color' size={18} stroke={1.2} />}
       />
       <NavLink
         className='side-nav'
         href="#required-for-focus"
         label="クエスト"
-        leftSection={<ClipboardIcon size={18} stroke={1.2} />}
+        leftSection={<IconClipboard className='clipboard-color' size={18} stroke={1.2} />}
         childrenOffset={28}
       >
         <NavLink
@@ -52,18 +51,17 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
           leftSection={<IconFilePlus size={18} stroke={1.2} />}
         />
       </NavLink>
-      {/* 管理者のみ */}
       <NavLink
         className='side-nav'
         href={`${USERS_URL}`}
-        label="ユーザ管理"
-        leftSection={<WorldIcon size={18} stroke={1.2} />}
+        label="通知"
+        leftSection={<IconBell color='rgb(250 204 21)' size={18} stroke={1.2} />}
       />
       <NavLink
         className='side-nav'
         href={`${USERS_URL}`}
         label="ユーザ管理"
-        leftSection={<UsersIcon size={18} stroke={1.2} />}
+        leftSection={<IconUsers className='users-color' size={18} stroke={1.2} />}
       />
     </>
   )
@@ -73,19 +71,19 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
     <>
       {/* ホームアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)}>
-        <HomeIcon stroke={1.4} />
+        <IconHome2 className='home-color' stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
-        <ClipboardIcon stroke={1.4} />
+        <IconClipboard className='clipboard-color' stroke={1.4} />
       </ActionIcon>
-      {/* 地球アイコン */}
+      {/* 通知アイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
-        <WorldIcon stroke={1.4} />
+        <IconBell color='rgb(250 204 21)' stroke={1.4} />
       </ActionIcon>
       {/* 人アイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)}>
-        <UsersIcon stroke={1.4} />
+        <IconUsers className='users-color' stroke={1.4} />
       </ActionIcon>
     </>
   )

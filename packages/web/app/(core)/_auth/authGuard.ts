@@ -21,7 +21,7 @@ export const authGuard = async ({parentNG = false, childNG = false, guestNG = fa
     redirect(AUTH_ERROR_URL)
   }
   
-  return { 
+  return {
     userInfo,
     isGuest: !userInfo,
     isParent: userInfo?.profiles?.type === "parent",

@@ -8,8 +8,6 @@ import { registerFamilyQuest } from "./service"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { FamilyQuestFormScheme, FamilyQuestFormType } from "@/app/(app)/quests/family/[id]/form"
 import z from "zod"
-import { QuestColumnSchema } from "@/drizzle/schema"
-import { SortOrderScheme } from "@/app/(core)/schema"
 
 /** 家族のクエストを取得する */
 export type GetFamilyQuestsResponse = Awaited<ReturnType<typeof fetchFamilyQuests>>
@@ -19,19 +17,19 @@ export async function GET(
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
     const { db, userId } = await getAuthContext()
-      // クエリパラメータを取得する
-      const url = new URL(req.url)
-      const query = queryString.parse(url.search)
-      const params = FamilyQuestSearchParamsScheme.parse(query)
+    // クエリパラメータを取得する
+    const url = new URL(req.url)
+    const query = queryString.parse(url.search)
+    const params = FamilyQuestSearchParamsScheme.parse(query)
 
-      // 家族IDを取得する
-      const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
-  
-      // クエストを取得する
-      const result = await fetchFamilyQuests({db, familyId: userInfo.profiles.familyId, params })
-  
-      return NextResponse.json(result as GetFamilyQuestsResponse)
+    // プロフィール情報を取得する
+    const userInfo = await fetchUserInfoByUserId({userId, db})
+    if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
+
+    // クエストを取得する
+    const result = await fetchFamilyQuests({db, familyId: userInfo.profiles.familyId, params })
+
+    return NextResponse.json(result as GetFamilyQuestsResponse)
   })
 }
 

@@ -21,7 +21,7 @@ export async function GET(
     const params = await context.params
     const childId = params.id
 
-    // 家族IDを取得する
+    // プロフィール情報を取得する
     const userInfo = await fetchUserInfoByUserId({userId, db})
     if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
 

@@ -8,6 +8,8 @@ import { deleteQuestDetails, InsertQuestDetailRecord, insertQuestDetails } from 
 import { FamilyQuestSelect, PublicQuestSelect, QuestSelect, QuestUpdate } from "@/drizzle/schema"
 import { fetchFamilyQuest } from "../family/query"
 import { fetchPublicQuest } from "./query"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
+import { fetchUserInfoByUserId } from "../../users/query"
 
 /** 家族クエストから公開クエストを登録する */
 export const registerPublicQuestByFamilyQuest = async ({
@@ -189,4 +191,18 @@ export const deactivatePublicQuest = async ({db, publicQuest}: {
     devLog("deactivatePublicQuest error:", error)
     throw new DatabaseError("公開クエストの無効化に失敗しました。")
   }
+}
+
+/** 公開クエストの編集権限を確認する */
+export const hasPublicQuestPermission = async ({ publicQuestId }: {
+  publicQuestId: PublicQuestSelect["id"]
+}) => {
+    // 認証コンテキストを取得する
+    const { db, userId } = await getAuthContext()
+    // プロフィール情報を取得する
+    const userInfo = await fetchUserInfoByUserId({userId, db})
+    // 公開クエストを取得する
+    const publicQuest = await fetchPublicQuest({ db, id: publicQuestId })
+    // 家族IDが一致するか確認する
+    return publicQuest?.base.familyId === userInfo.profiles.familyId
 }

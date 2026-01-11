@@ -18,7 +18,7 @@ import { useIsLike } from "./_hooks/useIsLike"
 import { useCancelQuestLike } from "./_hooks/useCancelQuestLike"
 
 /** 公開クエスト閲覧画面 */
-export const PublicQuestViewScreen = ({id}: {id: string}) => {
+export const PublicQuestView = ({id}: {id: string}) => {
   const router = useRouter()
   const {isDark} = useWindow()
   

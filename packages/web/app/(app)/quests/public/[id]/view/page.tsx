@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from "next/navigation"
-import { PublicQuestViewScreen } from "./PublicQuestViewScreen"
+import { PublicQuestView } from "./PublicQuestView"
 
 export default function Page() {
   const params = useParams()
@@ -9,7 +9,7 @@ export default function Page() {
 
   return (
     <>
-      <PublicQuestViewScreen id={id} />
+      <PublicQuestView id={id} />
     </>
   )
 }

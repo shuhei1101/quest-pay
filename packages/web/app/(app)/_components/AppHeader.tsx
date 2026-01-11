@@ -44,11 +44,11 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
         <IconHome2 style={{ width: '70%', height: '70%' }} stroke={1.5} />
       </ActionIcon>
       {/* タイトル */}
-      <Title textWrap='nowrap' order={5} c="var(--mantine-color-text)" >お小遣いクエストボード</Title>
+      <Title textWrap='nowrap' order={5} >お小遣いクエストボード</Title>
       {/* スペース */}
       <div className='w-full' />
       {/* ユーザ情報を表示する */}
-      <Text c="var(--mantine-color-text)" className='text-nowrap text-sm'>{userInfo?.profiles?.name}</Text>
+      <Text className='text-nowrap text-sm'>{userInfo?.profiles?.name}</Text>
       {/* サインアウトボタン */}
       {isGuest ? 
         <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>

@@ -39,7 +39,7 @@ export const questType = pgEnum("quest_type", [
 export const childQuestStatus = pgEnum("child_quest_status", [
   "not_started",          // 未着手
   "in_progress",          // 進行中
-  "reporting",            // 報告中
+  "pending_review",            // 報告中
   "completed",            // 完了
 ])
 
@@ -299,9 +299,17 @@ export const questChildren = pgTable("quest_children", {
   /** 子供ID */
   childId: uuid("child_id").notNull().references(() => children.id, { onDelete: "restrict" }),
   /** 現在のレベル */
-  currentLevel: integer("current_level").notNull().default(1),
+  level: integer("level").notNull().default(1),
   /** ステータス */
   status: childQuestStatus("status").notNull().default("not_started"),
+  /** 子供の申請メッセージ（申請時のメッセージ用カラム） */
+  requestMessage: text("request_message"),
+  /** 親からの返信メッセージ（返信時のメッセージ用カラム） */
+  responseMessage: text("response_message"),
+  /** 最後に承認/却下した親のプロフィールID */
+  lastApprovedBy: uuid("last_approved_by").references(() => profiles.id, { onDelete: "set null" }),
+  /** 現在の達成回数 */
+  currentCompletionCount: integer("current_completion_count").notNull().default(0),
   /** ステータス更新日時 */
   statusUpdatedAt: timestamp("status_updated_at", { withTimezone: true, mode: "string" }),
   /** タイムスタンプ */
@@ -309,6 +317,7 @@ export const questChildren = pgTable("quest_children", {
 })
 export type QuestChildrenSelect = typeof questChildren.$inferSelect
 export type QuestChildrenInsert = Omit<typeof questChildren.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type QuestChildrenUpdate = Omit<Partial<QuestChildrenInsert>, "familyQuestId" | "childId" | "statusUpdatedAt">
 
 /** テンプレートクエストテーブル */
 export const templateQuests = pgTable("template_quests", {

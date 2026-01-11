@@ -1,15 +1,16 @@
-'use client'
+import { hasChildQuestPermission } from "@/app/api/quests/child/service"
+import { ChildQuestViewScreen } from "./child/ChildQuestViewScreen"
 
-import { useParams } from "next/navigation"
-import { FamilyQuestViewScreen } from "./FamilyQuestViewScreen"
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = await params
 
-export default function Page() {
-  const params = useParams()
-  const id = params.id as string
+  // 編集権限を確認する
+  const hasPermission = await hasChildQuestPermission({ familyQuestId: id })
+  if (!hasPermission) throw new Error("閲覧権限がありません。")
 
   return (
     <>
-      <FamilyQuestViewScreen id={id} />
+      <ChildQuestViewScreen id={id} />
     </>
   )
 }

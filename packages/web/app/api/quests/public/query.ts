@@ -166,3 +166,27 @@ export const fetchPublicQuest = async ({id, db}: {
     throw new QueryError("公開クエストの読み込みに失敗しました。")
   }
 }
+
+/** 家族IDから公開クエストを取得する */
+export const fetchPublicQuestByFamilyId = async ({db, familyQuestId}: {
+  db: Db,
+  familyQuestId: FamilyQuestSelect["id"]
+}) => {
+  try {
+
+    const familyIcons = alias(icons, "family_icons")
+
+    // データを取得する
+    const rows = await db
+      .select()
+      .from(publicQuests)
+      .where(eq(publicQuests.familyQuestId, familyQuestId))
+
+    devLog("fetchPublicQuest.取得データ: ", rows)
+
+    return rows[0]
+  } catch (error) {
+    devLog("fetchPublicQuest.取得例外: ", error)
+    throw new QueryError("公開クエストの読み込みに失敗しました。")
+  }
+}

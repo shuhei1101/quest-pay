@@ -1,13 +1,15 @@
-import { DatabaseError } from "@/app/(core)/error/appError"
+import { DatabaseError, ServerError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
 import { Db } from "@/index"
 import { deleteQuest, insertQuest, updateQuest } from "../db"
 import { deleteFamilyQuest, insertFamilyQuest, InsertFamilyQuestRecord, updateFamilyQuest, UpdateFamilyQuestRecord } from "./db"
-import { deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord } from "../child/db"
+import { deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord, updateQuestChild } from "../child/db"
 import { deleteQuestTags, insertQuestTags, InsertQuestTagsRecord } from "../tag/db"
 import { deleteQuestDetails, InsertQuestDetailRecord, insertQuestDetails } from "../detail/db"
-import { FamilyQuestSelect, FamilyQuestUpdate, QuestInsert, QuestSelect, QuestUpdate } from "@/drizzle/schema"
+import { ChildSelect, FamilyQuestSelect, FamilyQuestUpdate, FamilySelect, QuestChildrenSelect, QuestInsert, QuestSelect, QuestUpdate } from "@/drizzle/schema"
 import { fetchFamilyQuest } from "./query"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
+import { fetchUserInfoByUserId } from "../../users/query"
 
 /** 家族クエストを登録する */
 export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest, questChildren, questTags}: {
@@ -34,7 +36,10 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
       const { id: familyQuestId } = await insertFamilyQuest({db: tx, record: familyQuest, questId })
 
       // クエスト対象の子供を挿入する
-      if (questChildren.length > 0) await insertQuestChildren({db: tx, records: questChildren, familyQuestId})
+      if (questChildren.length > 0) await insertQuestChildren({db: tx, records: questChildren.map(child => ({
+        ...child,
+        status: "in_progress"
+      })), familyQuestId})
       
       // タグを挿入する
       if (questTags.length > 0) await insertQuestTags({db: tx, records: questTags, questId})
@@ -139,5 +144,52 @@ export const removeFamilyQuest = async ({db, familyQuest, quest}: {
   } catch (error) {
     devLog("deleteFamilyQuest error:", error)
     throw new DatabaseError("家族クエストの削除に失敗しました。")
+  }
+}
+
+/** 家族クエストの編集権限を確認する */
+export const hasFamilyQuestPermission = async ({ familyQuestId }: {
+  familyQuestId: FamilyQuestSelect["id"]
+}) => {
+    // 認証コンテキストを取得する
+    const { db, userId } = await getAuthContext()
+    // プロフィール情報を取得する
+    const userInfo = await fetchUserInfoByUserId({userId, db})
+    // 家族クエストを取得する
+    const familyQuest = await fetchFamilyQuest({ db, id: familyQuestId })
+    // 家族IDが一致するか確認する
+    return familyQuest?.base.familyId === userInfo.profiles.familyId
+}
+
+
+/** 家族クエストを完了報告する */
+export const completeReport = async ({db, familyQuestId, updatedAt, childId, requestMessage}: {
+  db: Db
+  familyQuestId: FamilyQuestSelect["id"]
+  updatedAt: QuestChildrenSelect["updatedAt"]
+  childId: ChildSelect["id"]
+  requestMessage?: string
+}) => {
+  try {
+    return await db.transaction(async (tx) => {
+
+      // 家族クエストを取得する
+      const currentFamilyQuest = await fetchFamilyQuest({ db: tx, id: familyQuestId })
+      if (!currentFamilyQuest) throw new DatabaseError("家族クエストが見つかりません。")
+
+      // クエスト対象の子供のステータスを完了に更新する
+      await updateQuestChild({db: tx,
+        record: {
+          status: "pending_review",
+          requestMessage,
+        },
+        familyQuestId: familyQuestId,
+        childId: childId,
+        updatedAt
+      })
+    })
+  } catch (error) {
+    devLog("completeReport error:", error)
+    throw new DatabaseError("家族クエストの完了報告に失敗しました。")
   }
 }

@@ -12,9 +12,12 @@ import { BasicSettings } from "../../family/[id]/_components/BasicSettings"
 import { DetailSettings } from "../../family/[id]/_components/DetailSettings"
 import { useActivatePublicQuest } from "./_hooks/useActivatePublicQuest"
 import { useDeactivatePublicQuest } from "./_hooks/useDeactivatePublicQuest"
+import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
+import { useRouter } from "next/navigation"
 
 /** 公開クエスト編集コンポーネント */
 export const PublicQuestEdit = ({ id }: { id: string }) => {
+  const router = useRouter()
   /** 公開クエストID */
   const [publicQuestId, setPublicQuestId] = useState(id)
 
@@ -90,6 +93,12 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
     handleUpdate({ form, publicQuestId, updatedAt: fetchedEntity?.base.updatedAt })
   })
 
+  /** 元のクエスト確認ボタン */
+  const handleCheckOriginalQuest = () => {
+    if (isValueChanged) if (!confirm("変更内容が保存されていません。移動してもよろしいですか？")) return
+    router.push(FAMILY_QUEST_EDIT_URL(fetchedEntity?.familyQuest?.id || ""))
+  }
+
   /** 各タブのエラーチェックフラグ */
   const hasBasicErrors = !!(errors.name || errors.iconId || errors.iconColor || errors.categoryId || errors.tags || errors.client || errors.requestDetail || errors.ageFrom || errors.ageTo || errors.monthFrom || errors.monthTo)
   const hasDetailErrors = !!(errors.details)
@@ -138,6 +147,12 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
         },
       ]}
       editActions={[
+        // 公開元のクエストを確認するボタン
+        {
+          label: "元の家族クエストを確認",
+          color: "blue.7",
+          onClick: handleCheckOriginalQuest,
+        },
         // 公開・非公開切替ボタン
         fetchedEntity?.base.isActivate ? 
         {

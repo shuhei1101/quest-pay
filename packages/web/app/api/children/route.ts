@@ -20,7 +20,7 @@ export async function GET(
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する
     const { db, userId } = await getAuthContext()
-      // 家族IDを取得する
+      // プロフィール情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
       if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
   
@@ -49,7 +49,7 @@ export async function POST(
       const body = await request.json()
       const data = PostChildRequestSchema.parse(body)
 
-     // 家族IDを取得する
+     // プロフィール情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
       if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
         

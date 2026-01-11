@@ -1,15 +1,20 @@
-'use client'
-
-import { useParams } from "next/navigation"
+import { hasPublicQuestPermission } from "@/app/api/quests/public/service"
 import { PublicQuestEdit } from "./PublicQuestEdit"
+import { PublicQuestView } from "./view/PublicQuestView"
 
-export default function Page() {
-  const params = useParams()
-  const id = params.id as string
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = await params
+
+  // // 編集権限を確認する
+  const hasPermission = await hasPublicQuestPermission({ publicQuestId: id })
 
   return (
     <>
-      <PublicQuestEdit id={id} />
+      {hasPermission ? (
+        <PublicQuestEdit id={id} />
+      ) : (
+        <PublicQuestView id={id} />
+      )}
     </>
   )
 }

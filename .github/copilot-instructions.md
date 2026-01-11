@@ -17,9 +17,10 @@
   - 基本的にバックエンド側は人間が作成し、フロントエンド部分をAIが担当する
 
 # よく使うファイルパス
-- アプリ内エンドポイント定数: app/(core)/endpoints.ts
+- DBスキーマ定義: `drizzle/schema.ts`
+- アプリ内エンドポイント定数: `app/(core)/endpoints.ts`
   - 説明: APIや画面のエンドポイントを定義する
-- セッションストレージ: app/(core)/_sessionStorage/appStorage.ts
+- セッションストレージ: `app/(core)/_sessionStorage/appStorage.ts`
   - 説明: アプリ内で使用するセッションストレージをキーバリュー形式で定義する
 
 # コーディングルール

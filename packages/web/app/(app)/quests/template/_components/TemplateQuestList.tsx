@@ -10,7 +10,7 @@ import { TemplateQuestSortPopup } from "./TemplateQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
 import { TemplateQuestFilterScheme, type TemplateQuest, type TemplateQuestFilterType } from "@/app/api/quests/template/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { FAMILY_QUESTS_URL, TEMPLATE_QUEST_EDIT_URL, TEMPLATE_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUESTS_URL, TEMPLATE_QUEST_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** テンプレートクエストリストコンポーネント */
@@ -96,7 +96,7 @@ export const TemplateQuestList = () => {
     <TemplateQuestCardLayout
       key={index}
       templateQuest={quest}
-      onClick={(id) => router.push(TEMPLATE_QUEST_VIEW_URL(id))}
+      onClick={(id) => router.push(TEMPLATE_QUEST_URL(id))}
     />
   ), [router])
 

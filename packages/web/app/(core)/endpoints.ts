@@ -40,10 +40,13 @@ export const FAMILY_QUESTS_API_URL = `${QUESTS_API_URL}/family`
 export const FAMILY_QUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUESTS_API_URL}/${familyQuestId}`
 export const FAMILY_QUEST_PUBLISH_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/publish`
 
+// 完了報告
+export const COMPLETION_REPORT_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/completion-report`
+
 // 公開クエスト
 export const PUBLIC_QUESTS_URL = `${QUESTS_URL}/public`
 export const PUBLIC_QUEST_EDIT_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`
-export const PUBLIC_QUEST_VIEW_URL = (publicQuestId: string) => `${PUBLIC_QUEST_EDIT_URL(publicQuestId)}/view`
+export const PUBLIC_QUEST_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`
 export const PUBLIC_QUESTS_API_URL = `${QUESTS_API_URL}/public`
 export const PUBLIC_QUEST_API_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_API_URL}/${publicQuestId}`
 // 有効化・無効化API
@@ -54,11 +57,13 @@ export const PUBLIC_QUEST_LIKE_API_URL = (publicQuestId: string) => `${PUBLIC_QU
 export const PUBLIC_QUEST_LIKE_CANCEL_API_URL = (publicQuestId: string) => `${PUBLIC_QUEST_LIKE_API_URL(publicQuestId)}/cancel`
 // いいね数取得API
 export const PUBLIC_QUEST_LIKE_COUNT_API_URL = (publicQuestId: string) => `${PUBLIC_QUEST_LIKE_API_URL(publicQuestId)}/count`
+// 家族クエストIDに紐づく公開クエスト取得API
+export const PUBLIC_QUEST_BY_FAMILY_QUEST_ID_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/public`
+
 
 // テンプレートクエスト
 export const TEMPLATE_QUESTS_URL = `${QUESTS_URL}/template`
-export const TEMPLATE_QUEST_EDIT_URL = (templateQuestId: string) => `${TEMPLATE_QUESTS_URL}/${templateQuestId}`
-export const TEMPLATE_QUEST_VIEW_URL = (templateQuestId: string) => `${TEMPLATE_QUEST_EDIT_URL(templateQuestId)}/view`
+export const TEMPLATE_QUEST_URL = (templateQuestId: string) => `${TEMPLATE_QUESTS_URL}/${templateQuestId}`
 export const TEMPLATE_QUESTS_API_URL = `${QUESTS_API_URL}/template`
 export const TEMPLATE_QUEST_API_URL = (templateQuestId: string) => `${TEMPLATE_QUESTS_API_URL}/${templateQuestId}`
 // 公開クエストIDからテンプレートクエストを取得するAPI
@@ -70,7 +75,9 @@ export const GUEST_QUESTS_URL = `${QUESTS_URL}/guest`
 
 // 子供クエスト
 export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
+export const CHILD_QUEST_VIEW_URL = (familyQuestId: string) => `${FAMILY_QUEST_VIEW_URL(familyQuestId)}/child`
 export const CHILD_QUESTS_API_URL = `${QUESTS_API_URL}/child`
+export const CHILD_QUEST_API_URL = (childQuestId: string) => `${CHILD_QUESTS_API_URL}/${childQuestId}`
 
 // 家族
 export const FAMILIES_URL = `/families`

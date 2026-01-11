@@ -12,7 +12,7 @@ import { useTemplateQuest } from "./_hooks/useTemplateQuest"
 import { useRouter } from "next/navigation"
 import { TemplateQuestViewFooter } from "./_components/TemplateQuestViewFooter"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
-import { FAMILY_QUEST_NEW_URL, PUBLIC_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUEST_NEW_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
 import toast from "react-hot-toast"
 
 /** テンプレートクエスト閲覧画面 */
@@ -70,7 +70,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   /** 元のクエストを確認するハンドル */
   const onCheckSource = () => {
     if (templateQuest?.publicQuest) {
-      router.push(PUBLIC_QUEST_VIEW_URL(templateQuest.publicQuest.id))
+      router.push(PUBLIC_QUEST_URL(templateQuest.publicQuest.id))
     } else {
       toast.error("元のクエスト情報が見つかりません。")
     }

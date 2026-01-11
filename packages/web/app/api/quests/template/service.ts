@@ -8,6 +8,8 @@ import { deleteQuestDetails, InsertQuestDetailRecord, insertQuestDetails } from 
 import { FamilyQuestSelect, TemplateQuestSelect, QuestSelect, QuestUpdate, FamilySelect } from "@/drizzle/schema"
 import { fetchTemplateQuest } from "./query"
 import { fetchPublicQuest } from "../public/query"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
+import { fetchUserInfoByUserId } from "../../users/query"
 
 /** 公開クエストからテンプレート登録を行う */
 export const registerTemplateQuestByPublicQuest = async ({
@@ -139,4 +141,18 @@ export const removeTemplateQuest = async ({db, templateQuest, quest}: {
     devLog("deleteTemplateQuest error:", error)
     throw new DatabaseError("テンプレートクエストの削除に失敗しました。")
   }
+}
+
+/** テンプレートクエストの編集権限を確認する */
+export const hasTemplateQuestPermission = async ({ templateQuestId }: {
+  templateQuestId: TemplateQuestSelect["id"]
+}) => {
+    // 認証コンテキストを取得する
+    const { db, userId } = await getAuthContext()
+    // プロフィール情報を取得する
+    const userInfo = await fetchUserInfoByUserId({userId, db})
+    // テンプレートクエストを取得する
+    const templateQuest = await fetchTemplateQuest({ db, id: templateQuestId })
+    // 家族IDが一致するか確認する
+    return templateQuest?.base.familyId === userInfo.profiles.familyId
 }

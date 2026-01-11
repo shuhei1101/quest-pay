@@ -11,13 +11,14 @@ import { useDeleteFamilyQuest } from "./_hooks/useDeleteFamilyQuest"
 import { useDisclosure } from "@mantine/hooks"
 import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUEST_VIEW_URL, PUBLIC_QUEST_EDIT_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
 import { usePublishFamilyQuest } from "./_hooks/usePublishFamilyQuest"
 import { QuestEditLayout } from "../../_components/QuestEditLayout"
 import { FamilyQuestFormType } from "./form"
 import { UseFormRegister, UseFormSetValue, UseFormWatch, FieldErrors } from "react-hook-form"
 import { BaseQuestFormType } from "../../form"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
+import { usePublicQuest } from "./_hooks/usePublicQuest"
 
 /** 家族クエスト編集コンポーネント */
 export const FamilyQuestEdit = ({ id }: { id?: string }) => {
@@ -43,6 +44,9 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
 
   /** 家族クエストフォームを取得する */
   const { register, setForm, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({ familyQuestId })
+
+  /** 家族クエストIDに紐づく公開クエスト */
+  const {publicQuest} = usePublicQuest({ familyQuestId: familyQuestId! })
 
   /** 起動時のハンドル */
   useEffect(() => {
@@ -172,7 +176,10 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
         },
       ]}
       editActions={[
-        {
+        publicQuest ? {
+          label: "公開中のクエストを確認",
+          onClick: () => router.push(PUBLIC_QUEST_URL(publicQuest!.id)),
+        } : {
           label: "オンラインに公開",
           onClick: () => handlePublish({ familyQuestId: familyQuestId! }),
         },

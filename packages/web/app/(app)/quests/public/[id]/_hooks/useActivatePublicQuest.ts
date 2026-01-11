@@ -7,6 +7,7 @@ import { activatePublicQuest } from "@/app/api/quests/public/[id]/activate/clien
 import { ClientValueError } from "@/app/(core)/error/appError"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { queryClient } from "@/app/(core)/tanstack"
+import toast from "react-hot-toast"
 
 /** 有効化ボタン押下時のハンドル */
 export const useActivatePublicQuest = () => {
@@ -22,7 +23,7 @@ export const useActivatePublicQuest = () => {
       queryClient.invalidateQueries({ queryKey: ["publicQuest", variables.publicQuestId] })
 
       // 次画面で表示する成功メッセージを登録
-      appStorage.feedbackMessage.set({ message: "クエストを有効化しました", type: "success" })
+      toast.success("クエストを有効化しました")
     },
     onError: (error) => handleAppError(error, router)
   })
