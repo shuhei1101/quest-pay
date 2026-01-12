@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchParentsByFamilyId } from "./query"
+import { fetchFamilyParents } from "./query"
 import { fetchUserInfoByUserId } from "../users/query"
 
 
 /** 家族の親を取得する */
 export type GetParentsResponse = {
-  parents: Awaited<ReturnType<typeof fetchParentsByFamilyId>>
+  parents: Awaited<ReturnType<typeof fetchFamilyParents>>
 }
 export async function GET(
   req: NextRequest,
@@ -21,7 +21,7 @@ export async function GET(
       if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
   
       // 親を取得する
-      const result = await fetchParentsByFamilyId({db, familyId: userInfo.profiles.familyId })
+      const result = await fetchFamilyParents({db, familyId: userInfo.profiles.familyId })
   
       return NextResponse.json({parents: result} as GetParentsResponse)
     })

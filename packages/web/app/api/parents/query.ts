@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm"
 export type Parents = Parent[]
 
 /** 家族IDに一致する親を取得する */
-export const fetchParentsByFamilyId = async ({ db, familyId }: {
+export const fetchFamilyParents = async ({ db, familyId }: {
   db: Db,
   familyId: string
 }) => {

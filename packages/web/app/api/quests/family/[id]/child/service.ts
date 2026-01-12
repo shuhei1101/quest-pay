@@ -1,7 +1,7 @@
 import { FamilyQuestSelect } from "@/drizzle/schema"
 import { fetchChildQuest } from "./query"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
-import { fetchUserInfoByUserId } from "../../users/query"
+import { fetchUserInfoByUserId } from "../../../../users/query"
 
 
 /** 子供クエストの編集権限を確認する */

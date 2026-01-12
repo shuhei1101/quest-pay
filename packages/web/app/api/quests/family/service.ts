@@ -3,13 +3,17 @@ import { devLog } from "@/app/(core)/util"
 import { Db } from "@/index"
 import { deleteQuest, insertQuest, updateQuest } from "../db"
 import { deleteFamilyQuest, insertFamilyQuest, InsertFamilyQuestRecord, updateFamilyQuest, UpdateFamilyQuestRecord } from "./db"
-import { deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord, updateQuestChild } from "../child/db"
+import { deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord, updateQuestChild } from "./[id]/child/db"
 import { deleteQuestTags, insertQuestTags, InsertQuestTagsRecord } from "../tag/db"
 import { deleteQuestDetails, InsertQuestDetailRecord, insertQuestDetails } from "../detail/db"
 import { ChildSelect, FamilyQuestSelect, FamilyQuestUpdate, FamilySelect, QuestChildrenSelect, QuestInsert, QuestSelect, QuestUpdate } from "@/drizzle/schema"
 import { fetchFamilyQuest } from "./query"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "../../users/query"
+import { fetchFamilyParents } from "../../parents/query"
+import { insertNotification } from "../../notifications/db"
+import { fetchChild } from "../../children/query"
+import { CHILD_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 
 /** 家族クエストを登録する */
 export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest, questChildren, questTags}: {
@@ -157,17 +161,42 @@ export const hasFamilyQuestPermission = async ({ familyQuestId }: {
     const userInfo = await fetchUserInfoByUserId({userId, db})
     // 家族クエストを取得する
     const familyQuest = await fetchFamilyQuest({ db, id: familyQuestId })
-    // 家族IDが一致するか確認する
-    return familyQuest?.base.familyId === userInfo.profiles.familyId
+
+    // 家族IDが一致するかどうか
+    return userInfo.profiles.familyId === familyQuest?.base?.familyId
+}
+/** 子供クエストの編集権限を確認する */
+export const hasChildQuestPermission = async ({ familyQuestId, childId }: {
+  familyQuestId: FamilyQuestSelect["id"]
+  childId: ChildSelect["id"]
+}) => {
+    // 認証コンテキストを取得する
+    const { db, userId } = await getAuthContext()
+    // プロフィール情報を取得する
+    const userInfo = await fetchUserInfoByUserId({userId, db})
+    // 家族クエストを取得する
+    const familyQuest = await fetchFamilyQuest({ db, id: familyQuestId })
+
+    // 子供情報を取得する
+    const child = await fetchChild({ db, childId })
+
+    if (userInfo.profiles.type === "parent") {
+      // 親ユーザかつ子供が所属する家族IDと親ユーザの家族IDが一致するかどうか
+      return child?.profiles?.familyId === userInfo.profiles.familyId
+    } else {
+      // 子供ユーザかつログインユーザの子供IDとアクセスしている子供IDが一致するかどうか
+      return userInfo?.children?.id === childId
+    }
 }
 
 
 /** 家族クエストを完了報告する */
-export const completeReport = async ({db, familyQuestId, updatedAt, childId, requestMessage}: {
+export const reviewRequest = async ({db, familyQuestId, updatedAt, childId, requestMessage, familyId}: {
   db: Db
   familyQuestId: FamilyQuestSelect["id"]
   updatedAt: QuestChildrenSelect["updatedAt"]
   childId: ChildSelect["id"]
+  familyId: FamilySelect["id"]
   requestMessage?: string
 }) => {
   try {
@@ -184,12 +213,86 @@ export const completeReport = async ({db, familyQuestId, updatedAt, childId, req
           requestMessage,
         },
         familyQuestId: familyQuestId,
-        childId: childId,
+        childId,
         updatedAt
       })
+
+      // 家族の親を取得する
+      const familyParents = await fetchFamilyParents({ db: tx, familyId })
+
+      // 子供のプロフィールを取得する
+      const child = await fetchChild({ db: tx, childId })
+      
+      // 対象親の通知を登録する
+      for (const parent of familyParents) {
+        if (!parent.profiles?.id) break
+
+        await insertNotification({
+          db: tx,
+          record: {
+            type: "family_quest_review",
+            message: `${child.profiles?.name}から${currentFamilyQuest.quest.name}の完了報告がありました。`,
+            recipientProfileId: parent.profiles.id,
+            url: `${CHILD_QUEST_VIEW_URL(currentFamilyQuest.base.id, child.children.id)}`,
+          },
+        })
+      }
     })
   } catch (error) {
-    devLog("completeReport error:", error)
+    devLog("reviewRequest error:", error)
     throw new DatabaseError("家族クエストの完了報告に失敗しました。")
+  }
+}
+
+/** 家族クエストの完了報告をキャンセルする */
+export const cancelReview = async ({db, familyQuestId, updatedAt, childId, requestMessage, familyId}: {
+  db: Db
+  familyQuestId: FamilyQuestSelect["id"]
+  updatedAt: QuestChildrenSelect["updatedAt"]
+  childId: ChildSelect["id"]
+  requestMessage?: string
+  familyId: FamilySelect["id"]
+}) => {
+  try {
+    return await db.transaction(async (tx) => {
+
+      // 家族クエストを取得する
+      const currentFamilyQuest = await fetchFamilyQuest({ db: tx, id: familyQuestId })
+      if (!currentFamilyQuest) throw new DatabaseError("家族クエストが見つかりません。")
+
+      // クエスト対象の子供のステータスを進行中に戻す
+      await updateQuestChild({db: tx,
+        record: {
+          status: "in_progress",
+          requestMessage: requestMessage || "",
+        },
+        familyQuestId: familyQuestId,
+        childId,
+        updatedAt
+      })
+      // 家族の親を取得する
+      const familyParents = await fetchFamilyParents({ db: tx, familyId })
+
+      // 子供のプロフィールを取得する
+      const child = await fetchChild({ db: tx, childId })
+      
+      // 対象親の通知を登録する
+      for (const parent of familyParents) {
+        if (!parent.profiles?.id) break
+
+        await insertNotification({
+          db: tx,
+          record: {
+            type: "family_quest_review",
+            message: `${child.profiles?.name}から${currentFamilyQuest.quest.name}の完了報告がありました。`,
+            recipientProfileId: parent.profiles.id,
+            url: `${CHILD_QUEST_VIEW_URL(currentFamilyQuest.base.id, child.children.id)}`,
+          },
+        })
+      }
+    })
+  } catch (error) {
+    devLog("cancelReview error:", error)
+    throw new DatabaseError("家族クエストの完了報告キャンセルに失敗しました。")
   }
 }

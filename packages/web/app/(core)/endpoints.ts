@@ -41,7 +41,10 @@ export const FAMILY_QUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUESTS_
 export const FAMILY_QUEST_PUBLISH_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/publish`
 
 // 完了報告
-export const COMPLETION_REPORT_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/completion-report`
+export const REVIEW_REQUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/review-request`
+
+// 完了報告キャンセル
+export const CANCEL_REVIEW_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/cancel-review`
 
 // 公開クエスト
 export const PUBLIC_QUESTS_URL = `${QUESTS_URL}/public`
@@ -73,11 +76,6 @@ export const TEMPLATE_QUEST_BY_PUBLIC_QUEST_ID_API_URL = (publicQuestId: string)
 // ゲストクエスト
 export const GUEST_QUESTS_URL = `${QUESTS_URL}/guest`
 
-// 子供クエスト
-export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
-export const CHILD_QUEST_VIEW_URL = (familyQuestId: string) => `${FAMILY_QUEST_VIEW_URL(familyQuestId)}/child`
-export const CHILD_QUESTS_API_URL = `${QUESTS_API_URL}/child`
-export const CHILD_QUEST_API_URL = (childQuestId: string) => `${CHILD_QUESTS_API_URL}/${childQuestId}`
 
 // 家族
 export const FAMILIES_URL = `/families`
@@ -94,7 +92,7 @@ export const FAMILIES_MEMBERS_PARENT_EDIT_URL = (parentId: string) => `${FAMILIE
 
 // 家族メンバー（子）
 export const FAMILIES_MEMBERS_CHILD_URL = `${FAMILY_MEMBERS_URL}/child`
-export const FAMILIES_MEMBERS_CHILD_NEW_URL = `${FAMILIES_MEMBERS_CHILD_URL}/new`
+export const FAMILIES_MEMBERS_CHILD_NEW_URL = `$${FAMILIES_MEMBERS_CHILD_URL}/new`
 export const FAMILIES_MEMBERS_CHILD_VIEW_URL = (childId: string) => `${FAMILIES_MEMBERS_CHILD_EDIT_URL(childId)}/view`
 export const FAMILIES_MEMBERS_CHILD_EDIT_URL = (childId: string) => `${FAMILIES_MEMBERS_CHILD_URL}/${childId}`
 
@@ -111,6 +109,13 @@ export const CHILD_URL = (childId: string) => `${CHILDREN_URL}/${childId}`
 export const CHILDREN_API_URL = `/api${CHILDREN_URL}`
 export const CHILD_API_URL = (childId: string) => `${CHILDREN_API_URL}/${childId}`
 export const CHILD_JOIN_API_URL = `${CHILDREN_API_URL}/join`
+
+// 子供クエスト
+export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
+export const CHILD_QUEST_VIEW_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_VIEW_URL(familyQuestId)}/child/${childId}`
+export const CHILD_QUESTS_API_URL = (childId: string) => `${CHILD_API_URL(childId)}/quests`
+export const CHILD_QUEST_API_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/child/${childId}`
+
 // 親
 export const PARENTS_URL = `/parents`
 export const PARENT_NEW_URL = `${PARENTS_URL}/new`
@@ -120,5 +125,10 @@ export const PARENT_API_URL = (parentId: string) => `${PARENTS_API_URL}/${parent
 
 // アイコン
 export const ICONS_API_URL = `/api/icons`
-// アイコン
+// アイコンカテゴリ
 export const ICON_CATEGORIES_API_URL = `/api/icons/category`
+
+// 通知
+export const NOTIFICATIONS_URL = `/notifications`
+export const NOTIFICATION_URL = (notificationId: string) => `${NOTIFICATIONS_URL}/${notificationId}`
+export const NOTIFICATIONS_API_URL = `/api${NOTIFICATIONS_URL}`

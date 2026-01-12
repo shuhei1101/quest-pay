@@ -2,20 +2,22 @@
 
 import { Button, Group } from "@mantine/core"
 import { IconArrowLeft, IconEdit } from "@tabler/icons-react"
-import { ChildQuest } from "@/app/api/quests/child/query"
+import { ChildQuest } from "@/app/api/quests/family/[id]/child/query"
 import { QuestDetailSelect } from "@/drizzle/schema"
 
 /** クエスト閲覧フッター（子供向け） */
 export const ChildQuestViewFooter = ({
   onBack,
-  onCompletionReport,
+  onReviewRequest,
   quest,
   currentDetail,
+  onCancelReview
 }: {
   onBack?: () => void
-  onCompletionReport: () => void
+  onReviewRequest: () => void
   quest?: ChildQuest
   currentDetail?: QuestDetailSelect
+  onCancelReview: () => void
 }) => {
   return (
     <Group justify="center" mt="xl" gap="md">
@@ -38,6 +40,7 @@ export const ChildQuestViewFooter = ({
           radius="xl" 
           color="yellow"
           variant="outline"
+          onClick={onCancelReview}
         >
           承認待ち
         </Button>
@@ -50,7 +53,7 @@ export const ChildQuestViewFooter = ({
           color="blue"
           variant="outline"
           leftSection={<IconEdit size={18} />}
-          onClick={onCompletionReport}
+          onClick={onReviewRequest}
         >
           完了報告をする{`(${quest.children[0].currentCompletionCount || 0}/${currentDetail?.requiredCompletionCount || 0})`}
         </Button>

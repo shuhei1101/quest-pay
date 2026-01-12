@@ -16,7 +16,6 @@ export default function Page() {
         </div>
         <div className="w-1/2 h-full">
           <ChildForm />
-
         </div>
       </div>
     </>

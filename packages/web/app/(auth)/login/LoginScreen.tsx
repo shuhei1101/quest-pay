@@ -11,10 +11,12 @@ import { useLogin } from "./_hooks/useLogin"
 import { useRouter } from "next/navigation"
 import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL } from "../../(core)/endpoints"
 import Link from "next/link"
+import { devLog } from "@/app/(core)/util"
 
 export const LoginScreen = () => {
   /** セッションストレージを空にする */
   useEffect(() => {
+    devLog("セッションストレージをクリア")
     sessionStorage.clear()
   }, [])
 

@@ -5,12 +5,13 @@ import type { GetChildQuestResponse } from "./route";
 
 
 /** 子供クエストを取得する */
-export const getChildQuest = async ({familyQuestId}: {
+export const getChildQuest = async ({familyQuestId, childId}: {
   familyQuestId: string
+  childId: string
 }) => {
-  devLog("getChildQuest.API呼び出し: ", {URL: CHILD_QUEST_API_URL(familyQuestId)})
+  devLog("getChildQuest.API呼び出し: ", {URL: CHILD_QUEST_API_URL(familyQuestId, childId)})
   // APIを実行する
-  const res = await fetch(`${CHILD_QUEST_API_URL(familyQuestId)}`, {
+  const res = await fetch(`${CHILD_QUEST_API_URL(familyQuestId, childId)}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   })

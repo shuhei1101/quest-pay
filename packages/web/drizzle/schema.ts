@@ -43,6 +43,12 @@ export const childQuestStatus = pgEnum("child_quest_status", [
   "completed",            // 完了
 ])
 
+/** 通知タイプ */
+export const notificationType = pgEnum("notification_type", [
+  "family_quest_review",
+  "other",
+])
+
 /** authスキーマ */
 const authSchema = pgSchema("auth")
 
@@ -356,3 +362,26 @@ export const publicQuests = pgTable("public_quests", {
 export type PublicQuestSelect = typeof publicQuests.$inferSelect
 export type PublicQuestInsert = Omit<typeof publicQuests.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type PublicQuestUpdate = Partial<PublicQuestInsert>
+
+/** 通知テーブル */
+export const notifications = pgTable("notifications", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 通知者 */
+  recipientProfileId: uuid("recipient_profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  /** 遷移先URL */
+  url: text("url").notNull().default(""),
+  /** 通知タイプ */
+  type: notificationType("type").notNull().default("other"),
+  /** 通知メッセージ */
+  message: text("message").notNull().default(""),
+  /** 既読フラグ */
+  isRead: boolean("is_read").notNull().default(false),
+  /** 既読日時 */
+  readAt: timestamp("read_at", { withTimezone: true, mode: "string" }),
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type NotificationSelect = typeof notifications.$inferSelect
+export type NotificationInsert = Omit<typeof notifications.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type NotificationUpdate = Partial<NotificationInsert>

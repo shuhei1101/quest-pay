@@ -1,8 +1,8 @@
-import { hasChildQuestPermission } from "@/app/api/quests/child/service"
-import { ChildQuestViewScreen } from "./child/ChildQuestViewScreen"
+import { hasChildQuestPermission } from "@/app/api/quests/family/[id]/child/service"
+import { ChildQuestViewScreen } from "./child/[childId]/ChildQuestViewScreen"
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = await params
+export default async function Page({ params }: { params: { id: string, childId: string } }) {
+  const { id, childId } = await params
 
   // 編集権限を確認する
   const hasPermission = await hasChildQuestPermission({ familyQuestId: id })
@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <ChildQuestViewScreen id={id} />
+      <ChildQuestViewScreen id={id} childId={childId} />
     </>
   )
 }

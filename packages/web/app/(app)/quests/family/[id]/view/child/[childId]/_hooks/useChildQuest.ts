@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
-import { getChildQuest } from "@/app/api/quests/child/[id]/client"
+import { getChildQuest } from "@/app/api/quests/family/[id]/child/[childId]/client"
 import { useQuery } from "@tanstack/react-query"
 import { devLog } from "@/app/(core)/util"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
@@ -10,9 +10,10 @@ import { HOME_URL } from "@/app/(core)/endpoints"
 
 /** クエストを取得する */
 export const useChildQuest = ({
-  id
+  id, childId
 }:{
   id: string
+  childId: string
 }) => {
   const router = useRouter()
   
@@ -22,7 +23,7 @@ export const useChildQuest = ({
     retry: false,
     queryFn: async () => {
       // データを取得する
-      const childQuest = await getChildQuest({ familyQuestId: id })
+      const childQuest = await getChildQuest({ familyQuestId: id, childId })
       devLog("useChildQuest.取得データ: ", childQuest)
       // データが取得できなかった場合、ホームにリダイレクトする
       if (!childQuest.childQuest) {
@@ -32,7 +33,7 @@ export const useChildQuest = ({
       }
       return childQuest
     },
-    enabled: !!id
+    enabled: !!id && !!childId,
   })
 
   // エラーをチェックする

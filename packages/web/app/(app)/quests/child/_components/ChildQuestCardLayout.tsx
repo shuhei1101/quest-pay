@@ -1,5 +1,5 @@
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
-import { ChildQuest } from "@/app/api/quests/child/query"
+import { ChildQuest } from "@/app/api/quests/family/[id]/child/query"
 import { Badge, Card, Group, Text } from "@mantine/core"
 
 /** 子供クエストカードレイアウトコンポーネント */

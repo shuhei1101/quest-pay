@@ -5,14 +5,14 @@ import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import z from "zod"
 import { fetchFamilyQuest } from "../../query"
-import { completeReport } from "../../service"
+import { reviewRequest } from "../../service"
 
 /** 家族クエストを完了報告する */
-export const CompleteReportRequestScheme = z.object({
+export const ReviewRequestRequestScheme = z.object({
   updatedAt: z.string(),
   requestMessage: z.string().optional(),
 })
-export type CompleteReportRequest = z.infer<typeof CompleteReportRequestScheme>
+export type ReviewRequestRequest = z.infer<typeof ReviewRequestRequestScheme>
 export async function PUT(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -25,7 +25,7 @@ export async function PUT(
 
       // bodyから公開クエストを取得する
       const body = await req.json()
-      const data = CompleteReportRequestScheme.parse(body)
+      const data = ReviewRequestRequestScheme.parse(body)
 
       // プロフィール情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
@@ -39,12 +39,13 @@ export async function PUT(
       if (userInfo.profiles.familyId !== currentFamilyQuest?.base?.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
         
       // 家族クエストを更新する
-      await completeReport({
+      await reviewRequest({
         db,
         familyQuestId: id,
         updatedAt: data.updatedAt,
         childId: userInfo.children.id,
         requestMessage: data.requestMessage,
+        familyId: userInfo.profiles.familyId,
       })
       
       return NextResponse.json({})

@@ -111,6 +111,8 @@ export const fetchChildQuests = async ({ params, db, childId, familyId }: {
     // データをオブジェクトに変換する
     const result = buildResult(rows)
 
+    devLog("fetchChildQuests.取得結果: ", result)
+
     return {
       rows: result,
       totalRecords: total ?? 0

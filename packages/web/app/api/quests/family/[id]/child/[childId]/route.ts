@@ -12,7 +12,7 @@ export type GetChildQuestResponse = {
 }
 export async function GET(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string, childId: string }> }
 ) {
   return withRouteErrorHandling(async () => {
     // 認証コンテキストを取得する

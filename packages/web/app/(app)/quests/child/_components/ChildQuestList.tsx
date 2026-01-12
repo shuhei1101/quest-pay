@@ -9,14 +9,17 @@ import { ChildQuestCardLayout } from "./ChildQuestCardLayout"
 import { ChildQuestFilterPopup } from "./ChildQuestFilterPopup"
 import { ChildQuestSortPopup } from "./ChildQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
-import { ChildQuestFilterScheme, type ChildQuest, type ChildQuestFilterType } from "@/app/api/quests/child/query"
+import { ChildQuestFilterScheme, type ChildQuest, type ChildQuestFilterType } from "@/app/api/quests/family/[id]/child/query"
 import type { QuestSort } from "@/drizzle/schema"
 import { CHILD_QUEST_VIEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 子供クエストリストコンポーネント */
 export const ChildQuestList = () => {
   const router = useRouter()
 
+  /** ログインユーザ情報 */
+  const { userInfo } = useLoginUserInfo()
   /** フィルターポップアップ制御状態 */
   const [filterOpened, { open: openFilter, close: closeFilter }] = useDisclosure(false)
   /** ソートポップアップ制御状態 */
@@ -51,6 +54,7 @@ export const ChildQuestList = () => {
 
   /** クエスト一覧 */
   const { fetchedQuests, isLoading, totalRecords, maxPage } = useChildQuests({
+    childId: userInfo?.children?.id,
     filter: searchFilter,
     sortColumn: sort.column,
     sortOrder: sort.order,
@@ -93,7 +97,7 @@ export const ChildQuestList = () => {
     <ChildQuestCardLayout
       key={index}
       childQuest={quest}
-      onClick={(id) => router.push(CHILD_QUEST_VIEW_URL(id))}
+      onClick={(id) => router.push(CHILD_QUEST_VIEW_URL(id, userInfo?.children?.id || ""))}
     />
   ), [router])
 

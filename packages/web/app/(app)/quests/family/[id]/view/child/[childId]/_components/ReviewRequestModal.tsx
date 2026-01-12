@@ -4,7 +4,7 @@ import { Button, Group, Modal, Textarea } from "@mantine/core"
 import { useState } from "react"
 
 /** 完了報告モーダル */
-export const CompletionReportModal = ({
+export const ReviewRequestModal = ({
   isOpen,
   onClose,
   onSubmit,

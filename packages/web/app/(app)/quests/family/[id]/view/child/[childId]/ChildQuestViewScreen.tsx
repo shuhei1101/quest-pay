@@ -2,31 +2,34 @@
 
 import { Box, Paper, Tabs } from "@mantine/core"
 import { useState } from "react"
-import { QuestViewHeader } from "../../../../view/_components/QuestViewHeader"
-import { QuestViewIcon } from "../../../../view/_components/QuestViewIcon"
-import { QuestConditionTab } from "../../../../view/_components/QuestConditionTab"
-import { QuestDetailTab } from "../../../../view/_components/QuestDetailTab"
-import { QuestOtherTab } from "../../../../view/_components/QuestOtherTab"
+import { QuestViewHeader } from "../../../../../view/_components/QuestViewHeader"
+import { QuestViewIcon } from "../../../../../view/_components/QuestViewIcon"
+import { QuestConditionTab } from "../../../../../view/_components/QuestConditionTab"
+import { QuestDetailTab } from "../../../../../view/_components/QuestDetailTab"
+import { QuestOtherTab } from "../../../../../view/_components/QuestOtherTab"
 import { ChildQuestViewFooter } from "./_components/ChildQuestViewFooter"
-import { CompletionReportModal } from "./_components/CompletionReportModal"
+import { ReviewRequestModal } from "./_components/ReviewRequestModal"
+import { CancelReviewModal } from "./_components/CancelReviewModal"
 import { useWindow } from "@/app/(core)/useConstants"
 import { useChildQuest } from "./_hooks/useChildQuest"
 import { useRouter } from "next/navigation"
-import { useCompletionReport } from "./_hooks/useCompletionReport"
+import { useReviewRequest } from "./_hooks/useReviewRequest"
+import { useCancelReview } from "./_hooks/useCancelReview"
 
 /** 子供クエスト閲覧画面 */
-export const ChildQuestViewScreen = ({id}: {id: string}) => {
+export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string}) => {
   const router = useRouter()
   const {isDark} = useWindow()
 
   /** ハンドル */
-  const {handleCompleteReport, executeCompleteReport, closeModal, isModalOpen, isLoading} = useCompletionReport()
+  const {handleReviewRequest, executeReviewRequest, closeModal, isModalOpen, isLoading} = useReviewRequest()
+  const {handleCancelReview, executeCancelReview, closeModal: closeCancelModal, isModalOpen: isCancelModalOpen, isLoading: isCancelLoading} = useCancelReview()
   
   /** アクティブタブ */
   const [activeTab, setActiveTab] = useState<string | null>("condition")
 
   /** 現在のクエスト状態 */
-  const {childQuest} = useChildQuest({id})
+  const {childQuest} = useChildQuest({id, childId})
 
   /** 選択中のレベルの詳細を取得する */
   const currentDetail = childQuest?.details?.find(d => d.level === childQuest.children[0].level) || childQuest?.details?.[0]
@@ -104,7 +107,11 @@ export const ChildQuestViewScreen = ({id}: {id: string}) => {
       {/* 下部アクションエリア */}
       <ChildQuestViewFooter 
         onBack={() => router.back()}
-        onCompletionReport={() => handleCompleteReport({
+        onReviewRequest={() => handleReviewRequest({
+          familyQuestId: id,
+          updatedAt: childQuest?.base.updatedAt,
+        })}
+        onCancelReview={() => handleCancelReview({
           familyQuestId: id,
           updatedAt: childQuest?.base.updatedAt,
         })}
@@ -113,11 +120,19 @@ export const ChildQuestViewScreen = ({id}: {id: string}) => {
       />
 
       {/* 完了報告モーダル */}
-      <CompletionReportModal
+      <ReviewRequestModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        onSubmit={executeCompleteReport}
+        onSubmit={executeReviewRequest}
         isLoading={isLoading}
+      />
+
+      {/* キャンセルモーダル */}
+      <CancelReviewModal
+        isOpen={isCancelModalOpen}
+        onClose={closeCancelModal}
+        onSubmit={executeCancelReview}
+        isLoading={isCancelLoading}
       />
     </div>
   )

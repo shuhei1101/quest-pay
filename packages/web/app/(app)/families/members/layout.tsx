@@ -47,7 +47,11 @@ export default function FamilyMembersLayout({ children }: {
     
   // スマホの場合
   if (isMobile) {
-    // 通常の画面遷移を行う
+    // 選択されていない場合、一覧画面を表示する
+    if (!selectedId) {
+      return <FamilyMemberList selectedId={null} />
+    }
+    // 選択されている場合、子コンテンツを表示する
     return <>{children}</>
   }
   
