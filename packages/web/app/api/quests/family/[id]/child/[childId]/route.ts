@@ -23,12 +23,9 @@ export async function GET(
       // プロフィール情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
       if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
-      if (!userInfo?.children?.id) throw new ServerError("子供IDの取得に失敗しました。")
-      
-      devLog("GetChildQuest.パラメータ.ID: ", { id: params.id, childId: userInfo.children.id })
       
       // 子供クエストを取得する
-      const data = await fetchChildQuest({ db, familyQuestId: params.id, childId: userInfo.children.id })
+      const data = await fetchChildQuest({ db, familyQuestId: params.id, childId: params.childId })
       
       devLog("取得した子供クエスト: ", data)
   

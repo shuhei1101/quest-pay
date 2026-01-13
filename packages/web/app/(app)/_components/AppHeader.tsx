@@ -2,17 +2,29 @@
 
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { HOME_URL, LOGIN_URL } from '@/app/(core)/endpoints'
-import { ActionIcon, Title, Text, Button, LoadingOverlay } from '@mantine/core'
-import { IconHome2, IconMenu2 } from '@tabler/icons-react'
+import { ActionIcon, Title, Text, Button, LoadingOverlay, Indicator } from '@mantine/core'
+import { IconHome2, IconMenu2, IconBell } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { appStorage } from '../../(core)/_sessionStorage/appStorage'
 import { createClient } from '../../(core)/_supabase/client'
+import { useState } from 'react'
+import { NotificationModal } from '../notifications/_components/NotificationModal'
+import { useNotifications } from '../notifications/_hooks/useNotifications'
 
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
   /** ログインユーザ情報 */
   const { userInfo, isLoading, isGuest } = useLoginUserInfo()
+  
+  /** 通知モーダルの開閉状態 */
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+  
+  /** 通知データ */
+  const { notifications } = useNotifications()
+  
+  /** 未読数を計算する */
+  const unreadCount = notifications.filter(n => !n.isRead).length
 
   /** ログアウトボタン押下時のハンドル */
   const handleLogout = async () => {
@@ -49,6 +61,18 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       <div className='w-full' />
       {/* ユーザ情報を表示する */}
       <Text className='text-nowrap text-sm'>{userInfo?.profiles?.name}</Text>
+      {/* 通知ボタン */}
+      {!isGuest && (
+        <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
+          <ActionIcon
+            onClick={() => setIsNotificationOpen(true)} 
+            variant="subtle" 
+            size="xl"
+          >
+            <IconBell style={{ width: '60%', height: '60%' }} stroke={1.5} />
+          </ActionIcon>
+        </Indicator>
+      )}
       {/* サインアウトボタン */}
       {isGuest ? 
         <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
@@ -57,6 +81,12 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       }
       {/* ハンバーガーメニュー切り替えボタン */}
       {isMobile && <MenuButton/>}
+      
+      {/* 通知モーダル */}
+      <NotificationModal 
+        isOpen={isNotificationOpen} 
+        onClose={() => setIsNotificationOpen(false)} 
+      />
     </>
   )
 }
