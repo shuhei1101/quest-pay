@@ -39,7 +39,7 @@ export const questType = pgEnum("quest_type", [
 export const childQuestStatus = pgEnum("child_quest_status", [
   "not_started",          // 未着手
   "in_progress",          // 進行中
-  "pending_review",            // 報告中
+  "pending_review",       // 報告中
   "completed",            // 完了
 ])
 
@@ -270,7 +270,7 @@ export const questDetails = pgTable("quest_details", {
   reward: integer("reward").notNull().default(0),
   /** 獲得経験値 */
   childExp: integer("child_exp").notNull().default(0),
-  /** 必要クリア回数 */
+  /** 次レベルに必要なクリア回数 */
   requiredClearCount: integer("required_clear_count").notNull().default(1),
   /** タイムスタンプ */
   ...timestamps,
@@ -310,12 +310,14 @@ export const questChildren = pgTable("quest_children", {
   status: childQuestStatus("status").notNull().default("not_started"),
   /** 子供の申請メッセージ（申請時のメッセージ用カラム） */
   requestMessage: text("request_message"),
-  /** 親からの返信メッセージ（返信時のメッセージ用カラム） */
-  responseMessage: text("response_message"),
   /** 最後に承認/却下した親のプロフィールID */
   lastApprovedBy: uuid("last_approved_by").references(() => profiles.id, { onDelete: "set null" }),
   /** 現在の達成回数 */
   currentCompletionCount: integer("current_completion_count").notNull().default(0),
+  /** 現在のクリア回数 */
+  currentClearCount: integer("current_clear_count").notNull().default(0),
+  /** 有効フラグ */
+  isActivate: boolean("is_activate").notNull().default(true),
   /** ステータス更新日時 */
   statusUpdatedAt: timestamp("status_updated_at", { withTimezone: true, mode: "string" }),
   /** タイムスタンプ */
