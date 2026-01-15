@@ -4,10 +4,16 @@
 
 ## ファイル構成
 
-- `themeConfig.ts`: テーマの型定義
+- `themeConfig.ts`: テーマの型定義（ColorScheme, AppThemeConfig）
 - `themes.ts`: 利用可能なテーマの定義（デフォルト、ブルー、グリーン、パープル）
 - `themeContext.tsx`: テーマ状態を管理するReact Context
 - `useTheme.ts`: テーマを利用するためのカスタムフック
+
+## 機能
+
+- **カラースキーム**: ライトモードとダークモードの切り替えが可能
+- **テーマ切り替え**: 複数のカラーテーマから選択可能
+- **一元管理**: アプリ全体で統一されたカラー設定を提供
 
 ## 使い方
 
@@ -17,10 +23,10 @@
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 const MyComponent = () => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
 
   return (
-    <Button color={theme.buttonColors.primary}>
+    <Button color={colors.buttonColors.primary}>
       プライマリボタン
     </Button>
   )
@@ -46,6 +52,24 @@ const ThemeSwitcher = () => {
 }
 ```
 
+### カラースキームを切り替える
+
+```tsx
+import { useTheme } from "@/app/(core)/_theme/useTheme"
+
+const ColorSchemeSwitcher = () => {
+  const { colorScheme, setColorScheme, toggleColorScheme } = useTheme()
+
+  return (
+    <div>
+      <button onClick={() => setColorScheme("light")}>ライト</button>
+      <button onClick={() => setColorScheme("dark")}>ダーク</button>
+      <button onClick={toggleColorScheme}>トグル</button>
+    </div>
+  )
+}
+```
+
 ## 新しいテーマを追加する
 
 `themes.ts`に新しいテーマを追加してください：
@@ -54,26 +78,51 @@ const ThemeSwitcher = () => {
 export const newTheme: AppThemeConfig = {
   name: "新しいテーマ",
   primaryColor: "indigo",
-  buttonColors: {
-    default: "gray",
-    primary: "indigo",
-    secondary: "blue",
-    danger: "red",
-    success: "green",
+  light: {
+    buttonColors: {
+      default: "gray",
+      primary: "indigo",
+      secondary: "blue",
+      danger: "red",
+      success: "green",
+    },
+    textColors: {
+      primary: "#1e1b4b",
+      secondary: "#6366f1",
+      disabled: "#e0e7ff",
+    },
+    backgroundColors: {
+      default: "#ffffff",
+      card: "#f5f5ff",
+      hover: "#eef2ff",
+    },
+    borderColors: {
+      default: "#e0e7ff",
+      focus: "#6366f1",
+    },
   },
-  textColors: {
-    primary: "#1e1b4b",
-    secondary: "#6366f1",
-    disabled: "#e0e7ff",
-  },
-  backgroundColors: {
-    default: "#ffffff",
-    card: "#f5f5ff",
-    hover: "#eef2ff",
-  },
-  borderColors: {
-    default: "#e0e7ff",
-    focus: "#6366f1",
+  dark: {
+    buttonColors: {
+      default: "gray",
+      primary: "indigo",
+      secondary: "blue",
+      danger: "red",
+      success: "green",
+    },
+    textColors: {
+      primary: "#eef2ff",
+      secondary: "#c7d2fe",
+      disabled: "#4338ca",
+    },
+    backgroundColors: {
+      default: "#1a1a2e",
+      card: "#2d2d44",
+      hover: "#3d3d5a",
+    },
+    borderColors: {
+      default: "#4f46e5",
+      focus: "#6366f1",
+    },
   },
   colors: {
     indigo: [

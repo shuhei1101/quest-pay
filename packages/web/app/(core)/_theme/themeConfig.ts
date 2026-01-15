@@ -1,11 +1,10 @@
 import { MantineColorsTuple } from "@mantine/core"
 
-/** アプリで使用するカラーテーマの設定 */
-export type AppThemeConfig = {
-  /** テーマ名 */
-  name: string
-  /** プライマリカラー */
-  primaryColor: string
+/** カラースキーム */
+export type ColorScheme = "light" | "dark"
+
+/** カラー設定 */
+type ColorConfig = {
   /** ボタンの色 */
   buttonColors: {
     /** 通常ボタン */
@@ -44,6 +43,18 @@ export type AppThemeConfig = {
     /** フォーカス時 */
     focus: string
   }
+}
+
+/** アプリで使用するカラーテーマの設定 */
+export type AppThemeConfig = {
+  /** テーマ名 */
+  name: string
+  /** プライマリカラー */
+  primaryColor: string
+  /** ライトモードのカラー設定 */
+  light: ColorConfig
+  /** ダークモードのカラー設定 */
+  dark: ColorConfig
   /** カスタムカラーパレット（Mantine用） */
   colors?: {
     [key: string]: MantineColorsTuple
