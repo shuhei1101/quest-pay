@@ -1,12 +1,12 @@
 "use client"
 
 import { useThemeContext } from "./themeContext"
-import { useWindow } from "../useConstants"
+import { useSystemTheme } from "../useSystemTheme"
 
 /** テーマを利用するためのカスタムフック */
 export const useTheme = () => {
   const { currentTheme, currentThemeKey, getCurrentColors, setTheme } = useThemeContext()
-  const { isDark } = useWindow()
+  const { isDark } = useSystemTheme()
 
   return {
     /** 現在のテーマキー */

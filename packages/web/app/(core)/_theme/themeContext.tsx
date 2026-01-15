@@ -3,7 +3,7 @@
 import React, { createContext, useState, useCallback, useMemo } from "react"
 import { themes, ThemeKey } from "./themes"
 import { AppThemeConfig } from "./themeConfig"
-import { useWindow } from "../useConstants"
+import { useSystemTheme } from "../useSystemTheme"
 
 type ThemeContextType = {
   /** 現在のテーマキー */
@@ -26,7 +26,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 /** テーマコンテキストを提供する */
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>("default")
-  const { isDark } = useWindow()
+  const { isDark } = useSystemTheme()
 
   const currentTheme = useMemo(() => themes[currentThemeKey], [currentThemeKey])
 
