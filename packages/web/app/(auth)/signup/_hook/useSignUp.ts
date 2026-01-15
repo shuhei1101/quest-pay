@@ -2,7 +2,7 @@
 
 import toast from "react-hot-toast"
 import { createClient } from "@/app/(core)/_supabase/client"
-import { LoginFormType } from "../../login/form"
+import { AuthFormType } from "../../login/form"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { VERIFY_EMAIL_URL } from "@/app/(core)/endpoints"
@@ -12,7 +12,7 @@ export const useSignUp = () => {
   const router = useRouter()
 
   const mutation = useMutation({
-    mutationFn: async (form: LoginFormType) => await createClient().auth.signUp({
+    mutationFn: async (form: AuthFormType) => await createClient().auth.signUp({
       email: form.email,
       password: form.password
     }),
