@@ -31,24 +31,24 @@ import { useTheme } from "../../(core)/_theme/useTheme"
 import { themes, ThemeKey } from "../../(core)/_theme/themes"
 
 export default function Page() {
-  const { theme, themeKey, setTheme, getButtonColor, getTextColor, getBackgroundColor, getBorderColor } = useTheme()
+  const { theme, themeKey, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState<string | null>("home")
 
   return (
-    <div className="p-8 min-h-screen" style={{ backgroundColor: getBackgroundColor("default") }}>
+    <div className="p-8 min-h-screen" style={{ backgroundColor: theme.backgroundColors.default }}>
       {/* ヘッダー */}
       <div className="mb-8">
-        <Title order={1} className="mb-4" style={{ color: getTextColor("primary") }}>
+        <Title order={1} className="mb-4" style={{ color: theme.textColors.primary }}>
           テーマ切り替えデモページ
         </Title>
-        <Text size="sm" style={{ color: getTextColor("secondary") }}>
+        <Text size="sm" style={{ color: theme.textColors.secondary }}>
           このページでは、アプリのカラーテーマを切り替えて各コンポーネントの見た目を確認できます。
         </Text>
       </div>
 
       {/* テーマ選択 */}
-      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: getBackgroundColor("card") }}>
-        <Title order={3} className="mb-4" style={{ color: getTextColor("primary") }}>
+      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: theme.backgroundColors.card }}>
+        <Title order={3} className="mb-4" style={{ color: theme.textColors.primary }}>
           テーマ選択
         </Title>
         <Group gap="md">
@@ -56,7 +56,7 @@ export default function Page() {
             <Button
               key={key}
               variant={themeKey === key ? "filled" : "outline"}
-              color={getButtonColor("primary")}
+              color={theme.buttonColors.primary}
               onClick={() => setTheme(key)}
             >
               {themes[key].name}
@@ -64,32 +64,32 @@ export default function Page() {
           ))}
         </Group>
         <Divider className="my-4" />
-        <Text size="sm" style={{ color: getTextColor("secondary") }}>
+        <Text size="sm" style={{ color: theme.textColors.secondary }}>
           現在のテーマ: <strong>{theme.name}</strong>
         </Text>
       </Card>
 
       {/* ボタンサンプル */}
-      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: getBackgroundColor("card") }}>
-        <Title order={3} className="mb-4" style={{ color: getTextColor("primary") }}>
+      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: theme.backgroundColors.card }}>
+        <Title order={3} className="mb-4" style={{ color: theme.textColors.primary }}>
           ボタンサンプル
         </Title>
         <Stack gap="md">
           <Group gap="md">
-            <Button color={getButtonColor("default")}>デフォルト</Button>
-            <Button color={getButtonColor("primary")}>プライマリ</Button>
-            <Button color={getButtonColor("secondary")}>セカンダリ</Button>
-            <Button color={getButtonColor("success")}>成功</Button>
-            <Button color={getButtonColor("danger")}>危険</Button>
+            <Button color={theme.buttonColors.default}>デフォルト</Button>
+            <Button color={theme.buttonColors.primary}>プライマリ</Button>
+            <Button color={theme.buttonColors.secondary}>セカンダリ</Button>
+            <Button color={theme.buttonColors.success}>成功</Button>
+            <Button color={theme.buttonColors.danger}>危険</Button>
           </Group>
           <Group gap="md">
-            <Button variant="outline" color={getButtonColor("primary")}>
+            <Button variant="outline" color={theme.buttonColors.primary}>
               アウトライン
             </Button>
-            <Button variant="light" color={getButtonColor("primary")}>
+            <Button variant="light" color={theme.buttonColors.primary}>
               ライト
             </Button>
-            <Button variant="subtle" color={getButtonColor("primary")}>
+            <Button variant="subtle" color={theme.buttonColors.primary}>
               サブトル
             </Button>
           </Group>
@@ -97,35 +97,35 @@ export default function Page() {
       </Card>
 
       {/* バッジとアイコン */}
-      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: getBackgroundColor("card") }}>
-        <Title order={3} className="mb-4" style={{ color: getTextColor("primary") }}>
+      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: theme.backgroundColors.card }}>
+        <Title order={3} className="mb-4" style={{ color: theme.textColors.primary }}>
           バッジとアイコン
         </Title>
         <Group gap="md" className="mb-4">
-          <Badge color={getButtonColor("primary")}>プライマリ</Badge>
-          <Badge color={getButtonColor("secondary")}>セカンダリ</Badge>
-          <Badge color={getButtonColor("success")}>成功</Badge>
-          <Badge color={getButtonColor("danger")}>危険</Badge>
+          <Badge color={theme.buttonColors.primary}>プライマリ</Badge>
+          <Badge color={theme.buttonColors.secondary}>セカンダリ</Badge>
+          <Badge color={theme.buttonColors.success}>成功</Badge>
+          <Badge color={theme.buttonColors.danger}>危険</Badge>
         </Group>
         <Group gap="md">
-          <ActionIcon color={getButtonColor("primary")} variant="filled">
+          <ActionIcon color={theme.buttonColors.primary} variant="filled">
             <IconHeart size={18} />
           </ActionIcon>
-          <ActionIcon color={getButtonColor("secondary")} variant="filled">
+          <ActionIcon color={theme.buttonColors.secondary} variant="filled">
             <IconStar size={18} />
           </ActionIcon>
-          <ActionIcon color={getButtonColor("success")} variant="filled">
+          <ActionIcon color={theme.buttonColors.success} variant="filled">
             <IconCheck size={18} />
           </ActionIcon>
-          <ActionIcon color={getButtonColor("danger")} variant="filled">
+          <ActionIcon color={theme.buttonColors.danger} variant="filled">
             <IconX size={18} />
           </ActionIcon>
         </Group>
       </Card>
 
       {/* フォーム要素 */}
-      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: getBackgroundColor("card") }}>
-        <Title order={3} className="mb-4" style={{ color: getTextColor("primary") }}>
+      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: theme.backgroundColors.card }}>
+        <Title order={3} className="mb-4" style={{ color: theme.textColors.primary }}>
           フォーム要素
         </Title>
         <Stack gap="md">
@@ -135,9 +135,9 @@ export default function Page() {
             leftSection={<IconSearch size={16} />}
             styles={{
               input: {
-                borderColor: getBorderColor("default"),
+                borderColor: theme.borderColors.default,
                 "&:focus": {
-                  borderColor: getBorderColor("focus"),
+                  borderColor: theme.borderColors.focus,
                 },
               },
             }}
@@ -151,11 +151,11 @@ export default function Page() {
       </Card>
 
       {/* タブ */}
-      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: getBackgroundColor("card") }}>
-        <Title order={3} className="mb-4" style={{ color: getTextColor("primary") }}>
+      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: theme.backgroundColors.card }}>
+        <Title order={3} className="mb-4" style={{ color: theme.textColors.primary }}>
           タブ
         </Title>
-        <Tabs value={activeTab} onChange={setActiveTab} color={getButtonColor("primary")}>
+        <Tabs value={activeTab} onChange={setActiveTab} color={theme.buttonColors.primary}>
           <Tabs.List>
             <Tabs.Tab value="home" leftSection={<IconHome size={16} />}>
               ホーム
@@ -169,89 +169,89 @@ export default function Page() {
           </Tabs.List>
 
           <Tabs.Panel value="home" pt="md">
-            <Text style={{ color: getTextColor("primary") }}>ホームタブの内容</Text>
+            <Text style={{ color: theme.textColors.primary }}>ホームタブの内容</Text>
           </Tabs.Panel>
 
           <Tabs.Panel value="settings" pt="md">
-            <Text style={{ color: getTextColor("primary") }}>設定タブの内容</Text>
+            <Text style={{ color: theme.textColors.primary }}>設定タブの内容</Text>
           </Tabs.Panel>
 
           <Tabs.Panel value="profile" pt="md">
-            <Text style={{ color: getTextColor("primary") }}>プロフィールタブの内容</Text>
+            <Text style={{ color: theme.textColors.primary }}>プロフィールタブの内容</Text>
           </Tabs.Panel>
         </Tabs>
       </Card>
 
       {/* テキストとカラー情報 */}
-      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: getBackgroundColor("card") }}>
-        <Title order={3} className="mb-4" style={{ color: getTextColor("primary") }}>
+      <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: theme.backgroundColors.card }}>
+        <Title order={3} className="mb-4" style={{ color: theme.textColors.primary }}>
           テキストカラー
         </Title>
         <Stack gap="sm">
-          <Text style={{ color: getTextColor("primary") }}>プライマリテキスト</Text>
-          <Text style={{ color: getTextColor("secondary") }}>セカンダリテキスト</Text>
-          <Text style={{ color: getTextColor("disabled") }}>無効化テキスト</Text>
+          <Text style={{ color: theme.textColors.primary }}>プライマリテキスト</Text>
+          <Text style={{ color: theme.textColors.secondary }}>セカンダリテキスト</Text>
+          <Text style={{ color: theme.textColors.disabled }}>無効化テキスト</Text>
         </Stack>
       </Card>
 
       {/* カラー設定の詳細 */}
-      <Card shadow="sm" padding="lg" radius="md" style={{ backgroundColor: getBackgroundColor("card") }}>
-        <Title order={3} className="mb-4" style={{ color: getTextColor("primary") }}>
+      <Card shadow="sm" padding="lg" radius="md" style={{ backgroundColor: theme.backgroundColors.card }}>
+        <Title order={3} className="mb-4" style={{ color: theme.textColors.primary }}>
           現在のテーマ設定詳細
         </Title>
         <Box>
-          <Paper p="md" radius="md" className="mb-4" style={{ backgroundColor: getBackgroundColor("hover") }}>
-            <Text fw={700} className="mb-2" style={{ color: getTextColor("primary") }}>
+          <Paper p="md" radius="md" className="mb-4" style={{ backgroundColor: theme.backgroundColors.hover }}>
+            <Text fw={700} className="mb-2" style={{ color: theme.textColors.primary }}>
               ボタンカラー
             </Text>
             <Stack gap="xs">
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 デフォルト: {theme.buttonColors.default}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 プライマリ: {theme.buttonColors.primary}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 セカンダリ: {theme.buttonColors.secondary}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 危険: {theme.buttonColors.danger}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 成功: {theme.buttonColors.success}
               </Text>
             </Stack>
           </Paper>
 
-          <Paper p="md" radius="md" className="mb-4" style={{ backgroundColor: getBackgroundColor("hover") }}>
-            <Text fw={700} className="mb-2" style={{ color: getTextColor("primary") }}>
+          <Paper p="md" radius="md" className="mb-4" style={{ backgroundColor: theme.backgroundColors.hover }}>
+            <Text fw={700} className="mb-2" style={{ color: theme.textColors.primary }}>
               テキストカラー
             </Text>
             <Stack gap="xs">
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 プライマリ: {theme.textColors.primary}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 セカンダリ: {theme.textColors.secondary}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 無効化: {theme.textColors.disabled}
               </Text>
             </Stack>
           </Paper>
 
-          <Paper p="md" radius="md" style={{ backgroundColor: getBackgroundColor("hover") }}>
-            <Text fw={700} className="mb-2" style={{ color: getTextColor("primary") }}>
+          <Paper p="md" radius="md" style={{ backgroundColor: theme.backgroundColors.hover }}>
+            <Text fw={700} className="mb-2" style={{ color: theme.textColors.primary }}>
               背景カラー
             </Text>
             <Stack gap="xs">
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 デフォルト: {theme.backgroundColors.default}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 カード: {theme.backgroundColors.card}
               </Text>
-              <Text size="sm" style={{ color: getTextColor("secondary") }}>
+              <Text size="sm" style={{ color: theme.textColors.secondary }}>
                 ホバー: {theme.backgroundColors.hover}
               </Text>
             </Stack>

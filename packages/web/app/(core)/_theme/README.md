@@ -17,10 +17,10 @@
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 const MyComponent = () => {
-  const { theme, getButtonColor, getTextColor } = useTheme()
+  const { theme } = useTheme()
 
   return (
-    <Button color={getButtonColor("primary")}>
+    <Button color={theme.buttonColors.primary}>
       プライマリボタン
     </Button>
   )
@@ -105,5 +105,4 @@ export const themes = {
 
 テーマの動作確認には、以下のURLにアクセスしてください：
 
-- `/test-theme` - テーマ切り替えデモページ（認証不要）
-- `/test/theme` - テーマ切り替えデモページ（認証必要）
+- `/test/theme` - テーマ切り替えデモページ
