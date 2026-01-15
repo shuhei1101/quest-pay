@@ -8,22 +8,33 @@ import { QuestConditionTab } from "../../../../../view/_components/QuestConditio
 import { QuestDetailTab } from "../../../../../view/_components/QuestDetailTab"
 import { QuestOtherTab } from "../../../../../view/_components/QuestOtherTab"
 import { ChildQuestViewFooter } from "./_components/ChildQuestViewFooter"
+import { ParentChildQuestViewFooter } from "./_components/ParentChildQuestViewFooter"
 import { ReviewRequestModal } from "./_components/ReviewRequestModal"
 import { CancelReviewModal } from "./_components/CancelReviewModal"
+import { ReportReviewModal } from "./_components/ReportReviewModal"
 import { useWindow } from "@/app/(core)/useConstants"
 import { useChildQuest } from "./_hooks/useChildQuest"
 import { useRouter } from "next/navigation"
 import { useReviewRequest } from "./_hooks/useReviewRequest"
 import { useCancelReview } from "./_hooks/useCancelReview"
+import { useRejectReport } from "./_hooks/useRejectReport"
+import { useApproveReport } from "./_hooks/useApproveReport"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
+import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
 
 /** 子供クエスト閲覧画面 */
 export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string}) => {
   const router = useRouter()
   const {isDark} = useWindow()
+  const {isParent} = useLoginUserInfo()
 
-  /** ハンドル */
+  /** ハンドル（子供用） */
   const {handleReviewRequest, executeReviewRequest, closeModal, isModalOpen, isLoading} = useReviewRequest()
   const {handleCancelReview, executeCancelReview, closeModal: closeCancelModal, isModalOpen: isCancelModalOpen, isLoading: isCancelLoading} = useCancelReview()
+  
+  /** ハンドル（親用） */
+  const {handleRejectReport, executeRejectReport, closeModal: closeRejectModal, isModalOpen: isRejectModalOpen, isLoading: isRejectLoading} = useRejectReport()
+  const {handleApproveReport, executeApproveReport, closeModal: closeApproveModal, isModalOpen: isApproveModalOpen, isLoading: isApproveLoading} = useApproveReport()
   
   /** アクティブタブ */
   const [activeTab, setActiveTab] = useState<string | null>("condition")
@@ -105,21 +116,35 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
       </Paper>
 
       {/* 下部アクションエリア */}
-      <ChildQuestViewFooter 
-        onBack={() => router.back()}
-        onReviewRequest={() => handleReviewRequest({
-          familyQuestId: id,
-          updatedAt: childQuest?.base.updatedAt,
-        })}
-        onCancelReview={() => handleCancelReview({
-          familyQuestId: id,
-          updatedAt: childQuest?.base.updatedAt,
-        })}
-        quest={childQuest}
-        currentDetail={currentDetail}
-      />
+      {isParent ? (
+        /* 親ユーザの場合 */
+        <ParentChildQuestViewFooter
+          isPendingReview={childQuest?.children[0].status === "pending_review"}
+          onReviewReport={() => handleApproveReport({
+            familyQuestId: id,
+            childId,
+            updatedAt: childQuest?.base.updatedAt || '',
+          })}
+          onEdit={() => router.push(FAMILY_QUEST_EDIT_URL(id))}
+        />
+      ) : (
+        /* 子供ユーザの場合 */
+        <ChildQuestViewFooter 
+          onBack={() => router.back()}
+          onReviewRequest={() => handleReviewRequest({
+            familyQuestId: id,
+            updatedAt: childQuest?.base.updatedAt,
+          })}
+          onCancelReview={() => handleCancelReview({
+            familyQuestId: id,
+            updatedAt: childQuest?.base.updatedAt,
+          })}
+          quest={childQuest}
+          currentDetail={currentDetail}
+        />
+      )}
 
-      {/* 完了報告モーダル */}
+      {/* 完了報告モーダル（子供用） */}
       <ReviewRequestModal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -127,12 +152,22 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         isLoading={isLoading}
       />
 
-      {/* キャンセルモーダル */}
+      {/* キャンセルモーダル（子供用） */}
       <CancelReviewModal
         isOpen={isCancelModalOpen}
         onClose={closeCancelModal}
         onSubmit={executeCancelReview}
         isLoading={isCancelLoading}
+      />
+
+      {/* 報告内容確認モーダル（親用） */}
+      <ReportReviewModal
+        isOpen={isApproveModalOpen}
+        onClose={closeApproveModal}
+        onReject={executeRejectReport}
+        onApprove={executeApproveReport}
+        isLoading={isApproveLoading || isRejectLoading}
+        requestMessage={childQuest?.children[0].requestMessage || undefined}
       />
     </div>
   )

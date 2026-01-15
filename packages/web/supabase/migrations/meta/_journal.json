@@ -120,6 +120,13 @@
       "when": 1768312650613,
       "tag": "0016_oval_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1768495494391,
+      "tag": "0017_furry_infant_terrible",
+      "breakpoints": true
     }
   ]
 }

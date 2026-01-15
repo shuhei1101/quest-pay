@@ -27,7 +27,9 @@ export const useLoginUserInfo = () => {
         userInfo,
         isGuest: false,
       }
-    }
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
   })
 
   return {
