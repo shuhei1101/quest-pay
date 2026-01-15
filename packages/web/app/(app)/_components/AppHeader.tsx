@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { NotificationModal } from '../notifications/_components/NotificationModal'
 import { useNotifications } from '../notifications/_hooks/useNotifications'
 import { useWindow } from '@/app/(core)/useConstants'
+import { ThemeToggleButton } from './ThemeToggleButton'
 
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
@@ -70,6 +71,8 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       >
         {userInfo?.profiles.name}
       </Text>
+      {/* テーマ切り替えボタン */}
+      <ThemeToggleButton />
       {/* 通知ボタン */}
       {!isGuest && (
         <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
