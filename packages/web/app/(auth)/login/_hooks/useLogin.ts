@@ -14,7 +14,7 @@ export const useLogin = ({onSuccess}: {
 }) => {
 
   const mutation = useMutation({
-    mutationFn: async (form: LoginFormType) => createClient().auth.signInWithPassword({
+    mutationFn: async (form: LoginFormType) => createClient(form.rememberMe).auth.signInWithPassword({
         email: form.email,
         password: form.password
     }),
