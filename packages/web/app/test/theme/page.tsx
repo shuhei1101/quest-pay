@@ -57,7 +57,11 @@ export default function Page() {
         <Group gap="md" align="center">
           <SegmentedControl
             value={colorScheme}
-            onChange={(value) => setColorScheme(value as "light" | "dark")}
+            onChange={(value) => {
+              if (value === "light" || value === "dark") {
+                setColorScheme(value)
+              }
+            }}
             data={[
               {
                 value: "light",
