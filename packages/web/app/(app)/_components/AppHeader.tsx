@@ -11,11 +11,13 @@ import { useState } from 'react'
 import { NotificationModal } from '../notifications/_components/NotificationModal'
 import { useNotifications } from '../notifications/_hooks/useNotifications'
 import { useWindow } from '@/app/(core)/useConstants'
+import { useTheme } from '@/app/(core)/_theme/useTheme'
 
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
   const {isDark} = useWindow()
+  const { theme } = useTheme()
   /** ログインユーザ情報 */
   const { userInfo, isLoading, isGuest } = useLoginUserInfo()
   /** 通知モーダルの開閉状態 */
@@ -72,7 +74,7 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       </Text>
       {/* 通知ボタン */}
       {!isGuest && (
-        <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
+        <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color={theme.buttonColors.danger} disabled={unreadCount === 0}>
           <ActionIcon
             onClick={() => setIsNotificationOpen(true)} 
             variant="subtle" 

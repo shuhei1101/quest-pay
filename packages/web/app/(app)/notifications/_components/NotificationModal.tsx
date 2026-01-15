@@ -6,6 +6,7 @@ import { useNotifications } from "../_hooks/useNotifications"
 import { useRouter } from "next/navigation"
 import { NotificationSelect } from "@/drizzle/schema"
 import { useReadNotifications } from "../_hooks/useReadNotifications"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 通知モーダル */
 export const NotificationModal = ({
@@ -18,6 +19,7 @@ export const NotificationModal = ({
   const router = useRouter()
   const { notifications, isLoading } = useNotifications()
   const { handleReadNotifications, isLoading: isReadingAll } = useReadNotifications()
+  const { theme } = useTheme()
 
   /** 日時をフォーマットする */
   const formatDate = (dateString?: string | null) => {
@@ -115,7 +117,7 @@ export const NotificationModal = ({
                         {/* 通知アイコン */}
                         <IconBell size={20} />
                         {!notification.isRead && (
-                          <Badge color="red" size="sm">未読</Badge>
+                          <Badge color={theme.buttonColors.danger} size="sm">未読</Badge>
                         )}
                       </Group>
                       

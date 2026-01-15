@@ -1,3 +1,5 @@
+"use client"
+
 import { ActionIcon, Badge, Box, Button, Checkbox, Group, Input, Menu, NumberInput, Paper, PillsInput, Select, Tabs, Text, Textarea, TextInput } from "@mantine/core"
 import { IconAlertCircle, IconCheck, IconCircleCheck, IconCopy, IconLock, IconMinus, IconPlus } from "@tabler/icons-react"
 import { LevelDetailForm } from "./LevelDetailForm"
@@ -5,6 +7,7 @@ import { LevelCopyButton } from "./LevelCopyButton"
 import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { modals } from "@mantine/modals"
 import { BaseQuestFormType, isDefaultDetail } from "../../../form"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 詳細設定コンポーネント */
 export const DetailSettings = ({ 
@@ -26,6 +29,7 @@ export const DetailSettings = ({
   setValue: UseFormSetValue<BaseQuestFormType>
   watch: UseFormWatch<BaseQuestFormType>
 }) => {
+  const { theme } = useTheme()
   // 表示するレベルのリスト
   const visibleLevels = watch().details.map(d => d.level).sort((a, b) => a - b)
 
@@ -76,7 +80,7 @@ export const DetailSettings = ({
         title: "レベル削除の確認",
         children: `レベル${lastLevel}の入力を破棄しますか?`,
         labels: { confirm: "削除", cancel: "キャンセル" },
-        confirmProps: { color: "red" },
+        confirmProps: { color: theme.buttonColors.danger },
         onConfirm: executeRemove
       })
     }
@@ -126,14 +130,14 @@ export const DetailSettings = ({
                   key={level} 
                   value={levelStr}
                   rightSection={
-                    hasError ? <IconAlertCircle size={14} color="red" /> :
-                    isCompleted ? <IconCheck size={14} color="green" /> : 
+                    hasError ? <IconAlertCircle size={14} color={theme.buttonColors.danger} /> :
+                    isCompleted ? <IconCheck size={14} color={theme.buttonColors.success} /> : 
                     null
                   }
                 >
                   <Group gap={4}>
                     <Text size="sm">レベル {level}</Text>
-                    {level === 1 && <Text size="xs" c="red">*</Text>}
+                    {level === 1 && <Text size="xs" c={theme.buttonColors.danger}>*</Text>}
                   </Group>
                 </Tabs.Tab>
               )

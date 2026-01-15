@@ -3,6 +3,7 @@
 import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Stack, Text } from "@mantine/core"
 import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget } from "@tabler/icons-react"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** クエスト条件タブ */
 export const QuestConditionTab = ({
@@ -26,6 +27,8 @@ export const QuestConditionTab = ({
   exp: number
   type?: "parent" | "child" | "online"
 }) => {
+  const { theme } = useTheme()
+  
   return (
     <Stack gap="md" className="overflow-y-auto">
       {/* クエストレベル */}
@@ -72,7 +75,7 @@ export const QuestConditionTab = ({
         {type === "child" && currentCompletionCount !== undefined ? (
           // 現在の達成状況（子供のみ表示）
           <Group justify="flex-end" gap="xs">
-            <Badge variant="filled" color="green" size="lg">
+            <Badge variant="filled" color={theme.buttonColors.success} size="lg">
               {currentCompletionCount}/{requiredCompletionCount}回クリア
             </Badge>
           </Group>
