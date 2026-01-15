@@ -27,8 +27,8 @@ import {
   IconSettings,
   IconUser,
 } from "@tabler/icons-react"
-import { useTheme } from "../../../(core)/_theme/useTheme"
-import { themes, ThemeKey } from "../../../(core)/_theme/themes"
+import { useTheme } from "../../(core)/_theme/useTheme"
+import { themes, ThemeKey } from "../../(core)/_theme/themes"
 
 export default function Page() {
   const { theme, themeKey, setTheme, getButtonColor, getTextColor, getBackgroundColor, getBorderColor } = useTheme()
