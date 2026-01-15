@@ -90,6 +90,10 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
               reward={currentDetail?.reward || 0}
               exp={currentDetail?.childExp || 0}
               requiredCompletionCount={currentDetail?.requiredCompletionCount || 0}
+              currentCompletionCount={childQuest?.children[0].currentCompletionCount}
+              type="child"
+              childCurrentLevel={childQuest?.child?.currentLevel}
+              childTotalExp={childQuest?.child?.totalExp}
             />
           </Tabs.Panel>
 

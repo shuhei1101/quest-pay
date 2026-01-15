@@ -4,6 +4,13 @@ import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Stack, Text } fr
 import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget } from "@tabler/icons-react"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
 
+/** 次レベルまでに必要な経験値を計算する */
+const calculateRequiredExp = (currentLevel: number): number => {
+  // レベルごとの必要経験値（仮の計算式）
+  // TODO: 将来的にはDBや設定ファイルから取得する
+  return currentLevel * 100
+}
+
 /** クエスト条件タブ */
 export const QuestConditionTab = ({
   level,
@@ -15,6 +22,8 @@ export const QuestConditionTab = ({
   reward,
   exp,
   type,
+  childCurrentLevel,
+  childTotalExp,
 }: {
   level: number
   maxLevel?: number
@@ -25,7 +34,25 @@ export const QuestConditionTab = ({
   reward: number
   exp: number
   type?: "parent" | "child" | "online"
+  childCurrentLevel?: number
+  childTotalExp?: number
 }) => {
+  /** 現在のレベルでの経験値を計算する */
+  const currentLevelExp = childCurrentLevel && childTotalExp !== undefined 
+    ? (() => {
+        let totalRequiredExp = 0
+        for (let i = 1; i < childCurrentLevel; i++) {
+          totalRequiredExp += calculateRequiredExp(i)
+        }
+        return childTotalExp - totalRequiredExp
+      })()
+    : undefined
+
+  /** 次レベルまでに必要な経験値を計算する */
+  const requiredExpForNextLevel = childCurrentLevel 
+    ? calculateRequiredExp(childCurrentLevel)
+    : undefined
+
   return (
     <Stack gap="md" className="overflow-y-auto">
       {/* クエストレベル */}
@@ -37,6 +64,12 @@ export const QuestConditionTab = ({
         <Group justify="end">
           <Rating value={level} count={maxLevel} readOnly size="lg" />
         </Group>
+        {/* 現在の経験値（子供用） */}
+        {childCurrentLevel !== undefined && currentLevelExp !== undefined && requiredExpForNextLevel !== undefined && (
+          <Text ta="right" size="sm" c="dimmed" mt={4}>
+            現在の経験値: {currentLevelExp} / {requiredExpForNextLevel}
+          </Text>
+        )}
       </Box>
 
       <Divider />
