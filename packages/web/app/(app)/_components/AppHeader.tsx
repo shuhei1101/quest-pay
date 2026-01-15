@@ -3,7 +3,7 @@
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { HOME_URL, LOGIN_URL } from '@/app/(core)/endpoints'
 import { ActionIcon, Title, Text, Button, LoadingOverlay, Indicator } from '@mantine/core'
-import { IconHome2, IconMenu2, IconBell } from '@tabler/icons-react'
+import { IconHome2, IconMenu2, IconBell, IconLogout, IconLogin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { appStorage } from '../../(core)/_sessionStorage/appStorage'
 import { createClient } from '../../(core)/_supabase/client'
@@ -83,11 +83,33 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
         </Indicator>
       )}
       {/* サインアウトボタン */}
-      {isGuest ? 
-        <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
-        :
-        <Button variant='gradient' className='shrink-0' onClick={handleLogout}>ログアウト</Button>
-      }
+      {isGuest ? (
+        isMobile ? (
+          <ActionIcon
+            onClick={() => router.push(LOGIN_URL)}
+            variant="gradient"
+            size="lg"
+            aria-label="ログイン"
+          >
+            <IconLogin style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+        ) : (
+          <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
+        )
+      ) : (
+        isMobile ? (
+          <ActionIcon
+            onClick={handleLogout}
+            variant="gradient"
+            size="lg"
+            aria-label="ログアウト"
+          >
+            <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+        ) : (
+          <Button variant='gradient' className='shrink-0' onClick={handleLogout}>ログアウト</Button>
+        )
+      )}
       {/* ハンバーガーメニュー切り替えボタン */}
       {isMobile && <MenuButton/>}
       
