@@ -3,6 +3,7 @@
 import { Button, Group } from "@mantine/core"
 import { IconArrowLeft, IconEdit } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** クエスト閲覧フッター（親向け） */
 export const ParentQuestViewFooter = ({
@@ -18,6 +19,8 @@ export const ParentQuestViewFooter = ({
   selectedLevel?: number
   onLevelChange?: (level: number) => void
 }) => {
+  const { theme } = useTheme()
+  
   return (
     <Group justify="center" mt="xl" gap="md">
       {/* レベル切り替えボタン */}
@@ -30,7 +33,7 @@ export const ParentQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="blue"
+        color={theme.buttonColors.primary}
         leftSection={<IconEdit size={18} />}
         onClick={onEdit}
       >
@@ -40,7 +43,7 @@ export const ParentQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="gray"
+        color={theme.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}

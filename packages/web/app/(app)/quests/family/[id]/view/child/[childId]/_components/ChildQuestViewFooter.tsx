@@ -4,6 +4,7 @@ import { Button, Group } from "@mantine/core"
 import { IconArrowLeft, IconEdit } from "@tabler/icons-react"
 import { ChildQuest } from "@/app/api/quests/family/[id]/child/query"
 import { QuestDetailSelect } from "@/drizzle/schema"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** クエスト閲覧フッター（子供向け） */
 export const ChildQuestViewFooter = ({
@@ -19,6 +20,8 @@ export const ChildQuestViewFooter = ({
   currentDetail?: QuestDetailSelect
   onCancelReview: () => void
 }) => {
+  const { theme } = useTheme()
+  
   return (
     <Group justify="center" mt="xl" gap="md">
       {/* クリア済みボタン */}
@@ -26,7 +29,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color="green"
+          color={theme.buttonColors.success}
           variant="outline"
           leftSection={<IconEdit size={18} />}
         >
@@ -38,7 +41,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color="yellow"
+          color={theme.buttonColors.secondary}
           variant="outline"
           onClick={onCancelReview}
         >
@@ -50,7 +53,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color="blue"
+          color={theme.buttonColors.primary}
           variant="outline"
           leftSection={<IconEdit size={18} />}
           onClick={onReviewRequest}
@@ -63,7 +66,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color="red"
+          color={theme.buttonColors.danger}
           variant="outline"
           leftSection={<IconEdit size={18} />}
         >
@@ -74,7 +77,7 @@ export const ChildQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="gray"
+        color={theme.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}

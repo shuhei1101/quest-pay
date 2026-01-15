@@ -4,6 +4,7 @@ import { useWindow } from "@/app/(core)/useConstants"
 import { Button, Group, LoadingOverlay, Modal, Paper, Stack, Text, Textarea } from "@mantine/core"
 import { IconCheck, IconX } from "@tabler/icons-react"
 import { useState } from "react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 報告内容確認モーダル */
 export const ReportReviewModal = ({
@@ -22,8 +23,8 @@ export const ReportReviewModal = ({
   requestMessage?: string
 }) => {
   const [responseMessage, setResponseMessage] = useState("")
-
   const {isDark} = useWindow()
+  const { theme } = useTheme()
 
   /** モーダルを閉じるときの処理 */
   const handleClose = () => {
@@ -83,7 +84,7 @@ export const ReportReviewModal = ({
           <Group justify="space-between" mt="md">
             {/* 却下ボタン */}
             <Button
-              color="red"
+              color={theme.buttonColors.danger}
               leftSection={<IconX size={18} />}
               onClick={handleReject}
               disabled={isLoading}
@@ -93,7 +94,7 @@ export const ReportReviewModal = ({
 
             {/* 受領ボタン */}
             <Button
-              color="green"
+              color={theme.buttonColors.success}
               leftSection={<IconCheck size={18} />}
               onClick={handleApprove}
               disabled={isLoading}

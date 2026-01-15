@@ -2,6 +2,7 @@
 
 import { Button, Group } from "@mantine/core"
 import { IconEdit, IconFileText } from "@tabler/icons-react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** クエスト閲覧フッター（親向け） */
 export const ParentChildQuestViewFooter = ({
@@ -13,13 +14,15 @@ export const ParentChildQuestViewFooter = ({
   onEdit: () => void
   isPendingReview: boolean
 }) => {
+  const { theme } = useTheme()
+  
   return (
     <Group justify="center" mt="xl" gap="md">
       {/* 報告内容確認ボタン（pending_reviewの場合のみ表示） */}
       {isPendingReview && (
         <Button
           size="md"
-          color="blue"
+          color={theme.buttonColors.primary}
           leftSection={<IconFileText size={18} />}
           onClick={onReviewReport}
         >

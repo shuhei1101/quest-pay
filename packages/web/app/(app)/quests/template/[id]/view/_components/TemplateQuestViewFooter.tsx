@@ -1,7 +1,10 @@
+"use client"
+
 import { ActionIcon, Avatar, Button, Group, Indicator, Tooltip } from "@mantine/core"
 import { IconArrowLeft, IconFilePencil, IconFileSearch, IconHeart, IconHeartFilled, IconMessage, IconSearch, IconTrash } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** クエスト閲覧フッター（テンプレート向け） */
 export const TemplateQuestViewFooter = ({
@@ -29,6 +32,8 @@ export const TemplateQuestViewFooter = ({
   hasSourceQuest: boolean
   onCheckSource?: () => void
 }) => {
+  const { theme } = useTheme()
+  
   return (
     <Group justify="center" mt="xl" gap="xl">
       {/* レベル切り替えボタン */}
@@ -42,7 +47,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="blue"
+        color={theme.buttonColors.primary}
         variant="outline"
         leftSection={<IconFilePencil size={18} />}
         onClick={onCreateFromTemplate}
@@ -54,7 +59,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="gray"
+        color={theme.buttonColors.default}
         variant="outline"
         leftSection={<IconFileSearch size={18} />}
         onClick={onCheckSource}
@@ -66,7 +71,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="red"
+        color={theme.buttonColors.danger}
         leftSection={<IconTrash size={18} />}
         variant="outline"
         onClick={onDelete}
@@ -77,7 +82,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="gray"
+        color={theme.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}

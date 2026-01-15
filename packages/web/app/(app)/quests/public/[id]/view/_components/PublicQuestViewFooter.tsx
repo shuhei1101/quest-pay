@@ -1,7 +1,10 @@
+"use client"
+
 import { ActionIcon, Avatar, Button, Group, Indicator, Tooltip } from "@mantine/core"
 import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** クエスト閲覧フッター（オンライン向け） */
 export const PublicQuestViewFooter = ({
@@ -29,6 +32,8 @@ export const PublicQuestViewFooter = ({
   onLevelChange?: (level: number) => void
   onBack?: () => void
 }) => {
+  const { theme } = useTheme()
+  
   return (
     <Group justify="center" mt="xl" gap="xl">
       {/* レベル切り替えボタン */}
@@ -40,7 +45,7 @@ export const PublicQuestViewFooter = ({
       {/* 作成者家族アイコン */}
       <ActionIcon 
         variant="light" 
-        color="gray"
+        color={theme.buttonColors.default}
         size={56} 
         radius="xl"
         onClick={onLikeToggle}
@@ -52,10 +57,10 @@ export const PublicQuestViewFooter = ({
       </ActionIcon>
 
       {/* いいねボタン */}
-      <Indicator label={likeCount} size={18} color="red" offset={4}>
+      <Indicator label={likeCount} size={18} color={theme.buttonColors.danger} offset={4}>
         <ActionIcon 
           variant="light" 
-          color={isLiked ? "red" : "gray"} 
+          color={isLiked ? theme.buttonColors.danger : theme.buttonColors.default} 
           size={56} 
           radius="xl"
           onClick={onLikeToggle}
@@ -69,8 +74,8 @@ export const PublicQuestViewFooter = ({
       </Indicator>
 
       {/* コメントボタン */}
-      <Indicator label={commentCount} size={18} color="blue" offset={4}>
-        <ActionIcon variant="light" color="blue" size={56} radius="xl" onClick={onComment}>
+      <Indicator label={commentCount} size={18} color={theme.buttonColors.primary} offset={4}>
+        <ActionIcon variant="light" color={theme.buttonColors.primary} size={56} radius="xl" onClick={onComment}>
           <IconMessage size={28} />
         </ActionIcon>
       </Indicator>
@@ -78,7 +83,7 @@ export const PublicQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="gray"
+        color={theme.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}

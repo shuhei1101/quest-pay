@@ -2,6 +2,7 @@
 
 import { Button, Group, Modal, Textarea } from "@mantine/core"
 import { useState } from "react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 完了報告モーダル */
 export const ReviewRequestModal = ({
@@ -16,6 +17,7 @@ export const ReviewRequestModal = ({
   isLoading?: boolean
 }) => {
   const [message, setMessage] = useState("")
+  const { theme } = useTheme()
 
   /** 送信ハンドル */
   const handleSubmit = () => {
@@ -53,7 +55,7 @@ export const ReviewRequestModal = ({
         {/* キャンセルボタン */}
         <Button
           variant="outline"
-          color="gray"
+          color={theme.buttonColors.default}
           onClick={handleClose}
           disabled={isLoading}
         >
@@ -62,7 +64,7 @@ export const ReviewRequestModal = ({
         
         {/* 報告するボタン */}
         <Button
-          color="blue"
+          color={theme.buttonColors.primary}
           onClick={handleSubmit}
           loading={isLoading}
         >
