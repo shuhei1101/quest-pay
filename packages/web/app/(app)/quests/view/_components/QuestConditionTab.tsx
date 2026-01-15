@@ -44,7 +44,7 @@ export const QuestConditionTab = ({
         for (let i = 1; i < childCurrentLevel; i++) {
           totalRequiredExp += calculateRequiredExp(i)
         }
-        return childTotalExp - totalRequiredExp
+        return Math.max(0, childTotalExp - totalRequiredExp)
       })()
     : undefined
 
@@ -52,6 +52,9 @@ export const QuestConditionTab = ({
   const requiredExpForNextLevel = childCurrentLevel 
     ? calculateRequiredExp(childCurrentLevel)
     : undefined
+
+  /** 経験値表示の可否を判定する */
+  const shouldShowExp = childCurrentLevel !== undefined && currentLevelExp !== undefined && requiredExpForNextLevel !== undefined
 
   return (
     <Stack gap="md" className="overflow-y-auto">
@@ -65,7 +68,7 @@ export const QuestConditionTab = ({
           <Rating value={level} count={maxLevel} readOnly size="lg" />
         </Group>
         {/* 現在の経験値（子供用） */}
-        {childCurrentLevel !== undefined && currentLevelExp !== undefined && requiredExpForNextLevel !== undefined && (
+        {shouldShowExp && (
           <Text ta="right" size="sm" c="dimmed" mt={4}>
             現在の経験値: {currentLevelExp} / {requiredExpForNextLevel}
           </Text>
