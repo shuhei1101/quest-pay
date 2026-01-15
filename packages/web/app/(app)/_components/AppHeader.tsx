@@ -3,7 +3,7 @@
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { HOME_URL, LOGIN_URL } from '@/app/(core)/endpoints'
 import { ActionIcon, Title, Text, Button, LoadingOverlay, Indicator } from '@mantine/core'
-import { IconHome2, IconMenu2, IconBell } from '@tabler/icons-react'
+import { IconHome2, IconMenu2, IconBell, IconLogout, IconLogin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { appStorage } from '../../(core)/_sessionStorage/appStorage'
 import { createClient } from '../../(core)/_supabase/client'
@@ -56,11 +56,11 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
         <IconHome2 style={{ width: '70%', height: '70%' }} stroke={1.5} />
       </ActionIcon>
       {/* タイトル */}
-      <Title textWrap='nowrap' order={5} >お小遣いクエストボード</Title>
+      <Title textWrap='nowrap' order={isMobile ? 6 : 5} style={{ fontSize: isMobile ? '0.875rem' : undefined }}>お小遣いクエストボード</Title>
       {/* スペース */}
       <div className='w-full' />
       {/* ユーザ情報を表示する */}
-      <Text className='text-nowrap text-sm'>{userInfo?.profiles?.name}</Text>
+      <Text className='text-nowrap' style={{ fontSize: isMobile ? '0.75rem' : '0.875rem' }}>{userInfo?.profiles?.name}</Text>
       {/* 通知ボタン */}
       {!isGuest && (
         <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
@@ -74,11 +74,33 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
         </Indicator>
       )}
       {/* サインアウトボタン */}
-      {isGuest ? 
-        <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
-        :
-        <Button variant='gradient' className='shrink-0' onClick={handleLogout}>ログアウト</Button>
-      }
+      {isGuest ? (
+        isMobile ? (
+          <ActionIcon
+            onClick={() => router.push(LOGIN_URL)}
+            variant="gradient"
+            size="lg"
+            aria-label="ログイン"
+          >
+            <IconLogin style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+        ) : (
+          <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
+        )
+      ) : (
+        isMobile ? (
+          <ActionIcon
+            onClick={handleLogout}
+            variant="gradient"
+            size="lg"
+            aria-label="ログアウト"
+          >
+            <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+        ) : (
+          <Button variant='gradient' className='shrink-0' onClick={handleLogout}>ログアウト</Button>
+        )
+      )}
       {/* ハンバーガーメニュー切り替えボタン */}
       {isMobile && <MenuButton/>}
       
