@@ -46,6 +46,12 @@ export const REVIEW_REQUEST_API_URL = (familyQuestId: string) => `${FAMILY_QUEST
 // 完了報告キャンセル
 export const CANCEL_REVIEW_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/cancel-review`
 
+// 報告却下
+export const REJECT_REPORT_API_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/child/${childId}/reject`
+
+// 報告受領
+export const APPROVE_REPORT_API_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/child/${childId}/approve`
+
 // 公開クエスト
 export const PUBLIC_QUESTS_URL = `${QUESTS_URL}/public`
 export const PUBLIC_QUEST_EDIT_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`

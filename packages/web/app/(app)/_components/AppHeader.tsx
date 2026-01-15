@@ -10,13 +10,14 @@ import { createClient } from '../../(core)/_supabase/client'
 import { useState } from 'react'
 import { NotificationModal } from '../notifications/_components/NotificationModal'
 import { useNotifications } from '../notifications/_hooks/useNotifications'
+import { useWindow } from '@/app/(core)/useConstants'
 
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
+  const {isDark} = useWindow()
   /** ログインユーザ情報 */
   const { userInfo, isLoading, isGuest } = useLoginUserInfo()
-  
   /** 通知モーダルの開閉状態 */
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   
@@ -56,11 +57,19 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
         <IconHome2 style={{ width: '70%', height: '70%' }} stroke={1.5} />
       </ActionIcon>
       {/* タイトル */}
-      <Title textWrap='nowrap' order={5} >お小遣いクエストボード</Title>
+      <Title 
+       textWrap='nowrap' order={5} 
+        c={`${isDark ? 'white' : 'black'}`}
+      >お小遣いクエストボード</Title>
       {/* スペース */}
       <div className='w-full' />
       {/* ユーザ情報を表示する */}
-      <Text className='text-nowrap text-sm'>{userInfo?.profiles?.name}</Text>
+      <Text 
+        className={`text-nowrap text-sm`}
+        c={`${isDark ? 'white' : 'black'}`}
+      >
+        {userInfo?.profiles.name}
+      </Text>
       {/* 通知ボタン */}
       {!isGuest && (
         <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>

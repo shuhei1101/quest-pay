@@ -46,6 +46,11 @@ export const childQuestStatus = pgEnum("child_quest_status", [
 /** 通知タイプ */
 export const notificationType = pgEnum("notification_type", [
   "family_quest_review",
+  "quest_report_rejected",
+  "quest_report_approved",
+  "quest_cleared",
+  "quest_level_up",
+  "quest_completed",
   "other",
 ])
 

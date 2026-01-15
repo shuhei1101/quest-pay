@@ -6,7 +6,7 @@ import { deleteFamilyQuest, insertFamilyQuest, InsertFamilyQuestRecord, updateFa
 import { deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord, updateQuestChild } from "./[id]/child/db"
 import { deleteQuestTags, insertQuestTags, InsertQuestTagsRecord } from "../tag/db"
 import { deleteQuestDetails, InsertQuestDetailRecord, insertQuestDetails } from "../detail/db"
-import { ChildSelect, FamilyQuestSelect, FamilyQuestUpdate, FamilySelect, QuestChildrenSelect, QuestInsert, QuestSelect, QuestUpdate } from "@/drizzle/schema"
+import { ChildSelect, FamilyQuestSelect, FamilyQuestUpdate, FamilySelect, ProfileSelect, QuestChildrenSelect, QuestChildrenUpdate, QuestDetailSelect, QuestInsert, QuestSelect, QuestUpdate } from "@/drizzle/schema"
 import { fetchFamilyQuest } from "./query"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "../../users/query"
@@ -14,6 +14,8 @@ import { fetchFamilyParents } from "../../parents/query"
 import { insertNotification } from "../../notifications/db"
 import { fetchChild } from "../../children/query"
 import { CHILD_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { fetchChildQuest } from "./[id]/child/query"
+import { updateChild } from "../../children/db"
 
 /** 家族クエストを登録する */
 export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest, questChildren, questTags}: {
@@ -294,5 +296,186 @@ export const cancelReview = async ({db, familyQuestId, updatedAt, childId, reque
   } catch (error) {
     devLog("cancelReview error:", error)
     throw new DatabaseError("家族クエストの完了報告キャンセルに失敗しました。")
+  }
+}
+
+/** 報告を却下する */
+export const rejectReport = async ({db, familyQuestId, childId, responseMessage, profileId, updatedAt}: {
+  db: Db
+  familyQuestId: FamilyQuestSelect["id"]
+  childId: ChildSelect["id"]
+  responseMessage?: string
+  profileId: ProfileSelect["id"]
+  updatedAt: QuestChildrenSelect["updatedAt"]
+}) => {
+  try {
+    return await db.transaction(async (tx) => {
+      // クエスト子供を取得する
+      const questChild = await fetchChildQuest({ db: tx, familyQuestId, childId })
+      if (!questChild) throw new DatabaseError("クエストが見つかりません。")
+
+      // クエスト対象の子供のステータスを進行中に戻す
+      await updateQuestChild({
+        db: tx,
+        record: {
+          status: "in_progress",
+          lastApprovedBy: profileId,
+        },
+        familyQuestId: questChild.children[0].familyQuestId,
+        childId: questChild.children[0].childId,
+        updatedAt
+      })
+
+      // 子供情報を取得する
+      const child = await fetchChild({ db: tx, childId: questChild.children[0].childId })
+      if (!child?.profiles?.id) throw new DatabaseError("子供のプロフィールIDが取得できません。")
+
+      // 子供に通知を送信する
+      await insertNotification({
+        db: tx,
+        record: {
+          type: "quest_report_rejected",
+          message: `「${questChild.quest.name}」の報告が却下されました${responseMessage ? `。${responseMessage}` : ''}`,
+          recipientProfileId: child.profiles.id,
+          url: `${CHILD_QUEST_VIEW_URL(questChild.base.id, questChild.children[0].childId)}`,
+        },
+      })
+    })
+  } catch (error) {
+    devLog("rejectReport error:", error)
+    throw new DatabaseError("報告の却下に失敗しました。")
+  }
+}
+
+/** 報告を受領する */
+export const approveReport = async ({db, familyQuestId, childId, responseMessage, profileId, updatedAt}: {
+  db: Db
+  familyQuestId: FamilyQuestSelect["id"]
+  childId: ChildSelect["id"]
+  responseMessage?: string
+  profileId: ProfileSelect["id"]
+  updatedAt: QuestChildrenSelect["updatedAt"]
+}) => {
+  try {
+    return await db.transaction(async (tx) => {
+      // クエスト子供を取得する
+      const questChild = await fetchChildQuest({ db: tx, familyQuestId, childId })
+      if (!questChild) throw new DatabaseError("クエストが見つかりません。")
+
+      const currentQuestChild = questChild.children[0]
+      const currentLevel = currentQuestChild.level
+      
+      // 子供情報を取得する
+      const child = await fetchChild({ db: tx, childId })
+      if (!child?.profiles?.id) throw new DatabaseError("子供のプロフィールIDが取得できません。")
+      
+      // 現在のレベルの詳細を取得する
+      const currentDetail = questChild.details.find((d: QuestDetailSelect) => d.level === currentLevel)
+      if (!currentDetail) throw new DatabaseError("クエスト詳細が見つかりません。")
+
+      // 次の達成回数とクリア回数を計算する
+      const nextCompletionCount = currentQuestChild.currentCompletionCount + 1
+      const isCompletionAchieved = nextCompletionCount >= currentDetail.requiredCompletionCount
+      const nextClearCount = currentQuestChild.currentClearCount + (isCompletionAchieved ? 1 : 0)
+      const isClearAchieved = nextClearCount >= currentDetail.requiredClearCount
+      const nextLevel = currentLevel + 1
+      const isLevelUpPossible = nextLevel <= 5
+
+      let notificationType: "quest_report_approved" | "quest_cleared" | "quest_level_up" | "quest_completed" = "quest_report_approved"
+      let notificationMessage = `「${questChild.quest.name}」の報告を受領しました`
+      let questChildUpdate: QuestChildrenUpdate = {
+        status: "in_progress",
+        lastApprovedBy: profileId,
+      }
+
+      // 達成回数到達の場合
+      if (isCompletionAchieved) {
+        // クリア到達の場合
+        if (isClearAchieved) {
+          // レベルアップ可能な場合
+          if (isLevelUpPossible) {
+            // レベルアップ
+            questChildUpdate = {
+              ...questChildUpdate,
+              level: nextLevel,
+              currentClearCount: 0,
+              currentCompletionCount: 0,
+            }
+            notificationType = "quest_level_up"
+            notificationMessage = `「${questChild.quest.name}」がレベル${nextLevel}に上がりました！報酬:${currentDetail.reward}円、経験値:${currentDetail.childExp}`
+          } else {
+            // クエスト完了
+            questChildUpdate = {
+              ...questChildUpdate,
+              status: "completed",
+            }
+            notificationType = "quest_completed"
+            notificationMessage = `「${questChild.quest.name}」を完全クリアしました！お疲れ様でした！報酬:${currentDetail.reward}円、経験値:${currentDetail.childExp}`
+          }
+          
+          // 報酬と経験値を付与する
+          await updateChild({
+            db: tx,
+            id: currentQuestChild.childId,
+            updatedAt: child.children.updatedAt,
+            record: {
+              currentSavings: (child.children.currentSavings || 0) + currentDetail.reward,
+              totalExp: (child.children.totalExp || 0) + currentDetail.childExp,
+              // TODO: 子供レベルの計算（保留）
+            },
+          })
+        } else {
+          // クリアしたが次のレベルまではいかない
+          questChildUpdate = {
+            ...questChildUpdate,
+            currentClearCount: nextClearCount,
+            currentCompletionCount: 0,
+          }
+          notificationType = "quest_cleared"
+          notificationMessage = `「${questChild.quest.name}」をクリアしました！報酬:${currentDetail.reward}円、経験値:${currentDetail.childExp}`
+          
+          // 報酬と経験値を付与する
+          await updateChild({
+            db: tx,
+            id: currentQuestChild.childId,
+            updatedAt: child.children.updatedAt,
+            record: {
+              currentSavings: (child.children.currentSavings || 0) + currentDetail.reward,
+              totalExp: (child.children.totalExp || 0) + currentDetail.childExp,
+              // TODO: 子供レベルの計算（保留）
+            },
+          })
+        }
+      } else {
+        // 達成回数が足りない場合
+        questChildUpdate = {
+          ...questChildUpdate,
+          currentCompletionCount: nextCompletionCount,
+        }
+      }
+
+      // クエスト対象の子供を更新する
+      await updateQuestChild({
+        db: tx,
+        record: questChildUpdate,
+        familyQuestId: currentQuestChild.familyQuestId,
+        childId: currentQuestChild.childId,
+        updatedAt
+      })
+
+      // 子供に通知を送信する
+      await insertNotification({
+        db: tx,
+        record: {
+          type: notificationType,
+          message: notificationMessage,
+          recipientProfileId: child.profiles.id,
+          url: `${CHILD_QUEST_VIEW_URL(questChild.base.id, currentQuestChild.childId)}`,
+        },
+      })
+    })
+  } catch (error) {
+    devLog("approveReport error:", error)
+    throw new DatabaseError("報告の受領に失敗しました。")
   }
 }
