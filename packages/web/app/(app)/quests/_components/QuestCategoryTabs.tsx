@@ -56,6 +56,27 @@ export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children,
     }
   }, [tabValue])
 
+  /** マウスホイールでの横スクロールを有効化する */
+  useEffect(() => {
+    const container = tabListRef.current
+    if (!container) return
+
+    /** ホイールイベントハンドラ */
+    const handleWheel = (e: WheelEvent) => {
+      // 縦スクロールを横スクロールに変換する
+      if (e.deltaY !== 0) {
+        e.preventDefault()
+        container.scrollLeft += e.deltaY
+      }
+    }
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+
   /** 左右スワイプ時のハンドル */
   const handlers = useSwipeable({
     onSwiped: (event) => {
