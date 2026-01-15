@@ -3,6 +3,7 @@
 import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Stack, Text } from "@mantine/core"
 import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget } from "@tabler/icons-react"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
+import { useMemo } from "react"
 
 /** 次レベルまでに必要な経験値を計算する */
 const calculateRequiredExp = (currentLevel: number): number => {
@@ -38,20 +39,20 @@ export const QuestConditionTab = ({
   childTotalExp?: number
 }) => {
   /** 現在のレベルでの経験値を計算する */
-  const currentLevelExp = childCurrentLevel && childTotalExp !== undefined 
-    ? (() => {
-        let totalRequiredExp = 0
-        for (let i = 1; i < childCurrentLevel; i++) {
-          totalRequiredExp += calculateRequiredExp(i)
-        }
-        return Math.max(0, childTotalExp - totalRequiredExp)
-      })()
-    : undefined
+  const currentLevelExp = useMemo(() => {
+    if (!childCurrentLevel || childTotalExp === undefined) return undefined
+    
+    let totalRequiredExp = 0
+    for (let i = 1; i < childCurrentLevel; i++) {
+      totalRequiredExp += calculateRequiredExp(i)
+    }
+    return Math.max(0, childTotalExp - totalRequiredExp)
+  }, [childCurrentLevel, childTotalExp])
 
   /** 次レベルまでに必要な経験値を計算する */
-  const requiredExpForNextLevel = childCurrentLevel 
-    ? calculateRequiredExp(childCurrentLevel)
-    : undefined
+  const requiredExpForNextLevel = useMemo(() => {
+    return childCurrentLevel ? calculateRequiredExp(childCurrentLevel) : undefined
+  }, [childCurrentLevel])
 
   /** 経験値表示の可否を判定する */
   const shouldShowExp = childCurrentLevel !== undefined && currentLevelExp !== undefined && requiredExpForNextLevel !== undefined
