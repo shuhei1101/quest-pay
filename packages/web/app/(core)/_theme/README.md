@@ -57,7 +57,7 @@ const ThemeSwitcher = () => {
 
 ### カラースキームについて
 
-カラースキーム（ライト/ダーク）はOSの設定に自動的に追従します。`useWindow()`から取得される`isDark`を使用して、現在のモードを確認できます。
+カラースキーム（ライト/ダーク）はOSの設定に自動的に追従します。`useTheme()`から取得される`isDark`を使用して、現在のモードを確認できます。
 
 ```tsx
 import { useTheme } from "@/app/(core)/_theme/useTheme"
