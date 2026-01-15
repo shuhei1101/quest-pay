@@ -29,6 +29,9 @@ export function FamilyQuestsScreen() {
   /** タブリスト */
   const tabList = ['public', 'family', 'penalty', 'template']
 
+  /** スクロール時の余白（ピクセル） */
+  const SCROLL_MARGIN = 16
+
   /** タブ変更時に選択されたタブを画面内にスクロールする */
   useEffect(() => {
     if (!tabListRef.current || !tabValue) return
@@ -43,10 +46,10 @@ export function FamilyQuestsScreen() {
       // タブが画面外にある場合、スクロールして表示する
       if (tabRect.left < containerRect.left) {
         // タブが左側に隠れている場合
-        container.scrollLeft += tabRect.left - containerRect.left - 16 // 16pxの余白を追加
+        container.scrollLeft += tabRect.left - containerRect.left - SCROLL_MARGIN
       } else if (tabRect.right > containerRect.right) {
         // タブが右側に隠れている場合
-        container.scrollLeft += tabRect.right - containerRect.right + 16 // 16pxの余白を追加
+        container.scrollLeft += tabRect.right - containerRect.right + SCROLL_MARGIN
       }
     }
   }, [tabValue])
@@ -54,7 +57,7 @@ export function FamilyQuestsScreen() {
   /** 左右スワイプ時のハンドル */
   const handlers = useSwipeable({
     onSwiped: (event) => {
-      const idx = tabList.indexOf(tabValue ?? 'public')
+      const idx = tabList.indexOf(tabValue ?? tabList[0])
 
       if (event.dir === "Left") {
         // 次のタブへ
