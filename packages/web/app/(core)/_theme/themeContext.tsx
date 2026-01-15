@@ -1,0 +1,51 @@
+"use client"
+
+import React, { createContext, useState, useCallback, useMemo } from "react"
+import { themes, ThemeKey } from "./themes"
+import { AppThemeConfig } from "./themeConfig"
+
+type ThemeContextType = {
+  /** 現在のテーマキー */
+  currentThemeKey: ThemeKey
+  /** 現在のテーマ設定 */
+  currentTheme: AppThemeConfig
+  /** テーマを変更する */
+  setTheme: (themeKey: ThemeKey) => void
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+
+/** テーマコンテキストを提供する */
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>("default")
+
+  const currentTheme = useMemo(() => themes[currentThemeKey], [currentThemeKey])
+
+  const setTheme = useCallback((themeKey: ThemeKey) => {
+    setCurrentThemeKey(themeKey)
+  }, [])
+
+  const contextValue = useMemo(
+    () => ({
+      currentThemeKey,
+      currentTheme,
+      setTheme,
+    }),
+    [currentThemeKey, currentTheme, setTheme]
+  )
+
+  return (
+    <ThemeContext.Provider value={contextValue}>
+      {children}
+    </ThemeContext.Provider>
+  )
+}
+
+/** テーマコンテキストを利用する */
+export const useThemeContext = () => {
+  const context = React.useContext(ThemeContext)
+  if (context === undefined) {
+    throw new Error("useThemeContext must be used within a ThemeProvider")
+  }
+  return context
+}
