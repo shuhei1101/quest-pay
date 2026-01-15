@@ -40,7 +40,7 @@ export const LoginScreen = () => {
   
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <Paper shadow="md" p="xl" radius="md" className="w-full max-w-md">
           {/* タイトルセクション */}
           <div className="text-center mb-6">
