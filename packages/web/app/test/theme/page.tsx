@@ -16,7 +16,6 @@ import {
   Box,
   Paper,
   Divider,
-  SegmentedControl,
 } from "@mantine/core"
 import {
   IconHeart,
@@ -27,14 +26,12 @@ import {
   IconHome,
   IconSettings,
   IconUser,
-  IconSun,
-  IconMoon,
 } from "@tabler/icons-react"
 import { useTheme } from "../../(core)/_theme/useTheme"
 import { themes, ThemeKey } from "../../(core)/_theme/themes"
 
 export default function Page() {
-  const { theme, themeKey, colorScheme, colors, setTheme, setColorScheme } = useTheme()
+  const { theme, themeKey, isDark, colors, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState<string | null>("home")
 
   return (
@@ -45,48 +42,18 @@ export default function Page() {
           テーマ切り替えデモページ
         </Title>
         <Text size="sm" style={{ color: colors.textColors.secondary }}>
-          このページでは、アプリのカラーテーマを切り替えて各コンポーネントの見た目を確認できます。
+          このページでは、アプリのカラーテーマを切り替えて各コンポーネントの見た目を確認できます。カラースキーム（ライト/ダーク）はOSの設定に自動的に追従します。
         </Text>
       </div>
 
-      {/* カラースキーム選択 */}
+      {/* カラースキーム表示 */}
       <Card shadow="sm" padding="lg" radius="md" className="mb-6" style={{ backgroundColor: colors.backgroundColors.card }}>
         <Title order={3} className="mb-4" style={{ color: colors.textColors.primary }}>
-          カラースキーム選択
+          カラースキーム（OS連動）
         </Title>
-        <Group gap="md" align="center">
-          <SegmentedControl
-            value={colorScheme}
-            onChange={(value) => {
-              if (value === "light" || value === "dark") {
-                setColorScheme(value)
-              }
-            }}
-            data={[
-              {
-                value: "light",
-                label: (
-                  <Group gap="xs" justify="center">
-                    <IconSun size={16} />
-                    <span>ライト</span>
-                  </Group>
-                ),
-              },
-              {
-                value: "dark",
-                label: (
-                  <Group gap="xs" justify="center">
-                    <IconMoon size={16} />
-                    <span>ダーク</span>
-                  </Group>
-                ),
-              },
-            ]}
-          />
-          <Text size="sm" style={{ color: colors.textColors.secondary }}>
-            現在のカラースキーム: <strong>{colorScheme === "light" ? "ライト" : "ダーク"}</strong>
-          </Text>
-        </Group>
+        <Text size="sm" style={{ color: colors.textColors.secondary }}>
+          現在のカラースキーム: <strong>{isDark ? "ダーク" : "ライト"}</strong>（OSの設定に自動追従）
+        </Text>
       </Card>
 
       {/* テーマ選択 */}

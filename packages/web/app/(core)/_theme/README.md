@@ -4,14 +4,14 @@
 
 ## ファイル構成
 
-- `themeConfig.ts`: テーマの型定義（ColorScheme, AppThemeConfig）
+- `themeConfig.ts`: テーマの型定義（AppThemeConfig）
 - `themes.ts`: 利用可能なテーマの定義（デフォルト、ブルー、グリーン、パープル）
 - `themeContext.tsx`: テーマ状態を管理するReact Context
 - `useTheme.ts`: テーマを利用するためのカスタムフック
 
 ## 機能
 
-- **カラースキーム**: ライトモードとダークモードの切り替えが可能
+- **カラースキーム**: OSの設定に自動追従してライトモードとダークモードを切り替え
 - **テーマ切り替え**: 複数のカラーテーマから選択可能
 - **一元管理**: アプリ全体で統一されたカラー設定を提供
 
@@ -23,12 +23,15 @@
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 const MyComponent = () => {
-  const { colors } = useTheme()
+  const { colors, isDark } = useTheme()
 
   return (
-    <Button color={colors.buttonColors.primary}>
-      プライマリボタン
-    </Button>
+    <div style={{ backgroundColor: colors.backgroundColors.default }}>
+      <Button color={colors.buttonColors.primary}>
+        プライマリボタン
+      </Button>
+      {isDark && <p>ダークモードです</p>}
+    </div>
   )
 }
 ```
@@ -52,19 +55,19 @@ const ThemeSwitcher = () => {
 }
 ```
 
-### カラースキームを切り替える
+### カラースキームについて
+
+カラースキーム（ライト/ダーク）はOSの設定に自動的に追従します。`useWindow()`から取得される`isDark`を使用して、現在のモードを確認できます。
 
 ```tsx
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
-const ColorSchemeSwitcher = () => {
-  const { colorScheme, setColorScheme, toggleColorScheme } = useTheme()
+const MyComponent = () => {
+  const { isDark } = useTheme()
 
   return (
     <div>
-      <button onClick={() => setColorScheme("light")}>ライト</button>
-      <button onClick={() => setColorScheme("dark")}>ダーク</button>
-      <button onClick={toggleColorScheme}>トグル</button>
+      現在のモード: {isDark ? "ダーク" : "ライト"}
     </div>
   )
 }
@@ -154,4 +157,4 @@ export const themes = {
 
 テーマの動作確認には、以下のURLにアクセスしてください：
 
-- `/test/theme` - テーマ切り替えデモページ
+- `/test/theme` - テーマ切り替えデモページ（カラースキームはOSの設定に自動追従）

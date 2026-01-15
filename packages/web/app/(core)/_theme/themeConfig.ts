@@ -1,8 +1,5 @@
 import { MantineColorsTuple } from "@mantine/core"
 
-/** カラースキーム */
-export type ColorScheme = "light" | "dark"
-
 /** カラー設定 */
 type ColorConfig = {
   /** ボタンの色 */
