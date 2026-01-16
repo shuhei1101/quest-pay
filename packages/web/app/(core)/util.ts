@@ -96,3 +96,41 @@ export const calculatePagination = (params: {
   const offset = (page - 1) * pageSize
   return { pageSize, offset }
 }
+
+/** 相対時間を表示する */
+export const formatRelativeTime = (dateString?: string | null) => {
+  if (!dateString) return ""
+  
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / (1000 * 60))
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  
+  if (diffMins < 1) return "たった今"
+  if (diffMins < 60) return `${diffMins}分前`
+  if (diffHours < 24) return `${diffHours}時間前`
+  if (diffDays < 7) return `${diffDays}日前`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}週間前`
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)}ヶ月前`
+  return `${Math.floor(diffDays / 365)}年前`
+}
+
+/** 年齢範囲を表示する */
+export const formatAgeRange = (ageFrom?: number | null, ageTo?: number | null) => {
+  if (ageFrom == null && ageTo == null) return "全年齢"
+  if (ageFrom != null && ageTo != null) return `${ageFrom}歳〜${ageTo}歳`
+  if (ageFrom != null) return `${ageFrom}歳以上`
+  if (ageTo != null) return `${ageTo}歳以下`
+  return "全年齢"
+}
+
+/** 月範囲を表示する */
+export const formatMonthRange = (monthFrom?: number | null, monthTo?: number | null) => {
+  if (monthFrom == null && monthTo == null) return null
+  if (monthFrom != null && monthTo != null) return `${monthFrom}月〜${monthTo}月`
+  if (monthFrom != null) return `${monthFrom}月以降`
+  if (monthTo != null) return `${monthTo}月まで`
+  return null
+}
