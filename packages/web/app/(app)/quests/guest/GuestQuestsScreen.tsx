@@ -11,6 +11,11 @@ import { PublicQuestList } from "../public/PublicQuestList"
 /** 有効なタブ値の一覧 */
 const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
 
+/** タブ値が有効かチェックする */
+const isValidTab = (tab: string | null): tab is typeof VALID_TABS[number] => {
+  return tab !== null && (VALID_TABS as readonly string[]).includes(tab)
+}
+
 export function GuestQuestsScreen() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -21,7 +26,7 @@ export function GuestQuestsScreen() {
   /** クエリパラメータからタブ値を取得する */
   const getTabFromParams = () => {
     const tabParam = searchParams.get('tab')
-    return tabParam && VALID_TABS.includes(tabParam as any) ? tabParam : 'public'
+    return isValidTab(tabParam) ? tabParam : 'public'
   }
 
   const [tabValue, setTabValue] = useState<string | null>(getTabFromParams())
@@ -29,7 +34,7 @@ export function GuestQuestsScreen() {
   /** クエリパラメータが変更された時にタブを更新する */
   useEffect(() => {
     const tabParam = searchParams.get('tab')
-    const newTab = tabParam && VALID_TABS.includes(tabParam as any) ? tabParam : 'public'
+    const newTab = isValidTab(tabParam) ? tabParam : 'public'
     setTabValue(newTab)
   }, [searchParams])
 
