@@ -39,6 +39,7 @@ const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
   }, [currentTheme])
 
   return (
+    // プロバイダの適用
     <MantineProvider theme={mantineTheme}>
       <ModalsProvider>
         {children}
