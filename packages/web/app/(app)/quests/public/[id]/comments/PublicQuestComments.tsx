@@ -14,13 +14,13 @@ import { useDeleteComment } from "./_hooks/useDeleteComment"
 import { usePublicQuest } from "../view/_hooks/usePublicQuest"
 import { useIsLike } from "../view/_hooks/useIsLike"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
-import { useUser } from "@/app/(core)/useUser"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 公開クエストコメント画面 */
 export const PublicQuestComments = ({ id }: { id: string }) => {
   const router = useRouter()
   const { isDark } = useWindow()
-  const { user } = useUser()
+  const { userInfo } = useLoginUserInfo()
 
   /** コメント内容 */
   const [comment, setComment] = useState("")
@@ -117,7 +117,7 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
 
   /** いいねしているかどうか確認する */
   const hasLiked = (familyId: string) => {
-    return isLike && user?.profiles?.familyId === familyId
+    return isLike && userInfo?.profiles?.familyId === familyId
   }
 
   return (
@@ -261,7 +261,7 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
                         </Menu.Item>
 
                         {/* 削除（自分のコメントのみ） */}
-                        {user?.profiles?.id === commentItem.profileId && (
+                        {userInfo?.profiles?.id === commentItem.profileId && (
                           <>
                             <Menu.Divider />
                             <Menu.Item
