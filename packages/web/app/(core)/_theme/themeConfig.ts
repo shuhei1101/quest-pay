@@ -1,7 +1,7 @@
 import { MantineColorsTuple } from "@mantine/core"
 
 /** カラー設定 */
-type ColorConfig = {
+export type ColorConfig = {
   /** ボタンの色 */
   buttonColors: {
     /** 通常ボタン */

@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useCallback, useMemo } from "react"
 import { themes, ThemeKey } from "./themes"
-import { AppThemeConfig } from "./themeConfig"
+import { AppThemeConfig, ColorConfig } from "./themeConfig"
 import { useSystemTheme } from "../useSystemTheme"
 
 type ThemeContextType = {
@@ -11,12 +11,7 @@ type ThemeContextType = {
   /** 現在のテーマ設定 */
   currentTheme: AppThemeConfig
   /** カラースキームに応じた現在の色設定を取得する */
-  getCurrentColors: () => {
-    buttonColors: AppThemeConfig["light"]["buttonColors"]
-    textColors: AppThemeConfig["light"]["textColors"]
-    backgroundColors: AppThemeConfig["light"]["backgroundColors"]
-    borderColors: AppThemeConfig["light"]["borderColors"]
-  }
+  getCurrentColors: () => ColorConfig
   /** テーマを変更する */
   setTheme: (themeKey: ThemeKey) => void
 }
@@ -59,7 +54,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 export const useThemeContext = () => {
   const context = React.useContext(ThemeContext)
   if (context === undefined) {
-    throw new Error("useThemeContext must be used within a ThemeProvider")
+    throw new Error("useThemeContext は ThemeProvider 内で使用する必要があります")
   }
   return context
 }
