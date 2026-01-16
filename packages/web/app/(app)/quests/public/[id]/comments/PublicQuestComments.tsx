@@ -4,13 +4,15 @@ import { Box, Paper, Text, Textarea, Button, LoadingOverlay, Stack, Group, Actio
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useWindow } from "@/app/(core)/useConstants"
-import { IconArrowLeft, IconDots, IconThumbUp, IconThumbDown, IconFlag, IconTrash, IconHeart, IconCrown } from "@tabler/icons-react"
+import { IconArrowLeft, IconDots, IconThumbUp, IconThumbDown, IconFlag, IconTrash, IconHeart, IconCrown, IconPin } from "@tabler/icons-react"
 import { usePublicQuestComments } from "./_hooks/usePublicQuestComments"
 import { usePostComment } from "./_hooks/usePostComment"
 import { useUpvoteComment } from "./_hooks/useUpvoteComment"
 import { useDownvoteComment } from "./_hooks/useDownvoteComment"
 import { useReportComment } from "./_hooks/useReportComment"
 import { useDeleteComment } from "./_hooks/useDeleteComment"
+import { usePinComment } from "./_hooks/usePinComment"
+import { usePublisherLike } from "./_hooks/usePublisherLike"
 import { usePublicQuest } from "../view/_hooks/usePublicQuest"
 import { useIsLike } from "../view/_hooks/useIsLike"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
@@ -39,6 +41,10 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
   const { handleReport } = useReportComment()
   /** 削除 */
   const { handleDelete } = useDeleteComment()
+  /** ピン留め */
+  const { handlePin, handleUnpin } = usePinComment()
+  /** 公開者いいね */
+  const { handleLike: handlePublisherLike, handleUnlike: handlePublisherUnlike } = usePublisherLike()
   /** 公開クエスト情報 */
   const { publicQuest } = usePublicQuest({ id })
   /** いいねされているかどうか */
@@ -110,6 +116,44 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
     setIsLoading(false)
   }
 
+  /** ピン留めハンドル */
+  const handlePinClick = async (commentId: string, isPinned: boolean) => {
+    setIsLoading(true)
+    if (isPinned) {
+      await handleUnpin({
+        publicQuestId: id,
+        commentId,
+        onSuccess: refetch,
+      })
+    } else {
+      await handlePin({
+        publicQuestId: id,
+        commentId,
+        onSuccess: refetch,
+      })
+    }
+    setIsLoading(false)
+  }
+
+  /** 公開者いいねハンドル */
+  const handlePublisherLikeClick = async (commentId: string, isLiked: boolean) => {
+    setIsLoading(true)
+    if (isLiked) {
+      await handlePublisherUnlike({
+        publicQuestId: id,
+        commentId,
+        onSuccess: refetch,
+      })
+    } else {
+      await handlePublisherLike({
+        publicQuestId: id,
+        commentId,
+        onSuccess: refetch,
+      })
+    }
+    setIsLoading(false)
+  }
+
   /** クエスト作成者かどうか確認する */
   const isQuestCreator = (familyId: string) => {
     return publicQuest?.base.familyId === familyId
@@ -118,6 +162,11 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
   /** いいねしているかどうか確認する */
   const hasLiked = (familyId: string) => {
     return isLike && userInfo?.profiles?.familyId === familyId
+  }
+
+  /** 公開クエストの家族に所属しているか確認する */
+  const isPublisherFamily = () => {
+    return publicQuest?.base.familyId === userInfo?.profiles?.familyId
   }
 
   return (
@@ -218,7 +267,24 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
 
                       {/* ユーザ名と投稿日時 */}
                       <Stack gap={0}>
-                        <Text fw={700}>{commentItem.profile.name}</Text>
+                        <Group gap="xs">
+                          <Text fw={700}>{commentItem.profile.name}</Text>
+                          {/* ピン留めアイコン */}
+                          {commentItem.isPinned && (
+                            <IconPin size={16} color="#228be6" />
+                          )}
+                          {/* 公開者いいねバッジ */}
+                          {commentItem.isLikedByPublisher && (
+                            <Badge
+                              size="xs"
+                              variant="light"
+                              color="red"
+                              leftSection={<IconHeart size={12} />}
+                            >
+                              公開者
+                            </Badge>
+                          )}
+                        </Group>
                         <Text size="xs" c="dimmed">
                           {new Date(commentItem.createdAt).toLocaleString("ja-JP")}
                         </Text>
@@ -234,6 +300,30 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
                       </Menu.Target>
 
                       <Menu.Dropdown>
+                        {/* ピン留め（公開者家族のみ） */}
+                        {isPublisherFamily() && (
+                          <Menu.Item
+                            leftSection={<IconPin size={16} />}
+                            onClick={() => handlePinClick(commentItem.id, commentItem.isPinned)}
+                          >
+                            {commentItem.isPinned ? "ピン留め解除" : "ピン留め"}
+                          </Menu.Item>
+                        )}
+
+                        {/* 公開者いいね（公開者家族のみ） */}
+                        {isPublisherFamily() && (
+                          <Menu.Item
+                            leftSection={<IconHeart size={16} />}
+                            onClick={() => handlePublisherLikeClick(commentItem.id, commentItem.isLikedByPublisher)}
+                            color={commentItem.isLikedByPublisher ? "red" : undefined}
+                          >
+                            {commentItem.isLikedByPublisher ? "公開者いいね解除" : "公開者いいね"}
+                          </Menu.Item>
+                        )}
+
+                        {/* 区切り線（公開者家族の場合） */}
+                        {isPublisherFamily() && <Menu.Divider />}
+
                         {/* 高評価 */}
                         <Menu.Item
                           leftSection={<IconThumbUp size={16} />}

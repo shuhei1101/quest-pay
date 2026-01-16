@@ -12,6 +12,8 @@ export type PublicQuestComment = {
   content: string
   createdAt: string
   updatedAt: string
+  isPinned: boolean
+  isLikedByPublisher: boolean
   profile: {
     id: string
     name: string
@@ -51,7 +53,7 @@ export const fetchPublicQuestComments = async ({
       .innerJoin(profiles, eq(publicQuestComments.profileId, profiles.id))
       .innerJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(publicQuestComments.publicQuestId, publicQuestId))
-      .orderBy(desc(publicQuestComments.createdAt))
+      .orderBy(desc(publicQuestComments.isPinned), desc(publicQuestComments.createdAt))
 
     // 各コメントの評価数と自分の評価状態を取得する
     const commentsWithStats = await Promise.all(
@@ -119,6 +121,8 @@ export const fetchPublicQuestComments = async ({
           content: row.comment.content,
           createdAt: row.comment.createdAt,
           updatedAt: row.comment.updatedAt,
+          isPinned: row.comment.isPinned,
+          isLikedByPublisher: row.comment.isLikedByPublisher,
           profile: {
             id: row.profile.id,
             name: row.profile.name,

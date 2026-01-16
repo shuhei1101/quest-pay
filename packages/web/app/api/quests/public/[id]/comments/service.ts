@@ -244,3 +244,101 @@ export const reportComment = async ({
     throw new ServerError("コメントの報告に失敗しました。")
   }
 }
+
+/** コメントをピン留めする */
+export const pinComment = async ({
+  commentId,
+  publicQuestId,
+  db,
+}: {
+  commentId: string
+  publicQuestId: PublicQuestSelect["id"]
+  db: Db
+}) => {
+  try {
+    // 既存のピン留めを外す
+    await db
+      .update(publicQuestComments)
+      .set({ isPinned: false })
+      .where(
+        and(
+          eq(publicQuestComments.publicQuestId, publicQuestId),
+          eq(publicQuestComments.isPinned, true)
+        )
+      )
+
+    // 新しいコメントをピン留めする
+    await db
+      .update(publicQuestComments)
+      .set({ isPinned: true })
+      .where(eq(publicQuestComments.id, commentId))
+
+    devLog("pinComment.ピン留め完了: ", commentId)
+  } catch (error) {
+    devLog("pinComment.ピン留め例外: ", error)
+    throw new ServerError("ピン留めに失敗しました。")
+  }
+}
+
+/** コメントのピン留めを解除する */
+export const unpinComment = async ({
+  commentId,
+  db,
+}: {
+  commentId: string
+  db: Db
+}) => {
+  try {
+    await db
+      .update(publicQuestComments)
+      .set({ isPinned: false })
+      .where(eq(publicQuestComments.id, commentId))
+
+    devLog("unpinComment.ピン留め解除完了: ", commentId)
+  } catch (error) {
+    devLog("unpinComment.ピン留め解除例外: ", error)
+    throw new ServerError("ピン留め解除に失敗しました。")
+  }
+}
+
+/** 公開者いいねを付ける */
+export const likeByPublisher = async ({
+  commentId,
+  db,
+}: {
+  commentId: string
+  db: Db
+}) => {
+  try {
+    await db
+      .update(publicQuestComments)
+      .set({ isLikedByPublisher: true })
+      .where(eq(publicQuestComments.id, commentId))
+
+    devLog("likeByPublisher.公開者いいね完了: ", commentId)
+  } catch (error) {
+    devLog("likeByPublisher.公開者いいね例外: ", error)
+    throw new ServerError("公開者いいねに失敗しました。")
+  }
+}
+
+/** 公開者いいねを解除する */
+export const unlikeByPublisher = async ({
+  commentId,
+  db,
+}: {
+  commentId: string
+  db: Db
+}) => {
+  try {
+    await db
+      .update(publicQuestComments)
+      .set({ isLikedByPublisher: false })
+      .where(eq(publicQuestComments.id, commentId))
+
+    devLog("unlikeByPublisher.公開者いいね解除完了: ", commentId)
+  } catch (error) {
+    devLog("unlikeByPublisher.公開者いいね解除例外: ", error)
+    throw new ServerError("公開者いいね解除に失敗しました。")
+  }
+}

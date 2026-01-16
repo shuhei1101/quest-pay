@@ -81,6 +81,10 @@ export const PUBLIC_QUEST_COMMENT_UPVOTE_API_URL = (publicQuestId: string, comme
 export const PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/downvote`
 // コメント報告API
 export const PUBLIC_QUEST_COMMENT_REPORT_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/report`
+// コメントピン留めAPI
+export const PUBLIC_QUEST_COMMENT_PIN_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/pin`
+// コメント公開者いいねAPI
+export const PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/publisher-like`
 
 
 // テンプレートクエスト
