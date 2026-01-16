@@ -3,7 +3,7 @@ import { z } from "zod"
 /** パスワードリセット依頼フォームスキーマ */
 export const ForgotPasswordFormScheme = z.object({
   /** メールアドレス */
-  email: z.string().min(1, {message: "メールアドレスは必須です。"}).email({message: "正しいメールアドレスを入力してください。"}),
+  email: z.string().nonempty({error: "メールアドレスは必須です。"}).email({message: "正しいメールアドレスを入力してください。"}),
 })
 
 /** パスワードリセット依頼フォームの型 */
