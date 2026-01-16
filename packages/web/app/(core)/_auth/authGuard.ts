@@ -23,7 +23,8 @@ export const authGuard = async ({parentNG = false, childNG = false, guestNG = fa
     const cookieStore = await cookies()
     cookieStore.set('accessError', 'このページにアクセスする権限がありません', { 
       path: '/',
-      maxAge: 10
+      maxAge: 10,
+      sameSite: 'lax'
     })
     
     // 指定されたURLまたはクエスト画面に遷移する
