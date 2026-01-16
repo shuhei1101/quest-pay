@@ -14,9 +14,15 @@ export const ChildCardLayout = ({child, questStats, onClick, isSelected}: {
   const minSavings = child.children?.minSavings ?? 0
   const savingsProgress = minSavings > 0 ? (currentSavings / minSavings) * 100 : 0
   
+  const handleClick = () => {
+    if (child.children?.id) {
+      onClick(child.children.id)
+    }
+  }
+  
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder
-      onClick={() => { if (child.children?.id) onClick(child.children.id) }}
+      onClick={handleClick}
       className={`cursor-pointer quest-card ${isSelected ? 'rainbow-border' : ''}`}
     >
       {/* アイコンとプロフィール名 */}

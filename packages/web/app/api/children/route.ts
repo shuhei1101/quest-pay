@@ -31,12 +31,16 @@ export async function GET(
       // 各子供のクエスト統計を並行で取得する
       const questStatsPromises = result
         .filter(child => child.children?.id)
-        .map(async (child) => ({
-          id: child.children!.id,
-          stats: await fetchChildQuestStats({db, childId: child.children!.id})
-        }))
+        .map(async (child) => {
+          const childId = child.children?.id
+          if (!childId) return null
+          return {
+            id: childId,
+            stats: await fetchChildQuestStats({db, childId})
+          }
+        })
       
-      const questStatsArray = await Promise.all(questStatsPromises)
+      const questStatsArray = (await Promise.all(questStatsPromises)).filter((item): item is NonNullable<typeof item> => item !== null)
       const questStats: Record<string, Awaited<ReturnType<typeof fetchChildQuestStats>>> = {}
       for (const item of questStatsArray) {
         questStats[item.id] = item.stats
