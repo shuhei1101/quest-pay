@@ -2,13 +2,16 @@
 
 import React, { createContext, useState, useCallback, useMemo } from "react"
 import { themes, ThemeKey } from "./themes"
-import { AppThemeConfig } from "./themeConfig"
+import { AppThemeConfig, ColorConfig } from "./themeConfig"
+import { useSystemTheme } from "../useSystemTheme"
 
 type ThemeContextType = {
   /** 現在のテーマキー */
   currentThemeKey: ThemeKey
   /** 現在のテーマ設定 */
   currentTheme: AppThemeConfig
+  /** カラースキームに応じた現在の色設定を取得する */
+  getCurrentColors: () => ColorConfig
   /** テーマを変更する */
   setTheme: (themeKey: ThemeKey) => void
 }
@@ -18,8 +21,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 /** テーマコンテキストを提供する */
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>("default")
+  const { isDark } = useSystemTheme()
 
   const currentTheme = useMemo(() => themes[currentThemeKey], [currentThemeKey])
+
+  const getCurrentColors = useCallback(() => {
+    return currentTheme[isDark ? "dark" : "light"]
+  }, [currentTheme, isDark])
 
   const setTheme = useCallback((themeKey: ThemeKey) => {
     setCurrentThemeKey(themeKey)
@@ -29,9 +37,10 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     () => ({
       currentThemeKey,
       currentTheme,
+      getCurrentColors,
       setTheme,
     }),
-    [currentThemeKey, currentTheme, setTheme]
+    [currentThemeKey, currentTheme, getCurrentColors, setTheme]
   )
 
   return (
@@ -45,7 +54,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 export const useThemeContext = () => {
   const context = React.useContext(ThemeContext)
   if (context === undefined) {
-    throw new Error("useThemeContext must be used within a ThemeProvider")
+    throw new Error("useThemeContext は ThemeProvider 内で使用する必要があります")
   }
   return context
 }
