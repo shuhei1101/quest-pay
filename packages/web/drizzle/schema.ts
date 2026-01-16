@@ -411,10 +411,13 @@ export const publicQuestComments = pgTable("public_quest_comments", {
   publicQuestId: uuid("public_quest_id").notNull().references(() => publicQuests.id, { onDelete: "cascade" }),
   /** ピン留めフラグ */
   isPinned: boolean("is_pinned").notNull().default(false),
+  /** 公開者ユーザがコメントにいいねするフラグ */
+  isLikedByPublisher: boolean("is_liked_by_publisher").notNull().default(false),
   /** コメント共通カラム */
   ...commentCommonColumns,
 }, (table) => [
   sql`UNIQUE (${table.publicQuestId}) WHERE ${table.isPinned} = true`,
+  sql`UNIQUE (${table.publicQuestId}) WHERE ${table.isLikedByPublisher} = true`,
 ])
 
 
