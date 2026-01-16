@@ -43,15 +43,15 @@ export const FamilyQuestCardLayout = ({familyQuest, onClick}: {
             受注中:
           </Text>
           <Avatar.Group spacing="sm">
-            {familyQuest.children.slice(0, 3).map((child) => (
-              <Tooltip key={child.id} label={`子供ID: ${child.childId}`}>
+            {familyQuest.children.slice(0, 3).map((child, index) => (
+              <Tooltip key={child.id} label="受注中の子供">
                 <Avatar 
                   size="sm" 
                   radius="xl"
                   style={{ cursor: "pointer" }}
                 >
                   {/* TODO: 子供のアイコンを表示する場合は、子供情報も取得する必要がある */}
-                  {child.childId.substring(0, 1).toUpperCase()}
+                  {index + 1}
                 </Avatar>
               </Tooltip>
             ))}

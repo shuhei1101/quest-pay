@@ -109,8 +109,8 @@ export const formatRelativeTime = (dateString?: string | null) => {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
   
   if (diffMins < 1) return "たった今"
-  if (diffMins < 60) return `${diffMins}分前`
-  if (diffHours < 24) return `${diffHours}時間前`
+  if (diffHours < 1) return `${diffMins}分前`
+  if (diffDays < 1) return `${diffHours}時間前`
   if (diffDays < 7) return `${diffDays}日前`
   if (diffDays < 30) return `${Math.floor(diffDays / 7)}週間前`
   if (diffDays < 365) return `${Math.floor(diffDays / 30)}ヶ月前`

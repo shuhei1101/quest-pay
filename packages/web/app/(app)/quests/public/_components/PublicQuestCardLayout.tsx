@@ -1,6 +1,6 @@
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { PublicQuest } from "@/app/api/quests/public/query"
-import { Badge, Card, Group, Text, Stack, Box } from "@mantine/core"
+import { Badge, Card, Group, Text, Stack } from "@mantine/core"
 import { IconHeart, IconMessageCircle } from "@tabler/icons-react"
 import { formatAgeRange, formatMonthRange } from "@/app/(core)/util"
 
@@ -39,18 +39,18 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
         />
         
         {/* いいね数とコメント数 */}
-        <Group gap="xs">
+        <Group gap="md">
           {/* TODO: いいね数をAPIから取得して表示する */}
-          <Box style={{ position: "relative" }}>
+          <Group gap={4}>
             <IconHeart size={20} color="red" />
-            <Text size="xs" style={{ position: "absolute", top: -5, right: -10 }}>0</Text>
-          </Box>
+            <Text size="sm" fw={500}>0</Text>
+          </Group>
           
           {/* TODO: コメント数をAPIから取得して表示する */}
-          <Box style={{ position: "relative" }}>
+          <Group gap={4}>
             <IconMessageCircle size={20} />
-            <Text size="xs" style={{ position: "absolute", top: -5, right: -10 }}>0</Text>
-          </Box>
+            <Text size="sm" fw={500}>0</Text>
+          </Group>
         </Group>
       </Group>
       

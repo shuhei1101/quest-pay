@@ -12,8 +12,22 @@ export const ChildQuestCardLayout = ({childQuest, onClick}: {
   // 子供クエスト情報を取得する（最初の子供の情報を使用）
   const questChild = childQuest.children[0]
   
+  // 子供情報がない場合はプレースホルダーを表示する
   if (!questChild) {
-    return null
+    return (
+      <Card 
+        shadow="sm" 
+        padding="md" 
+        radius="md" 
+        withBorder
+        className="quest-card"
+        style={{ opacity: 0.6 }}
+      >
+        <Text c="dimmed" ta="center">
+          クエストデータが見つかりません
+        </Text>
+      </Card>
+    )
   }
   
   // 現在のレベルの詳細情報を取得する
