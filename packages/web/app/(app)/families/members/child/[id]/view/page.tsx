@@ -1,11 +1,12 @@
-'use client'
-
 import { ChildView } from "@/app/(app)/children/[id]/_components/ChildView"
-import { useParams } from "next/navigation"
+import { authGuard } from "@/app/(core)/_auth/authGuard"
+import { QUESTS_URL } from "@/app/(core)/endpoints"
 
-export default function Page() {
-  const params = useParams()
-  const id = params.id as string
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = await params
+  
+  // 親のみアクセス可能、子供・ゲストは不可
+  const _ = await authGuard({ childNG: true, guestNG: true, redirectUrl: QUESTS_URL })
 
   return (
     <>
