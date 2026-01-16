@@ -19,7 +19,7 @@ export const ParentQuestViewFooter = ({
   selectedLevel?: number
   onLevelChange?: (level: number) => void
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Group justify="center" mt="xl" gap="md">
@@ -33,7 +33,7 @@ export const ParentQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.primary}
+        color={colors.buttonColors.primary}
         leftSection={<IconEdit size={18} />}
         onClick={onEdit}
       >
@@ -43,7 +43,7 @@ export const ParentQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.default}
+        color={colors.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}

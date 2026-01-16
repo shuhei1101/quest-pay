@@ -14,7 +14,7 @@ export const ParentChildQuestViewFooter = ({
   onEdit: () => void
   isPendingReview: boolean
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Group justify="center" mt="xl" gap="md">
@@ -22,7 +22,7 @@ export const ParentChildQuestViewFooter = ({
       {isPendingReview && (
         <Button
           size="md"
-          color={theme.buttonColors.primary}
+          color={colors.buttonColors.primary}
           leftSection={<IconFileText size={18} />}
           onClick={onReviewReport}
         >

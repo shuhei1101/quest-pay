@@ -19,7 +19,7 @@ export const NotificationModal = ({
   const router = useRouter()
   const { notifications, isLoading } = useNotifications()
   const { handleReadNotifications, isLoading: isReadingAll } = useReadNotifications()
-  const { theme } = useTheme()
+  const { colors } = useTheme()
 
   /** 日時をフォーマットする */
   const formatDate = (dateString?: string | null) => {
@@ -117,7 +117,7 @@ export const NotificationModal = ({
                         {/* 通知アイコン */}
                         <IconBell size={20} />
                         {!notification.isRead && (
-                          <Badge color={theme.buttonColors.danger} size="sm">未読</Badge>
+                          <Badge color={colors.buttonColors.danger} size="sm">未読</Badge>
                         )}
                       </Group>
                       

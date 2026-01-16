@@ -10,19 +10,19 @@ export const TemplateQuestCardLayout = ({templateQuest, onClick}: {
   templateQuest: TemplateQuest,
   onClick: (questId: string) => void
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder
       onClick={() => onClick(templateQuest.base.id)}
       className="cursor-pointer quest-card"
-      style={{ backgroundColor: theme.backgroundColors.card }}
+      style={{ backgroundColor: colors.backgroundColors.card }}
     >
       <Group mb="xs">
-        <Badge color={theme.buttonColors.primary}>{templateQuest.quest.name}</Badge>
+        <Badge color={colors.buttonColors.primary}>{templateQuest.quest.name}</Badge>
         <RenderIcon iconName={templateQuest.icon?.name} size={templateQuest.icon?.size ?? undefined}  iconColor={templateQuest.quest.iconColor}/>
       </Group>
-      <Text size="sm" mb="xs" style={{ color: theme.textColors.primary }}>{templateQuest.quest.name}</Text>
+      <Text size="sm" mb="xs" style={{ color: colors.textColors.primary }}>{templateQuest.quest.name}</Text>
     </Card>
   )
 }

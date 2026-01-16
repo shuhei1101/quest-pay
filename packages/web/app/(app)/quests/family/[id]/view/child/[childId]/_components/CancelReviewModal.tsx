@@ -17,7 +17,7 @@ export const CancelReviewModal = ({
   isLoading?: boolean
 }) => {
   const [message, setMessage] = useState("")
-  const { theme } = useTheme()
+  const { colors } = useTheme()
 
   /** 送信ハンドル */
   const handleSubmit = () => {
@@ -55,7 +55,7 @@ export const CancelReviewModal = ({
         {/* いいえボタン */}
         <Button
           variant="outline"
-          color={theme.buttonColors.default}
+          color={colors.buttonColors.default}
           onClick={handleClose}
           disabled={isLoading}
         >
@@ -64,7 +64,7 @@ export const CancelReviewModal = ({
         
         {/* はいボタン */}
         <Button
-          color={theme.buttonColors.danger}
+          color={colors.buttonColors.danger}
           onClick={handleSubmit}
           loading={isLoading}
         >

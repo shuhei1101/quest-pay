@@ -27,7 +27,7 @@ export const QuestConditionTab = ({
   exp: number
   type?: "parent" | "child" | "online"
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Stack gap="md" className="overflow-y-auto">
@@ -75,7 +75,7 @@ export const QuestConditionTab = ({
         {type === "child" && currentCompletionCount !== undefined ? (
           // 現在の達成状況（子供のみ表示）
           <Group justify="flex-end" gap="xs">
-            <Badge variant="filled" color={theme.buttonColors.success} size="lg">
+            <Badge variant="filled" color={colors.buttonColors.success} size="lg">
               {currentCompletionCount}/{requiredCompletionCount}回クリア
             </Badge>
           </Group>

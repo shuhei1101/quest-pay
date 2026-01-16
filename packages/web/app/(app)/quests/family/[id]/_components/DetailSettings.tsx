@@ -29,7 +29,7 @@ export const DetailSettings = ({
   setValue: UseFormSetValue<BaseQuestFormType>
   watch: UseFormWatch<BaseQuestFormType>
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   // 表示するレベルのリスト
   const visibleLevels = watch().details.map(d => d.level).sort((a, b) => a - b)
 
@@ -80,7 +80,7 @@ export const DetailSettings = ({
         title: "レベル削除の確認",
         children: `レベル${lastLevel}の入力を破棄しますか?`,
         labels: { confirm: "削除", cancel: "キャンセル" },
-        confirmProps: { color: theme.buttonColors.danger },
+        confirmProps: { color: colors.buttonColors.danger },
         onConfirm: executeRemove
       })
     }
@@ -130,14 +130,14 @@ export const DetailSettings = ({
                   key={level} 
                   value={levelStr}
                   rightSection={
-                    hasError ? <IconAlertCircle size={14} color={theme.buttonColors.danger} /> :
-                    isCompleted ? <IconCheck size={14} color={theme.buttonColors.success} /> : 
+                    hasError ? <IconAlertCircle size={14} color={colors.buttonColors.danger} /> :
+                    isCompleted ? <IconCheck size={14} color={colors.buttonColors.success} /> : 
                     null
                   }
                 >
                   <Group gap={4}>
                     <Text size="sm">レベル {level}</Text>
-                    {level === 1 && <Text size="xs" c={theme.buttonColors.danger}>*</Text>}
+                    {level === 1 && <Text size="xs" c={colors.buttonColors.danger}>*</Text>}
                   </Group>
                 </Tabs.Tab>
               )

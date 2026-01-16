@@ -24,7 +24,7 @@ const FooterNotAccepted = ({
   onAccept?: () => void
   onImprovement?: () => void
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Group justify="center" mt="xl" gap="md">
@@ -32,7 +32,7 @@ const FooterNotAccepted = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.primary}
+        color={colors.buttonColors.primary}
         leftSection={<IconPlayerPlay size={18} />}
         onClick={onAccept}
       >
@@ -42,7 +42,7 @@ const FooterNotAccepted = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.secondary}
+        color={colors.buttonColors.secondary}
         variant="outline"
         leftSection={<IconSend size={18} />}
         onClick={onImprovement}
@@ -55,14 +55,14 @@ const FooterNotAccepted = ({
 
 /** 改善要望中のボタンセット */
 const FooterImprovementPending = () => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Center mt="xl">
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.default}
+        color={colors.buttonColors.default}
         disabled
       >
         改善要望中
@@ -83,7 +83,7 @@ const FooterAccepted = ({
   onComplete?: () => void
   onRetire?: () => void
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Group justify="center" mt="xl" gap="md">
@@ -91,7 +91,7 @@ const FooterAccepted = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.primary}
+        color={colors.buttonColors.primary}
         leftSection={<IconCheck size={18} />}
         onClick={onComplete}
       >
@@ -101,7 +101,7 @@ const FooterAccepted = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.danger}
+        color={colors.buttonColors.danger}
         variant="outline"
         leftSection={<IconX size={18} />}
         onClick={onRetire}
@@ -114,14 +114,14 @@ const FooterAccepted = ({
 
 /** 承認待ちのボタンセット */
 const FooterWaitingApproval = () => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Center mt="xl">
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.secondary}
+        color={colors.buttonColors.secondary}
         disabled
       >
         承認待ち
@@ -132,14 +132,14 @@ const FooterWaitingApproval = () => {
 
 /** クリア済みのボタンセット */
 const FooterCleared = () => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Center mt="xl">
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.success}
+        color={colors.buttonColors.success}
         disabled
         leftSection={<IconCheck size={18} />}
       >

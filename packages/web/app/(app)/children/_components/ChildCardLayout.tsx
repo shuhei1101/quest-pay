@@ -10,19 +10,19 @@ export const ChildCardLayout = ({child, onClick, isSelected}: {
   onClick: (childId: string) => void,
   isSelected?: boolean
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder
       onClick={() => onClick(child.children.id)}
       className={`cursor-pointer quest-card ${isSelected ? 'rainbow-border' : ''}`}
-      style={{ backgroundColor: theme.backgroundColors.card }}
+      style={{ backgroundColor: colors.backgroundColors.card }}
     >
       <Group mb="xs">
-        <Badge color={theme.buttonColors.primary}>{child.profiles?.name}</Badge>
+        <Badge color={colors.buttonColors.primary}>{child.profiles?.name}</Badge>
         <RenderIcon iconName={child.icons?.name} iconColor={child.profiles?.iconColor}/>
       </Group>
-      <Text size="sm" mb="xs" style={{ color: theme.textColors.primary }}>{child.profiles?.name}</Text>
+      <Text size="sm" mb="xs" style={{ color: colors.textColors.primary }}>{child.profiles?.name}</Text>
     </Card>
   )
 }

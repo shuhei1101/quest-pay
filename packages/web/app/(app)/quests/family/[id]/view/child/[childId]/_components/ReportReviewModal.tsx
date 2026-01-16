@@ -24,7 +24,7 @@ export const ReportReviewModal = ({
 }) => {
   const [responseMessage, setResponseMessage] = useState("")
   const {isDark} = useWindow()
-  const { theme } = useTheme()
+  const { colors } = useTheme()
 
   /** モーダルを閉じるときの処理 */
   const handleClose = () => {
@@ -84,7 +84,7 @@ export const ReportReviewModal = ({
           <Group justify="space-between" mt="md">
             {/* 却下ボタン */}
             <Button
-              color={theme.buttonColors.danger}
+              color={colors.buttonColors.danger}
               leftSection={<IconX size={18} />}
               onClick={handleReject}
               disabled={isLoading}
@@ -94,7 +94,7 @@ export const ReportReviewModal = ({
 
             {/* 受領ボタン */}
             <Button
-              color={theme.buttonColors.success}
+              color={colors.buttonColors.success}
               leftSection={<IconCheck size={18} />}
               onClick={handleApprove}
               disabled={isLoading}

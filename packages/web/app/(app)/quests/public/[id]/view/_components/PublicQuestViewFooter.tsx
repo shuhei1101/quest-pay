@@ -32,7 +32,7 @@ export const PublicQuestViewFooter = ({
   onLevelChange?: (level: number) => void
   onBack?: () => void
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Group justify="center" mt="xl" gap="xl">
@@ -45,7 +45,7 @@ export const PublicQuestViewFooter = ({
       {/* 作成者家族アイコン */}
       <ActionIcon 
         variant="light" 
-        color={theme.buttonColors.default}
+        color={colors.buttonColors.default}
         size={56} 
         radius="xl"
         onClick={onLikeToggle}
@@ -57,10 +57,10 @@ export const PublicQuestViewFooter = ({
       </ActionIcon>
 
       {/* いいねボタン */}
-      <Indicator label={likeCount} size={18} color={theme.buttonColors.danger} offset={4}>
+      <Indicator label={likeCount} size={18} color={colors.buttonColors.danger} offset={4}>
         <ActionIcon 
           variant="light" 
-          color={isLiked ? theme.buttonColors.danger : theme.buttonColors.default} 
+          color={isLiked ? colors.buttonColors.danger : colors.buttonColors.default} 
           size={56} 
           radius="xl"
           onClick={onLikeToggle}
@@ -74,8 +74,8 @@ export const PublicQuestViewFooter = ({
       </Indicator>
 
       {/* コメントボタン */}
-      <Indicator label={commentCount} size={18} color={theme.buttonColors.primary} offset={4}>
-        <ActionIcon variant="light" color={theme.buttonColors.primary} size={56} radius="xl" onClick={onComment}>
+      <Indicator label={commentCount} size={18} color={colors.buttonColors.primary} offset={4}>
+        <ActionIcon variant="light" color={colors.buttonColors.primary} size={56} radius="xl" onClick={onComment}>
           <IconMessage size={28} />
         </ActionIcon>
       </Indicator>
@@ -83,7 +83,7 @@ export const PublicQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.default}
+        color={colors.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}

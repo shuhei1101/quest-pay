@@ -20,7 +20,7 @@ export const ChildQuestViewFooter = ({
   currentDetail?: QuestDetailSelect
   onCancelReview: () => void
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Group justify="center" mt="xl" gap="md">
@@ -29,7 +29,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color={theme.buttonColors.success}
+          color={colors.buttonColors.success}
           variant="outline"
           leftSection={<IconEdit size={18} />}
         >
@@ -41,7 +41,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color={theme.buttonColors.secondary}
+          color={colors.buttonColors.secondary}
           variant="outline"
           onClick={onCancelReview}
         >
@@ -53,7 +53,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color={theme.buttonColors.primary}
+          color={colors.buttonColors.primary}
           variant="outline"
           leftSection={<IconEdit size={18} />}
           onClick={onReviewRequest}
@@ -66,7 +66,7 @@ export const ChildQuestViewFooter = ({
         <Button 
           size="md" 
           radius="xl" 
-          color={theme.buttonColors.danger}
+          color={colors.buttonColors.danger}
           variant="outline"
           leftSection={<IconEdit size={18} />}
         >
@@ -77,7 +77,7 @@ export const ChildQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.default}
+        color={colors.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}

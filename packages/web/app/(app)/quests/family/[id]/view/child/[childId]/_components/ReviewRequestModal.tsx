@@ -17,7 +17,7 @@ export const ReviewRequestModal = ({
   isLoading?: boolean
 }) => {
   const [message, setMessage] = useState("")
-  const { theme } = useTheme()
+  const { colors } = useTheme()
 
   /** 送信ハンドル */
   const handleSubmit = () => {
@@ -55,7 +55,7 @@ export const ReviewRequestModal = ({
         {/* キャンセルボタン */}
         <Button
           variant="outline"
-          color={theme.buttonColors.default}
+          color={colors.buttonColors.default}
           onClick={handleClose}
           disabled={isLoading}
         >
@@ -64,7 +64,7 @@ export const ReviewRequestModal = ({
         
         {/* 報告するボタン */}
         <Button
-          color={theme.buttonColors.primary}
+          color={colors.buttonColors.primary}
           onClick={handleSubmit}
           loading={isLoading}
         >

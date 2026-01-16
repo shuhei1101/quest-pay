@@ -32,7 +32,7 @@ export const TemplateQuestViewFooter = ({
   hasSourceQuest: boolean
   onCheckSource?: () => void
 }) => {
-  const { theme } = useTheme()
+  const { colors } = useTheme()
   
   return (
     <Group justify="center" mt="xl" gap="xl">
@@ -47,7 +47,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.primary}
+        color={colors.buttonColors.primary}
         variant="outline"
         leftSection={<IconFilePencil size={18} />}
         onClick={onCreateFromTemplate}
@@ -59,7 +59,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.default}
+        color={colors.buttonColors.default}
         variant="outline"
         leftSection={<IconFileSearch size={18} />}
         onClick={onCheckSource}
@@ -71,7 +71,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.danger}
+        color={colors.buttonColors.danger}
         leftSection={<IconTrash size={18} />}
         variant="outline"
         onClick={onDelete}
@@ -82,7 +82,7 @@ export const TemplateQuestViewFooter = ({
       <Button 
         size="md" 
         radius="xl" 
-        color={theme.buttonColors.default}
+        color={colors.buttonColors.default}
         variant="outline"
         leftSection={<IconArrowLeft size={18} />}
         onClick={onBack}
