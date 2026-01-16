@@ -9,6 +9,7 @@ export const useLoginForm = () => {
   const defaultForm: LoginFormType = {
     email: "",
     password: "",
+    rememberMe: false,
   }
 
   // ログインフォームの状態を作成する
@@ -30,7 +31,8 @@ export const useLoginForm = () => {
   /** 値を変更したかどうか */
   const isValueChanged = 
     currentQuests.email !== defaultForm.email ||
-    currentQuests.password !== defaultForm.password
+    currentQuests.password !== defaultForm.password ||
+    currentQuests.rememberMe !== defaultForm.rememberMe
 
   return {
     register,
