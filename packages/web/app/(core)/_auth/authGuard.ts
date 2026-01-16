@@ -1,31 +1,43 @@
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { getAuthContext } from "./withAuth"
-import { AUTH_ERROR_URL } from "../endpoints"
+import { AUTH_ERROR_URL, LOGIN_URL } from "../endpoints"
 import { redirect } from "next/navigation"
+import { AppError, AUTHORIZED_ERROR_CODE } from "../error/appError"
+import { devLog } from "../util"
 
 export const authGuard = async ({parentNG = false, childNG = false, guestNG = false}: {
   parentNG?: boolean
   childNG?: boolean
   guestNG?: boolean
 }) => {
-  // 認証コンテキストを取得する
-  const { db, userId } = await getAuthContext()
-  // ユーザ情報を取得する
-  const userInfo = await fetchUserInfoByUserId({db, userId})
+  try {
+    // 認証コンテキストを取得する
+    const { db, userId } = await getAuthContext()
+    // ユーザ情報を取得する
+    const userInfo = await fetchUserInfoByUserId({db, userId})
 
-  if ((guestNG && !userInfo) ||
-    (parentNG && userInfo?.profiles?.type === "parent") || 
-    (childNG && userInfo?.profiles?.type === "child")
-  ) {
-    // 権限エラー画面に遷移する
-    redirect(AUTH_ERROR_URL)
-  }
-  
-  return {
-    userInfo,
-    isGuest: !userInfo,
-    isParent: userInfo?.profiles?.type === "parent",
-    isChild: userInfo?.profiles?.type === "child",
-  
+    if ((guestNG && !userInfo) ||
+      (parentNG && userInfo?.profiles?.type === "parent") || 
+      (childNG && userInfo?.profiles?.type === "child")
+    ) {
+      // 権限エラー画面に遷移する
+      redirect(AUTH_ERROR_URL)
+    }
+    
+    return {
+      userInfo,
+      isGuest: !userInfo,
+      isParent: userInfo?.profiles?.type === "parent",
+      isChild: userInfo?.profiles?.type === "child",
+    
+    }
+  } catch (error) {
+    // 認証エラーの場合はログイン画面にリダイレクトする
+    if (error instanceof AppError && error.code === AUTHORIZED_ERROR_CODE) {
+      devLog("authGuard.認証エラー: ログイン画面にリダイレクトする")
+      redirect(LOGIN_URL)
+    }
+    // その他のエラーは再スローする
+    throw error
   }
 }
