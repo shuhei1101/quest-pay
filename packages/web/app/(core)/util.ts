@@ -102,6 +102,9 @@ export const calculateAge = (birthday: string | null | undefined): number | null
   if (!birthday) return null
   
   const birthDate = new Date(birthday)
+  // 無効な日付をチェックする
+  if (isNaN(birthDate.getTime())) return null
+  
   const today = new Date()
   
   let age = today.getFullYear() - birthDate.getFullYear()
@@ -119,6 +122,9 @@ export const formatDate = (dateString: string | null | undefined): string => {
   if (!dateString) return ""
   
   const date = new Date(dateString)
+  // 無効な日付をチェックする
+  if (isNaN(date.getTime())) return ""
+  
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, "0")
   const day = String(date.getDate()).padStart(2, "0")

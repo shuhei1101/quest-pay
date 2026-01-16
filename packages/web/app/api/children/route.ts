@@ -28,12 +28,18 @@ export async function GET(
       // 子供を取得する
       const result = await fetchChildrenByFamilyId({db, familyId: userInfo.profiles.familyId })
   
-      // 各子供のクエスト統計を取得する
+      // 各子供のクエスト統計を並行で取得する
+      const questStatsPromises = result
+        .filter(child => child.children)
+        .map(async (child) => ({
+          id: child.children!.id,
+          stats: await fetchChildQuestStats({db, childId: child.children!.id})
+        }))
+      
+      const questStatsArray = await Promise.all(questStatsPromises)
       const questStats: Record<string, Awaited<ReturnType<typeof fetchChildQuestStats>>> = {}
-      for (const child of result) {
-        if (child.children) {
-          questStats[child.children.id] = await fetchChildQuestStats({db, childId: child.children.id})
-        }
+      for (const item of questStatsArray) {
+        questStats[item.id] = item.stats
       }
 
       return NextResponse.json({children: result, questStats} as GetChildrenResponse)
