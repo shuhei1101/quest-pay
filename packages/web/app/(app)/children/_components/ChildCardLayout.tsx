@@ -16,7 +16,7 @@ export const ChildCardLayout = ({child, questStats, onClick, isSelected}: {
   
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder
-      onClick={() => child.children?.id && onClick(child.children.id)}
+      onClick={() => { if (child.children?.id) onClick(child.children.id) }}
       className={`cursor-pointer quest-card ${isSelected ? 'rainbow-border' : ''}`}
     >
       {/* アイコンとプロフィール名 */}

@@ -30,7 +30,7 @@ export async function GET(
   
       // 各子供のクエスト統計を並行で取得する
       const questStatsPromises = result
-        .filter(child => child.children)
+        .filter(child => child.children?.id)
         .map(async (child) => ({
           id: child.children!.id,
           stats: await fetchChildQuestStats({db, childId: child.children!.id})
