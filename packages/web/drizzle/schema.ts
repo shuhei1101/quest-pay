@@ -409,9 +409,14 @@ const commentCommonColumns = {
 export const publicQuestComments = pgTable("public_quest_comments", {
   /** 公開クエストID */
   publicQuestId: uuid("public_quest_id").notNull().references(() => publicQuests.id, { onDelete: "cascade" }),
+  /** ピン留めフラグ */
+  isPinned: boolean("is_pinned").notNull().default(false),
   /** コメント共通カラム */
   ...commentCommonColumns,
-})
+}, (table) => [
+  sql`UNIQUE (${table.publicQuestId}) WHERE ${table.isPinned} = true`,
+])
+
 
 /** コメントいいねエンティティ */
 export const commentLikes = pgTable("comment_likes", {
@@ -451,8 +456,6 @@ export const commentUpvotes = pgTable("comment_upvotes", {
   commentId: uuid("comment_id").notNull(),
   /** プロフィールID */
   profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
-  /** 評価タイプ */
-  type: commentUpvoteType("type").notNull(),
   /** タイムスタンプ */
   ...timestamps,
 }, (table) => [
