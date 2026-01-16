@@ -3,7 +3,10 @@ import { z } from "zod"
 /** パスワード変更フォームスキーマ */
 export const ResetPasswordFormScheme = z.object({
   /** 新しいパスワード */
-  password: z.string().nonempty({error: "パスワードは必須です。"}).min(6, { error: "パスワードは6文字以上で入力してください。"}).max(20, { error: "パスワードは20文字以下で入力してください。"}),
+  password: z.string()
+    .nonempty({error: "パスワードは必須です。"})
+    .min(6, { error: "パスワードは6文字以上で入力してください。"})
+    .max(20, { error: "パスワードは20文字以下で入力してください。"}),
   /** パスワード確認 */
   passwordConfirm: z.string().nonempty({error: "パスワード（確認）は必須です。"}),
 }).refine((data) => data.password === data.passwordConfirm, {
