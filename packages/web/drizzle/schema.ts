@@ -417,7 +417,6 @@ export const publicQuestComments = pgTable("public_quest_comments", {
   ...commentCommonColumns,
 }, (table) => [
   sql`UNIQUE (${table.publicQuestId}) WHERE ${table.isPinned} = true`,
-  sql`UNIQUE (${table.publicQuestId}) WHERE ${table.isLikedByPublisher} = true`,
 ])
 
 
