@@ -1,20 +1,36 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { PublicQuestList } from "../public/PublicQuestList"
 
 export function GuestQuestsScreen() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   /** ログインユーザ情報 */
   const { isGuest } = useLoginUserInfo()
 
-  const [tabValue, setTabValue] = useState<string | null>('public')
+  /** 有効なタブ値の一覧 */
+  const validTabs = ['public', 'family', 'penalty', 'template']
+  
+  /** クエリパラメータからタブ値を取得する */
+  const getInitialTab = () => {
+    const tabParam = searchParams.get('tab')
+    return tabParam && validTabs.includes(tabParam) ? tabParam : 'public'
+  }
+
+  const [tabValue, setTabValue] = useState<string | null>(getInitialTab())
+
+  /** クエリパラメータが変更された時にタブを更新する */
+  useEffect(() => {
+    const newTab = getInitialTab()
+    setTabValue(newTab)
+  }, [searchParams])
 
     const GuestScreen = () => (
     <div className="w-full h-[80vh] flex flex-col items-center justify-center">
