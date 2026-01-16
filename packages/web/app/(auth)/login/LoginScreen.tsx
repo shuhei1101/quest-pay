@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks"
 import { LoginTypeSelectPopup } from "./_components/LoginTypeSelectPopup"
 import { useLogin } from "./_hooks/useLogin"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL } from "../../(core)/endpoints"
+import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL, FORGOT_PASSWORD_URL } from "../../(core)/endpoints"
 import Link from "next/link"
 import { devLog } from "@/app/(core)/util"
 
@@ -68,14 +68,16 @@ export const LoginScreen = () => {
                 {...register("password")}
               />
               
-              {/* ログイン状態保持とパスワード忘れ */}
-              <div className="flex items-center justify-between">
-                <Checkbox 
-                  label="ログイン状態を保持" 
-                  checked={watch("rememberMe")}
-                  onChange={(event) => setValue("rememberMe", event.currentTarget.checked)}
-                />
-                <Anchor size="sm">パスワードをお忘れですか？</Anchor>
+              {/* ログイン状態保持 */}
+              <Checkbox 
+                label="ログイン状態を保持" 
+                checked={watch("rememberMe")}
+                onChange={(event) => setValue("rememberMe", event.currentTarget.checked)}
+              />
+              
+              {/* パスワード忘れ */}
+              <div className="text-center">
+                <Anchor size="sm" component={Link} href={FORGOT_PASSWORD_URL}>パスワードをお忘れですか？</Anchor>
               </div>
 
               {/* ログインボタン */}
