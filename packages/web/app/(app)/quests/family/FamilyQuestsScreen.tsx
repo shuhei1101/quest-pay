@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, Suspense } from "react"
-import { Tabs, Paper, Text, Button } from "@mantine/core"
+import { Tabs, Paper, Text, Button, Loader, Center } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
@@ -85,16 +85,34 @@ export function FamilyQuestsScreen() {
       <Paper p="xs" withBorder>
 
       <Tabs.Panel value="public">
-        <PublicQuestList />
+        <Suspense fallback={
+          <Center className="my-8">
+            <Loader size="lg" />
+          </Center>
+        }>
+          <PublicQuestList />
+        </Suspense>
       </Tabs.Panel>
       <Tabs.Panel value="family">
-        <FamilyQuestList />
+        <Suspense fallback={
+          <Center className="my-8">
+            <Loader size="lg" />
+          </Center>
+        }>
+          <FamilyQuestList />
+        </Suspense>
       </Tabs.Panel>
       <Tabs.Panel value="penalty">
         違反リスト
       </Tabs.Panel>
       <Tabs.Panel value="template">
-        <TemplateQuestList />
+        <Suspense fallback={
+          <Center className="my-8">
+            <Loader size="lg" />
+          </Center>
+        }>
+          <TemplateQuestList />
+        </Suspense>
       </Tabs.Panel>
     </Paper>
     </div>

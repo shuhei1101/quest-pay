@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Paper, Tabs } from "@mantine/core"
+import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState } from "react"
 import { QuestViewHeader } from "../../../view/_components/QuestViewHeader"
 import { QuestViewIcon } from "../../../view/_components/QuestViewIcon"
@@ -22,7 +22,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
-  const {familyQuest} = useFamilyQuest({id})
+  const {familyQuest, isLoading} = useFamilyQuest({id})
 
   /** 選択中のレベルの詳細を取得する */
   const selectedDetail = familyQuest?.details?.find(d => d.level === selectedLevel) || familyQuest?.details?.[0]
@@ -31,7 +31,9 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   const availableLevels = familyQuest?.details?.map(d => d.level).filter((level): level is number => level !== null && level !== undefined) || []
 
   return (
-    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={familyQuest?.quest?.name || ""}
@@ -107,6 +109,6 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
         onLevelChange={setSelectedLevel}
         onBack={() => router.back()}
       />
-    </div>
+    </Box>
   )
 }
