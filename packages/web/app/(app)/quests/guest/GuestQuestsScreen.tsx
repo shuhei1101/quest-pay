@@ -8,6 +8,9 @@ import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { PublicQuestList } from "../public/PublicQuestList"
 
+/** 有効なタブ値の一覧 */
+const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
+
 export function GuestQuestsScreen() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -15,20 +18,18 @@ export function GuestQuestsScreen() {
   /** ログインユーザ情報 */
   const { isGuest } = useLoginUserInfo()
 
-  /** 有効なタブ値の一覧 */
-  const validTabs = ['public', 'family', 'penalty', 'template']
-  
   /** クエリパラメータからタブ値を取得する */
-  const getInitialTab = () => {
+  const getTabFromParams = () => {
     const tabParam = searchParams.get('tab')
-    return tabParam && validTabs.includes(tabParam) ? tabParam : 'public'
+    return tabParam && VALID_TABS.includes(tabParam as any) ? tabParam : 'public'
   }
 
-  const [tabValue, setTabValue] = useState<string | null>(getInitialTab())
+  const [tabValue, setTabValue] = useState<string | null>(getTabFromParams())
 
   /** クエリパラメータが変更された時にタブを更新する */
   useEffect(() => {
-    const newTab = getInitialTab()
+    const tabParam = searchParams.get('tab')
+    const newTab = tabParam && VALID_TABS.includes(tabParam as any) ? tabParam : 'public'
     setTabValue(newTab)
   }, [searchParams])
 
