@@ -57,7 +57,7 @@ export function GuestQuestsScreen() {
     <Tabs variant="pills" value={tabValue} onChange={setTabValue} color={
       tabValue == 'public' ? "rgb(96 165 250)" :
       tabValue == 'family' ? "rgb(74, 222, 128)" :
-      tabValue == 'penalty' ? "rgb(252, 132, 132" :
+      tabValue == 'penalty' ? "rgb(252, 132, 132)" :
       tabValue == 'template' ? "rgb(250 204 21)" : "blue"
     }  >
       <div className="flex flex-col gap-4">
