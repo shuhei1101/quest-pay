@@ -3,7 +3,7 @@
 import { Button } from "@mantine/core"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
-import toast, { Toaster } from "react-hot-toast"
+import toast from "react-hot-toast"
 import { HOME_URL, LOGIN_URL } from "./(core)/endpoints"
 
 export default function ErrorPage({
@@ -21,7 +21,6 @@ export default function ErrorPage({
 
 
   return (
-    <>
     <div className="flex flex-col items-start gap-4">
       <h2>不明なエラーが発生しました。</h2>
       <div className="flex flex-col gap-2">
@@ -36,7 +35,5 @@ export default function ErrorPage({
         </Button>
       </div>
     </div>
-    <Toaster />
-    </>
   )
 }
