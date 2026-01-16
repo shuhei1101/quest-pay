@@ -5,7 +5,7 @@ import { generateUniqueInviteCode } from "./invite/service"
 import { fetchUserInfoByUserId } from "../users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchChildrenByFamilyId } from "./query"
+import { fetchChildrenByFamilyId, fetchChildQuestStats } from "./query"
 import { ChildFormSchema, ChildFormType } from "@/app/(app)/children/[id]/form"
 import z from "zod"
 
@@ -13,6 +13,7 @@ import z from "zod"
 /** 家族の子供を取得する */
 export type GetChildrenResponse = {
   children: Awaited<ReturnType<typeof fetchChildrenByFamilyId>>
+  questStats: Record<string, Awaited<ReturnType<typeof fetchChildQuestStats>>>
 }
 export async function GET(
   req: NextRequest,
@@ -27,7 +28,15 @@ export async function GET(
       // 子供を取得する
       const result = await fetchChildrenByFamilyId({db, familyId: userInfo.profiles.familyId })
   
-      return NextResponse.json({children: result} as GetChildrenResponse)
+      // 各子供のクエスト統計を取得する
+      const questStats: Record<string, Awaited<ReturnType<typeof fetchChildQuestStats>>> = {}
+      for (const child of result) {
+        if (child.children) {
+          questStats[child.children.id] = await fetchChildQuestStats({db, childId: child.children.id})
+        }
+      }
+
+      return NextResponse.json({children: result, questStats} as GetChildrenResponse)
     })
 }
 

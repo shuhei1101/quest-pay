@@ -96,3 +96,32 @@ export const calculatePagination = (params: {
   const offset = (page - 1) * pageSize
   return { pageSize, offset }
 }
+
+/** 生年月日から年齢を計算する */
+export const calculateAge = (birthday: string | null | undefined): number | null => {
+  if (!birthday) return null
+  
+  const birthDate = new Date(birthday)
+  const today = new Date()
+  
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const monthDiff = today.getMonth() - birthDate.getMonth()
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+  
+  return age
+}
+
+/** 日付を YYYY/MM/DD 形式でフォーマットする */
+export const formatDate = (dateString: string | null | undefined): string => {
+  if (!dateString) return ""
+  
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  
+  return `${year}/${month}/${day}`
+}
