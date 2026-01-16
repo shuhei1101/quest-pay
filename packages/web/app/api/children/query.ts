@@ -92,6 +92,6 @@ export const fetchChildQuestStats = async ({db, childId}: {
     return data[0] ?? { inProgressCount: 0, completedCount: 0 }
   } catch (error) {
     devLog("fetchChildQuestStats.取得例外: ", error, "app/api/children/query.ts")
-    throw new QueryError("クエスト統計の読み込みに失敗しました。")
+    throw new QueryError("クエスト統計の読み込みに失敗しました。", "app/api/children/query.ts")
   }
 }
