@@ -7,6 +7,7 @@ import toast from "react-hot-toast"
 import { queryClient } from "@/app/(core)/tanstack"
 import { getLoginUser } from "@/app/api/users/login/client"
 import { UserInfo } from "@/app/api/users/query"
+import { devLog } from "@/app/(core)/util"
 
 /** ログイン時のハンドル */
 export const useLogin = ({onSuccess}: {
@@ -23,9 +24,14 @@ export const useLogin = ({onSuccess}: {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] })
-      // ユーザ情報を取得する
-      const { userInfo } = await getLoginUser()
-      onSuccess(userInfo)
+      try {
+        // ユーザ情報を取得する
+        const { userInfo } = await getLoginUser()
+        onSuccess(userInfo)
+      } catch (error) {
+        devLog("useLogin.ユーザ情報取得エラー:", error)
+        toast.error("ユーザ情報の取得に失敗しました。")
+      }
     }
   })
 

@@ -12,7 +12,8 @@ export async function getAuthContext() {
 
   if (error) {
     devLog("getAuthContext.user取得失敗:", error)
-    throw error
+    // Supabaseのセッションエラーを適切にハンドルする
+    throw new AuthorizedError("ログインが必要です")
   }
 
   if (!user?.id) {
