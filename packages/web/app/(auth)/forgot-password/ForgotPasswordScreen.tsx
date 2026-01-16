@@ -18,7 +18,7 @@ export const ForgotPasswordScreen = () => {
   }})
 
   /** パスワードリセット依頼フォーム状態 */
-  const { register, handleSubmit } = useForgotPasswordForm()
+  const { register, handleSubmit, formState: { errors } } = useForgotPasswordForm()
   
   return (
     <>
@@ -39,6 +39,7 @@ export const ForgotPasswordScreen = () => {
                 placeholder="your-email@example.com"
                 leftSection={<IconMail size={16} />}
                 required
+                error={errors.email?.message}
                 {...register("email")}
               />
 
