@@ -1,9 +1,9 @@
 "use client"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 import { FamilyQuestFilterType } from "@/app/api/quests/family/query"
 import { ActionIcon, Button, ColorPicker, Input, Modal, Pill, PillsInput, Popover, Space, Tabs, Text } from "@mantine/core"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-
 /** 家族クエストフィルターポップアップ */
 export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSearch}: {
   opened: boolean,
@@ -12,8 +12,8 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
   handleSearch: (filter: FamilyQuestFilterType) => void
 }) => {
   /** クエストフィルター状態 */
+  const { colors } = useTheme()
   const [filter, setFilter] = useState<FamilyQuestFilterType>({tags: []})
-
   /** タグ入力状態 */
   const [tagInputValue, setTagInputValue] = useState("")
   
@@ -22,26 +22,17 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
     if (!opened) return
     setFilter(currentFilter)
   }, [opened])
-
-
   // 検索ボタン押下時のイベント
   const onSearchClick = () => {
     handleSearch(filter)
     close()
   }
-
   // タグ更新ラッパー関数
   const setTags = (tags: string[]) => {
     setFilter(prev => ({
       ...prev,
       tags
     }))
-  }
-
-
-  /** タグ入力時のハンドル */
-  const handleTag = () => {
-    const newTag = tagInputValue.trim()
     // タグが空白もしくは既に登録済みの場合、処理を終了する
     if (newTag && !filter.tags.includes(newTag)) {
       // タグを追加する
@@ -49,11 +40,8 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
     }
     // タグ入力状態を初期化する
     setTagInputValue("")
-  }
-
   /** IME入力状態 */
   const [isComposing, setIsComposing] = useState(false);
-
   return (
     <Modal opened={opened} onClose={close} title="フィルター">
           <div className="flex gap-6  items-center p-2 flex-wrap">
@@ -91,15 +79,12 @@ export const FamilyQuestFilterPopup = ({opened, close, currentFilter, handleSear
                       handleTag()
                     }
                   }}
-                />
               </Pill.Group>
             </PillsInput>
-
           </div>
           <div className="mb-5" /> 
           <div className="flex justify-end">
-            <Button variant="gradient" onClick={onSearchClick}>検索</Button>
-          </div>
+            <Button variant="gradient" gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }} onClick={onSearchClick}>検索</Button>
     </Modal>
   )
 }

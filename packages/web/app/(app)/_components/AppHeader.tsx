@@ -93,26 +93,28 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
           <ActionIcon
             onClick={() => router.push(LOGIN_URL)}
             variant="gradient"
+            gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }}
             size="lg"
             aria-label="ログイン"
           >
             <IconLogin style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>
         ) : (
-          <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
+          <Button variant='gradient' gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }} className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
         )
       ) : (
         isMobile ? (
           <ActionIcon
             onClick={handleLogout}
             variant="gradient"
+            gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }}
             size="lg"
             aria-label="ログアウト"
           >
             <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>
         ) : (
-          <Button variant='gradient' className='shrink-0' onClick={handleLogout}>ログアウト</Button>
+          <Button variant='gradient' gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }} className='shrink-0' onClick={handleLogout}>ログアウト</Button>
         )
       )}
       {/* ハンバーガーメニュー切り替えボタン */}
