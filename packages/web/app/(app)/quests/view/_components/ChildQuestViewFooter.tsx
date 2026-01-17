@@ -2,6 +2,7 @@
 
 import { ActionIcon, Avatar, Button, Center, Group, Indicator, Tooltip } from "@mantine/core"
 import { IconCheck, IconHeart, IconHeartFilled, IconMessage, IconPlayerPlay, IconSend, IconX } from "@tabler/icons-react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 子供用クエストステータス */
 export type ChildQuestStatus = 
@@ -23,13 +24,15 @@ const FooterNotAccepted = ({
   onAccept?: () => void
   onImprovement?: () => void
 }) => {
+  const { colors } = useTheme()
+  
   return (
     <Group justify="center" mt="xl" gap="md">
       {/* クエストを受注するボタン */}
       <Button 
         size="md" 
         radius="xl" 
-        color="blue"
+        color={colors.buttonColors.primary}
         leftSection={<IconPlayerPlay size={18} />}
         onClick={onAccept}
       >
@@ -39,7 +42,7 @@ const FooterNotAccepted = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="teal"
+        color={colors.buttonColors.secondary}
         variant="outline"
         leftSection={<IconSend size={18} />}
         onClick={onImprovement}
@@ -52,12 +55,14 @@ const FooterNotAccepted = ({
 
 /** 改善要望中のボタンセット */
 const FooterImprovementPending = () => {
+  const { colors } = useTheme()
+  
   return (
     <Center mt="xl">
       <Button 
         size="md" 
         radius="xl" 
-        color="gray"
+        color={colors.buttonColors.default}
         disabled
       >
         改善要望中
@@ -78,13 +83,15 @@ const FooterAccepted = ({
   onComplete?: () => void
   onRetire?: () => void
 }) => {
+  const { colors } = useTheme()
+  
   return (
     <Group justify="center" mt="xl" gap="md">
       {/* 完了報告ボタン */}
       <Button 
         size="md" 
         radius="xl" 
-        color="blue"
+        color={colors.buttonColors.primary}
         leftSection={<IconCheck size={18} />}
         onClick={onComplete}
       >
@@ -94,7 +101,7 @@ const FooterAccepted = ({
       <Button 
         size="md" 
         radius="xl" 
-        color="red"
+        color={colors.buttonColors.danger}
         variant="outline"
         leftSection={<IconX size={18} />}
         onClick={onRetire}
@@ -107,12 +114,14 @@ const FooterAccepted = ({
 
 /** 承認待ちのボタンセット */
 const FooterWaitingApproval = () => {
+  const { colors } = useTheme()
+  
   return (
     <Center mt="xl">
       <Button 
         size="md" 
         radius="xl" 
-        color="yellow"
+        color={colors.buttonColors.secondary}
         disabled
       >
         承認待ち
@@ -123,12 +132,14 @@ const FooterWaitingApproval = () => {
 
 /** クリア済みのボタンセット */
 const FooterCleared = () => {
+  const { colors } = useTheme()
+  
   return (
     <Center mt="xl">
       <Button 
         size="md" 
         radius="xl" 
-        color="green"
+        color={colors.buttonColors.success}
         disabled
         leftSection={<IconCheck size={18} />}
       >

@@ -4,6 +4,7 @@ import { ActionIcon, MantineColor } from "@mantine/core"
 import { IconPlus, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useWindow } from "../useConstants"
+import { useTheme } from "../_theme/useTheme"
 
 export type FloatingActionItem = {
   /** アイコン要素 */
@@ -23,8 +24,8 @@ export const FloatingActionButton = ({
   items,
   open,
   onToggle,
-  mainButtonColor = "pink",
-  subButtonColor = "pink",
+  mainButtonColor,
+  subButtonColor,
   mainIcon = <IconPlus style={{ width: "70%", height: "70%" }} />,
   rightMobile = "20px",
   rightDesktop = "40px",
@@ -63,6 +64,11 @@ export const FloatingActionButton = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isMobile } = useWindow()
+  const { colors } = useTheme()
+  
+  // テーマカラーをデフォルトとして使用
+  const actualMainButtonColor = mainButtonColor || colors.buttonColors.primary
+  const actualSubButtonColor = subButtonColor || colors.buttonColors.primary
 
   // 外側クリックで閉じる
   useEffect(() => {
@@ -106,7 +112,7 @@ export const FloatingActionButton = ({
                 size="xl"
                 radius="xl"
                 variant="white"
-                color={item.color || subButtonColor}
+                color={item.color || actualSubButtonColor}
                 onClick={item.onClick}
                 style={{
                   width: subButtonSize,
@@ -124,7 +130,7 @@ export const FloatingActionButton = ({
       <ActionIcon
         radius="xl"
         variant="filled"
-        color={mainButtonColor}
+        color={actualMainButtonColor}
         onClick={() => onToggle(!open)}
         style={{
           width: mainButtonSize,

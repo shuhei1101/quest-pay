@@ -1,4 +1,5 @@
 "use client"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 import { useWindow } from "@/app/(core)/useConstants"
 import { QuestSort, QuestColumn } from "@/drizzle/schema"
@@ -31,6 +32,7 @@ export const ChildQuestSortPopup = ({opened, close, currentSort, handleSearch}: 
 }) => {
   /** 画面定数 */
   const { isMobile, isTablet, isDesktop } = useWindow()
+  const { colors } = useTheme()
 
   /** ソート状態 */
   const [sort, setSort] = useState<QuestSort>({column: "id", order: "asc"})
@@ -64,7 +66,7 @@ export const ChildQuestSortPopup = ({opened, close, currentSort, handleSearch}: 
           </SimpleGrid>
           <div className="mb-5" />
           <div className="flex justify-end">
-            <Button variant="gradient" onClick={onSearchClick}>検索</Button>
+            <Button variant="gradient" gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }} onClick={onSearchClick}>検索</Button>
           </div>
     </Modal>
   )

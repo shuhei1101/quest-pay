@@ -14,6 +14,8 @@ export type ColorConfig = {
     danger: string
     /** 成功アクション */
     success: string
+    /** グラデーションボタン用 */
+    gradient: string
   }
   /** テキストの色 */
   textColors: {

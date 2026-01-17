@@ -11,6 +11,7 @@ export const defaultTheme: AppThemeConfig = {
       secondary: "blue",
       danger: "red",
       success: "green",
+      gradient: "pink",
     },
     textColors: {
       primary: "#000000",
@@ -34,6 +35,7 @@ export const defaultTheme: AppThemeConfig = {
       secondary: "blue",
       danger: "red",
       success: "green",
+      gradient: "pink",
     },
     textColors: {
       primary: "#f9fafb",
@@ -165,6 +167,7 @@ export const greenTheme: AppThemeConfig = {
       primary: "green",
       secondary: "teal",
       danger: "red",
+      gradient: "green",
       success: "green",
     },
     textColors: {
@@ -208,6 +211,7 @@ export const purpleTheme: AppThemeConfig = {
       primary: "violet",
       secondary: "grape",
       danger: "red",
+      gradient: "violet",
       success: "green",
     },
     textColors: {
@@ -229,6 +233,7 @@ export const purpleTheme: AppThemeConfig = {
     buttonColors: {
       default: "gray",
       primary: "violet",
+      gradient: "violet",
       secondary: "grape",
       danger: "red",
       success: "green",

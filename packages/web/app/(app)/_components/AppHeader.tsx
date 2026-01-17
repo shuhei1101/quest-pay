@@ -11,12 +11,14 @@ import { useState } from 'react'
 import { NotificationModal } from '../notifications/_components/NotificationModal'
 import { useNotifications } from '../notifications/_hooks/useNotifications'
 import { useWindow } from '@/app/(core)/useConstants'
+import { useTheme } from '@/app/(core)/_theme/useTheme'
 import { ThemeToggleButton } from './ThemeToggleButton'
 
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
   const {isDark} = useWindow()
+  const { colors } = useTheme()
   /** ログインユーザ情報 */
   const { userInfo, isLoading, isGuest } = useLoginUserInfo()
   /** 通知モーダルの開閉状態 */
@@ -75,7 +77,7 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       <ThemeToggleButton />
       {/* 通知ボタン */}
       {!isGuest && (
-        <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
+        <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color={colors.buttonColors.danger} disabled={unreadCount === 0}>
           <ActionIcon
             onClick={() => setIsNotificationOpen(true)} 
             variant="subtle" 
@@ -91,26 +93,28 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
           <ActionIcon
             onClick={() => router.push(LOGIN_URL)}
             variant="gradient"
+            gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }}
             size="lg"
             aria-label="ログイン"
           >
             <IconLogin style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>
         ) : (
-          <Button variant='gradient' className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
+          <Button variant='gradient' gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }} className='shrink-0' onClick={() => router.push(LOGIN_URL)}>ログイン</Button>
         )
       ) : (
         isMobile ? (
           <ActionIcon
             onClick={handleLogout}
             variant="gradient"
+            gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }}
             size="lg"
             aria-label="ログアウト"
           >
             <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>
         ) : (
-          <Button variant='gradient' className='shrink-0' onClick={handleLogout}>ログアウト</Button>
+          <Button variant='gradient' gradient={{ from: colors.buttonColors.gradient, to: colors.buttonColors.primary, deg: 90 }} className='shrink-0' onClick={handleLogout}>ログアウト</Button>
         )
       )}
       {/* ハンバーガーメニュー切り替えボタン */}
