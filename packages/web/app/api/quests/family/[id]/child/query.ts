@@ -94,7 +94,7 @@ export const fetchChildQuests = async ({ params, db, childId, familyId }: {
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(questChildren, eq(questChildren.familyQuestId, familyQuests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
-      .where(and(...conditions, eq(questChildren.childId, childId), eq(familyQuests.familyId, familyId)))
+      .where(and(...conditions, eq(questChildren.childId, childId), eq(familyQuests.familyId, familyId), eq(questChildren.isActivate, true)))
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
         desc(quests[params.sortColumn])
@@ -105,7 +105,7 @@ export const fetchChildQuests = async ({ params, db, childId, familyId }: {
       .select({ total: count() })
       .from(familyQuests)
       .leftJoin(questChildren, eq(questChildren.familyQuestId, familyQuests.id))
-      .where(and(...conditions, eq(questChildren.childId, childId)))
+      .where(and(...conditions, eq(questChildren.childId, childId), eq(questChildren.isActivate, true)))
     ])
 
     // データをオブジェクトに変換する
