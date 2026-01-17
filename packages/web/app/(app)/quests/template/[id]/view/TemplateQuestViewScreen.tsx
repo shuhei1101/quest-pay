@@ -77,10 +77,11 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   }
 
   return (
-    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(161, 98, 7, 0.2)" : "rgba(254, 243, 199, 0.5)" }}>
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={templateQuest?.quest?.name || ""}
+        headerColor={{ light: "yellow.3", dark: "yellow.8" }}
       />
 
       {/* クエストアイコン */}
