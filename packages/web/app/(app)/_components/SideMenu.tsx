@@ -2,15 +2,17 @@
 
 import { HOME_URL, PROFILE_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconUser, IconSettings, IconWorld, IconClipboardPlus } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
+import { menuColors } from '@/app/(core)/_theme/colors'
+import { RenderIcon } from '@/app/(app)/icons/_components/RenderIcon'
 
 /** サイドメニューを取得する */
 export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean, isDark: boolean, opened: boolean, onClose: () => void}) => {
   const router = useRouter()
   /** ログインユーザ情報 */
-  const { isParent } = useLoginUserInfo()
+  const { isParent, userInfo } = useLoginUserInfo()
 
   /** メニューアイテム */
   const menuItems = (
@@ -20,14 +22,14 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
         className='side-nav'
         href={`${HOME_URL}`}
         label="ホーム"
-        leftSection={<IconHome2 className='home-color' size={18} stroke={1.2} />}
+        leftSection={<IconHome2 color={menuColors.home} size={18} stroke={1.2} />}
       />
       {/* クエスト */}
       <NavLink
         className='side-nav'
         href="#required-for-focus"
         label="クエスト"
-        leftSection={<IconClipboard className='clipboard-color' size={18} stroke={1.2} />}
+        leftSection={<IconClipboard color={menuColors.quest} size={18} stroke={1.2} />}
         childrenOffset={28}
       >
         {/* 公開（親のみ） */}
@@ -36,7 +38,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
             className='side-nav'
             href={`${PUBLIC_QUESTS_URL}`}
             label="公開"
-            leftSection={<IconWorld className='clipboard-color' size={18} stroke={1.2} />}
+            leftSection={<IconWorld color={menuColors.publicQuest} size={18} stroke={1.2} />}
           />
         )}
         {/* 家族（親のみ） */}
@@ -45,7 +47,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
             className='side-nav'
             href={`${FAMILY_QUESTS_URL}`}
             label="家族"
-            leftSection={<IconHome2 className='clipboard-color' size={18} stroke={1.2} />}
+            leftSection={<IconHome2 color={menuColors.familyQuest} size={18} stroke={1.2} />}
           />
         )}
         {/* お気に入り（親のみ） */}
@@ -54,7 +56,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
             className='side-nav'
             href={`${TEMPLATE_QUESTS_URL}`}
             label="お気に入り"
-            leftSection={<IconClipboardPlus className='clipboard-color' size={18} stroke={1.2} />}
+            leftSection={<IconClipboardPlus color={menuColors.favoriteQuest} size={18} stroke={1.2} />}
           />
         )}
       </NavLink>
@@ -64,7 +66,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
           className='side-nav'
           href={`${FAMILY_MEMBERS_URL}`}
           label="メンバー"
-          leftSection={<IconUsers className='users-color' size={18} stroke={1.2} />}
+          leftSection={<IconUsers color={menuColors.members} size={18} stroke={1.2} />}
         />
       )}
       {/* プロフィール */}
@@ -72,14 +74,21 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
         className='side-nav'
         href={`${PROFILE_URL}`}
         label="プロフィール"
-        leftSection={<IconUser size={18} stroke={1.2} />}
+        leftSection={
+          <RenderIcon 
+            iconName={userInfo?.icons?.name} 
+            iconColor={userInfo?.profiles?.iconColor} 
+            size={18} 
+            stroke={1.2} 
+          />
+        }
       />
       {/* 設定 */}
       <NavLink
         className='side-nav'
         href={`${SETTINGS_URL}`}
         label="設定"
-        leftSection={<IconSettings size={18} stroke={1.2} />}
+        leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
       />
     </>
   )
@@ -89,25 +98,30 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
     <>
       {/* ホームアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)}>
-        <IconHome2 className='home-color' stroke={1.4} />
+        <IconHome2 color={menuColors.home} stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
-        <IconClipboard className='clipboard-color' stroke={1.4} />
+        <IconClipboard color={menuColors.quest} stroke={1.4} />
       </ActionIcon>
       {/* メンバーアイコン（親のみ） */}
       {isParent && (
         <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)}>
-          <IconUsers className='users-color' stroke={1.4} />
+          <IconUsers color={menuColors.members} stroke={1.4} />
         </ActionIcon>
       )}
       {/* プロフィールアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(PROFILE_URL)}>
-        <IconUser stroke={1.4} />
+        <RenderIcon 
+          iconName={userInfo?.icons?.name} 
+          iconColor={userInfo?.profiles?.iconColor} 
+          size={24} 
+          stroke={1.4} 
+        />
       </ActionIcon>
       {/* 設定アイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)}>
-        <IconSettings stroke={1.4} />
+        <IconSettings color={menuColors.settings} stroke={1.4} />
       </ActionIcon>
     </>
   )
