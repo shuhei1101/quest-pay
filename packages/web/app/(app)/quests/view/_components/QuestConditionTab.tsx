@@ -48,7 +48,7 @@ export const QuestConditionTab = ({
               次レベルまで: {currentClearCount} / {requiredClearCount} 回クリア
             </Text>
             <Slider
-              value={currentClearCount}
+              value={Math.min(currentClearCount, requiredClearCount)}
               max={requiredClearCount}
               marks={[
                 { value: 0, label: '0' },
@@ -57,6 +57,7 @@ export const QuestConditionTab = ({
               label={(value) => `${value}回`}
               color="blue"
               size="md"
+              disabled
               styles={{
                 markLabel: { fontSize: '12px' },
               }}
