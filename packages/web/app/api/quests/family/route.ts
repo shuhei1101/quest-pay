@@ -82,10 +82,12 @@ export async function POST(
         familyQuest: {
           familyId: userInfo.profiles.familyId,
         },
-        questChildren: data.form.childSettings.map((setting) => ({
-          childId: setting.childId,
-          isActivate: setting.isActivate,
-        })),
+        questChildren: data.form.childSettings
+          .filter(setting => setting.isEnable) // isEnableがtrueのもののみ作成
+          .map((setting) => ({
+            childId: setting.childId,
+            isEnable: setting.isEnable,
+          })),
         questTags: data.form.tags.map((tagName) => ({
           name: tagName,
         }))

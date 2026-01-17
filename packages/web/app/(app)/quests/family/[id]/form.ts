@@ -4,7 +4,8 @@ import { addAgeMonthRefinements, BaseQuestFormScheme, isDefaultDetail as baseIsD
 /** 子供設定スキーマ */
 export const ChildSettingScheme = z.object({
   childId: z.string(),
-  isActivate: z.boolean(),
+  isEnable: z.boolean(),
+  hasQuestChildren: z.boolean(),
 })
 
 /** 家族クエストフォームスキーマ */

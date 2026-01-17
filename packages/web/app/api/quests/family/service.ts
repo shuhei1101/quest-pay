@@ -72,7 +72,7 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
     id: FamilyQuestSelect["id"]
     updatedAt: FamilyQuestSelect["updatedAt"]
   }
-  questChildren: InsertQuestChildrenRecord[]
+  questChildren: (InsertQuestChildrenRecord & { shouldDelete?: boolean })[]
   questTags: InsertQuestTagsRecord[]
 }) => {
   try {
@@ -100,16 +100,30 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
       // 現在の家族クエストを取得して、既存の子供設定を確認する
       const currentFamilyQuest = await fetchFamilyQuest({ db: tx, id: familyQuest.id })
       const currentChildIds = currentFamilyQuest.children.map(c => c.childId)
-      const newChildIds = questChildren.map(c => c.childId)
 
-      // 削除対象の子供を特定する
-      const childIdsToDelete = currentChildIds.filter(id => !newChildIds.includes(id))
+      // 削除対象（shouldDelete=trueまたはフォームから除外されたもの）
+      const childIdsToDelete = questChildren
+        .filter(c => c.shouldDelete)
+        .map(c => c.childId)
       
-      // 新規追加の子供を特定する
-      const childIdsToAdd = newChildIds.filter(id => !currentChildIds.includes(id))
-      
-      // 更新対象の子供を特定する（既存かつ新規にも含まれる）
-      const childIdsToUpdate = newChildIds.filter(id => currentChildIds.includes(id))
+      // 既存から削除されたものも追加
+      currentChildIds.forEach(id => {
+        if (!questChildren.some(c => c.childId === id)) {
+          childIdsToDelete.push(id)
+        }
+      })
+
+      // 新規追加（isEnableがtrueで、まだ存在しないもの）
+      const childrenToAdd = questChildren.filter(c => 
+        !c.shouldDelete && 
+        !currentChildIds.includes(c.childId)
+      )
+
+      // 更新対象（既存で、shouldDeleteではないもの）
+      const childrenToUpdate = questChildren.filter(c => 
+        !c.shouldDelete && 
+        currentChildIds.includes(c.childId)
+      )
 
       // 削除処理を実行する
       for (const childId of childIdsToDelete) {
@@ -117,24 +131,20 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
       }
 
       // 新規追加処理を実行する
-      const childrenToAdd = questChildren.filter(c => childIdsToAdd.includes(c.childId))
       if (childrenToAdd.length > 0) {
         await insertQuestChildren({db: tx, records: childrenToAdd, familyQuestId: familyQuest.id})
       }
 
-      // 更新処理を実行する（isActivateの変更を反映）
-      for (const childId of childIdsToUpdate) {
-        const newSetting = questChildren.find(c => c.childId === childId)
-        if (newSetting) {
-          await updateQuestChildSettings({
-            db: tx,
-            familyQuestId: familyQuest.id,
-            childId,
-            record: {
-              isActivate: newSetting.isActivate,
-            }
-          })
-        }
+      // 更新処理を実行する（isEnableの変更を反映）
+      for (const child of childrenToUpdate) {
+        await updateQuestChildSettings({
+          db: tx,
+          familyQuestId: familyQuest.id,
+          childId: child.childId,
+          record: {
+            isEnable: child.isEnable,
+          }
+        })
       }
       
       // タグを削除する

@@ -83,7 +83,8 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
         requestDetail: familyQuest.quest.requestDetail,
         childSettings: familyQuest.children.map((child) => ({
           childId: child.childId,
-          isActivate: child.isActivate,
+          isEnable: child.isEnable ?? true,
+          hasQuestChildren: true,
         })),
       }
       // 取得フォームを状態にセットする
