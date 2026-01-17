@@ -18,7 +18,7 @@ export const insertQuestChildren = async ({db, records, familyQuestId}: {
     await db.insert(questChildren).values(records.map(record => ({ 
       ...record,
       familyQuestId
-     }))).execute()
+     })))
   } catch (error) {
     devLog("insertQuestChildren error:", error)
     devLog("insertQuestChildren records:", records)
@@ -83,7 +83,7 @@ export const deleteQuestChildren = async ({db, familyQuestId}: {
 }) => {
   try {
     // クエスト対象の子供を削除する
-    await db.delete(questChildren).where(eq(questChildren.familyQuestId, familyQuestId)).execute()
+    await db.delete(questChildren).where(eq(questChildren.familyQuestId, familyQuestId))
   } catch (error) {
     devLog("deleteQuestChildrenByQuestId error:", error)
     throw new DatabaseError("クエスト対象の子供の削除に失敗しました。")
@@ -101,7 +101,7 @@ export const deleteQuestChild = async ({db, familyQuestId, childId}: {
     await db.delete(questChildren).where(and(
       eq(questChildren.familyQuestId, familyQuestId),
       eq(questChildren.childId, childId)
-    )).execute()
+    ))
   } catch (error) {
     devLog("deleteQuestChild error:", error)
     throw new DatabaseError("クエスト対象の子供の削除に失敗しました。")

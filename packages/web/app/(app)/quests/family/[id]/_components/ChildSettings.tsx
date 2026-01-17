@@ -164,7 +164,7 @@ export const ChildSettings = ({ watch, setValue }: {
                   <Switch 
                     label={setting?.isActivate ? "公開" : "非公開"}
                     labelPosition="left"
-                    checked={setting?.isActivate ?? true}
+                    checked={setting?.isActivate !== false}
                     onChange={() => toggleChildActivate(child.children.id)}
                   />
 
