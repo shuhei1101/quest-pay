@@ -12,7 +12,7 @@ export const TemplateQuestCardLayout = ({templateQuest, onClick}: {
     className="cursor-pointer quest-card"
   >
     <Group mb="xs">
-      <Badge color="pink">{templateQuest.quest.name}</Badge>
+      <Badge color="yellow">{templateQuest.quest.name}</Badge>
       <RenderIcon iconName={templateQuest.icon?.name} size={templateQuest.icon?.size ?? undefined}  iconColor={templateQuest.quest.iconColor}/>
     </Group>
     <Text size="sm" mb="xs">{templateQuest.quest.name}</Text>

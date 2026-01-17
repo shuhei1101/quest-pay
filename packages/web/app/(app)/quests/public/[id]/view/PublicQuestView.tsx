@@ -58,10 +58,11 @@ export const PublicQuestView = ({id}: {id: string}) => {
   }
 
   return (
-    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(59, 130, 246, 0.2)" : "rgba(191, 219, 254, 0.5)" }}>
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={publicQuest?.quest?.name || ""}
+        headerColor={{ light: "blue.3", dark: "blue.5" }}
       />
 
       {/* クエストアイコン */}
