@@ -1,16 +1,8 @@
 "use client"
 
-import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Stack, Text } from "@mantine/core"
+import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Slider, Stack, Text } from "@mantine/core"
 import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget } from "@tabler/icons-react"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
-import { useMemo } from "react"
-
-/** 次レベルまでに必要な経験値を計算する */
-const calculateRequiredExp = (currentLevel: number): number => {
-  // レベルごとの必要経験値（仮の計算式）
-  // TODO: 将来的にはDBや設定ファイルから取得する
-  return currentLevel * 100
-}
 
 /** クエスト条件タブ */
 export const QuestConditionTab = ({
@@ -23,8 +15,8 @@ export const QuestConditionTab = ({
   reward,
   exp,
   type,
-  childCurrentLevel,
-  childTotalExp,
+  currentClearCount,
+  requiredClearCount,
 }: {
   level: number
   maxLevel?: number
@@ -35,28 +27,9 @@ export const QuestConditionTab = ({
   reward: number
   exp: number
   type?: "parent" | "child" | "online"
-  childCurrentLevel?: number
-  childTotalExp?: number
+  currentClearCount?: number
+  requiredClearCount?: number
 }) => {
-  /** 現在のレベルでの経験値を計算する */
-  const currentLevelExp = useMemo(() => {
-    if (!childCurrentLevel || childTotalExp === undefined) return undefined
-    
-    let totalRequiredExp = 0
-    for (let i = 1; i < childCurrentLevel; i++) {
-      totalRequiredExp += calculateRequiredExp(i)
-    }
-    return Math.max(0, childTotalExp - totalRequiredExp)
-  }, [childCurrentLevel, childTotalExp])
-
-  /** 次レベルまでに必要な経験値を計算する */
-  const requiredExpForNextLevel = useMemo(() => {
-    return childCurrentLevel ? calculateRequiredExp(childCurrentLevel) : undefined
-  }, [childCurrentLevel])
-
-  /** 経験値表示の可否を判定する */
-  const shouldShowExp = childCurrentLevel !== undefined && currentLevelExp !== undefined && requiredExpForNextLevel !== undefined
-
   return (
     <Stack gap="md" className="overflow-y-auto">
       {/* クエストレベル */}
@@ -68,11 +41,27 @@ export const QuestConditionTab = ({
         <Group justify="end">
           <Rating value={level} count={maxLevel} readOnly size="lg" />
         </Group>
-        {/* 現在の経験値（子供用） */}
-        {shouldShowExp && (
-          <Text ta="right" size="sm" c="dimmed" mt={4}>
-            現在の経験値: {currentLevelExp} / {requiredExpForNextLevel}
-          </Text>
+        {/* レベルアップまでの進捗（子供用） */}
+        {type === "child" && currentClearCount !== undefined && requiredClearCount !== undefined && requiredClearCount > 0 && (
+          <Box mt={8}>
+            <Text size="sm" c="dimmed" mb={4}>
+              次レベルまで: {currentClearCount} / {requiredClearCount} 回クリア
+            </Text>
+            <Slider
+              value={currentClearCount}
+              max={requiredClearCount}
+              marks={[
+                { value: 0, label: '0' },
+                { value: requiredClearCount, label: `${requiredClearCount}` },
+              ]}
+              label={(value) => `${value}回`}
+              color="blue"
+              size="md"
+              styles={{
+                markLabel: { fontSize: '12px' },
+              }}
+            />
+          </Box>
         )}
       </Box>
 
