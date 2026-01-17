@@ -1,5 +1,4 @@
 import { LoginScreen } from "./LoginScreen"
-import { MockLoginA, MockLoginB, MockLoginC } from "./mock"
 import { checkIsLoggedIn } from "@/app/(core)/_auth/checkIsLoggedIn"
 import { QUESTS_URL } from "@/app/(core)/endpoints"
 import { redirect } from "next/navigation"
