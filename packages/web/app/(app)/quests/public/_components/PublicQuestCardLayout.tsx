@@ -12,7 +12,7 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
     className="cursor-pointer quest-card"
   >
     <Group mb="xs">
-      <Badge color="pink">{publicQuest.quest.name}</Badge>
+      <Badge color="blue">{publicQuest.quest.name}</Badge>
       <RenderIcon iconName={publicQuest.icon?.name} size={publicQuest.icon?.size ?? undefined}  iconColor={publicQuest.quest.iconColor}/>
     </Group>
     <Text size="sm" mb="xs">{publicQuest.quest.name}</Text>
