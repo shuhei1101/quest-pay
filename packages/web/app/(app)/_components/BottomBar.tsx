@@ -12,9 +12,6 @@ export const BottomBar = () => {
   return (
     <Box
       style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
         width: "100%",
         height: "60px",
         background: "rgba(255, 255, 255, 0.9)",
@@ -23,7 +20,6 @@ export const BottomBar = () => {
         justifyContent: "space-around",
         alignItems: "center",
         boxShadow: "0 -2px 6px rgba(0, 0, 0, 0.15)",
-        zIndex: 2000,
       }}
     >
       {/* ホームアイコン */}

@@ -27,16 +27,16 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
             desktop: false,
           },
         }}
+        footer={isMobile ? { height: 60 } : undefined}
         padding="md"
         styles={{
           main: {
             height: isMobile 
-              ? "calc(100dvh - var(--app-shell-header-offset, 60px) - 60px)"
+              ? "calc(100dvh - var(--app-shell-header-offset, 60px) - var(--app-shell-footer-offset, 60px))"
               : "calc(100dvh - var(--app-shell-header-offset, 60px))",
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
-            paddingBottom: isMobile ? "60px" : undefined,
           },
         }}
       >
@@ -59,10 +59,14 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
 
         {/* メインコンテンツ */}
         <AppShell.Main>{children}</AppShell.Main>
-      </AppShell>
 
-      {/* モバイル用ボトムバー */}
-      {isMobile && <BottomBar />}
+        {/* モバイル用フッター */}
+        {isMobile && (
+          <AppShell.Footer>
+            <BottomBar />
+          </AppShell.Footer>
+        )}
+      </AppShell>
     </BackgroundWrapper>
   )
 }
