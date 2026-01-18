@@ -49,6 +49,8 @@ type QuestEditLayoutProps<TForm extends Record<string, unknown>> = {
   createActions: ActionButton[]
   /** フローティングポップアップコンポーネント */
   popups?: ReactNode
+  /** デフォルトで表示するタブの値 */
+  defaultTab?: string
 }
 
 /** クエスト編集レイアウトコンポーネント */
@@ -60,9 +62,17 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
   editActions,
   createActions,
   popups,
+  defaultTab,
 }: QuestEditLayoutProps<TForm>) => {
   /** アクティブタブ状態 */
-  const [activeTab, setActiveTab] = useState<string | null>(tabs[0]?.value ?? "basic")
+  const [activeTab, setActiveTab] = useState<string | null>(() => {
+    // デフォルトタブが指定されていて、有効なタブ値であれば使用する
+    if (defaultTab && tabs.some(tab => tab.value === defaultTab)) {
+      return defaultTab
+    }
+    // それ以外は最初のタブを使用する
+    return tabs[0]?.value ?? "basic"
+  })
 
   /** 表示するアクションボタンを取得する */
   const actionButtons = questId ? editActions : createActions

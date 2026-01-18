@@ -3,8 +3,9 @@ import { hasFamilyQuestPermission } from "@/app/api/quests/family/service"
 import { authGuard } from "@/app/(core)/_auth/authGuard"
 import { QUESTS_URL } from "@/app/(core)/endpoints"
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params, searchParams }: { params: { id: string }, searchParams: { tab?: string } }) {
   const { id } = await params
+  const { tab } = await searchParams
 
   // 親のみアクセス可能、子供・ゲストは不可
   const _ = await authGuard({ childNG: true, guestNG: true, redirectUrl: QUESTS_URL })
@@ -15,7 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <FamilyQuestEdit id={id} />
+      <FamilyQuestEdit id={id} defaultTab={tab} />
     </>
   )
 }
