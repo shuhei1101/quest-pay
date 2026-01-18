@@ -83,7 +83,7 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
         requestDetail: familyQuest.quest.requestDetail,
         childSettings: familyQuest.children.map((child) => ({
           childId: child.childId,
-          isEnable: child.isEnable ?? true,
+          isActivate: child.isActivate ?? true,
           hasQuestChildren: true,
         })),
       }

@@ -323,8 +323,6 @@ export const questChildren = pgTable("quest_children", {
   currentClearCount: integer("current_clear_count").notNull().default(0),
   /** 有効フラグ */
   isActivate: boolean("is_activate").notNull().default(true),
-  /** 公開フラグ */
-  isEnable: boolean("is_enable").notNull().default(true),
   /** ステータス更新日時 */
   statusUpdatedAt: timestamp("status_updated_at", { withTimezone: true, mode: "string" }),
   /** タイムスタンプ */

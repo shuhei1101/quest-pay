@@ -113,7 +113,7 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
         }
       })
 
-      // 新規追加（isEnableがtrueで、まだ存在しないもの）
+      // 新規追加（isActivateがtrueで、まだ存在しないもの）
       const childrenToAdd = questChildren.filter(c => 
         !c.shouldDelete && 
         !currentChildIds.includes(c.childId)
@@ -135,14 +135,14 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
         await insertQuestChildren({db: tx, records: childrenToAdd, familyQuestId: familyQuest.id})
       }
 
-      // 更新処理を実行する（isEnableの変更を反映）
+      // 更新処理を実行する（isActivateの変更を反映）
       for (const child of childrenToUpdate) {
         await updateQuestChildSettings({
           db: tx,
           familyQuestId: familyQuest.id,
           childId: child.childId,
           record: {
-            isEnable: child.isEnable,
+            isActivate: child.isActivate,
           }
         })
       }

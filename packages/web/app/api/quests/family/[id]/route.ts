@@ -99,11 +99,11 @@ export async function PUT(
           updatedAt: data.updatedAt,
         },
         questChildren: data.form.childSettings
-          .filter(setting => setting.isEnable || setting.hasQuestChildren) // isEnableがtrueまたはhasQuestChildrenがtrueのもの
+          .filter(setting => setting.isActivate || setting.hasQuestChildren) // isActivateがtrueまたはhasQuestChildrenがtrueのもの
           .map((setting) => ({
             childId: setting.childId,
-            isEnable: setting.isEnable,
-            shouldDelete: setting.hasQuestChildren && !setting.isEnable, // リセット対象
+            isActivate: setting.isActivate,
+            shouldDelete: setting.hasQuestChildren && !setting.isActivate, // リセット対象
           })),
         questTags: data.form.tags.map((tagName) => ({
           name: tagName,

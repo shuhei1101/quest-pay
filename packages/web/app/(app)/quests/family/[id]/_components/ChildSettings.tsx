@@ -19,21 +19,21 @@ export const ChildSettings = ({ watch, setValue }: {
   const { children, isLoading } = useChildren()
 
   /** 子供の公開フラグを切り替える */
-  const toggleChildEnable = (childId: string) => {
+  const toggleChildActivate = (childId: string) => {
     const currentSettings = watch().childSettings
     const existingSetting = currentSettings.find(s => s.childId === childId)
     
     if (existingSetting) {
-      // 既存の設定がある場合は、isEnableを切り替える
+      // 既存の設定がある場合は、isActivateを切り替える
       const updatedSettings = currentSettings.map(setting => 
         setting.childId === childId 
-          ? { ...setting, isEnable: !setting.isEnable }
+          ? { ...setting, isActivate: !setting.isActivate }
           : setting
       )
       setValue("childSettings", updatedSettings)
     } else {
-      // 設定がない場合は、新しい設定を追加（isEnable=true）
-      setValue("childSettings", [...currentSettings, { childId, isEnable: true, hasQuestChildren: false }])
+      // 設定がない場合は、新しい設定を追加（isActivate=true）
+      setValue("childSettings", [...currentSettings, { childId, isActivate: true, hasQuestChildren: false }])
     }
   }
 
@@ -80,7 +80,7 @@ export const ChildSettings = ({ watch, setValue }: {
       ) : (
         children.map((child) => {
           const setting = getChildSetting(child.children.id)
-          const isEnabled = setting?.isEnable ?? false
+          const isActivated = setting?.isActivate ?? false
           const hasQuestChildren = setting?.hasQuestChildren ?? false
           
           return (
@@ -110,10 +110,10 @@ export const ChildSettings = ({ watch, setValue }: {
                 <Group gap="md">
                   {/* 公開/非公開スイッチ */}
                   <Switch 
-                    label={isEnabled ? "公開" : "非公開"}
+                    label={isActivated ? "公開" : "非公開"}
                     labelPosition="left"
-                    checked={isEnabled}
-                    onChange={() => toggleChildEnable(child.children.id)}
+                    checked={isActivated}
+                    onChange={() => toggleChildActivate(child.children.id)}
                   />
 
                   {/* 進捗リセットボタン（QuestChildrenが存在する場合のみ表示） */}

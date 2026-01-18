@@ -1,1 +1,0 @@
-ALTER TABLE "quest_children" ADD COLUMN "is_enable" boolean DEFAULT true NOT NULL;
