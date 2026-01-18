@@ -7,8 +7,6 @@ export default async function Page() {
   // 親のみアクセス可能、子供・ゲストは不可
   const _ = await authGuard({ childNG: true, guestNG: true, redirectUrl: QUESTS_URL })
   return (
-    <Suspense fallback={<div></div>}>
-      <FamilyQuestsScreen />
-    </Suspense>
+    <FamilyQuestsScreen />
   )
 }

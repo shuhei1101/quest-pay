@@ -27,7 +27,7 @@ import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
 export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string}) => {
   const router = useRouter()
   const {isDark} = useWindow()
-  const {isParent} = useLoginUserInfo()
+  const {isParent, isChild} = useLoginUserInfo()
 
   /** ハンドル（子供用） */
   const {handleReviewRequest, executeReviewRequest, closeModal, isModalOpen, isLoading} = useReviewRequest()
@@ -120,7 +120,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
       </Paper>
 
       {/* 下部アクションエリア */}
-      {isParent ? (
+      {isParent && (
         /* 親ユーザの場合 */
         <ParentChildQuestViewFooter
           isPendingReview={childQuest?.children[0].status === "pending_review"}
@@ -132,7 +132,9 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
           onEdit={() => router.push(FAMILY_QUEST_EDIT_URL(id))}
           onReset={() => handleDelete({familyQuestId: id, childId})}
         />
-      ) : (
+      )} 
+      
+      {isChild && (
         /* 子供ユーザの場合 */
         <ChildQuestViewFooter 
           onBack={() => router.back()}
