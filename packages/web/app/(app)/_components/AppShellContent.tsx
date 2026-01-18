@@ -2,6 +2,7 @@
 
 import { AppShell } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { Suspense } from 'react'
 import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from './BackgroundWrapper'
 import { AppHeader } from './AppHeader'
@@ -23,8 +24,10 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
 
   return (
     <BackgroundWrapper>
-      {/* アクセスエラーハンドラー */}
-      <AccessErrorHandler />
+      {/* アクセスエラーハンドラー（useSearchParamsを使用するためSuspenseでラップ） */}
+      <Suspense fallback={null}>
+        <AccessErrorHandler />
+      </Suspense>
       <AppShell
         header={{ height: 60 }}
         navbar={{

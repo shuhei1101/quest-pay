@@ -2,7 +2,7 @@
 
 import { Button, Checkbox, Paper, PasswordInput, TextInput, Title, Text, Anchor } from "@mantine/core"
 import { FeedbackMessage } from "../../(core)/_components/FeedbackMessageWrapper"
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { IconMail, IconLock } from "@tabler/icons-react"
 import { useLoginForm } from "./_hooks/useLoginForm"
 import { useDisclosure } from "@mantine/hooks"
@@ -41,7 +41,10 @@ export const LoginScreen = () => {
   
   return (
     <>
-      <AccessErrorHandler />
+      {/* アクセスエラーハンドラ（useSearchParamsを使用するためSuspenseでラップ） */}
+      <Suspense fallback={null}>
+        <AccessErrorHandler />
+      </Suspense>
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <Paper shadow="md" p="xl" radius="md" className="w-full max-w-md">
           {/* タイトルセクション */}
