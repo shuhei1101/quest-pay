@@ -16,6 +16,8 @@ import { useLikeQuest } from "./_hooks/useLikeQuest"
 import { useLikeCount } from "./_hooks/useLikeCount"
 import { useIsLike } from "./_hooks/useIsLike"
 import { useCancelQuestLike } from "./_hooks/useCancelQuestLike"
+import { PUBLIC_QUEST_COMMENTS_URL } from "@/app/(core)/endpoints"
+import { useCommentsCount } from "../comments/_hooks/useCommentsCount"
 
 /** 公開クエスト閲覧画面 */
 export const PublicQuestView = ({id}: {id: string}) => {
@@ -40,6 +42,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
 
   /** いいねされているかどうか */
   const { isLike } = useIsLike({ id })
+
+  /** コメント数 */
+  const { count: commentCount } = useCommentsCount({ publicQuestId: id })
 
   /** いいねハンドル */
   const { handleLike } = useLikeQuest()
@@ -135,9 +140,10 @@ export const PublicQuestView = ({id}: {id: string}) => {
         onBack={ () => router.back() } 
         familyIcon={ publicQuest?.familyIcon?.name }
         likeCount={ likeCount || 0 } 
-        commentCount={ 0 } 
+        commentCount={ commentCount || 0 } 
         isLiked={ isLike }
         onLikeToggle={ likeToggleHandle }
+        onComment={ () => router.push(PUBLIC_QUEST_COMMENTS_URL(id)) }
       />
     </div>
   )
