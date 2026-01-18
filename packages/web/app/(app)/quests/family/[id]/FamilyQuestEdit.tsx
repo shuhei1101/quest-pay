@@ -171,6 +171,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
             <ChildSettings
               watch={watch as unknown as UseFormWatch<FormWithChildSettings>}
               setValue={setValue as unknown as UseFormSetValue<FormWithChildSettings>}
+              familyQuestId={familyQuestId}
             />
           ),
         },

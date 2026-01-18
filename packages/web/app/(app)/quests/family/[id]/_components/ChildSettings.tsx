@@ -1,9 +1,9 @@
-import { ActionIcon, Anchor, Group, Paper, Switch, Text } from "@mantine/core"
-import { IconRefresh, IconUser } from "@tabler/icons-react"
+import { Anchor, Group, Paper, Switch, Text } from "@mantine/core"
+import { IconUser } from "@tabler/icons-react"
 import { UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { useChildren } from "@/app/(app)/children/_hook/useChildren"
 import { ChildSettingType } from "../form"
-import { modals } from "@mantine/modals"
+import { CHILD_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 
 /** childSettingsを持つフォーム型 */
 export type FormWithChildSettings = {
@@ -11,9 +11,10 @@ export type FormWithChildSettings = {
 }
 
 /** 子供設定コンポーネント */
-export const ChildSettings = ({ watch, setValue }: {
+export const ChildSettings = ({ watch, setValue, familyQuestId }: {
   watch: UseFormWatch<FormWithChildSettings>
   setValue: UseFormSetValue<FormWithChildSettings>
+  familyQuestId?: string
 }) => {
   /** 子供リストを取得する */
   const { children, isLoading } = useChildren()
@@ -37,26 +38,6 @@ export const ChildSettings = ({ watch, setValue }: {
     }
   }
 
-  /** 進捗をリセットする */
-  const resetProgress = (childId: string, childName: string) => {
-    modals.openConfirmModal({
-      title: "進捗リセット",
-      children: (
-        <Text size="sm">
-          {childName}の進捗状況をリセットしますか？<br />
-          リセットすると、クエストの進行状況が削除されます。
-        </Text>
-      ),
-      labels: { confirm: "リセット", cancel: "キャンセル" },
-      confirmProps: { color: "red" },
-      onConfirm: () => {
-        // hasQuestChildrenがtrueの設定を削除する（リセット）
-        const currentSettings = watch().childSettings
-        setValue("childSettings", currentSettings.filter(setting => setting.childId !== childId))
-      },
-    })
-  }
-
   /** 子供の設定を取得する */
   const getChildSetting = (childId: string): ChildSettingType | undefined => {
     return watch().childSettings.find(s => s.childId === childId)
@@ -70,8 +51,7 @@ export const ChildSettings = ({ watch, setValue }: {
     <div className="flex flex-col gap-4 max-w-2xl p-4">
       {/* 説明テキスト */}
       <Text size="sm" c="dimmed">
-        公開/非公開を切り替えて、子供からの表示を制御できます。<br />
-        進捗リセットボタンでクエストの進行状況を削除できます。
+        公開/非公開を切り替えて、子供からの表示を制御できます。
       </Text>
 
       {/* 全子供リスト */}
@@ -88,46 +68,44 @@ export const ChildSettings = ({ watch, setValue }: {
               <Group justify="space-between" align="center">
                 {/* 子供のアイコンと名前 */}
                 <Group gap="md">
-                  <ActionIcon 
-                    size="lg" 
-                    radius="xl" 
-                    variant="filled"
-                    style={{ backgroundColor: child.profiles?.iconColor }}
+                  {/* アイコン */}
+                  <div 
+                    style={{ 
+                      width: 40,
+                      height: 40,
+                      borderRadius: '50%',
+                      backgroundColor: child.profiles?.iconColor,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
                   >
-                    <IconUser size={20} />
-                  </ActionIcon>
+                    <IconUser size={20} color="white" />
+                  </div>
                   
-                  <Anchor 
-                    href={`/children/${child.children.id}`} 
-                    size="md"
-                    fw={500}
-                  >
-                    {child.profiles?.name}
-                  </Anchor>
-                </Group>
-
-                {/* 操作ボタン */}
-                <Group gap="md">
-                  {/* 公開/非公開スイッチ */}
-                  <Switch 
-                    label={isActivated ? "公開" : "非公開"}
-                    labelPosition="left"
-                    checked={isActivated}
-                    onChange={() => toggleChildActivate(child.children.id)}
-                  />
-
-                  {/* 進捗リセットボタン（QuestChildrenが存在する場合のみ表示） */}
-                  {hasQuestChildren && (
-                    <ActionIcon
-                      color="red"
-                      variant="subtle"
-                      onClick={() => resetProgress(child.children.id, child.profiles?.name || "")}
-                      title="進捗リセット"
+                  {/* 名前 - QuestChildrenがある場合はリンク、ない場合はテキスト */}
+                  {hasQuestChildren && familyQuestId ? (
+                    <Anchor 
+                      href={CHILD_QUEST_VIEW_URL(familyQuestId, child.children.id)} 
+                      size="md"
+                      fw={500}
                     >
-                      <IconRefresh size={18} />
-                    </ActionIcon>
+                      {child.profiles?.name}
+                    </Anchor>
+                  ) : (
+                    <Text size="md" fw={500}>
+                      {child.profiles?.name}
+                    </Text>
                   )}
                 </Group>
+
+                {/* 公開/非公開スイッチ */}
+                <Switch 
+                  label={isActivated ? "公開" : "非公開"}
+                  labelPosition="left"
+                  checked={isActivated}
+                  onChange={() => toggleChildActivate(child.children.id)}
+                />
               </Group>
             </Paper>
           )

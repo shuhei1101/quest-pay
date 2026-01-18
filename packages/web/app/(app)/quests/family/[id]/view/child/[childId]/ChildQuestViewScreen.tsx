@@ -19,6 +19,7 @@ import { useReviewRequest } from "./_hooks/useReviewRequest"
 import { useCancelReview } from "./_hooks/useCancelReview"
 import { useRejectReport } from "./_hooks/useRejectReport"
 import { useApproveReport } from "./_hooks/useApproveReport"
+import { useDeleteChildQuest } from "./_hooks/useDeleteChildQuest"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
 
@@ -35,6 +36,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
   /** ハンドル（親用） */
   const {handleRejectReport, executeRejectReport, closeModal: closeRejectModal, isModalOpen: isRejectModalOpen, isLoading: isRejectLoading} = useRejectReport()
   const {handleApproveReport, executeApproveReport, closeModal: closeApproveModal, isModalOpen: isApproveModalOpen, isLoading: isApproveLoading} = useApproveReport()
+  const {handleDelete, isLoading: isDeleteLoading} = useDeleteChildQuest()
   
   /** アクティブタブ */
   const [activeTab, setActiveTab] = useState<string | null>("condition")
@@ -48,7 +50,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
   return (
     <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
       {/* ロード中のオーバーレイ */}
-      <LoadingOverlay visible={questLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
+      <LoadingOverlay visible={questLoading || isDeleteLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={childQuest?.quest?.name || ""}
@@ -128,6 +130,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
             updatedAt: childQuest?.base.updatedAt || '',
           })}
           onEdit={() => router.push(FAMILY_QUEST_EDIT_URL(id))}
+          onReset={() => handleDelete({familyQuestId: id, childId})}
         />
       ) : (
         /* 子供ユーザの場合 */
