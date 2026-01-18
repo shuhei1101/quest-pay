@@ -1,7 +1,7 @@
 import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
-import { familyQuests, icons, IconSelect, questChildren, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, ChildSelect, FamilyQuestSelect, QuestChildrenSelect } from "@/drizzle/schema"
+import { familyQuests, icons, IconSelect, questChildren, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, ChildSelect, FamilyQuestSelect, QuestChildrenSelect, children } from "@/drizzle/schema"
 import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
@@ -31,6 +31,7 @@ export type ChildQuest = {
   details: QuestDetailSelect[]
   icon: IconSelect | null
   children: QuestChildrenSelect[]
+  child: ChildSelect | null
 }
 
 /** クエリ結果をFetchChildQuestsItemの配列に変換する */
@@ -41,6 +42,7 @@ const buildResult = (rows: {
   quest_tags?: QuestTagSelect | null
   icons: IconSelect | null
   quest_children: QuestChildrenSelect | null
+  children: ChildSelect | null
 }[]): ChildQuest[] => {
   const map = new Map<string, ChildQuest>()
 
@@ -56,6 +58,7 @@ const buildResult = (rows: {
         details: [],
         icon: row.icons,
         children: [],
+        child: row.children,
       })
     }
 
@@ -139,6 +142,7 @@ export const fetchChildQuest = async ({familyQuestId, db, childId}: {
       .leftJoin(questDetails, eq(questDetails.questId, quests.id))
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
+      .leftJoin(children, eq(questChildren.childId, children.id))
       .where(and(eq(familyQuests.id, familyQuestId), eq(questChildren.childId, childId)))
 
     // データを結果オブジェクトに変換する
