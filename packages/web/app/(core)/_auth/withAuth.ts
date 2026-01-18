@@ -29,7 +29,6 @@ export async function getAuthContext() {
 } catch (e) {
     // エラーメッセージをクエリパラメータに付与する
     const urlWithError = addQueryParam(LOGIN_URL, 'error', 'このページにアクセスする権限がありません')
-    
     // 指定されたURLまたはクエスト画面に遷移する
     redirect(urlWithError)
   }

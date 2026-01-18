@@ -28,3 +28,24 @@ export const getChildQuest = async ({familyQuestId, childId}: {
 
   return data as GetChildQuestResponse
 }
+
+/** 子供クエストを削除する（進捗リセット） */
+export const deleteChildQuest = async ({familyQuestId, childId}: {
+  familyQuestId: string
+  childId: string
+}) => {
+  devLog("deleteChildQuest.API呼び出し: ", {URL: CHILD_QUEST_API_URL(familyQuestId, childId)})
+  // APIを実行する
+  const res = await fetch(`${CHILD_QUEST_API_URL(familyQuestId, childId)}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  })
+
+  // ステータスが不正な場合、アプリ例外を発生させる
+  if (!res.ok) {
+    const data = await res.json()
+    throw AppError.fromResponse(data, res.status)
+  }
+
+  devLog("deleteChildQuest.削除完了")
+}

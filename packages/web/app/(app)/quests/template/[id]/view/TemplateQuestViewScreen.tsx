@@ -60,7 +60,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         reward: detail.reward,
         requiredClearCount: detail.requiredClearCount,
       })) || [],
-      childIds: []
+      childSettings: [],
     })
 
     // 家族クエスト作成画面へ遷移する
