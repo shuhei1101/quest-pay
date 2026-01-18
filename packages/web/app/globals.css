@@ -46,22 +46,6 @@ body {
   box-shadow: 0 0 10px #66f0ff;
 }
 
-.home-color {
-  color: rgb(252, 132, 132);
-}
-.clipboard-color {
-  color: rgb(250 204 21);
-}
-.penalty-color {
-  color: rgb(252, 132, 132);
-}
-.world-color {
-  color: rgb(96 165 250);
-}
-.users-color {
-  color: rgb(74, 222, 128);
-}
-
 .side-nav:hover {
   background-color: rgba(0, 112, 243, 0.1) !important;
 }
