@@ -1,9 +1,10 @@
 import { ActionIcon, Anchor, Group, Paper, Switch, Text } from "@mantine/core"
-import { IconExternalLink, IconUser } from "@tabler/icons-react"
+import { IconExternalLink } from "@tabler/icons-react"
 import { UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { useChildren } from "@/app/(app)/children/_hook/useChildren"
 import { ChildSettingType } from "../form"
 import { CHILD_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 
 /** childSettingsを持つフォーム型 */
 export type FormWithChildSettings = {
@@ -33,7 +34,8 @@ export const ChildSettings = ({ watch, setValue, familyQuestId }: {
       )
       setValue("childSettings", updatedSettings)
     } else {
-      // 設定がない場合は、新しい設定を追加（isActivate=true）
+      // 設定がない場合（hasQuestChildren=false）で、スイッチをONにした場合のみ新しい設定を追加
+      // OFFのままの場合は何もしない（不要な変更を避ける）
       setValue("childSettings", [...currentSettings, { childId, isActivate: true, hasQuestChildren: false }])
     }
   }
@@ -80,7 +82,7 @@ export const ChildSettings = ({ watch, setValue, familyQuestId }: {
                       justifyContent: 'center'
                     }}
                   >
-                    <IconUser size={20} color="white" />
+                    <RenderIcon iconName={child.icons?.name} iconSize={20} color="white" />
                   </div>
                   
                   {/* 名前 - 子供画面へのリンク */}
