@@ -131,3 +131,11 @@ export const formatDate = (dateString: string | null | undefined): string => {
   
   return `${year}/${month}/${day}`
 }
+
+
+/** URLにクエリパラメータを付与する */
+export const addQueryParam = (url: string, key: string, value: string) => {
+  const encodedValue = encodeURIComponent(value)
+  const separator = url.includes('?') ? '&' : '?'
+  return `${url}${separator}${key}=${encodedValue}`
+}
