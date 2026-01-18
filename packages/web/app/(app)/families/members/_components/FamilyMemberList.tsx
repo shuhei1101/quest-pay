@@ -13,7 +13,7 @@ export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
   /** 親一覧 */
   const { parents } = useParents()
   /** 子供一覧 */
-  const { children } = useChildren()
+  const { children, questStats } = useChildren()
 
   return (
     <>
@@ -42,6 +42,7 @@ export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
               <ChildCardLayout 
                 key={ index } 
                 child={ child } 
+                questStats={child.children ? questStats[child.children.id] : undefined}
                 isSelected={selectedId === child.children.id}
                 onClick={(childId) => {
                   router.push(FAMILIES_MEMBERS_CHILD_VIEW_URL(childId)) // 子供閲覧画面へ遷移する

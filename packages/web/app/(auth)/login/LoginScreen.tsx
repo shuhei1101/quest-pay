@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation"
 import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL } from "../../(core)/endpoints"
 import Link from "next/link"
 import { devLog } from "@/app/(core)/util"
+import { AccessErrorHandler } from "@/app/(core)/_components/AccessErrorHandler"
 
 export const LoginScreen = () => {
   /** セッションストレージを空にする */
@@ -40,6 +41,7 @@ export const LoginScreen = () => {
   
   return (
     <>
+      <AccessErrorHandler />
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <Paper shadow="md" p="xl" radius="md" className="w-full max-w-md">
           {/* タイトルセクション */}

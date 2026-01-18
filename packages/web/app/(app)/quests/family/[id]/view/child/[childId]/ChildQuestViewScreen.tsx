@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Paper, Tabs } from "@mantine/core"
+import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState } from "react"
 import { QuestViewHeader } from "../../../../../view/_components/QuestViewHeader"
 import { QuestViewIcon } from "../../../../../view/_components/QuestViewIcon"
@@ -40,13 +40,15 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
   const [activeTab, setActiveTab] = useState<string | null>("condition")
 
   /** 現在のクエスト状態 */
-  const {childQuest} = useChildQuest({id, childId})
+  const {childQuest, isLoading: questLoading} = useChildQuest({id, childId})
 
   /** 選択中のレベルの詳細を取得する */
   const currentDetail = childQuest?.details?.find(d => d.level === childQuest.children[0].level) || childQuest?.details?.[0]
 
   return (
-    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={questLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={childQuest?.quest?.name || ""}
@@ -169,6 +171,6 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         isLoading={isApproveLoading || isRejectLoading}
         requestMessage={childQuest?.children[0].requestMessage || undefined}
       />
-    </div>
+    </Box>
   )
 }
