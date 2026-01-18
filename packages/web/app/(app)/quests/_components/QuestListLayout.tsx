@@ -107,7 +107,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   }
 
   return (
-    <div className="w-full h-[80vh]">
+    <div className="w-full">
       {/* クエストカテゴリタブ */}
       <QuestCategoryTabs
         tabValue={tabValue}

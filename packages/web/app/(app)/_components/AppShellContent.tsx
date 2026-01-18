@@ -16,6 +16,11 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
   /** ブレークポイント */
   const { isMobile, isDark } = useWindow()
 
+  /** コンテンツ領域の高さ（ヘッダー60px + パディング2rem + モバイル時フッター60px） */
+  const contentHeight = isMobile
+    ? 'calc(100dvh - 60px - 2rem - 60px)'
+    : 'calc(100dvh - 60px - 2rem)'
+
   return (
     <BackgroundWrapper>
       {/* アクセスエラーハンドラー */}
@@ -30,17 +35,10 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
             desktop: false,
           },
         }}
+        footer={isMobile ? { height: 60, offset: true } : undefined}
         padding="md"
-        styles={{
-          main: {
-            height: isMobile 
-              ? "calc(100dvh - var(--app-shell-header-offset, 60px) - 60px)"
-              : "calc(100dvh - var(--app-shell-header-offset, 60px))",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            paddingBottom: isMobile ? "60px" : undefined,
-          },
+        __vars={{
+          '--content-height': contentHeight,
         }}
       >
         {/* ヘッダー */}
@@ -61,11 +59,17 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
         </AppShell.Navbar>
 
         {/* メインコンテンツ */}
-        <AppShell.Main>{children}</AppShell.Main>
-      </AppShell>
+        <AppShell.Main>
+          {children}
+        </AppShell.Main>
 
-      {/* モバイル用ボトムバー */}
-      {isMobile && <BottomBar />}
+        {/* モバイル用フッター */}
+        {isMobile && (
+          <AppShell.Footer>
+            <BottomBar />
+          </AppShell.Footer>
+        )}
+      </AppShell>
     </BackgroundWrapper>
   )
 }
