@@ -2,17 +2,13 @@
 
 import { useState, Suspense } from "react"
 import { Tabs, Paper, Text, Button } from "@mantine/core"
-import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
+import { IconClipboard, IconClipboardOff, IconHome2, IconLogin, IconWorld } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
-import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
+import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { PublicQuestList } from "../(app)/quests/public/PublicQuestList"
 
 export function GuestQuestsScreen() {
   const router = useRouter()
-
-  /** ログインユーザ情報 */
-  const { isGuest } = useLoginUserInfo()
 
   const [tabValue, setTabValue] = useState<string | null>('public')
 
@@ -24,7 +20,7 @@ export function GuestQuestsScreen() {
       >
         <>
           <Text>ログイン</Text>
-          <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          <IconLogin style={{ width: '70%', height: '70%' }} stroke={1.5} />
         </>
       </Button>
     </div>
