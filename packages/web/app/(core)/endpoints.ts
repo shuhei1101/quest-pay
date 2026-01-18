@@ -80,7 +80,7 @@ export const TEMPLATE_QUEST_BY_PUBLIC_QUEST_ID_API_URL = (publicQuestId: string)
 
 
 // ゲストクエスト
-export const GUEST_QUESTS_URL = `${QUESTS_URL}/guest`
+export const GUEST_QUESTS_URL = `/guest`
 
 
 // 家族

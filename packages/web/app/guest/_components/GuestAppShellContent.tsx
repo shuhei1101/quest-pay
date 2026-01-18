@@ -4,12 +4,12 @@ import { AppShell } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from '../../(core)/_components/layout/BackgroundWrapper'
-import { AppHeader } from './AppHeader'
-import { SideMenu } from './SideMenu'
-import { BottomBar } from './BottomBar'
+import { GuestAppHeader } from './GuestAppHeader'
+import { GuestSideMenu } from './GuestSideMenu'
+import { GuestBottomBar } from './GuestBottomBar'
 
-/** AppShellコンテンツを取得する */
-export const AppShellContent = ({children}: {children: React.ReactNode}) => {
+/** ゲスト用AppShellコンテンツを取得する */
+export const GuestAppShellContent = ({children}: {children: React.ReactNode}) => {
   /** メニューの表示状態 */
   const [opened, { toggle, close }] = useDisclosure()
   /** ブレークポイント */
@@ -49,12 +49,12 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
           paddingRight: "10px",
           gap: "8px",
         }} >
-          <AppHeader isMobile={isMobile} onToggleMenu={toggle} />
+          <GuestAppHeader isMobile={isMobile} onToggleMenu={toggle} />
         </AppShell.Header>
 
         {/* サイドメニュー */}
         <AppShell.Navbar>
-          <SideMenu isMobile={isMobile} isDark={isDark} opened={opened} onClose={close} />
+          <GuestSideMenu isMobile={isMobile} isDark={isDark} opened={opened} onClose={close} />
         </AppShell.Navbar>
 
         {/* メインコンテンツ */}
@@ -62,7 +62,7 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
       </AppShell>
 
       {/* モバイル用ボトムバー */}
-      {isMobile && <BottomBar />}
+      {isMobile && <GuestBottomBar />}
     </BackgroundWrapper>
   )
 }
