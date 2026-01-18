@@ -21,7 +21,7 @@ import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
 
 /** 家族クエスト編集コンポーネント */
-export const FamilyQuestEdit = ({ id }: { id?: string }) => {
+export const FamilyQuestEdit = ({ id, defaultTab }: { id?: string, defaultTab?: string }) => {
   const router = useRouter()
 
   /** 家族クエストID */
@@ -126,6 +126,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
       questId={familyQuestId}
       isLoading={questLoading}
       onSubmit={onSubmit}
+      defaultTab={defaultTab}
       tabs={[
         {
           value: "basic",
