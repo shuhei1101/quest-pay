@@ -155,3 +155,9 @@ export const ICON_CATEGORIES_API_URL = `/api/icons/category`
 export const NOTIFICATIONS_URL = `/notifications`
 export const NOTIFICATION_URL = (notificationId: string) => `${NOTIFICATIONS_URL}/${notificationId}`
 export const NOTIFICATIONS_API_URL = `/api${NOTIFICATIONS_URL}`
+
+// プロフィール
+export const PROFILE_URL = `/profile`
+
+// 設定
+export const SETTINGS_URL = `/settings`
