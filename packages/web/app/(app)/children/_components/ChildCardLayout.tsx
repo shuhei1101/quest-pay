@@ -43,7 +43,7 @@ export const ChildCardLayout = ({child, questStats, onClick, isSelected}: {
       <Stack gap="xs" mb="xs">
         <Group gap="xs" align="center">
           <Text size="sm" fw={500}>💰 貯金額:</Text>
-          <Text size="sm">¥{currentSavings.toLocaleString()} / ¥{minSavings.toLocaleString()}</Text>
+          <Text size="sm">¥{currentSavings.toLocaleString()}</Text>
         </Group>
         {minSavings > 0 && (
           <Progress value={savingsProgress} size="sm" color={savingsProgress >= 100 ? "green" : "blue"} />
