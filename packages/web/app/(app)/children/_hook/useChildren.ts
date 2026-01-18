@@ -20,6 +20,7 @@ export const useChildren = () => {
 
   return {
     children: data?.children ?? [],
+    questStats: data?.questStats ?? {},
     isLoading,
     refetch
   }
