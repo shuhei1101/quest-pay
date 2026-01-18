@@ -31,6 +31,8 @@ type ActionButton = {
   loading?: boolean
   /** 無効状態 */
   disabled?: boolean
+  /** 左側に配置するかどうか */
+  alignLeft?: boolean
 }
 
 /** クエスト編集レイアウトProps */
@@ -104,19 +106,37 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
             </Tabs>
 
             {/* アクションボタン */}
-            <Group mt="md" justify="flex-end">
-              {actionButtons.map((action, index) => (
-                <Button
-                  key={index}
-                  type={action.type ?? "button"}
-                  color={action.color}
-                  loading={action.loading}
-                  disabled={action.disabled}
-                  onClick={action.type !== "submit" ? action.onClick : undefined}
-                >
-                  {action.label}
-                </Button>
-              ))}
+            <Group mt="md" justify="space-between">
+              {/* 左側のボタン */}
+              <Group>
+                {actionButtons.filter(action => action.alignLeft).map((action, index) => (
+                  <Button
+                    key={`left-${index}`}
+                    type={action.type ?? "button"}
+                    color={action.color}
+                    loading={action.loading}
+                    disabled={action.disabled}
+                    onClick={action.type !== "submit" ? action.onClick : undefined}
+                  >
+                    {action.label}
+                  </Button>
+                ))}
+              </Group>
+              {/* 右側のボタン */}
+              <Group>
+                {actionButtons.filter(action => !action.alignLeft).map((action, index) => (
+                  <Button
+                    key={`right-${index}`}
+                    type={action.type ?? "button"}
+                    color={action.color}
+                    loading={action.loading}
+                    disabled={action.disabled}
+                    onClick={action.type !== "submit" ? action.onClick : undefined}
+                  >
+                    {action.label}
+                  </Button>
+                ))}
+              </Group>
             </Group>
           </Paper>
         </form>

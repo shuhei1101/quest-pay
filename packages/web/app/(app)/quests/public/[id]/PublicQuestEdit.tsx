@@ -37,7 +37,7 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
   }, [deleteLoading, updateLoading])
 
   /** 公開クエストフォームを取得する */
-  const { register, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = usePublicQuestForm({ publicQuestId })
+  const { register, setForm, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity, fetchedQuest } = usePublicQuestForm({ publicQuestId })
 
   /** アクティブレベル */
   const [activeLevel, setActiveLevel] = useState<string | null>(() => {
@@ -99,6 +99,12 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
     router.push(FAMILY_QUEST_EDIT_URL(fetchedEntity?.familyQuest?.id || ""))
   }
 
+  /** 元に戻すハンドル */
+  const handleReset = () => {
+    if (!window.confirm('入力内容を元に戻します。よろしいですか？')) return
+    setForm(fetchedQuest)
+  }
+
   /** 各タブのエラーチェックフラグ */
   const hasBasicErrors = !!(errors.name || errors.iconId || errors.iconColor || errors.categoryId || errors.tags || errors.client || errors.requestDetail || errors.ageFrom || errors.ageTo || errors.monthFrom || errors.monthTo)
   const hasDetailErrors = !!(errors.details)
@@ -147,6 +153,13 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
         },
       ]}
       editActions={[
+        {
+          label: "元に戻す",
+          color: "gray.6",
+          onClick: handleReset,
+          disabled: !isValueChanged,
+          alignLeft: true,
+        },
         // 公開元のクエストを確認するボタン
         {
           label: "元の家族クエストを確認",

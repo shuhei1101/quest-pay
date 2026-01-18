@@ -43,7 +43,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   }, [deleteLoading, registerLoading, updateLoading])
 
   /** 家族クエストフォームを取得する */
-  const { register, setForm, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({ familyQuestId })
+  const { register, setForm, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity, fetchedQuest } = useFamilyQuestForm({ familyQuestId })
 
   /** 家族クエストIDに紐づく公開クエスト */
   const {publicQuest} = usePublicQuest({ familyQuestId: familyQuestId! })
@@ -116,6 +116,12 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
     }
   })
 
+  /** 元に戻すハンドル */
+  const handleReset = () => {
+    if (!window.confirm('入力内容を元に戻します。よろしいですか？')) return
+    setForm(fetchedQuest)
+  }
+
   /** 各タブのエラーチェックフラグ */
   const hasBasicErrors = !!(errors.name || errors.iconId || errors.iconColor || errors.categoryId || errors.tags || errors.client || errors.requestDetail || errors.ageFrom || errors.ageTo || errors.monthFrom || errors.monthTo)
   const hasDetailErrors = !!(errors.details)
@@ -177,6 +183,13 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
         },
       ]}
       editActions={[
+        {
+          label: "元に戻す",
+          color: "gray.6",
+          onClick: handleReset,
+          disabled: !isValueChanged,
+          alignLeft: true,
+        },
         publicQuest ? {
           label: "公開中のクエストを確認",
           onClick: () => router.push(PUBLIC_QUEST_URL(publicQuest!.id)),

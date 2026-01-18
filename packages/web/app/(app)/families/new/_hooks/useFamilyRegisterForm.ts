@@ -48,5 +48,6 @@ export const useFamilyRegisterForm = () => {
     isValueChanged,
     setForm: reset,
     handleSubmit,
+    defaultFamily,
   }
 }

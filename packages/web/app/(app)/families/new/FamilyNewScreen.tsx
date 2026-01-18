@@ -26,8 +26,14 @@ export const FamilyNewScreen = () => {
   /** 親アイコン選択ポップアッププロパティ */
   const [parentIconOpened, { open: openParentIcon, close: closeParentIcon }] = useDisclosure(false)
 
+  /** 元に戻すハンドル */
+  const handleReset = () => {
+    if (!window.confirm('入力内容を元に戻します。よろしいですか？')) return
+    setForm(defaultFamily)
+  }
+
   // 家族フォームを取得する
-  const { register: familyRegister, errors, setValue: setFamilyValue, watch: watchFamily, isValueChanged, handleSubmit } = useFamilyRegisterForm()
+  const { register: familyRegister, errors, setValue: setFamilyValue, watch: watchFamily, isValueChanged, handleSubmit, setForm, defaultFamily } = useFamilyRegisterForm()
 
   return (
     <>
@@ -109,8 +115,21 @@ export const FamilyNewScreen = () => {
             </div>
             <Space h="md" />
             {/* サブミットボタン */}
-            <Group>
-              <Button type="submit" variant="gradient" >保存</Button>
+            <Group justify="space-between">
+              {/* 左側のボタン */}
+              <Group>
+                <Button 
+                  color="gray.6" 
+                  onClick={handleReset} 
+                  disabled={!isValueChanged}
+                >
+                  元に戻す
+                </Button>
+              </Group>
+              {/* 右側のボタン */}
+              <Group>
+                <Button type="submit" variant="gradient" >保存</Button>
+              </Group>
             </Group>
           </form>
         </Box>
