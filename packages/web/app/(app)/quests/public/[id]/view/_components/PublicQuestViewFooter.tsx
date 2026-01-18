@@ -16,6 +16,7 @@ export const PublicQuestViewFooter = ({
   selectedLevel,
   onLevelChange,
   onBack,
+  isLikeLoading,
 }: {
   familyIcon?: string
   likeCount: number
@@ -28,6 +29,7 @@ export const PublicQuestViewFooter = ({
   selectedLevel?: number
   onLevelChange?: (level: number) => void
   onBack?: () => void
+  isLikeLoading?: boolean
 }) => {
   return (
     <Group justify="center" mt="xl" gap="xl">
@@ -59,6 +61,8 @@ export const PublicQuestViewFooter = ({
           size={56} 
           radius="xl"
           onClick={onLikeToggle}
+          loading={isLikeLoading}
+          disabled={isLikeLoading}
         >
           {isLiked ? (
             <IconHeartFilled size={28} />

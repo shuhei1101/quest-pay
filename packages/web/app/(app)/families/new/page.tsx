@@ -15,7 +15,7 @@ dayjs.locale('ja')
 
 export default function Page() {
   /** ハンドル */
-  const { handleRegister } = useRegisterFamily()
+  const { handleRegister, isLoading: isSubmitting } = useRegisterFamily()
 
   /** アイコン情報 */
   const { iconById } = useIcons()
@@ -32,6 +32,8 @@ export default function Page() {
     <>
         <div>
         <Box pos="relative" className="max-w-120">
+          {/* ロード中のオーバーレイ */}
+          <LoadingOverlay visible={isSubmitting} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
           {/* 家族入力フォーム */}
           <form onSubmit={handleSubmit((form) => handleRegister({form}))}>
             {/* 入力欄のコンテナ */}
@@ -109,7 +111,7 @@ export default function Page() {
             <Space h="md" />
             {/* サブミットボタン */}
             <Group>
-              <Button type="submit" variant="gradient" >保存</Button>
+              <Button type="submit" variant="gradient" loading={isSubmitting} disabled={isSubmitting}>保存</Button>
             </Group>
           </form>
         </Box>
