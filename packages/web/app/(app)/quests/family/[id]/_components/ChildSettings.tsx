@@ -26,16 +26,22 @@ export const ChildSettings = ({ watch, setValue, familyQuestId }: {
     const existingSetting = currentSettings.find(s => s.childId === childId)
     
     if (existingSetting) {
-      // 既存の設定がある場合は、isActivateを切り替える
-      const updatedSettings = currentSettings.map(setting => 
-        setting.childId === childId 
-          ? { ...setting, isActivate: !setting.isActivate }
-          : setting
-      )
-      setValue("childSettings", updatedSettings)
+      // 既存の設定がある場合
+      if (!existingSetting.hasQuestChildren && existingSetting.isActivate) {
+        // QuestChildrenがなく、ONからOFFにする場合は設定を削除する
+        const updatedSettings = currentSettings.filter(setting => setting.childId !== childId)
+        setValue("childSettings", updatedSettings)
+      } else {
+        // それ以外の場合はisActivateを切り替える
+        const updatedSettings = currentSettings.map(setting => 
+          setting.childId === childId 
+            ? { ...setting, isActivate: !setting.isActivate }
+            : setting
+        )
+        setValue("childSettings", updatedSettings)
+      }
     } else {
       // 設定がない場合（hasQuestChildren=false）で、スイッチをONにした場合のみ新しい設定を追加
-      // OFFのままの場合は何もしない（不要な変更を避ける）
       setValue("childSettings", [...currentSettings, { childId, isActivate: true, hasQuestChildren: false }])
     }
   }
@@ -71,19 +77,7 @@ export const ChildSettings = ({ watch, setValue, familyQuestId }: {
                 {/* 子供のアイコンと名前 */}
                 <Group gap="md">
                   {/* アイコン */}
-                  <div 
-                    style={{ 
-                      width: 40,
-                      height: 40,
-                      borderRadius: '50%',
-                      backgroundColor: child.profiles?.iconColor,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <RenderIcon iconName={child.icons?.name} iconSize={20} color="white" />
-                  </div>
+                  <RenderIcon iconName={child.icons?.name} iconSize={20} color={child.profiles?.iconColor} />
                   
                   {/* 名前 - 子供画面へのリンク */}
                   <Anchor 

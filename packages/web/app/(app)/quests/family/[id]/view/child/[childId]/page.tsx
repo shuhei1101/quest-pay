@@ -9,8 +9,8 @@ export default async function Page({ params }: { params: {
 } }) {
   const { id, childId } = await params
 
-  // 子供のみアクセス可能、親・ゲストは不可
-  const _ = await authGuard({ parentNG: true, guestNG: true, redirectUrl: QUESTS_URL })
+  // ゲストは不可
+  const _ = await authGuard({ guestNG: true, redirectUrl: QUESTS_URL })
 
   // 編集権限を確認する
   const hasPermission = await hasChildQuestPermission({ familyQuestId: id, childId })
