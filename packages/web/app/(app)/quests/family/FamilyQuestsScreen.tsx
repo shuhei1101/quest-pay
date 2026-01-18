@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button, Loader, Center } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
@@ -11,13 +11,35 @@ import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_componen
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
 
+/** 有効なタブ値の一覧 */
+const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
+
+/** タブ値が有効かチェックする */
+const isValidTab = (tab: string | null): tab is typeof VALID_TABS[number] => {
+  return tab !== null && (VALID_TABS as readonly string[]).includes(tab)
+}
+
 export function FamilyQuestsScreen() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   /** ログインユーザ情報 */
   const { isGuest } = useLoginUserInfo()
 
-  const [tabValue, setTabValue] = useState<string | null>('public')
+  /** クエリパラメータからタブ値を取得する */
+  const getTabFromParams = () => {
+    const tabParam = searchParams.get('tab')
+    return isValidTab(tabParam) ? tabParam : 'public'
+  }
+
+  const [tabValue, setTabValue] = useState<string | null>(getTabFromParams())
+
+  /** クエリパラメータが変更された時にタブを更新する */
+  useEffect(() => {
+    const tabParam = searchParams.get('tab')
+    const newTab = isValidTab(tabParam) ? tabParam : 'public'
+    setTabValue(newTab)
+  }, [searchParams])
 
   /** フローティングアクションボタンの開閉状態 */
   const [open, setOpen] = useState(false)
