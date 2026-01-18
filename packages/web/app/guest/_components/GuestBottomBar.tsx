@@ -2,7 +2,7 @@
 
 import { HOME_URL, GUEST_QUESTS_URL, LOGIN_URL } from '@/app/(core)/endpoints'
 import { Box, ActionIcon } from '@mantine/core'
-import { HomeIcon, WorldIcon } from '../../(core)/_components/icon'
+import { HomeIcon, WorldIcon } from '@/app/(core)/_components/icon'
 import { IconLogin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 
