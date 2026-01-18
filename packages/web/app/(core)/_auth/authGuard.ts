@@ -1,8 +1,8 @@
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { getAuthContext } from "./withAuth"
-import { QUESTS_URL } from "../endpoints"
+import { LOGIN_URL, QUESTS_URL } from "../endpoints"
 import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
+import { addQueryParam } from "../util"
 
 export const authGuard = async ({parentNG = false, childNG = false, guestNG = false, redirectUrl}: {
   parentNG?: boolean
@@ -19,16 +19,12 @@ export const authGuard = async ({parentNG = false, childNG = false, guestNG = fa
     (parentNG && userInfo?.profiles?.type === "parent") || 
     (childNG && userInfo?.profiles?.type === "child")
   ) {
-    // Cookieに権限エラーメッセージを設定する
-    const cookieStore = await cookies()
-    cookieStore.set('accessError', 'このページにアクセスする権限がありません', { 
-      path: '/',
-      maxAge: 10,
-      sameSite: 'lax'
-    })
+    // エラーメッセージをクエリパラメータに付与する
+    const targetUrl = redirectUrl || LOGIN_URL
+    const urlWithError = addQueryParam(targetUrl, 'error', 'このページにアクセスする権限がありません')
     
     // 指定されたURLまたはクエスト画面に遷移する
-    redirect(redirectUrl || QUESTS_URL)
+    redirect(urlWithError)
   }
   
   return {

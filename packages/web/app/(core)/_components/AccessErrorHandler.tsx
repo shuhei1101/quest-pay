@@ -2,42 +2,27 @@
 
 import { useEffect } from "react"
 import toast from "react-hot-toast"
-import { usePathname } from "next/navigation"
-
-/** Cookieからアクセスエラーメッセージを取得する */
-const getAccessErrorCookie = () => {
-  if (typeof document === 'undefined') return null
-  
-  const cookies = document.cookie.split('; ')
-  const accessErrorCookie = cookies.find(row => row.startsWith('accessError='))
-  
-  if (accessErrorCookie) {
-    return decodeURIComponent(accessErrorCookie.split('=')[1])
-  }
-  
-  return null
-}
-
-/** Cookieを削除する */
-const deleteAccessErrorCookie = () => {
-  if (typeof document === 'undefined') return
-  document.cookie = 'accessError=; path=/; max-age=0; SameSite=Lax'
-}
+import { useSearchParams, useRouter } from "next/navigation"
 
 /** アクセスエラーをハンドリングするコンポーネント */
 export const AccessErrorHandler = () => {
-  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter()
   
   useEffect(() => {
-    // Cookieからアクセスエラーメッセージを取得する
-    const message = getAccessErrorCookie()
+    // クエリパラメータからエラーメッセージを取得する
+    const errorMessage = searchParams.get('error')
     
-    if (message) {
-      toast.error(message, { duration: 3000 })
-      // Cookieを削除する
-      deleteAccessErrorCookie()
+    if (errorMessage) {
+      toast.error(errorMessage, { duration: 3000 })
+      
+      // エラーパラメータを削除する
+      const params = new URLSearchParams(searchParams)
+      params.delete('error')
+      const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname
+      router.replace(newUrl)
     }
-  }, [pathname])
+  }, [searchParams, router])
   
   return null
 }
