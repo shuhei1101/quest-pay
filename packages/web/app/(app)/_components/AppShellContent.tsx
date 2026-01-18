@@ -7,6 +7,7 @@ import { BackgroundWrapper } from './BackgroundWrapper'
 import { AppHeader } from './AppHeader'
 import { SideMenu } from './SideMenu'
 import { BottomBar } from './BottomBar'
+import { AccessErrorHandler } from '../../(core)/_components/AccessErrorHandler'
 
 /** AppShellコンテンツを取得する */
 export const AppShellContent = ({children}: {children: React.ReactNode}) => {
@@ -17,6 +18,8 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
 
   return (
     <BackgroundWrapper>
+      {/* アクセスエラーハンドラー */}
+      <AccessErrorHandler />
       <AppShell
         header={{ height: 60 }}
         navbar={{

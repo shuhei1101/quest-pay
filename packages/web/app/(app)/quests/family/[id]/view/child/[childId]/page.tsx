@@ -1,6 +1,7 @@
 import { hasChildQuestPermission } from "@/app/api/quests/family/service"
 import { ChildQuestViewScreen } from "./ChildQuestViewScreen"
 import { authGuard } from "@/app/(core)/_auth/authGuard"
+import { QUESTS_URL } from "@/app/(core)/endpoints"
 
 export default async function Page({ params }: { params: { 
   id: string, 
@@ -8,8 +9,8 @@ export default async function Page({ params }: { params: {
 } }) {
   const { id, childId } = await params
 
-  // 権限を確認する
-  const _ = await authGuard({ guestNG: true })
+  // ゲストは不可
+  const _ = await authGuard({ guestNG: true, redirectUrl: QUESTS_URL })
 
   // 編集権限を確認する
   const hasPermission = await hasChildQuestPermission({ familyQuestId: id, childId })

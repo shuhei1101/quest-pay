@@ -1,20 +1,42 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { PublicQuestList } from "../public/PublicQuestList"
 
+/** 有効なタブ値の一覧 */
+const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
+
+/** タブ値が有効かチェックする */
+const isValidTab = (tab: string | null): tab is typeof VALID_TABS[number] => {
+  return tab !== null && (VALID_TABS as readonly string[]).includes(tab)
+}
+
 export function GuestQuestsScreen() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   /** ログインユーザ情報 */
   const { isGuest } = useLoginUserInfo()
 
-  const [tabValue, setTabValue] = useState<string | null>('public')
+  /** クエリパラメータからタブ値を取得する */
+  const getTabFromParams = () => {
+    const tabParam = searchParams.get('tab')
+    return isValidTab(tabParam) ? tabParam : 'public'
+  }
+
+  const [tabValue, setTabValue] = useState<string | null>(getTabFromParams())
+
+  /** クエリパラメータが変更された時にタブを更新する */
+  useEffect(() => {
+    const tabParam = searchParams.get('tab')
+    const newTab = isValidTab(tabParam) ? tabParam : 'public'
+    setTabValue(newTab)
+  }, [searchParams])
 
     const GuestScreen = () => (
     <div className="w-full h-[80vh] flex flex-col items-center justify-center">
@@ -35,7 +57,7 @@ export function GuestQuestsScreen() {
     <Tabs variant="pills" value={tabValue} onChange={setTabValue} color={
       tabValue == 'public' ? "rgb(96 165 250)" :
       tabValue == 'family' ? "rgb(74, 222, 128)" :
-      tabValue == 'penalty' ? "rgb(252, 132, 132" :
+      tabValue == 'penalty' ? "rgb(252, 132, 132)" :
       tabValue == 'template' ? "rgb(250 204 21)" : "blue"
     }  >
       <div className="flex flex-col gap-4">
