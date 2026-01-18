@@ -1,12 +1,29 @@
 "use client"
 
-import { PUBLIC_QUEST_COMMENTS_API_URL } from "@/app/(core)/endpoints"
-import { PostPublicQuestCommentRequest } from "@/app/api/quests/public/[id]/comments/route"
+import { useMutation } from "@tanstack/react-query"
+import { handleAppError } from "@/app/(core)/error/handler/client"
+import { postComment } from "@/app/api/quests/public/[id]/comments/client"
+import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 /** コメントを投稿する */
 export const usePostComment = () => {
-  const handlePostComment = async ({
+  const router = useRouter()
+  
+  const mutation = useMutation({
+    mutationFn: ({ publicQuestId, content }: { publicQuestId: string; content: string }) =>
+      postComment({ publicQuestId, content }),
+    onSuccess: (_data, variables) => {
+      toast.success("コメントを投稿しました", { duration: 2000 })
+      // コメント一覧を再取得する
+      queryClient.invalidateQueries({ queryKey: ["publicQuestComments", variables.publicQuestId] })
+      queryClient.invalidateQueries({ queryKey: ["publicQuestCommentsCount", variables.publicQuestId] })
+    },
+    onError: (error) => handleAppError(error, router),
+  })
+
+  const handlePostComment = ({
     publicQuestId,
     content,
     onSuccess,
@@ -15,26 +32,15 @@ export const usePostComment = () => {
     content: string
     onSuccess?: () => void
   }) => {
-    try {
-      const response = await fetch(PUBLIC_QUEST_COMMENTS_API_URL(publicQuestId), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    mutation.mutate(
+      { publicQuestId, content },
+      {
+        onSuccess: () => {
+          onSuccess?.()
         },
-        body: JSON.stringify({ content } as PostPublicQuestCommentRequest),
-      })
-
-      if (!response.ok) {
-        throw new Error("コメントの投稿に失敗しました")
       }
-
-      toast.success("コメントを投稿しました", { duration: 2000 })
-      onSuccess?.()
-    } catch (error) {
-      toast.error("コメントの投稿に失敗しました", { duration: 2000 })
-      console.error(error)
-    }
+    )
   }
 
-  return { handlePostComment }
+  return { handlePostComment, isLoading: mutation.isPending }
 }

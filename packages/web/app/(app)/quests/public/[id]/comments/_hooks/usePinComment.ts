@@ -1,37 +1,39 @@
 "use client"
 
-import { PUBLIC_QUEST_COMMENT_PIN_API_URL } from "@/app/(core)/endpoints"
+import { useMutation } from "@tanstack/react-query"
+import { handleAppError } from "@/app/(core)/error/handler/client"
+import { pinComment, unpinComment } from "@/app/api/quests/public/[id]/comments/[commentId]/pin/client"
+import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 /** コメントをピン留めする */
 export const usePinComment = () => {
-  const handlePin = async ({
-    publicQuestId,
-    commentId,
-    onSuccess,
-  }: {
-    publicQuestId: string
-    commentId: string
-    onSuccess?: () => void
-  }) => {
-    try {
-      const response = await fetch(PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId), {
-        method: "POST",
-      })
-
-      if (!response.ok) {
-        throw new Error("ピン留めに失敗しました")
-      }
-
+  const router = useRouter()
+  
+  const pinMutation = useMutation({
+    mutationFn: ({ publicQuestId, commentId }: { publicQuestId: string; commentId: string }) =>
+      pinComment({ publicQuestId, commentId }),
+    onSuccess: (_data, variables) => {
       toast.success("ピン留めしました", { duration: 2000 })
-      onSuccess?.()
-    } catch (error) {
-      toast.error("ピン留めに失敗しました", { duration: 2000 })
-      console.error(error)
-    }
-  }
+      // コメント一覧を再取得する
+      queryClient.invalidateQueries({ queryKey: ["publicQuestComments", variables.publicQuestId] })
+    },
+    onError: (error) => handleAppError(error, router),
+  })
 
-  const handleUnpin = async ({
+  const unpinMutation = useMutation({
+    mutationFn: ({ publicQuestId, commentId }: { publicQuestId: string; commentId: string }) =>
+      unpinComment({ publicQuestId, commentId }),
+    onSuccess: (_data, variables) => {
+      toast.success("ピン留め解除しました", { duration: 2000 })
+      // コメント一覧を再取得する
+      queryClient.invalidateQueries({ queryKey: ["publicQuestComments", variables.publicQuestId] })
+    },
+    onError: (error) => handleAppError(error, router),
+  })
+
+  const handlePin = ({
     publicQuestId,
     commentId,
     onSuccess,
@@ -40,22 +42,38 @@ export const usePinComment = () => {
     commentId: string
     onSuccess?: () => void
   }) => {
-    try {
-      const response = await fetch(PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId), {
-        method: "DELETE",
-      })
-
-      if (!response.ok) {
-        throw new Error("ピン留め解除に失敗しました")
+    pinMutation.mutate(
+      { publicQuestId, commentId },
+      {
+        onSuccess: () => {
+          onSuccess?.()
+        },
       }
-
-      toast.success("ピン留め解除しました", { duration: 2000 })
-      onSuccess?.()
-    } catch (error) {
-      toast.error("ピン留め解除に失敗しました", { duration: 2000 })
-      console.error(error)
-    }
+    )
   }
 
-  return { handlePin, handleUnpin }
+  const handleUnpin = ({
+    publicQuestId,
+    commentId,
+    onSuccess,
+  }: {
+    publicQuestId: string
+    commentId: string
+    onSuccess?: () => void
+  }) => {
+    unpinMutation.mutate(
+      { publicQuestId, commentId },
+      {
+        onSuccess: () => {
+          onSuccess?.()
+        },
+      }
+    )
+  }
+
+  return {
+    handlePin,
+    handleUnpin,
+    isLoading: pinMutation.isPending || unpinMutation.isPending,
+  }
 }

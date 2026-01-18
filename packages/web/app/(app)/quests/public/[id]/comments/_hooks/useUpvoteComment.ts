@@ -1,11 +1,28 @@
 "use client"
 
-import { PUBLIC_QUEST_COMMENT_UPVOTE_API_URL } from "@/app/(core)/endpoints"
+import { useMutation } from "@tanstack/react-query"
+import { handleAppError } from "@/app/(core)/error/handler/client"
+import { upvoteComment } from "@/app/api/quests/public/[id]/comments/[commentId]/upvote/client"
+import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 /** コメントに高評価を付ける */
 export const useUpvoteComment = () => {
-  const handleUpvote = async ({
+  const router = useRouter()
+  
+  const mutation = useMutation({
+    mutationFn: ({ publicQuestId, commentId }: { publicQuestId: string; commentId: string }) =>
+      upvoteComment({ publicQuestId, commentId }),
+    onSuccess: (_data, variables) => {
+      toast.success("高評価しました", { duration: 2000 })
+      // コメント一覧を再取得する
+      queryClient.invalidateQueries({ queryKey: ["publicQuestComments", variables.publicQuestId] })
+    },
+    onError: (error) => handleAppError(error, router),
+  })
+
+  const handleUpvote = ({
     publicQuestId,
     commentId,
     onSuccess,
@@ -14,22 +31,15 @@ export const useUpvoteComment = () => {
     commentId: string
     onSuccess?: () => void
   }) => {
-    try {
-      const response = await fetch(PUBLIC_QUEST_COMMENT_UPVOTE_API_URL(publicQuestId, commentId), {
-        method: "POST",
-      })
-
-      if (!response.ok) {
-        throw new Error("高評価に失敗しました")
+    mutation.mutate(
+      { publicQuestId, commentId },
+      {
+        onSuccess: () => {
+          onSuccess?.()
+        },
       }
-
-      toast.success("高評価しました", { duration: 2000 })
-      onSuccess?.()
-    } catch (error) {
-      toast.error("高評価に失敗しました", { duration: 2000 })
-      console.error(error)
-    }
+    )
   }
 
-  return { handleUpvote }
+  return { handleUpvote, isLoading: mutation.isPending }
 }

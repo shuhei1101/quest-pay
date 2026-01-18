@@ -26,36 +26,38 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
 
   /** コメント内容 */
   const [comment, setComment] = useState("")
-  /** ローディング状態 */
-  const [isLoading, setIsLoading] = useState(false)
 
   /** コメント一覧 */
   const { comments, refetch } = usePublicQuestComments({ publicQuestId: id })
   /** コメント投稿 */
-  const { handlePostComment } = usePostComment()
+  const { handlePostComment, isLoading: isPostingComment } = usePostComment()
   /** 高評価 */
-  const { handleUpvote } = useUpvoteComment()
+  const { handleUpvote, isLoading: isUpvoting } = useUpvoteComment()
   /** 低評価 */
-  const { handleDownvote } = useDownvoteComment()
+  const { handleDownvote, isLoading: isDownvoting } = useDownvoteComment()
   /** 報告 */
-  const { handleReport } = useReportComment()
+  const { handleReport, isLoading: isReporting } = useReportComment()
   /** 削除 */
-  const { handleDelete } = useDeleteComment()
+  const { handleDelete, isLoading: isDeleting } = useDeleteComment()
   /** ピン留め */
-  const { handlePin, handleUnpin } = usePinComment()
+  const { handlePin, handleUnpin, isLoading: isPinning } = usePinComment()
   /** 公開者いいね */
-  const { handleLike: handlePublisherLike, handleUnlike: handlePublisherUnlike } = usePublisherLike()
+  const { handleLike: handlePublisherLike, handleUnlike: handlePublisherUnlike, isLoading: isPublisherLiking } = usePublisherLike()
   /** 公開クエスト情報 */
   const { publicQuest } = usePublicQuest({ id })
   /** いいねされているかどうか */
   const { isLike } = useIsLike({ id })
 
+  /** ローディング状態を統合する */
+  const isLoading = isPostingComment || isUpvoting || isDownvoting || isReporting || isDeleting || isPinning || isPublisherLiking
+  /** いいねされているかどうか */
+  const { isLike } = useIsLike({ id })
+
   /** コメント投稿ハンドル */
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!comment.trim()) return
 
-    setIsLoading(true)
-    await handlePostComment({
+    handlePostComment({
       publicQuestId: id,
       content: comment,
       onSuccess: () => {
@@ -63,95 +65,82 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
         refetch()
       },
     })
-    setIsLoading(false)
   }
 
   /** 高評価ハンドル */
-  const handleUpvoteClick = async (commentId: string) => {
-    setIsLoading(true)
-    await handleUpvote({
+  const handleUpvoteClick = (commentId: string) => {
+    handleUpvote({
       publicQuestId: id,
       commentId,
       onSuccess: refetch,
     })
-    setIsLoading(false)
   }
 
   /** 低評価ハンドル */
-  const handleDownvoteClick = async (commentId: string) => {
-    setIsLoading(true)
-    await handleDownvote({
+  const handleDownvoteClick = (commentId: string) => {
+    handleDownvote({
       publicQuestId: id,
       commentId,
       onSuccess: refetch,
     })
-    setIsLoading(false)
   }
 
   /** 報告ハンドル */
-  const handleReportClick = async (commentId: string) => {
+  const handleReportClick = (commentId: string) => {
     const reason = prompt("報告理由を入力してください")
     if (!reason) return
 
-    setIsLoading(true)
-    await handleReport({
+    handleReport({
       publicQuestId: id,
       commentId,
       reason,
       onSuccess: refetch,
     })
-    setIsLoading(false)
   }
 
   /** 削除ハンドル */
-  const handleDeleteClick = async (commentId: string) => {
+  const handleDeleteClick = (commentId: string) => {
     if (!confirm("このコメントを削除しますか？")) return
 
-    setIsLoading(true)
-    await handleDelete({
+    handleDelete({
       publicQuestId: id,
       commentId,
       onSuccess: refetch,
     })
-    setIsLoading(false)
   }
 
   /** ピン留めハンドル */
-  const handlePinClick = async (commentId: string, isPinned: boolean) => {
-    setIsLoading(true)
+  const handlePinClick = (commentId: string, isPinned: boolean) => {
     if (isPinned) {
-      await handleUnpin({
+      handleUnpin({
         publicQuestId: id,
         commentId,
         onSuccess: refetch,
       })
     } else {
-      await handlePin({
+      handlePin({
         publicQuestId: id,
         commentId,
         onSuccess: refetch,
       })
     }
-    setIsLoading(false)
   }
 
   /** 公開者いいねハンドル */
-  const handlePublisherLikeClick = async (commentId: string, isLiked: boolean) => {
-    setIsLoading(true)
+  const handlePublisherLikeClick = (commentId: string, isLiked: boolean) => {
     if (isLiked) {
-      await handlePublisherUnlike({
+      handlePublisherUnlike({
         publicQuestId: id,
         commentId,
         onSuccess: refetch,
       })
     } else {
-      await handlePublisherLike({
+      handlePublisherLike({
         publicQuestId: id,
         commentId,
         onSuccess: refetch,
       })
     }
-    setIsLoading(false)
   }
 
   /** クエスト作成者かどうか確認する */

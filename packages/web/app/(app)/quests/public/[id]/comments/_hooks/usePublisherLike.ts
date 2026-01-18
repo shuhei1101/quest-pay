@@ -1,37 +1,39 @@
 "use client"
 
-import { PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL } from "@/app/(core)/endpoints"
+import { useMutation } from "@tanstack/react-query"
+import { handleAppError } from "@/app/(core)/error/handler/client"
+import { likeByPublisher, unlikeByPublisher } from "@/app/api/quests/public/[id]/comments/[commentId]/publisher-like/client"
+import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 /** コメントに公開者いいねを付ける */
 export const usePublisherLike = () => {
-  const handleLike = async ({
-    publicQuestId,
-    commentId,
-    onSuccess,
-  }: {
-    publicQuestId: string
-    commentId: string
-    onSuccess?: () => void
-  }) => {
-    try {
-      const response = await fetch(PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId), {
-        method: "POST",
-      })
-
-      if (!response.ok) {
-        throw new Error("公開者いいねに失敗しました")
-      }
-
+  const router = useRouter()
+  
+  const likeMutation = useMutation({
+    mutationFn: ({ publicQuestId, commentId }: { publicQuestId: string; commentId: string }) =>
+      likeByPublisher({ publicQuestId, commentId }),
+    onSuccess: (_data, variables) => {
       toast.success("公開者いいねしました", { duration: 2000 })
-      onSuccess?.()
-    } catch (error) {
-      toast.error("公開者いいねに失敗しました", { duration: 2000 })
-      console.error(error)
-    }
-  }
+      // コメント一覧を再取得する
+      queryClient.invalidateQueries({ queryKey: ["publicQuestComments", variables.publicQuestId] })
+    },
+    onError: (error) => handleAppError(error, router),
+  })
 
-  const handleUnlike = async ({
+  const unlikeMutation = useMutation({
+    mutationFn: ({ publicQuestId, commentId }: { publicQuestId: string; commentId: string }) =>
+      unlikeByPublisher({ publicQuestId, commentId }),
+    onSuccess: (_data, variables) => {
+      toast.success("公開者いいね解除しました", { duration: 2000 })
+      // コメント一覧を再取得する
+      queryClient.invalidateQueries({ queryKey: ["publicQuestComments", variables.publicQuestId] })
+    },
+    onError: (error) => handleAppError(error, router),
+  })
+
+  const handleLike = ({
     publicQuestId,
     commentId,
     onSuccess,
@@ -40,22 +42,38 @@ export const usePublisherLike = () => {
     commentId: string
     onSuccess?: () => void
   }) => {
-    try {
-      const response = await fetch(PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId), {
-        method: "DELETE",
-      })
-
-      if (!response.ok) {
-        throw new Error("公開者いいね解除に失敗しました")
+    likeMutation.mutate(
+      { publicQuestId, commentId },
+      {
+        onSuccess: () => {
+          onSuccess?.()
+        },
       }
-
-      toast.success("公開者いいね解除しました", { duration: 2000 })
-      onSuccess?.()
-    } catch (error) {
-      toast.error("公開者いいね解除に失敗しました", { duration: 2000 })
-      console.error(error)
-    }
+    )
   }
 
-  return { handleLike, handleUnlike }
+  const handleUnlike = ({
+    publicQuestId,
+    commentId,
+    onSuccess,
+  }: {
+    publicQuestId: string
+    commentId: string
+    onSuccess?: () => void
+  }) => {
+    unlikeMutation.mutate(
+      { publicQuestId, commentId },
+      {
+        onSuccess: () => {
+          onSuccess?.()
+        },
+      }
+    )
+  }
+
+  return {
+    handleLike,
+    handleUnlike,
+    isLoading: likeMutation.isPending || unlikeMutation.isPending,
+  }
 }

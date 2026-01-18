@@ -1,12 +1,35 @@
 "use client"
 
-import { PUBLIC_QUEST_COMMENT_REPORT_API_URL } from "@/app/(core)/endpoints"
-import { PostCommentReportRequest } from "@/app/api/quests/public/[id]/comments/[commentId]/report/route"
+import { useMutation } from "@tanstack/react-query"
+import { handleAppError } from "@/app/(core)/error/handler/client"
+import { reportComment } from "@/app/api/quests/public/[id]/comments/[commentId]/report/client"
+import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 /** コメントを報告する */
 export const useReportComment = () => {
-  const handleReport = async ({
+  const router = useRouter()
+  
+  const mutation = useMutation({
+    mutationFn: ({
+      publicQuestId,
+      commentId,
+      reason,
+    }: {
+      publicQuestId: string
+      commentId: string
+      reason: string
+    }) => reportComment({ publicQuestId, commentId, reason }),
+    onSuccess: (_data, variables) => {
+      toast.success("報告しました", { duration: 2000 })
+      // コメント一覧を再取得する
+      queryClient.invalidateQueries({ queryKey: ["publicQuestComments", variables.publicQuestId] })
+    },
+    onError: (error) => handleAppError(error, router),
+  })
+
+  const handleReport = ({
     publicQuestId,
     commentId,
     reason,
@@ -17,26 +40,15 @@ export const useReportComment = () => {
     reason: string
     onSuccess?: () => void
   }) => {
-    try {
-      const response = await fetch(PUBLIC_QUEST_COMMENT_REPORT_API_URL(publicQuestId, commentId), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    mutation.mutate(
+      { publicQuestId, commentId, reason },
+      {
+        onSuccess: () => {
+          onSuccess?.()
         },
-        body: JSON.stringify({ reason } as PostCommentReportRequest),
-      })
-
-      if (!response.ok) {
-        throw new Error("報告に失敗しました")
       }
-
-      toast.success("報告しました", { duration: 2000 })
-      onSuccess?.()
-    } catch (error) {
-      toast.error("報告に失敗しました", { duration: 2000 })
-      console.error(error)
-    }
+    )
   }
 
-  return { handleReport }
+  return { handleReport, isLoading: mutation.isPending }
 }
