@@ -103,7 +103,6 @@ export async function PUT(
           .map((setting) => ({
             childId: setting.childId,
             isActivate: setting.isActivate,
-            shouldDelete: setting.hasQuestChildren && !setting.isActivate, // リセット対象
           })),
         questTags: data.form.tags.map((tagName) => ({
           name: tagName,

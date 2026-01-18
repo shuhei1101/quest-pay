@@ -72,7 +72,7 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
     id: FamilyQuestSelect["id"]
     updatedAt: FamilyQuestSelect["updatedAt"]
   }
-  questChildren: (InsertQuestChildrenRecord & { shouldDelete?: boolean })[]
+  questChildren: InsertQuestChildrenRecord[]
   questTags: InsertQuestTagsRecord[]
 }) => {
   try {
@@ -100,28 +100,18 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
       // 現在の家族クエストを取得して、既存の子供設定を確認する
       const currentFamilyQuest = await fetchFamilyQuest({ db: tx, id: familyQuest.id })
       const currentChildIds = currentFamilyQuest.children.map(c => c.childId)
+      const newChildIds = questChildren.map(c => c.childId)
 
-      // 削除対象（shouldDelete=trueまたはフォームから除外されたもの）
-      const childIdsToDelete = questChildren
-        .filter(c => c.shouldDelete)
-        .map(c => c.childId)
-      
-      // 既存から削除されたものも追加
-      currentChildIds.forEach(id => {
-        if (!questChildren.some(c => c.childId === id)) {
-          childIdsToDelete.push(id)
-        }
-      })
+      // 削除対象（フォームから完全に除外されたもののみ）
+      const childIdsToDelete = currentChildIds.filter(id => !newChildIds.includes(id))
 
-      // 新規追加（isActivateがtrueで、まだ存在しないもの）
+      // 新規追加（まだ存在しないもの）
       const childrenToAdd = questChildren.filter(c => 
-        !c.shouldDelete && 
         !currentChildIds.includes(c.childId)
       )
 
-      // 更新対象（既存で、shouldDeleteではないもの）
+      // 更新対象（既存のもの）
       const childrenToUpdate = questChildren.filter(c => 
-        !c.shouldDelete && 
         currentChildIds.includes(c.childId)
       )
 
