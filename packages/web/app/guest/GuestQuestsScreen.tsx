@@ -18,10 +18,8 @@ export function GuestQuestsScreen() {
       <Button
         onClick={() => router.push(`${LOGIN_URL}`)}
       >
-        <>
-          <Text>ログイン</Text>
-          <IconLogin style={{ width: '70%', height: '70%' }} stroke={1.5} />
-        </>
+        <Text>ログイン</Text>
+        <IconLogin style={{ width: '70%', height: '70%' }} stroke={1.5} />
       </Button>
     </div>
   )
