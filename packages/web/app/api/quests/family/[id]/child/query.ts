@@ -2,7 +2,7 @@ import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { familyQuests, icons, IconSelect, questChildren, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, ChildSelect, FamilyQuestSelect, QuestChildrenSelect } from "@/drizzle/schema"
-import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
+import { and, asc, count, countDistinct, desc, eq, inArray, like } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
 
@@ -102,10 +102,12 @@ export const fetchChildQuests = async ({ params, db, childId, familyId }: {
       .limit(pageSize)
       .offset(offset),
       db
-      .select({ total: count() })
+      .select({ total: countDistinct(familyQuests.id) })
       .from(familyQuests)
+      .innerJoin(quests, eq(familyQuests.questId, quests.id))
       .leftJoin(questChildren, eq(questChildren.familyQuestId, familyQuests.id))
-      .where(and(...conditions, eq(questChildren.childId, childId), eq(questChildren.isEnable, true)))
+      .leftJoin(questTags, eq(questTags.questId, quests.id))
+      .where(and(...conditions, eq(questChildren.childId, childId), eq(familyQuests.familyId, familyId), eq(questChildren.isEnable, true)))
     ])
 
     // データをオブジェクトに変換する
