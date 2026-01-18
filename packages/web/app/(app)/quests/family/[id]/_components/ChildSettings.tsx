@@ -1,5 +1,5 @@
-import { Anchor, Group, Paper, Switch, Text } from "@mantine/core"
-import { IconUser } from "@tabler/icons-react"
+import { ActionIcon, Anchor, Group, Paper, Switch, Text } from "@mantine/core"
+import { IconExternalLink, IconUser } from "@tabler/icons-react"
 import { UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { useChildren } from "@/app/(app)/children/_hook/useChildren"
 import { ChildSettingType } from "../form"
@@ -83,29 +83,39 @@ export const ChildSettings = ({ watch, setValue, familyQuestId }: {
                     <IconUser size={20} color="white" />
                   </div>
                   
-                  {/* 名前 - QuestChildrenがある場合はリンク、ない場合はテキスト */}
-                  {hasQuestChildren && familyQuestId ? (
-                    <Anchor 
-                      href={CHILD_QUEST_VIEW_URL(familyQuestId, child.children.id)} 
-                      size="md"
-                      fw={500}
-                    >
-                      {child.profiles?.name}
-                    </Anchor>
-                  ) : (
-                    <Text size="md" fw={500}>
-                      {child.profiles?.name}
-                    </Text>
-                  )}
+                  {/* 名前 - 子供画面へのリンク */}
+                  <Anchor 
+                    href={`/children/${child.children.id}`} 
+                    size="md"
+                    fw={500}
+                  >
+                    {child.profiles?.name}
+                  </Anchor>
                 </Group>
 
-                {/* 公開/非公開スイッチ */}
-                <Switch 
-                  label={isActivated ? "公開" : "非公開"}
-                  labelPosition="left"
-                  checked={isActivated}
-                  onChange={() => toggleChildActivate(child.children.id)}
-                />
+                {/* 右側の操作エリア */}
+                <Group gap="md">
+                  {/* 子供クエスト画面へのリンクアイコン（QuestChildrenがある場合のみ表示） */}
+                  {hasQuestChildren && familyQuestId && (
+                    <ActionIcon
+                      component="a"
+                      href={CHILD_QUEST_VIEW_URL(familyQuestId, child.children.id)}
+                      variant="subtle"
+                      color="blue"
+                      title="子供クエスト画面を開く"
+                    >
+                      <IconExternalLink size={18} />
+                    </ActionIcon>
+                  )}
+
+                  {/* 公開/非公開スイッチ */}
+                  <Switch 
+                    label={isActivated ? "公開" : "非公開"}
+                    labelPosition="left"
+                    checked={isActivated}
+                    onChange={() => toggleChildActivate(child.children.id)}
+                  />
+                </Group>
               </Group>
             </Paper>
           )
