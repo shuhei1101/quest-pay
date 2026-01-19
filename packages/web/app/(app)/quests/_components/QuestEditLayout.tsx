@@ -1,9 +1,8 @@
 "use client"
 
 import { Box, Button, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
-import { useState, ReactNode, useEffect } from "react"
+import { useState, ReactNode } from "react"
 import { IconAlertCircle } from "@tabler/icons-react"
-import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch, UseFormHandleSubmit } from "react-hook-form"
 
 /** クエスト編集レイアウトのタブ設定 */
 type TabConfig = {
@@ -75,7 +74,7 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 
         {/* クエスト入力フォーム */}
         <form onSubmit={onSubmit}>
-          <Paper p="md" withBorder style={{ height: 'calc(100vh - 60px - 2rem)', display: 'flex', flexDirection: 'column' }}>
+          <Paper p="md" withBorder style={{ height: 'var(--content-height)', display: 'flex', flexDirection: 'column' }}>
             <Tabs value={activeTab} onChange={setActiveTab} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
               {/* タブリスト */}
               <Tabs.List>

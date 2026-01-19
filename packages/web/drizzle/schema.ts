@@ -392,3 +392,74 @@ export const notifications = pgTable("notifications", {
 export type NotificationSelect = typeof notifications.$inferSelect
 export type NotificationInsert = Omit<typeof notifications.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type NotificationUpdate = Partial<NotificationInsert>
+
+/** コメント共通カラム */
+const commentCommonColumns = {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** プロフィールID */
+  profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  /** コメント内容 */
+  content: text("content").notNull().default(""),
+  /** タイムスタンプ */
+  ...timestamps,
+}
+
+/** 公開クエストコメントテーブル */
+export const publicQuestComments = pgTable("public_quest_comments", {
+  /** 公開クエストID */
+  publicQuestId: uuid("public_quest_id").notNull().references(() => publicQuests.id, { onDelete: "cascade" }),
+  /** ピン留めフラグ */
+  isPinned: boolean("is_pinned").notNull().default(false),
+  /** 公開者ユーザがコメントにいいねするフラグ */
+  isLikedByPublisher: boolean("is_liked_by_publisher").notNull().default(false),
+  /** コメント共通カラム */
+  ...commentCommonColumns,
+}, (table) => [
+  sql`UNIQUE (${table.publicQuestId}) WHERE ${table.isPinned} = true`,
+])
+
+
+/** コメントいいねエンティティ */
+export const commentLikes = pgTable("comment_likes", {
+  /** コメントID */
+  commentId: uuid("comment_id").notNull(),
+  /** プロフィールID */
+  profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  /** タイムスタンプ */
+  ...timestamps,
+}, (table) => [
+  sql`PRIMARY KEY (${table.commentId}, ${table.profileId})`,
+])
+
+/** コメント報告テーブル */
+export const commentReports = pgTable("comment_reports", {
+  /** コメントID */
+  commentId: uuid("comment_id").notNull(),
+  /** プロフィールID */
+  profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  /** 理由 */
+  reason: text("reason").notNull().default(""),
+  /** タイムスタンプ */
+  ...timestamps,
+}, (table) => [
+  sql`PRIMARY KEY (${table.commentId}, ${table.profileId})`,
+])
+
+/** コメント評価タイプ（Enum） */
+export const commentUpvoteType = pgEnum("comment_upvote_type", [
+  "upvote",
+  "downvote",
+])
+
+/** コメント評価テーブル（高評価／低評価） */
+export const commentUpvotes = pgTable("comment_upvotes", {
+  /** コメントID */
+  commentId: uuid("comment_id").notNull(),
+  /** プロフィールID */
+  profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  /** タイムスタンプ */
+  ...timestamps,
+}, (table) => [
+  sql`PRIMARY KEY (${table.commentId}, ${table.profileId})`,
+])

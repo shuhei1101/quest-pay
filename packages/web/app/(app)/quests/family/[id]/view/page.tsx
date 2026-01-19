@@ -1,16 +1,21 @@
-import { hasChildQuestPermission } from "@/app/api/quests/family/[id]/child/service"
-import { ChildQuestViewScreen } from "./child/[childId]/ChildQuestViewScreen"
+import { hasFamilyQuestPermission } from "@/app/api/quests/family/service"
+import { FamilyQuestViewScreen } from "./FamilyQuestViewScreen"
+import { authGuard } from "@/app/(core)/_auth/authGuard"
+import { QUESTS_URL } from "@/app/(core)/endpoints"
 
-export default async function Page({ params }: { params: { id: string, childId: string } }) {
-  const { id, childId } = await params
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = await params
 
-  // 編集権限を確認する
-  const hasPermission = await hasChildQuestPermission({ familyQuestId: id })
+  // 親のみアクセス可能、子供・ゲストは不可
+  const _ = await authGuard({ childNG: true, guestNG: true, redirectUrl: QUESTS_URL })
+
+  // 閲覧権限を確認する
+  const hasPermission = await hasFamilyQuestPermission({ familyQuestId: id })
   if (!hasPermission) throw new Error("閲覧権限がありません。")
 
   return (
     <>
-      <ChildQuestViewScreen id={id} childId={childId} />
+      <FamilyQuestViewScreen id={id} />
     </>
   )
 }

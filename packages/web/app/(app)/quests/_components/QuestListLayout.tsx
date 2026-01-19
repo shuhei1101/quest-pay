@@ -1,6 +1,6 @@
 "use client"
 import { useState, ReactNode, useEffect } from "react"
-import { Tabs } from "@mantine/core"
+import { Tabs, Loader, Center } from "@mantine/core"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
 import { QuestCategoryTabs } from "./QuestCategoryTabs"
 import { QuestSearchBar } from "./QuestSearchBar"
@@ -107,7 +107,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   }
 
   return (
-    <div className="w-full h-[80vh]">
+    <div className="w-full">
       {/* クエストカテゴリタブ */}
       <QuestCategoryTabs
         tabValue={tabValue}
@@ -134,6 +134,12 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             tabValue={tabValue}
             questCategoryById={questCategoryById}
           />
+          {/* ローディング表示 */}
+          {isLoading && (
+            <Center className="my-4">
+              <Loader size="md" />
+            </Center>
+          )}
         </Tabs.Panel>
 
         {/* カテゴリごとのパネル */}
@@ -146,6 +152,12 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
               tabValue={tabValue}
               questCategoryById={questCategoryById}
             />
+            {/* ローディング表示 */}
+            {isLoading && (
+              <Center className="my-4">
+                <Loader size="md" />
+              </Center>
+            )}
           </Tabs.Panel>
         ))}
 
@@ -158,6 +170,12 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             tabValue={tabValue}
             questCategoryById={questCategoryById}
           />
+          {/* ローディング表示 */}
+          {isLoading && (
+            <Center className="my-4">
+              <Loader size="md" />
+            </Center>
+          )}
         </Tabs.Panel>
 
         <div className="m-5" />

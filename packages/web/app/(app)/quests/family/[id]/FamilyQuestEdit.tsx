@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { DetailSettings } from "./_components/DetailSettings"
 import { BasicSettings } from "./_components/BasicSettings"
-import { ChildSettings, FormWithChildIds } from "./_components/ChildSettings"
+import { ChildSettings, FormWithChildSettings } from "./_components/ChildSettings"
 import { useFamilyQuestForm } from "./_hooks/useFamilyQuestForm"
 import { useRegisterFamilyQuest } from "./_hooks/useRegisterFamilyQuest"
 import { useUpdateFamilyQuest } from "./_hooks/useUpdateFamilyQuest"
@@ -119,7 +119,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   /** 各タブのエラーチェックフラグ */
   const hasBasicErrors = !!(errors.name || errors.iconId || errors.iconColor || errors.categoryId || errors.tags || errors.client || errors.requestDetail || errors.ageFrom || errors.ageTo || errors.monthFrom || errors.monthTo)
   const hasDetailErrors = !!(errors.details)
-  const hasChildErrors = !!(errors.childIds)
+  const hasChildErrors = !!(errors.childSettings)
 
   return (
     <QuestEditLayout<FamilyQuestFormType>
@@ -169,8 +169,9 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
           hasErrors: hasChildErrors,
           content: (
             <ChildSettings
-              watch={watch as unknown as UseFormWatch<FormWithChildIds>}
-              setValue={setValue as unknown as UseFormSetValue<FormWithChildIds>}
+              watch={watch as unknown as UseFormWatch<FormWithChildSettings>}
+              setValue={setValue as unknown as UseFormSetValue<FormWithChildSettings>}
+              familyQuestId={familyQuestId}
             />
           ),
         },

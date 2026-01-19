@@ -61,7 +61,7 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       <Title 
        textWrap='nowrap' order={5} 
         c={`${isDark ? 'white' : 'black'}`}
-      >お小遣いクエストボード</Title>
+      >クエストペイ</Title>
       {/* スペース */}
       <div className='w-full' />
       {/* ユーザ情報を表示する */}
