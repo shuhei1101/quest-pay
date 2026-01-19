@@ -1,7 +1,6 @@
 "use client"
 import { Tabs } from "@mantine/core"
 import { RenderIcon } from "../../icons/_components/RenderIcon"
-import { useSwipeable } from "react-swipeable"
 import { ReactNode, useRef, useEffect } from "react"
 import { QuestCategorySelect } from "@/drizzle/schema"
 
@@ -77,30 +76,8 @@ export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children,
     }
   }, [])
 
-  /** 左右スワイプ時のハンドル */
-  const handlers = useSwipeable({
-    onSwiped: (event) => {
-      if (!enableSwipe) return
-      
-      const idx = tabList.indexOf(tabValue ?? TAB_ALL)
-
-      if (event.dir === "Left") {
-        // 次のタブへ
-        const next = tabList[idx + 1]
-        if (next) onTabChange(next)
-      }
-
-      if (event.dir === "Right") {
-        // 前のタブへ
-        const prev = tabList[idx - 1]
-        if (prev) onTabChange(prev)
-      }
-    },
-    trackMouse: true
-  })
-
   return (
-    <div {...handlers} className="w-full">
+    <div className="w-full">
       <Tabs value={tabValue} onChange={onTabChange}>
         {/* タブリスト */}
         <Tabs.List>

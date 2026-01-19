@@ -65,6 +65,13 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   /** タブ状態 */
   const [tabValue, setTabValue] = useState<string | null>('すべて')
 
+  /** タブリスト */
+  const tabList = [
+    'すべて',
+    ...questCategories.map(c => c.name),
+    'その他'
+  ]
+
   /** 現在のクエスト一覧状態 */
   const [displayQuests, setDisplayQuests] = useState<T[]>([])
 
@@ -133,6 +140,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             sentinelRef={sentinelRef}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
+            onTabChange={setTabValue}
+            tabList={tabList}
           />
           {/* ローディング表示 */}
           {isLoading && (
@@ -151,6 +160,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
               sentinelRef={sentinelRef}
               tabValue={tabValue}
               questCategoryById={questCategoryById}
+              onTabChange={setTabValue}
+              tabList={tabList}
             />
             {/* ローディング表示 */}
             {isLoading && (
@@ -169,6 +180,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             sentinelRef={sentinelRef}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
+            onTabChange={setTabValue}
+            tabList={tabList}
           />
           {/* ローディング表示 */}
           {isLoading && (
