@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Button, LoadingOverlay, Paper, Tabs } from "@mantine/core"
-import { useState, ReactNode } from "react"
+import { useState, ReactNode, useRef, useEffect } from "react"
 import { IconAlertCircle } from "@tabler/icons-react"
 import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
@@ -64,8 +64,32 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
   /** アクティブタブ状態 */
   const [activeTab, setActiveTab] = useState<string | null>(tabs[0]?.value ?? "basic")
 
+  /** タブリストコンテナの参照 */
+  const tabListRef = useRef<HTMLDivElement>(null)
+
   /** 表示するアクションボタンを取得する */
   const actionButtons = questId ? editActions : createActions
+
+  /** マウスホイールでの横スクロールを有効化する */
+  useEffect(() => {
+    const container = tabListRef.current
+    if (!container) return
+
+    /** ホイールイベントハンドラ */
+    const handleWheel = (e: WheelEvent) => {
+      // 横スクロールが必要な場合のみ、縦スクロールを横スクロールに変換する
+      if (e.deltaY !== 0 && container.scrollWidth > container.clientWidth) {
+        e.preventDefault()
+        container.scrollLeft += e.deltaY
+      }
+    }
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
 
   return (
     <>
@@ -79,15 +103,17 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
             <Tabs value={activeTab} onChange={setActiveTab} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
               {/* タブリスト */}
               <Tabs.List>
-                {tabs.map((tab) => (
-                  <Tabs.Tab
-                    key={tab.value}
-                    value={tab.value}
-                    rightSection={tab.hasErrors ? <IconAlertCircle size={16} color="red" /> : null}
-                  >
-                    {tab.label}
-                  </Tabs.Tab>
-                ))}
+                <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+                  {tabs.map((tab) => (
+                    <Tabs.Tab
+                      key={tab.value}
+                      value={tab.value}
+                      rightSection={tab.hasErrors ? <IconAlertCircle size={16} color="red" /> : null}
+                    >
+                      {tab.label}
+                    </Tabs.Tab>
+                  ))}
+                </div>
               </Tabs.List>
 
               {/* タブパネル */}
