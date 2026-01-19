@@ -28,6 +28,9 @@ export const SaveIconButton = ({
   /** ボタンのタイプ */
   type?: "button" | "submit"
 }) => {
+  /** クリックハンドラを取得する（submit時はonClickを無効化） */
+  const handleClick = type === "submit" ? undefined : onClick
+
   return (
     <Tooltip label={tooltip}>
       <ActionIcon
@@ -35,7 +38,7 @@ export const SaveIconButton = ({
         size={size}
         loading={loading}
         disabled={disabled}
-        onClick={type !== "submit" ? onClick : undefined}
+        onClick={handleClick}
         type={type}
         variant="filled"
       >

@@ -88,11 +88,7 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 
             {/* アクションボタン */}
             <Group mt="md" justify="flex-end" gap="xs">
-              {actionButtons.map((action, index) => (
-                <div key={index}>
-                  {action}
-                </div>
-              ))}
+              {actionButtons}
             </Group>
           </Paper>
         </form>
