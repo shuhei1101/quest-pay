@@ -54,7 +54,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.0",
     "tailwindcss": "^4",
-    "ts-node": "^10.9.2",
+    "ts-node": "^1.7.1",
     "tsx": "^4.20.6",
     "typescript": "5.9.3"
   }

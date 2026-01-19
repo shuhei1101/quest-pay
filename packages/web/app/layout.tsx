@@ -36,6 +36,16 @@ export default function RootLayout({
     <React.StrictMode>
       <html lang="ja" {...mantineHtmlProps}>
         <head>
+          {/* PWAマニフェスト */}
+          <link rel="manifest" href="/manifest.webmanifest" />
+          {/* Apple Touch Icon */}
+          <link rel="apple-touch-icon" href="/icon512_rounded.png" />
+          {/* テーマカラー */}
+          <meta name="theme-color" content="#8936FF" />
+          {/* Apple PWA設定 */}
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+          <meta name="apple-mobile-web-app-title" content="クエストペイ" />
           <title>お小遣いクエストボード</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
           <ColorSchemeScript />

@@ -8,6 +8,7 @@ import { ErrorFallback } from '../error/ErrorFallback'
 import { queryClient } from '../tanstack'
 import { ThemeProvider, useThemeContext } from '../_theme/themeContext'
 import { useMemo } from 'react'
+import { ServiceWorkerRegistration } from './ServiceWorkerRegistration'
 
 /** MantineProviderのラッパー（テーマを適用する） */
 const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -66,6 +67,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <MantineThemeWrapper>
+            {/* Service Workerの登録 */}
+            <ServiceWorkerRegistration />
             {children}
           </MantineThemeWrapper>
         </ThemeProvider>
