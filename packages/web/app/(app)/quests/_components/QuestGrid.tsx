@@ -76,8 +76,8 @@ export const QuestGrid = <T extends QuestItem>({
         {filteredQuests.map((quest, index) => renderQuest(quest, index))}
       </SimpleGrid>
       
-      {/* 無限スクロール用のセンチネル */}
-      {sentinelRef && <div ref={sentinelRef} style={{ height: 1 }} />}
+      {/* 無限スクロール用のセンチネル（カードが見切れないよう余白を確保する） */}
+      {sentinelRef && <div ref={sentinelRef} style={{ height: 200 }} />}
     </div>
   )
 }
