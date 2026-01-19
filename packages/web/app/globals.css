@@ -25,6 +25,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* モバイルで入力時に拡大しないようにフォントサイズを16px以上に設定 */
+input,
+textarea,
+select {
+  font-size: 16px !important;
+}
+
 .neonButton {
   background-color: #1a1a2e; /* 暗めのベースカラー */
   color: #00e0ff; /* ネオンブルー */

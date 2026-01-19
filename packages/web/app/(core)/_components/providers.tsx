@@ -23,6 +23,43 @@ const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
         xl: "20px",
       },
       defaultRadius: "sm",
+      components: {
+        Input: {
+          defaultProps: {
+            size: "md",
+          },
+        },
+        TextInput: {
+          defaultProps: {
+            size: "md",
+          },
+        },
+        PasswordInput: {
+          defaultProps: {
+            size: "md",
+          },
+        },
+        NumberInput: {
+          defaultProps: {
+            size: "md",
+          },
+        },
+        Textarea: {
+          defaultProps: {
+            size: "md",
+          },
+        },
+        Select: {
+          defaultProps: {
+            size: "md",
+          },
+        },
+        PillsInput: {
+          defaultProps: {
+            size: "md",
+          },
+        },
+      },
     }
 
     // カスタムカラーが定義されている場合のみ設定する
