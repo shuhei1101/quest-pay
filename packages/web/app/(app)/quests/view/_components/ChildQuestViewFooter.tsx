@@ -1,7 +1,8 @@
 "use client"
 
-import { ActionIcon, Avatar, Button, Center, Group, Indicator, Tooltip } from "@mantine/core"
+import { ActionIcon, Avatar, Button, Center, Indicator, Tooltip } from "@mantine/core"
 import { IconCheck, IconHeart, IconHeartFilled, IconMessage, IconPlayerPlay, IconSend, IconX } from "@tabler/icons-react"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** 子供用クエストステータス */
 export type ChildQuestStatus = 
@@ -24,7 +25,7 @@ const FooterNotAccepted = ({
   onImprovement?: () => void
 }) => {
   return (
-    <Group justify="center" mt="xl" gap="md">
+    <HorizontalScrollButtons justify="center" mt="xl" gap="md">
       {/* クエストを受注するボタン */}
       <Button 
         size="md" 
@@ -46,7 +47,7 @@ const FooterNotAccepted = ({
       >
         改善要望を送る
       </Button>
-    </Group>
+    </HorizontalScrollButtons>
   )
 }
 
@@ -79,7 +80,7 @@ const FooterAccepted = ({
   onRetire?: () => void
 }) => {
   return (
-    <Group justify="center" mt="xl" gap="md">
+    <HorizontalScrollButtons justify="center" mt="xl" gap="md">
       {/* 完了報告ボタン */}
       <Button 
         size="md" 
@@ -101,7 +102,7 @@ const FooterAccepted = ({
       >
         リタイア
       </Button>
-    </Group>
+    </HorizontalScrollButtons>
   )
 }
 

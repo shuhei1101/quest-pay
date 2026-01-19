@@ -1,7 +1,8 @@
-import { ActionIcon, Avatar, Button, Group, Indicator, Tooltip } from "@mantine/core"
+import { ActionIcon, Avatar, Button, Indicator, Tooltip } from "@mantine/core"
 import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** クエスト閲覧フッター（オンライン向け） */
 export const PublicQuestViewFooter = ({
@@ -32,7 +33,7 @@ export const PublicQuestViewFooter = ({
   isLikeLoading?: boolean
 }) => {
   return (
-    <Group justify="center" mt="xl" gap="xl">
+    <HorizontalScrollButtons justify="center" mt="xl" gap="xl">
       {/* レベル切り替えボタン */}
       <LevelSelectMenu 
         availableLevels={availableLevels || []}
@@ -89,6 +90,6 @@ export const PublicQuestViewFooter = ({
       >
         戻る
       </Button>
-    </Group>
+    </HorizontalScrollButtons>
   )
 }

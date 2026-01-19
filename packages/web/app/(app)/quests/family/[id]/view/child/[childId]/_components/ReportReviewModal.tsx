@@ -1,9 +1,10 @@
 "use client"
 
 import { useWindow } from "@/app/(core)/useConstants"
-import { Button, Group, LoadingOverlay, Modal, Paper, Stack, Text, Textarea } from "@mantine/core"
+import { Button, LoadingOverlay, Modal, Paper, Stack, Text, Textarea } from "@mantine/core"
 import { IconCheck, IconX } from "@tabler/icons-react"
 import { useState } from "react"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** 報告内容確認モーダル */
 export const ReportReviewModal = ({
@@ -80,7 +81,7 @@ export const ReportReviewModal = ({
           />
 
           {/* ボタンエリア */}
-          <Group justify="space-between" mt="md">
+          <HorizontalScrollButtons justify="space-between" mt="md">
             {/* 却下ボタン */}
             <Button
               color="red"
@@ -100,7 +101,7 @@ export const ReportReviewModal = ({
             >
               受領
             </Button>
-          </Group>
+          </HorizontalScrollButtons>
         </Stack>
       </Paper>
     </Modal>

@@ -1,7 +1,8 @@
 "use client"
 
-import { Button, Group } from "@mantine/core"
+import { Button } from "@mantine/core"
 import { IconEdit, IconFileText, IconRefresh } from "@tabler/icons-react"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** クエスト閲覧フッター（親向け） */
 export const ParentChildQuestViewFooter = ({
@@ -16,7 +17,7 @@ export const ParentChildQuestViewFooter = ({
   isPendingReview: boolean
 }) => {
   return (
-    <Group justify="center" mt="xl" gap="md">
+    <HorizontalScrollButtons justify="center" mt="xl" gap="md">
       {/* 報告内容確認ボタン（pending_reviewの場合のみ表示） */}
       {isPendingReview && (
         <Button
@@ -49,6 +50,6 @@ export const ParentChildQuestViewFooter = ({
       >
         進捗リセット
       </Button>
-    </Group>
+    </HorizontalScrollButtons>
   )
 }

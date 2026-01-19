@@ -1,8 +1,9 @@
 "use client"
 
-import { Button, Group } from "@mantine/core"
+import { Button } from "@mantine/core"
 import { IconArrowLeft, IconEdit } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** クエスト閲覧フッター（親向け） */
 export const ParentQuestViewFooter = ({
@@ -19,7 +20,7 @@ export const ParentQuestViewFooter = ({
   onLevelChange?: (level: number) => void
 }) => {
   return (
-    <Group justify="center" mt="xl" gap="md">
+    <HorizontalScrollButtons justify="center" mt="xl" gap="md">
       {/* レベル切り替えボタン */}
       <LevelSelectMenu 
         availableLevels={availableLevels || []}
@@ -47,6 +48,6 @@ export const ParentQuestViewFooter = ({
       >
         戻る
       </Button>
-    </Group>
+    </HorizontalScrollButtons>
   )
 }

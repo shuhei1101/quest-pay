@@ -1,9 +1,10 @@
 "use client"
 
-import { Button, Group } from "@mantine/core"
+import { Button } from "@mantine/core"
 import { IconArrowLeft, IconEdit } from "@tabler/icons-react"
 import { ChildQuest } from "@/app/api/quests/family/[id]/child/query"
 import { QuestDetailSelect } from "@/drizzle/schema"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** クエスト閲覧フッター（子供向け） */
 export const ChildQuestViewFooter = ({
@@ -20,7 +21,7 @@ export const ChildQuestViewFooter = ({
   onCancelReview: () => void
 }) => {
   return (
-    <Group justify="center" mt="xl" gap="md">
+    <HorizontalScrollButtons justify="center" mt="xl" gap="md">
       {/* クリア済みボタン */}
       {quest?.children[0].status === "completed" && (
         <Button 
@@ -81,6 +82,6 @@ export const ChildQuestViewFooter = ({
       >
         戻る
       </Button>
-    </Group>
+    </HorizontalScrollButtons>
   )
 }

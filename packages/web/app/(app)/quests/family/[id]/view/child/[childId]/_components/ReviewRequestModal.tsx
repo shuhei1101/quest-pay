@@ -1,7 +1,8 @@
 "use client"
 
-import { Button, Group, Modal, Textarea } from "@mantine/core"
+import { Button, Modal, Textarea } from "@mantine/core"
 import { useState } from "react"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** 完了報告モーダル */
 export const ReviewRequestModal = ({
@@ -49,7 +50,7 @@ export const ReviewRequestModal = ({
       />
 
       {/* ボタングループ */}
-      <Group justify="flex-end" gap="sm">
+      <HorizontalScrollButtons justify="flex-end" gap="sm">
         {/* キャンセルボタン */}
         <Button
           variant="outline"
@@ -68,7 +69,7 @@ export const ReviewRequestModal = ({
         >
           報告する
         </Button>
-      </Group>
+      </HorizontalScrollButtons>
     </Modal>
   )
 }

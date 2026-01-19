@@ -1,7 +1,8 @@
 "use client"
 
-import { Button, Group, Modal, Textarea } from "@mantine/core"
+import { Button, Modal, Textarea } from "@mantine/core"
 import { useState } from "react"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** キャンセルモーダル */
 export const CancelReviewModal = ({
@@ -49,7 +50,7 @@ export const CancelReviewModal = ({
       />
 
       {/* ボタングループ */}
-      <Group justify="flex-end" gap="sm">
+      <HorizontalScrollButtons justify="flex-end" gap="sm">
         {/* いいえボタン */}
         <Button
           variant="outline"
@@ -68,7 +69,7 @@ export const CancelReviewModal = ({
         >
           はい
         </Button>
-      </Group>
+      </HorizontalScrollButtons>
     </Modal>
   )
 }
