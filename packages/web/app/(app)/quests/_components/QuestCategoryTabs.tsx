@@ -6,7 +6,7 @@ import { QuestCategorySelect } from "@/drizzle/schema"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
 /** クエストカテゴリタブコンポーネント */
-export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children, enableSwipe = true }: {
+export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children }: {
   /** 現在のタブ値 */
   tabValue: string | null
   /** タブ変更時のハンドル */
@@ -15,8 +15,6 @@ export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children,
   categories: QuestCategorySelect[]
   /** タブパネルの内容 */
   children: ReactNode
-  /** スワイプ操作を有効にするか */
-  enableSwipe?: boolean
 }) => {
   /** タブリストコンテナの参照 */
   const tabListRef = useRef<HTMLDivElement>(null)
