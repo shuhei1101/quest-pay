@@ -1,7 +1,12 @@
 import type { NextConfig } from 'next'
 
+// Capacitorビルド用の静的エクスポート設定
+const isCapacitor = process.env.NEXT_PUBLIC_PLATFORM === 'capacitor'
+
 const nextConfig: NextConfig = {
   reactStrictMode: false,
+  // Capacitor用に静的エクスポートを有効化
+  ...(isCapacitor && { output: 'export' }),
   images: {
     unoptimized: true,
   },
