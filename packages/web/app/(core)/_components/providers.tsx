@@ -14,6 +14,9 @@ const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
   const { currentTheme } = useThemeContext()
 
   const mantineTheme = useMemo(() => {
+    // 入力コンポーネントのデフォルトサイズ（モバイルで拡大しないように16px以上に設定）
+    const inputDefaultProps = { size: "md" }
+
     const themeConfig: any = {
       fontSizes: {
         xs: "14px",
@@ -24,41 +27,13 @@ const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
       },
       defaultRadius: "sm",
       components: {
-        Input: {
-          defaultProps: {
-            size: "md",
-          },
-        },
-        TextInput: {
-          defaultProps: {
-            size: "md",
-          },
-        },
-        PasswordInput: {
-          defaultProps: {
-            size: "md",
-          },
-        },
-        NumberInput: {
-          defaultProps: {
-            size: "md",
-          },
-        },
-        Textarea: {
-          defaultProps: {
-            size: "md",
-          },
-        },
-        Select: {
-          defaultProps: {
-            size: "md",
-          },
-        },
-        PillsInput: {
-          defaultProps: {
-            size: "md",
-          },
-        },
+        Input: { defaultProps: inputDefaultProps },
+        TextInput: { defaultProps: inputDefaultProps },
+        PasswordInput: { defaultProps: inputDefaultProps },
+        NumberInput: { defaultProps: inputDefaultProps },
+        Textarea: { defaultProps: inputDefaultProps },
+        Select: { defaultProps: inputDefaultProps },
+        PillsInput: { defaultProps: inputDefaultProps },
       },
     }
 
