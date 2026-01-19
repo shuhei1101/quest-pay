@@ -14,7 +14,7 @@ export const useTabAutoScroll = (tabValue: string | null) => {
     if (!tabListRef.current || !tabValue) return
 
     const container = tabListRef.current
-    const selectedTabElement = container.querySelector(`[data-value="${tabValue}"]`) as HTMLElement
+    const selectedTabElement = container.querySelector(`[data-value="${tabValue}"]`) as HTMLElement | null
 
     if (selectedTabElement) {
       const containerRect = container.getBoundingClientRect()
