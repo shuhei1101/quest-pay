@@ -35,6 +35,7 @@ const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
         Textarea: { defaultProps: inputDefaultProps },
         Select: { defaultProps: inputDefaultProps },
         PillsInput: { defaultProps: inputDefaultProps },
+        DateInput: { defaultProps: inputDefaultProps },
       },
     }
 
