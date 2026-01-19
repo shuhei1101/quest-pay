@@ -12,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: "any",
     dir: "auto",
     lang: "ja",
-    theme_color: "#8936FF",
-    background_color: "#2EC6FE",
+    theme_color: "#E0F7FF",
+    background_color: "#E0F7FF",
     icons: [
       {
         purpose: "maskable",
