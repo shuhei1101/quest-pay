@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
+import { Box, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
 import { useState, ReactNode } from "react"
 import { IconAlertCircle } from "@tabler/icons-react"
 
@@ -16,22 +16,6 @@ type TabConfig = {
   content: ReactNode
 }
 
-/** クエスト編集レイアウトのアクションボタン */
-type ActionButton = {
-  /** ボタンのラベル */
-  label: string
-  /** クリック時のハンドラ */
-  onClick?: () => void
-  /** フォーム送信ボタンかどうか */
-  type?: "button" | "submit"
-  /** ボタンの色 */
-  color?: string
-  /** ローディング状態 */
-  loading?: boolean
-  /** 無効状態 */
-  disabled?: boolean
-}
-
 /** クエスト編集レイアウトProps */
 type QuestEditLayoutProps<TForm extends Record<string, unknown>> = {
   /** クエストID（新規作成時はundefined） */
@@ -43,9 +27,9 @@ type QuestEditLayoutProps<TForm extends Record<string, unknown>> = {
   /** タブ設定 */
   tabs: TabConfig[]
   /** 編集モード時のアクションボタン */
-  editActions: ActionButton[]
+  editActions: ReactNode[]
   /** 新規作成モード時のアクションボタン */
-  createActions: ActionButton[]
+  createActions: ReactNode[]
   /** フローティングポップアップコンポーネント */
   popups?: ReactNode
 }
@@ -103,18 +87,11 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
             </Tabs>
 
             {/* アクションボタン */}
-            <Group mt="md" justify="flex-end">
+            <Group mt="md" justify="flex-end" gap="xs">
               {actionButtons.map((action, index) => (
-                <Button
-                  key={index}
-                  type={action.type ?? "button"}
-                  color={action.color}
-                  loading={action.loading}
-                  disabled={action.disabled}
-                  onClick={action.type !== "submit" ? action.onClick : undefined}
-                >
-                  {action.label}
-                </Button>
+                <div key={index}>
+                  {action}
+                </div>
               ))}
             </Group>
           </Paper>
