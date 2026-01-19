@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, Suspense, useEffect } from "react"
+import { useState, Suspense, useEffect, useRef } from "react"
 import { Tabs, Paper, Text, Button, Loader, Center } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -34,12 +34,61 @@ export function FamilyQuestsScreen() {
 
   const [tabValue, setTabValue] = useState<string | null>(getTabFromParams())
 
+  /** タブリストコンテナの参照 */
+  const tabListRef = useRef<HTMLDivElement>(null)
+
+  /** スクロール時の余白（ピクセル） */
+  const SCROLL_MARGIN = 16
+
   /** クエリパラメータが変更された時にタブを更新する */
   useEffect(() => {
     const tabParam = searchParams.get('tab')
     const newTab = isValidTab(tabParam) ? tabParam : 'public'
     setTabValue(newTab)
   }, [searchParams])
+
+  /** タブ変更時に選択されたタブを画面内にスクロールする */
+  useEffect(() => {
+    if (!tabListRef.current || !tabValue) return
+
+    const container = tabListRef.current
+    const selectedTabElement = container.querySelector(`[data-value="${tabValue}"]`) as HTMLElement
+
+    if (selectedTabElement) {
+      const containerRect = container.getBoundingClientRect()
+      const tabRect = selectedTabElement.getBoundingClientRect()
+
+      // タブが画面外にある場合、スクロールして表示する
+      if (tabRect.left < containerRect.left) {
+        // タブが左側に隠れている場合
+        container.scrollLeft += tabRect.left - containerRect.left - SCROLL_MARGIN
+      } else if (tabRect.right > containerRect.right) {
+        // タブが右側に隠れている場合
+        container.scrollLeft += tabRect.right - containerRect.right + SCROLL_MARGIN
+      }
+    }
+  }, [tabValue])
+
+  /** マウスホイールでの横スクロールを有効化する */
+  useEffect(() => {
+    const container = tabListRef.current
+    if (!container) return
+
+    /** ホイールイベントハンドラ */
+    const handleWheel = (e: WheelEvent) => {
+      // 縦スクロールを横スクロールに変換する
+      if (e.deltaY !== 0) {
+        e.preventDefault()
+        container.scrollLeft += e.deltaY
+      }
+    }
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
 
   /** フローティングアクションボタンの開閉状態 */
   const [open, setOpen] = useState(false)
@@ -88,17 +137,17 @@ export function FamilyQuestsScreen() {
         {/* タブリスト */}
         <Paper p="xs" withBorder >
           <Tabs.List>
-            <div className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-              <Tabs.Tab value="public" leftSection={<IconWorld color={tabValue == 'public' ? "white" : "rgb(96 165 250)"} size={18} />}>
+            <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+              <Tabs.Tab value="public" data-value="public" leftSection={<IconWorld color={tabValue == 'public' ? "white" : "rgb(96 165 250)"} size={18} />}>
                 公開
               </Tabs.Tab>
-              <Tabs.Tab value="family" leftSection={<IconHome2 color={tabValue == 'family' ? "white" : "rgb(74, 222, 128)"} size={18} />}>
+              <Tabs.Tab value="family" data-value="family" leftSection={<IconHome2 color={tabValue == 'family' ? "white" : "rgb(74, 222, 128)"} size={18} />}>
                 家族
               </Tabs.Tab>
-              <Tabs.Tab value="penalty" leftSection={<IconClipboardOff color={tabValue == 'penalty' ? "white" : "rgb(252, 132, 132)"} size={18} />}>
+              <Tabs.Tab value="penalty" data-value="penalty" leftSection={<IconClipboardOff color={tabValue == 'penalty' ? "white" : "rgb(252, 132, 132)"} size={18} />}>
                 違反リスト
               </Tabs.Tab>
-              <Tabs.Tab value="template" leftSection={<IconClipboard color={tabValue == 'template' ? "white" : "rgb(250 204 21)"} size={18} />}>
+              <Tabs.Tab value="template" data-value="template" leftSection={<IconClipboard color={tabValue == 'template' ? "white" : "rgb(250 204 21)"} size={18} />}>
                 テンプレート
               </Tabs.Tab>
             </div>
