@@ -43,8 +43,6 @@ export default function RootLayout({
         <head>
           {/* PWAマニフェスト */}
           <link rel="manifest" href="/manifest.webmanifest" />
-          {/* Apple Touch Icon */}
-          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           {/* テーマカラー */}
           <meta name="theme-color" content="#E0F7FF" />
           {/* Apple PWA設定 */}
