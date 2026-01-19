@@ -79,15 +79,16 @@ export const QuestGrid = <T extends QuestItem>({
     onSwiped: (event) => {
       if (!enableSwipe || !onTabChange || !tabList || !tabValue) return
       
-      const idx = tabList.indexOf(tabValue ?? TAB_ALL)
+      const idx = tabList.indexOf(tabValue)
+      
+      // インデックスが見つからない場合は何もしない
+      if (idx === -1) return
 
       if (event.dir === "Left") {
         // 次のタブへ
         const next = tabList[idx + 1]
         if (next) onTabChange(next)
-      }
-
-      if (event.dir === "Right") {
+      } else if (event.dir === "Right") {
         // 前のタブへ
         const prev = tabList[idx - 1]
         if (prev) onTabChange(prev)
