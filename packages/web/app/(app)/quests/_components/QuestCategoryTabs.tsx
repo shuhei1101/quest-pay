@@ -3,9 +3,7 @@ import { Tabs } from "@mantine/core"
 import { RenderIcon } from "../../icons/_components/RenderIcon"
 import { ReactNode, useRef, useEffect } from "react"
 import { QuestCategorySelect } from "@/drizzle/schema"
-
-const TAB_ALL = "すべて"
-const TAB_OTHERS = "その他"
+import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
 /** クエストカテゴリタブコンポーネント */
 export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children, enableSwipe = true }: {

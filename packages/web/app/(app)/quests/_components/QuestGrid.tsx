@@ -5,6 +5,7 @@ import { ReactNode } from "react"
 import { QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
 import { useSwipeable } from "react-swipeable"
+import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
 type QuestItem = {
   quest: QuestSelect
@@ -56,11 +57,11 @@ export const QuestGrid = <T extends QuestItem>({
 
   /** タブによってフィルタリングされたクエストを取得する */
   const getFilteredQuests = () => {
-    if (!tabValue || tabValue === "すべて") {
+    if (!tabValue || tabValue === TAB_ALL) {
       return quests
     }
     
-    if (tabValue === "その他") {
+    if (tabValue === TAB_OTHERS) {
       return quests.filter((quest) => quest.quest.categoryId === null)
     }
     
@@ -78,7 +79,7 @@ export const QuestGrid = <T extends QuestItem>({
     onSwiped: (event) => {
       if (!enableSwipe || !onTabChange || !tabList || !tabValue) return
       
-      const idx = tabList.indexOf(tabValue ?? "すべて")
+      const idx = tabList.indexOf(tabValue ?? TAB_ALL)
 
       if (event.dir === "Left") {
         // 次のタブへ
