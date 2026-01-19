@@ -1,14 +1,12 @@
 "use client"
 
-import { Group } from "@mantine/core"
+import { Group, GroupProps } from "@mantine/core"
 import { ReactNode, useRef, useEffect } from "react"
 
 /** 横スクロール可能なボタングループコンポーネント */
-export const HorizontalScrollButtons = ({ children, ...props }: {
+export const HorizontalScrollButtons = ({ children, className = '', ...props }: GroupProps & {
   /** ボタンなどの子要素 */
   children: ReactNode
-  /** Groupコンポーネントに渡すプロパティ */
-  [key: string]: unknown
 }) => {
   /** ボタングループコンテナの参照 */
   const containerRef = useRef<HTMLDivElement>(null)
@@ -35,13 +33,13 @@ export const HorizontalScrollButtons = ({ children, ...props }: {
   }, [])
 
   return (
-    <Group {...props}>
-      <div 
-        ref={containerRef} 
-        className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2 w-full"
-      >
-        {children}
-      </div>
+    <Group 
+      ref={containerRef}
+      wrap="nowrap"
+      className={`overflow-x-auto hidden-scrollbar ${className}`}
+      {...props}
+    >
+      {children}
     </Group>
   )
 }
