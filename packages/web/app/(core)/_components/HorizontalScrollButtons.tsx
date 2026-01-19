@@ -1,13 +1,10 @@
 "use client"
 
 import { Group, GroupProps } from "@mantine/core"
-import { ReactNode, useRef, useEffect } from "react"
+import { useRef, useEffect } from "react"
 
 /** 横スクロール可能なボタングループコンポーネント */
-export const HorizontalScrollButtons = ({ children, className = '', ...props }: GroupProps & {
-  /** ボタンなどの子要素 */
-  children: ReactNode
-}) => {
+export const HorizontalScrollButtons = ({ children, className = '', ...props }: GroupProps) => {
   /** ボタングループコンテナの参照 */
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -18,8 +15,8 @@ export const HorizontalScrollButtons = ({ children, className = '', ...props }: 
 
     /** ホイールイベントハンドラ */
     const handleWheel = (e: WheelEvent) => {
-      // 縦スクロールを横スクロールに変換する
-      if (e.deltaY !== 0) {
+      // 横スクロールが必要な場合のみ、縦スクロールを横スクロールに変換する
+      if (e.deltaY !== 0 && container.scrollWidth > container.clientWidth) {
         e.preventDefault()
         container.scrollLeft += e.deltaY
       }
