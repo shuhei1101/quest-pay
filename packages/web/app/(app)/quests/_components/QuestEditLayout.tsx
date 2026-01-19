@@ -1,8 +1,9 @@
 "use client"
 
-import { Box, Button, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
+import { Box, Button, LoadingOverlay, Paper, Tabs } from "@mantine/core"
 import { useState, ReactNode } from "react"
 import { IconAlertCircle } from "@tabler/icons-react"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 
 /** クエスト編集レイアウトのタブ設定 */
 type TabConfig = {
@@ -103,7 +104,7 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
             </Tabs>
 
             {/* アクションボタン */}
-            <Group mt="md" justify="flex-end">
+            <HorizontalScrollButtons mt="md" justify="flex-end">
               {actionButtons.map((action, index) => (
                 <Button
                   key={index}
@@ -116,7 +117,7 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
                   {action.label}
                 </Button>
               ))}
-            </Group>
+            </HorizontalScrollButtons>
           </Paper>
         </form>
       </Box>

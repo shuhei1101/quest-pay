@@ -1,5 +1,5 @@
 'use client'
-import { ActionIcon, Box, Button, Checkbox, Group, Input, LoadingOverlay, Space, Textarea} from "@mantine/core"
+import { ActionIcon, Box, Button, Checkbox, Input, LoadingOverlay, Space, Textarea} from "@mantine/core"
 import { DateInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useState } from "react"
@@ -11,6 +11,7 @@ import { useChildForm } from "../_hook/useChildForm"
 import { devLog } from "@/app/(core)/util"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
+import { HorizontalScrollButtons } from "@/app/(core)/_components/HorizontalScrollButtons"
 // dayjs のロケールを日本語に設定
 dayjs.locale('ja')
 
@@ -78,9 +79,9 @@ export const ChildForm = ( params: {
             </div>
             <Space h="md" />
             {/* サブミットボタン */}
-            <Group>
+            <HorizontalScrollButtons>
               <Button type="submit" variant="gradient" loading={isSubmitting} disabled={isLoading || isSubmitting}>保存</Button>
-            </Group>
+            </HorizontalScrollButtons>
           </form>
         </Box>
         </div>
