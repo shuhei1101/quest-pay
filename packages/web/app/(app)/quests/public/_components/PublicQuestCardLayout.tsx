@@ -5,7 +5,7 @@ import { PublicQuest } from "@/app/api/quests/public/query"
 import { Badge, Card, Group, Text, Stack, Flex } from "@mantine/core"
 import { IconHeart, IconMessageCircle } from "@tabler/icons-react"
 import { formatAgeRange, formatMonthRange } from "@/app/(core)/util"
-import { usePublicQuestLikeCount } from "../_hooks/usePublicQuestLikeCount"
+import { useLikeCount } from "../[id]/view/_hooks/useLikeCount"
 
 /** 公開クエストカードレイアウトコンポーネント */
 export const PublicQuestCardLayout = ({publicQuest, onClick}: {
@@ -23,7 +23,7 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
   const monthRange = formatMonthRange(publicQuest.quest.monthFrom, publicQuest.quest.monthTo)
   
   // いいね数を取得する
-  const { likeCount } = usePublicQuestLikeCount({publicQuestId: publicQuest.base.id})
+  const { likeCount } = useLikeCount({id: publicQuest.base.id})
   
   return (
     <Card 
