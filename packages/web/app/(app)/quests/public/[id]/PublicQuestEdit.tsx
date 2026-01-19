@@ -153,25 +153,30 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
       ]}
       editActions={[
         <CheckOriginalIconButton
+          key="check-original"
           onClick={handleCheckOriginalQuest}
         />,
         fetchedEntity?.base.isActivate ? (
           <UnpublishIconButton
+            key="unpublish"
             loading={deactivateLoading}
             onClick={() => handleDeactivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
           />
         ) : (
           <PublishIconButton
+            key="publish"
             loading={activateLoading}
             onClick={() => handleActivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
             tooltip="公開にする"
           />
         ),
         <DeleteIconButton
+          key="delete"
           loading={submitLoading}
           onClick={() => handleDelete({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
         />,
         <SaveIconButton
+          key="save"
           type="submit"
           loading={submitLoading}
           disabled={!isValueChanged}
@@ -180,6 +185,7 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
       ]}
       createActions={[
         <SaveIconButton
+          key="save"
           type="submit"
           loading={submitLoading}
           tooltip="登録"

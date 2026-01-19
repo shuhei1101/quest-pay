@@ -184,21 +184,26 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
       editActions={[
         publicQuest ? (
           <CheckPublicQuestIconButton
+            key="check-public"
             onClick={() => router.push(PUBLIC_QUEST_URL(publicQuest!.id))}
           />
         ) : (
           <PublishIconButton
+            key="publish"
             onClick={() => handlePublish({ familyQuestId: familyQuestId! })}
           />
         ),
         <ViewIconButton
+          key="view"
           onClick={() => router.push(FAMILY_QUEST_VIEW_URL(familyQuestId!))}
         />,
         <DeleteIconButton
+          key="delete"
           loading={submitLoading}
           onClick={() => handleDelete({ familyQuestId: familyQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
         />,
         <SaveIconButton
+          key="save"
           type="submit"
           loading={submitLoading}
           disabled={!isValueChanged}
@@ -207,6 +212,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
       ]}
       createActions={[
         <SaveIconButton
+          key="save"
           type="submit"
           loading={submitLoading}
           tooltip="登録"
