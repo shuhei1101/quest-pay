@@ -6,7 +6,7 @@ import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_com
 import { useRouter } from 'next/navigation'
 
 /** モバイル用ボトムバーを取得する */
-export const BottomBar = () => {
+export const BottomBar = ({isDark}: {isDark: boolean}) => {
   const router = useRouter()
 
   return (
@@ -14,12 +14,12 @@ export const BottomBar = () => {
       style={{
         width: "100%",
         height: "60px",
-        background: "rgba(255, 255, 255, 0.9)",
+        background: isDark ? "rgba(39, 39, 42, 0.9)" : "rgba(255, 255, 255, 0.9)",
         backdropFilter: "blur(8px)",
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",
-        boxShadow: "0 -2px 6px rgba(0, 0, 0, 0.15)",
+        boxShadow: isDark ? "0 -2px 6px rgba(0, 0, 0, 0.4)" : "0 -2px 6px rgba(0, 0, 0, 0.15)",
       }}
     >
       {/* ホームアイコン */}
