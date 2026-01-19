@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, Suspense, useEffect, useRef } from "react"
+import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button } from "@mantine/core"
 import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { PublicQuestList } from "../public/PublicQuestList"
+import { useTabAutoScroll, useTabHorizontalScroll } from "@/app/(core)/_hooks/useTabScrollControl"
 
 /** 有効なタブ値の一覧 */
 const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
@@ -31,11 +32,11 @@ export function GuestQuestsScreen() {
 
   const [tabValue, setTabValue] = useState<string | null>(getTabFromParams())
 
-  /** タブリストコンテナの参照 */
-  const tabListRef = useRef<HTMLDivElement>(null)
+  /** タブの自動スクロール制御 */
+  const { tabListRef } = useTabAutoScroll(tabValue)
 
-  /** スクロール時の余白（ピクセル） */
-  const SCROLL_MARGIN = 16
+  /** タブの横スクロール制御 */
+  useTabHorizontalScroll(tabListRef)
 
   /** クエリパラメータが変更された時にタブを更新する */
   useEffect(() => {
@@ -43,49 +44,6 @@ export function GuestQuestsScreen() {
     const newTab = isValidTab(tabParam) ? tabParam : 'public'
     setTabValue(newTab)
   }, [searchParams])
-
-  /** タブ変更時に選択されたタブを画面内にスクロールする */
-  useEffect(() => {
-    if (!tabListRef.current || !tabValue) return
-
-    const container = tabListRef.current
-    const selectedTabElement = container.querySelector(`[data-value="${tabValue}"]`) as HTMLElement
-
-    if (selectedTabElement) {
-      const containerRect = container.getBoundingClientRect()
-      const tabRect = selectedTabElement.getBoundingClientRect()
-
-      // タブが画面外にある場合、スクロールして表示する
-      if (tabRect.left < containerRect.left) {
-        // タブが左側に隠れている場合
-        container.scrollLeft += tabRect.left - containerRect.left - SCROLL_MARGIN
-      } else if (tabRect.right > containerRect.right) {
-        // タブが右側に隠れている場合
-        container.scrollLeft += tabRect.right - containerRect.right + SCROLL_MARGIN
-      }
-    }
-  }, [tabValue])
-
-  /** マウスホイールでの横スクロールを有効化する */
-  useEffect(() => {
-    const container = tabListRef.current
-    if (!container) return
-
-    /** ホイールイベントハンドラ */
-    const handleWheel = (e: WheelEvent) => {
-      // 縦スクロールを横スクロールに変換する
-      if (e.deltaY !== 0) {
-        e.preventDefault()
-        container.scrollLeft += e.deltaY
-      }
-    }
-
-    container.addEventListener('wheel', handleWheel, { passive: false })
-
-    return () => {
-      container.removeEventListener('wheel', handleWheel)
-    }
-  }, [])
 
     const GuestScreen = () => (
     <div className="w-full h-[80vh] flex flex-col items-center justify-center">
