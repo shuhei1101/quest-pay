@@ -37,7 +37,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
           <div className='flex flex-col'>
             {/* 家族名 */}
             <Text size="xs" c="dimmed" className='font-medium'>
-              {userInfo?.families?.name}
+              {userInfo?.families?.localName}
             </Text>
             {/* 自身の名前 */}
             <Text size="md" className='font-bold'>
