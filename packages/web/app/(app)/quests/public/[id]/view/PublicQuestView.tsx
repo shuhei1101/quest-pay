@@ -68,7 +68,11 @@ export const PublicQuestView = ({id}: {id: string}) => {
       />
 
       {/* クエストアイコン */}
-      <QuestViewIcon />
+      <QuestViewIcon
+        iconColor={publicQuest?.quest?.iconColor}
+        iconName={publicQuest?.icon?.name}
+        iconSize={publicQuest?.icon?.size ?? 60}
+      />
 
       {/* クエスト内容カード */}
       <Paper

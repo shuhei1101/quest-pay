@@ -1,12 +1,14 @@
 "use client"
 
 import { ActionIcon, Button, ColorPicker, Input, Modal, Popover, Space, Tabs, Text } from "@mantine/core"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { RenderIcon } from "./RenderIcon"
 import { useIcons } from "../_hooks/useIcons"
 import { devLog } from "@/app/(core)/util"
 import { useIconCategories } from "../category/_hook/useIconCategories"
 import { IconSelect } from "@/drizzle/schema"
+import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
+import { useWindow } from "@/app/(core)/useConstants"
 
 /** アイコン選択ポップアップ */
 export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor, currentColor}: {
@@ -17,6 +19,8 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
   setColor: (color: string) => void,
   currentColor: string | null
 }) => {
+  /** テーマ */
+  const { isDark } = useWindow()
   /** アイコンカテゴリ */
   const { iconCategories } = useIconCategories()
   /** アイコン */
@@ -28,8 +32,8 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
   /** 選択中のアイコン */
   const [selectedIconId, setSelectedIconId] = useState<number | undefined>(undefined)
 
-  /** タブリストコンテナの参照 */
-  const tabListRef = useRef<HTMLDivElement>(null)
+  /** アクティブタブ */
+  const [activeTab, setActiveTab] = useState<string | null>(iconCategories.at(0)?.name ?? null)
 
   // ポップアップ起動時のイベント
   useEffect(() => {
@@ -37,28 +41,8 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
     // 現在の値をセットする
     setSelectedColor(currentColor)
     setSelectedIconId(currentIconId)
-  }, [opened])
-
-  /** マウスホイールでの横スクロールを有効化する */
-  useEffect(() => {
-    const container = tabListRef.current
-    if (!container) return
-
-    /** ホイールイベントハンドラ */
-    const handleWheel = (e: WheelEvent) => {
-      // 縦スクロールを横スクロールに変換する
-      if (e.deltaY !== 0) {
-        e.preventDefault()
-        container.scrollLeft += e.deltaY
-      }
-    }
-
-    container.addEventListener('wheel', handleWheel, { passive: false })
-
-    return () => {
-      container.removeEventListener('wheel', handleWheel)
-    }
-  }, [])
+    setActiveTab(iconCategories.at(0)?.name ?? null)
+  }, [opened, iconCategories])
 
   /** アイコン選択時のハンドル */
   const onIconSelect = (icon: IconSelect) => {
@@ -79,39 +63,39 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
     close()
   }
 
+  /** タブアイテムを生成する */
+  const tabItems: ScrollableTabItem[] = iconCategories.map((category) => ({
+    value: category.name,
+    label: category.name,
+    leftSection: <RenderIcon iconName={category.iconName} iconSize={category.iconSize} />
+  }))
+
   return (
     <Modal opened={opened} onClose={close} title="アイコン選択">
-      <Tabs defaultValue={iconCategories.at(0) ? iconCategories.at(0)?.name : ""}>
-        {/* アイコンカテゴリ */}
-        <Tabs.List>
-          <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-            {iconCategories.map((category) => {
-              return (
-                  <Tabs.Tab
-                    key={category.name}
-                    value={category.name}
-                    leftSection={<RenderIcon iconName={category.iconName} iconSize={category.iconSize} />}
-                  >
-                  {category.name}
-                  </Tabs.Tab>
-              )
-            })}
-          </div>
-        </Tabs.List>
-
+      <ScrollableTabs
+        value={activeTab}
+        onChange={setActiveTab}
+        items={tabItems}
+      >
         {/* カテゴリごとのアイコン一覧 */}
         {iconCategories.map((category) => 
           <Tabs.Panel value={category.name} key={category.id}>
             <div className="flex flex-wrap justify-start gap-3 m-3">
               {icons.filter((icon) => icon.categoryId === category.id).map((icon) => (
-                <ActionIcon key={icon.id} variant={selectedIconId === icon.id ? "outline" : "white"} radius="sm" onClick={() => onIconSelect(icon)}>
+                <ActionIcon 
+                  key={icon.id} 
+                  variant="transparent" 
+                  radius="sm" 
+                  onClick={() => onIconSelect(icon)}
+                  style={{ backgroundColor: selectedIconId === icon.id ? (isDark ? "rgba(0, 0, 0, 0.377)" : "rgba(3, 3, 3, 0.111)") : "transparent" }}
+                >
                   <RenderIcon iconName={icon.name} iconColor={selectedColor} />
                 </ActionIcon>
               ))}
             </div>
           </Tabs.Panel>
         )}
-      </Tabs>
+      </ScrollableTabs>
       <div className="flex justify-end gap-2.5">
         <Popover width={270} position="bottom" withArrow shadow="lg">
           <Popover.Target>
