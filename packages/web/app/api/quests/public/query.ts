@@ -84,6 +84,7 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
   try {
     const { pageSize, offset } = calculatePagination({ page: params.page, pageSize: params.pageSize })
     const conditions = []
+    const familyIcons = alias(icons, "family_icons")
 
     if (params.name !== undefined) conditions.push(like(quests.name, `%${params.name}%`))
     if (params.tags.length !== 0) conditions.push(inArray(questTags.name, params.tags))
@@ -105,6 +106,8 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
       .leftJoin(familyQuests, eq(familyQuests.id, publicQuests.familyQuestId))
+      .leftJoin(families, eq(families.id, familyQuests.familyId))
+      .leftJoin(familyIcons, eq(families.iconId, familyIcons.id))
       .where(and(...conditions))
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
