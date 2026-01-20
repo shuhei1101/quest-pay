@@ -95,7 +95,12 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
                   key={tab.value}
                   value={tab.value}
                   pt="xs"
-                  style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}
+                  style={{ 
+                    flex: 1, 
+                    // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
+                    overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
+                    overflowX: 'hidden' 
+                  }}
                 >
                   {tab.content}
                 </Tabs.Panel>
