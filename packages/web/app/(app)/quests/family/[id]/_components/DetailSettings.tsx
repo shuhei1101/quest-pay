@@ -142,7 +142,7 @@ export const DetailSettings = ({
                         null
                       }
                     >
-                      <Group gap={4}>
+                      <Group gap={4} wrap="nowrap">
                         <Text size="sm">レベル {level}</Text>
                         {level === 1 && <Text size="xs" c="red">*</Text>}
                       </Group>
