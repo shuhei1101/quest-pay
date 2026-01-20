@@ -2,7 +2,7 @@
 
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { HOME_URL, LOGIN_URL } from '@/app/(core)/endpoints'
-import { ActionIcon, Title, Text, Button, LoadingOverlay, Indicator } from '@mantine/core'
+import { ActionIcon, Title, Button, LoadingOverlay, Indicator } from '@mantine/core'
 import { IconHome2, IconMenu2, IconBell, IconLogout, IconLogin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { appStorage } from '../../(core)/_sessionStorage/appStorage'
@@ -64,13 +64,6 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       >クエストペイ</Title>
       {/* スペース */}
       <div className='w-full' />
-      {/* ユーザ情報を表示する */}
-      <Text 
-        className={`text-nowrap text-sm`}
-        c={`${isDark ? 'white' : 'black'}`}
-      >
-        {userInfo?.profiles.name}
-      </Text>
       {/* テーマ切り替えボタン */}
       <ThemeToggleButton />
       {/* 通知ボタン */}
