@@ -1,7 +1,7 @@
 "use client"
 
 import { ActionIcon, Button, ColorPicker, Input, Modal, Popover, Space, Tabs, Text } from "@mantine/core"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { RenderIcon } from "./RenderIcon"
 import { useIcons } from "../_hooks/useIcons"
 import { devLog } from "@/app/(core)/util"
@@ -28,6 +28,9 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
   /** 選択中のアイコン */
   const [selectedIconId, setSelectedIconId] = useState<number | undefined>(undefined)
 
+  /** タブリストコンテナの参照 */
+  const tabListRef = useRef<HTMLDivElement>(null)
+
   // ポップアップ起動時のイベント
   useEffect(() => {
     if (!opened) return
@@ -35,6 +38,27 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
     setSelectedColor(currentColor)
     setSelectedIconId(currentIconId)
   }, [opened])
+
+  /** マウスホイールでの横スクロールを有効化する */
+  useEffect(() => {
+    const container = tabListRef.current
+    if (!container) return
+
+    /** ホイールイベントハンドラ */
+    const handleWheel = (e: WheelEvent) => {
+      // 縦スクロールを横スクロールに変換する
+      if (e.deltaY !== 0) {
+        e.preventDefault()
+        container.scrollLeft += e.deltaY
+      }
+    }
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
 
   /** アイコン選択時のハンドル */
   const onIconSelect = (icon: IconSelect) => {
@@ -60,17 +84,19 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
       <Tabs defaultValue={iconCategories.at(0) ? iconCategories.at(0)?.name : ""}>
         {/* アイコンカテゴリ */}
         <Tabs.List>
-          {iconCategories.map((category) => {
-            return (
-                <Tabs.Tab
-                  key={category.name}
-                  value={category.name}
-                  leftSection={<RenderIcon iconName={category.iconName} iconSize={category.iconSize} />}
-                >
-                {category.name}
-                </Tabs.Tab>
-            )
-          })}
+          <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+            {iconCategories.map((category) => {
+              return (
+                  <Tabs.Tab
+                    key={category.name}
+                    value={category.name}
+                    leftSection={<RenderIcon iconName={category.iconName} iconSize={category.iconSize} />}
+                  >
+                  {category.name}
+                  </Tabs.Tab>
+              )
+            })}
+          </div>
         </Tabs.List>
 
         {/* カテゴリごとのアイコン一覧 */}
