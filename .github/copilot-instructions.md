@@ -96,3 +96,8 @@ export const useChildForm = ({childId}: {childId?: string}) => {
 ## 命名規則
 - 閲覧画面: 〇〇View
 - 編集画面: 〇〇Edit
+
+## 共通コンポーネント
+- 共通コンポーネントは`app/(core)/_components/`以下に配置すること
+- 共通タブ: `ScrollableTabs`
+- 

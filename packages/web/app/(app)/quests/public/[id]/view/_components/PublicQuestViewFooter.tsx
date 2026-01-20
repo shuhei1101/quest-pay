@@ -78,17 +78,6 @@ export const PublicQuestViewFooter = ({
           <IconMessage size={28} />
         </ActionIcon>
       </Indicator>
-      {/* 戻るボタン */}
-      <Button 
-        size="md" 
-        radius="xl" 
-        color="gray"
-        variant="outline"
-        leftSection={<IconArrowLeft size={18} />}
-        onClick={onBack}
-      >
-        戻る
-      </Button>
     </Group>
   )
 }

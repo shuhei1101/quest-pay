@@ -40,7 +40,11 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
       />
 
       {/* クエストアイコン */}
-      <QuestViewIcon />
+      <QuestViewIcon 
+        iconName={familyQuest?.icon?.name}
+        iconSize={familyQuest?.icon?.size ?? 60}
+        iconColor={familyQuest?.quest?.iconColor}
+      />
 
       {/* クエスト内容カード */}
       <Paper

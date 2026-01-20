@@ -82,6 +82,8 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
   familyId?: FamilySelect["id"]
 }) => {
   try {
+
+    devLog("fetchPublicQuests.検索パラメータ: ", params)
     const { pageSize, offset } = calculatePagination({ page: params.page, pageSize: params.pageSize })
     const conditions = []
     const familyIcons = alias(icons, "family_icons")
@@ -96,30 +98,49 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
           : eq(publicQuests.isActivate, true)
     )
 
-    // データを取得する
-    const [rows, [{ total }]] = await Promise.all([
-      db
-      .select()
+    // 先に公開クエストのIDを取得する
+    const publicQuestIds = await db
+      .select({ id: publicQuests.id })
       .from(publicQuests)
       .innerJoin(quests, eq(publicQuests.questId, quests.id))
-      .leftJoin(questDetails, eq(questDetails.questId, quests.id))
-      .leftJoin(questTags, eq(questTags.questId, quests.id))
-      .leftJoin(icons, eq(quests.iconId, icons.id))
-      .leftJoin(familyQuests, eq(familyQuests.id, publicQuests.familyQuestId))
-      .leftJoin(families, eq(families.id, familyQuests.familyId))
-      .leftJoin(familyIcons, eq(families.iconId, familyIcons.id))
       .where(and(...conditions))
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
         desc(quests[params.sortColumn])
       )
       .limit(pageSize)
-      .offset(offset),
+      .offset(offset)
+
+    // データを取得する
+    const [rows, [{ total }]] = await Promise.all([
+      publicQuestIds.length > 0 
+        ? db
+          .select()
+          .from(publicQuests)
+          .innerJoin(quests, eq(publicQuests.questId, quests.id))
+          .leftJoin(questDetails, eq(questDetails.questId, quests.id))
+          .leftJoin(questTags, eq(questTags.questId, quests.id))
+          .leftJoin(icons, eq(quests.iconId, icons.id))
+          .leftJoin(familyQuests, eq(familyQuests.id, publicQuests.familyQuestId))
+          .leftJoin(families, eq(families.id, familyQuests.familyId))
+          .leftJoin(familyIcons, eq(families.iconId, familyIcons.id))
+          .where(inArray(publicQuests.id, publicQuestIds.map(pq => pq.id)))
+          .orderBy(params.sortOrder === "asc" ? 
+            asc(quests[params.sortColumn]) :
+            desc(quests[params.sortColumn])
+          )
+        : Promise.resolve([]),
       db
-      .select({ total: count() })
-      .from(publicQuests)
-      .where(and(...conditions))
+        .select({ total: count() })
+        .from(publicQuests)
+        .innerJoin(quests, eq(publicQuests.questId, quests.id))
+        .where(and(...conditions))
     ])
+
+    devLog("fetchPublicQuests.生クエリ結果件数: ", rows.length)
+    devLog("fetchPublicQuests.familyId: ", familyId)
+    devLog("fetchPublicQuests.conditions: ", conditions.length)
+    devLog("fetchPublicQuests.total: ", total)
 
     // データをオブジェクトに変換する
     const result = buildResult(rows)

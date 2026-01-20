@@ -92,6 +92,26 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
     }
   }, [entry, totalRecords, page, maxPage, isLoading, onPageChange])
 
+  /** スクロール最下部検知の連続呼び出しを防ぐフラグ */
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+
+  /** スクロール最下部検知時のハンドル */
+  const handleScrollBottom = () => {
+    devLog("スクロール最下部検知。現在のページ: ", { page, maxPage, totalRecords, isLoading, isLoadingMore })
+    // 次のページが存在し、かつ現在読み込み中でない場合のみ実行する
+    if (page < maxPage && !isLoading && !isLoadingMore) {
+      setIsLoadingMore(true)
+      onPageChange(page + 1)
+    }
+  }
+
+  /** ローディング状態が変わったらフラグをリセットする */
+  useEffect(() => {
+    if (!isLoading) {
+      setIsLoadingMore(false)
+    }
+  }, [isLoading])
+
   /** データ取得時に表示クエスト一覧を更新する */
   useEffect(() => {
     if (page === 1) {
@@ -139,6 +159,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             quests={displayQuests}
             renderQuest={renderQuestCard}
             sentinelRef={sentinelRef}
+            onScrollBottom={handleScrollBottom}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
             onTabChange={setTabValue}
@@ -159,6 +180,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
               quests={displayQuests}
               renderQuest={renderQuestCard}
               sentinelRef={sentinelRef}
+              onScrollBottom={handleScrollBottom}
               tabValue={tabValue}
               questCategoryById={questCategoryById}
               onTabChange={setTabValue}
@@ -179,6 +201,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             quests={displayQuests}
             renderQuest={renderQuestCard}
             sentinelRef={sentinelRef}
+            onScrollBottom={handleScrollBottom}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
             onTabChange={setTabValue}
