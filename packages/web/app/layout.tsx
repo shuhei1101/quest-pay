@@ -22,7 +22,12 @@ export const metadata: Metadata = {
   title: "お小遣いクエストボード",
   description: "I made a mistake in the app name and called it React.",
   icons: {
-    icon: '/public/favicon.ico'
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
   }
 }
 
@@ -38,10 +43,8 @@ export default function RootLayout({
         <head>
           {/* PWAマニフェスト */}
           <link rel="manifest" href="/manifest.webmanifest" />
-          {/* Apple Touch Icon */}
-          <link rel="apple-touch-icon" href="/icon512_rounded.png" />
           {/* テーマカラー */}
-          <meta name="theme-color" content="#8936FF" />
+          <meta name="theme-color" content="#E0F7FF" />
           {/* Apple PWA設定 */}
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
