@@ -117,41 +117,44 @@ export const DetailSettings = ({
   return (
     <div className="flex flex-col gap-4 p-4">
       <Tabs value={activeLevel} onChange={setActiveLevel} variant="outline">
-        <Group gap="xs" wrap="nowrap">
-          <Tabs.List style={{ flex: 1 }}>
-            <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-              {visibleLevels.map((level) => {
-                const levelStr = level.toString()
-                const isCompleted = levels[levelStr]
-                
-                // 該当レベルのdetailインデックスを取得する
-                const detailIndex = watch().details.findIndex(d => d.level === level)
-                // 該当レベルにエラーがあるかチェックする
-                const hasError = detailIndex !== -1 && errors.details?.[detailIndex]
+        <Group gap="xs" wrap="nowrap" style={{ alignItems: 'flex-start' }}>
+          {/* レベルタブ（スクロール可能領域） */}
+          <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+            <Tabs.List>
+              <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+                {visibleLevels.map((level) => {
+                  const levelStr = level.toString()
+                  const isCompleted = levels[levelStr]
+                  
+                  // 該当レベルのdetailインデックスを取得する
+                  const detailIndex = watch().details.findIndex(d => d.level === level)
+                  // 該当レベルにエラーがあるかチェックする
+                  const hasError = detailIndex !== -1 && errors.details?.[detailIndex]
 
-                return (
-                  <Tabs.Tab 
-                    key={level} 
-                    value={levelStr}
-                    data-value={levelStr}
-                    rightSection={
-                      hasError ? <IconAlertCircle size={14} color="red" /> :
-                      isCompleted ? <IconCheck size={14} color="green" /> : 
-                      null
-                    }
-                  >
-                    <Group gap={4}>
-                      <Text size="sm">レベル {level}</Text>
-                      {level === 1 && <Text size="xs" c="red">*</Text>}
-                    </Group>
-                  </Tabs.Tab>
-                )
-              })}
-            </div>
-          </Tabs.List>
+                  return (
+                    <Tabs.Tab 
+                      key={level} 
+                      value={levelStr}
+                      data-value={levelStr}
+                      rightSection={
+                        hasError ? <IconAlertCircle size={14} color="red" /> :
+                        isCompleted ? <IconCheck size={14} color="green" /> : 
+                        null
+                      }
+                    >
+                      <Group gap={4}>
+                        <Text size="sm">レベル {level}</Text>
+                        {level === 1 && <Text size="xs" c="red">*</Text>}
+                      </Group>
+                    </Tabs.Tab>
+                  )
+                })}
+              </div>
+            </Tabs.List>
+          </div>
 
-          {/* タブ操作ボタン */}
-          <Group gap="xs">
+          {/* タブ操作ボタン（固定） */}
+          <Group gap="xs" style={{ flexShrink: 0 }}>
             {/* コピーボタン */}
             <LevelCopyButton 
               currentLevel={activeLevel}
