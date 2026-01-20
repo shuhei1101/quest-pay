@@ -1,7 +1,6 @@
 "use client"
 
 import { Box, Stack, Text, Center } from "@mantine/core"
-import { IconMessage } from "@tabler/icons-react"
 
 /** コメントタブ */
 export const QuestCommentTab = () => {

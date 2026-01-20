@@ -59,7 +59,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
     }
   }
 
-  /** コメント数（仮） */
+  /** コメント数（TODO: 実装時にAPIから取得する） */
   const commentCount = 0
 
   return (
