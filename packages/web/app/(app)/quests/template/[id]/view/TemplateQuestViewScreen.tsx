@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Paper, Tabs } from "@mantine/core"
+import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState } from "react"
 import { QuestViewHeader } from "../../../view/_components/QuestViewHeader"
 import { QuestViewIcon } from "../../../view/_components/QuestViewIcon"
@@ -25,7 +25,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
-  const {templateQuest} = useTemplateQuest({id})
+  const {templateQuest, isLoading} = useTemplateQuest({id})
 
   /** 選択中のレベルの詳細を取得する */
   const selectedDetail = templateQuest?.details?.find(d => d.level === selectedLevel) || templateQuest?.details?.[0]
@@ -60,7 +60,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         reward: detail.reward,
         requiredClearCount: detail.requiredClearCount,
       })) || [],
-      childIds: []
+      childSettings: [],
     })
 
     // 家族クエスト作成画面へ遷移する
@@ -77,7 +77,9 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   }
 
   return (
-    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(161, 98, 7, 0.2)" : "rgba(254, 243, 199, 0.5)" }}>
+    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(161, 98, 7, 0.2)" : "rgba(254, 243, 199, 0.5)" }}>
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={templateQuest?.quest?.name || ""}
@@ -159,6 +161,6 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         onCheckSource={ onCheckSource }
         hasSourceQuest={ !!templateQuest?.base.publicQuestId }
       />
-    </div>
+    </Box>
   )
 }

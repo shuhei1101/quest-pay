@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Paper, Tabs } from "@mantine/core"
+import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState } from "react"
 import { QuestViewHeader } from "../../../view/_components/QuestViewHeader"
 import { QuestViewIcon } from "../../../view/_components/QuestViewIcon"
@@ -27,7 +27,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
-  const {publicQuest} = usePublicQuest({id})
+  const {publicQuest, isLoading} = usePublicQuest({id})
 
   /** 選択中のレベルの詳細を取得する */
   const selectedDetail = publicQuest?.details?.find(d => d.level === selectedLevel) || publicQuest?.details?.[0]
@@ -42,9 +42,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
   const { isLike } = useIsLike({ id })
 
   /** いいねハンドル */
-  const { handleLike } = useLikeQuest()
+  const { handleLike, isLoading: isLikeLoading } = useLikeQuest()
   /** いいね解除ハンドル */
-  const { handleCancelLike } = useCancelQuestLike()
+  const { handleCancelLike, isLoading: isCancelLikeLoading } = useCancelQuestLike()
 
   /** いいね押下時のハンドル */
   const likeToggleHandle = () => {
@@ -58,7 +58,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
   }
 
   return (
-    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(59, 130, 246, 0.2)" : "rgba(191, 219, 254, 0.5)" }}>
+    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(59, 130, 246, 0.2)" : "rgba(191, 219, 254, 0.5)" }}>
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={publicQuest?.quest?.name || ""}
@@ -139,7 +141,8 @@ export const PublicQuestView = ({id}: {id: string}) => {
         commentCount={ 0 } 
         isLiked={ isLike }
         onLikeToggle={ likeToggleHandle }
+        isLikeLoading={ isLikeLoading || isCancelLikeLoading }
       />
-    </div>
+    </Box>
   )
 }
