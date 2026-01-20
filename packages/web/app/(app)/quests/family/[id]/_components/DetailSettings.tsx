@@ -118,10 +118,10 @@ export const DetailSettings = ({
     <div className="flex flex-col gap-4" style={{ height: '100%' }}>
       <Tabs value={activeLevel} onChange={setActiveLevel} variant="outline" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         {/* レベルタブヘッダー（固定） */}
-        <div className="p-4 pb-0">
+        <div className="px-4 pt-4">
           <Group gap="xs" wrap="nowrap" style={{ alignItems: 'flex-start' }}>
             {/* レベルタブ（スクロール可能領域） */}
-            <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <Tabs.List>
                 <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
                   {visibleLevels.map((level) => {
