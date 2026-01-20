@@ -19,6 +19,11 @@ import { UseFormRegister, UseFormSetValue, UseFormWatch, FieldErrors } from "rea
 import { BaseQuestFormType } from "../../form"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
+import { DeleteIconButton } from "@/app/(core)/_components/DeleteIconButton"
+import { SaveIconButton } from "@/app/(core)/_components/SaveIconButton"
+import { ViewIconButton } from "@/app/(core)/_components/ViewIconButton"
+import { PublishIconButton } from "@/app/(core)/_components/PublishIconButton"
+import { CheckPublicQuestIconButton } from "@/app/(core)/_components/CheckPublicQuestIconButton"
 
 /** 家族クエスト編集コンポーネント */
 export const FamilyQuestEdit = ({ id }: { id?: string }) => {
@@ -177,36 +182,41 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
         },
       ]}
       editActions={[
-        publicQuest ? {
-          label: "公開中のクエストを確認",
-          onClick: () => router.push(PUBLIC_QUEST_URL(publicQuest!.id)),
-        } : {
-          label: "オンラインに公開",
-          onClick: () => handlePublish({ familyQuestId: familyQuestId! }),
-        },
-        {
-          label: "表示確認",
-          onClick: () => router.push(FAMILY_QUEST_VIEW_URL(familyQuestId!)),
-        },
-        {
-          label: "削除",
-          color: "red.7",
-          loading: submitLoading,
-          onClick: () => handleDelete({ familyQuestId: familyQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
-        },
-        {
-          label: "更新",
-          type: "submit",
-          loading: submitLoading,
-          disabled: !isValueChanged,
-        },
+        publicQuest ? (
+          <CheckPublicQuestIconButton
+            key="check-public"
+            onClick={() => router.push(PUBLIC_QUEST_URL(publicQuest!.id))}
+          />
+        ) : (
+          <PublishIconButton
+            key="publish"
+            onClick={() => handlePublish({ familyQuestId: familyQuestId! })}
+          />
+        ),
+        <ViewIconButton
+          key="view"
+          onClick={() => router.push(FAMILY_QUEST_VIEW_URL(familyQuestId!))}
+        />,
+        <DeleteIconButton
+          key="delete"
+          loading={submitLoading}
+          onClick={() => handleDelete({ familyQuestId: familyQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
+        />,
+        <SaveIconButton
+          key="save"
+          type="submit"
+          loading={submitLoading}
+          disabled={!isValueChanged}
+          tooltip="更新"
+        />,
       ]}
       createActions={[
-        {
-          label: "登録",
-          type: "submit",
-          loading: submitLoading,
-        },
+        <SaveIconButton
+          key="save"
+          type="submit"
+          loading={submitLoading}
+          tooltip="登録"
+        />,
       ]}
       popups={
         <IconSelectPopup
