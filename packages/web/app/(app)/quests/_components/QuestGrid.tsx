@@ -4,6 +4,8 @@ import { useWindow } from "@/app/(core)/useConstants"
 import { ReactNode } from "react"
 import { QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
+import { useSwipeable } from "react-swipeable"
+import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
 type QuestItem = {
   quest: QuestSelect
@@ -22,6 +24,12 @@ type QuestGridProps<T extends QuestItem> = {
   tabValue?: string | null
   /** クエストカテゴリ辞書 */
   questCategoryById?: QuestCategoryById
+  /** タブ変更時のハンドル（スワイプ用） */
+  onTabChange?: (value: string | null) => void
+  /** 全タブリスト（スワイプ用） */
+  tabList?: string[]
+  /** スワイプ操作を有効にするか */
+  enableSwipe?: boolean
 }
 
 /** クエストグリッドコンポーネント */
@@ -31,7 +39,10 @@ export const QuestGrid = <T extends QuestItem>({
   sentinelRef,
   panelHeight = "calc(100vh - 200px)",
   tabValue,
-  questCategoryById
+  questCategoryById,
+  onTabChange,
+  tabList,
+  enableSwipe = true
 }: QuestGridProps<T>) => {
   /** 画面定数 */
   const { isMobile, isTablet, isDesktop } = useWindow()
@@ -46,11 +57,11 @@ export const QuestGrid = <T extends QuestItem>({
 
   /** タブによってフィルタリングされたクエストを取得する */
   const getFilteredQuests = () => {
-    if (!tabValue || tabValue === "すべて") {
+    if (!tabValue || tabValue === TAB_ALL) {
       return quests
     }
     
-    if (tabValue === "その他") {
+    if (tabValue === TAB_OTHERS) {
       return quests.filter((quest) => quest.quest.categoryId === null)
     }
     
@@ -63,8 +74,32 @@ export const QuestGrid = <T extends QuestItem>({
 
   const filteredQuests = getFilteredQuests()
 
+  /** 左右スワイプ時のハンドル */
+  const handlers = useSwipeable({
+    onSwiped: (event) => {
+      if (!enableSwipe || !onTabChange || !tabList || !tabValue) return
+      
+      const idx = tabList.indexOf(tabValue)
+      
+      // インデックスが見つからない場合は何もしない
+      if (idx === -1) return
+
+      if (event.dir === "Left") {
+        // 次のタブへ
+        const next = tabList[idx + 1]
+        if (next) onTabChange(next)
+      } else if (event.dir === "Right") {
+        // 前のタブへ
+        const prev = tabList[idx - 1]
+        if (prev) onTabChange(prev)
+      }
+    },
+    trackMouse: true
+  })
+
   return (
     <div
+      {...handlers}
       style={{
         height: panelHeight,
         overflowY: "auto",

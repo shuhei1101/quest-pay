@@ -8,6 +8,7 @@ import { QuestGrid } from "./QuestGrid"
 import { QuestCategorySelect, QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
 import { devLog } from "@/app/(core)/util"
+import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
 type QuestItem = {
   quest: QuestSelect
@@ -63,7 +64,14 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   onSortOpen: () => void
 }) => {
   /** タブ状態 */
-  const [tabValue, setTabValue] = useState<string | null>('すべて')
+  const [tabValue, setTabValue] = useState<string | null>(TAB_ALL)
+
+  /** タブリスト */
+  const tabList = [
+    TAB_ALL,
+    ...questCategories.map(c => c.name),
+    TAB_OTHERS
+  ]
 
   /** 現在のクエスト一覧状態 */
   const [displayQuests, setDisplayQuests] = useState<T[]>([])
@@ -126,13 +134,15 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
         <div className="m-3" />
 
         {/* すべてタブのパネル */}
-        <Tabs.Panel value={"すべて"} key={0}>
+        <Tabs.Panel value={TAB_ALL} key={0}>
           <QuestGrid<T>
             quests={displayQuests}
             renderQuest={renderQuestCard}
             sentinelRef={sentinelRef}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
+            onTabChange={setTabValue}
+            tabList={tabList}
           />
           {/* ローディング表示 */}
           {isLoading && (
@@ -151,6 +161,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
               sentinelRef={sentinelRef}
               tabValue={tabValue}
               questCategoryById={questCategoryById}
+              onTabChange={setTabValue}
+              tabList={tabList}
             />
             {/* ローディング表示 */}
             {isLoading && (
@@ -162,13 +174,15 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
         ))}
 
         {/* その他タブのパネル */}
-        <Tabs.Panel value={"その他"} key={-1}>
+        <Tabs.Panel value={TAB_OTHERS} key={-1}>
           <QuestGrid<T>
             quests={displayQuests}
             renderQuest={renderQuestCard}
             sentinelRef={sentinelRef}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
+            onTabChange={setTabValue}
+            tabList={tabList}
           />
           {/* ローディング表示 */}
           {isLoading && (
