@@ -51,7 +51,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   const { register, setForm, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = useFamilyQuestForm({ familyQuestId })
 
   /** 家族クエストIDに紐づく公開クエスト */
-  const {publicQuest} = usePublicQuest({ familyQuestId: familyQuestId! })
+  const {publicQuest} = usePublicQuest({ familyQuestId: familyQuestId })
 
   /** 起動時のハンドル */
   useEffect(() => {
