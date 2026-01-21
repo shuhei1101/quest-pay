@@ -13,7 +13,7 @@ export const BottomBar = ({isDark}: {isDark: boolean}) => {
     <Box
       style={{
         width: "100%",
-        height: "60px",
+        height: "70px",
         background: isDark ? "rgba(39, 39, 42, 0.9)" : "rgba(255, 255, 255, 0.9)",
         backdropFilter: "blur(8px)",
         display: "flex",
