@@ -1,15 +1,7 @@
 "use client"
 
-import { Box, Paper, Tabs, LoadingOverlay, Badge } from "@mantine/core"
 import { useState } from "react"
-import { QuestViewHeader } from "../../../view/_components/QuestViewHeader"
-import { QuestViewIcon } from "../../../view/_components/QuestViewIcon"
-import { QuestConditionTab } from "../../../view/_components/QuestConditionTab"
-import { QuestDetailTab } from "../../../view/_components/QuestDetailTab"
-import { QuestOtherTab } from "../../../view/_components/QuestOtherTab"
-import { QuestCommentTab } from "../../../view/_components/QuestCommentTab"
-import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
-import { useWindow } from "@/app/(core)/useConstants"
+import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
 import { useTemplateQuest } from "./_hooks/useTemplateQuest"
 import { useRouter } from "next/navigation"
 import { TemplateQuestViewFooter } from "./_components/TemplateQuestViewFooter"
@@ -20,10 +12,7 @@ import toast from "react-hot-toast"
 /** テンプレートクエスト閲覧画面 */
 export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   const router = useRouter()
-  const {isDark} = useWindow()
   
-  /** アクティブタブ */
-  const [activeTab, setActiveTab] = useState<string | null>("condition")
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
@@ -82,102 +71,45 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   const commentCount = 0
 
   return (
-    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(161, 98, 7, 0.2)" : "rgba(254, 243, 199, 0.5)" }}>
-      {/* ロード中のオーバーレイ */}
-      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
-      {/* ヘッダー部分 */}
-      <QuestViewHeader 
-        questName={templateQuest?.quest?.name || ""}
-        headerColor={{ light: "yellow.3", dark: "yellow.8" }}
-      />
-
-      {/* クエストアイコン */}
-      <QuestViewIcon
-        iconColor={templateQuest?.quest?.iconColor}
-        iconName={templateQuest?.icon?.name}
-        iconSize={templateQuest?.icon?.size ?? 48}
-      />
-
-      {/* クエスト内容カード */}
-      <Paper
-        className="flex-1 min-h-0"
-        p="md" 
-        radius="md" 
-        style={{ 
-          backgroundColor: isDark ? "#544c4c" : "#fffef5",
-          boxShadow: "4px 4px 8px rgba(0,0,0,0.15)",
-        }}
-      >
-        {/* タブ切り替え */}
-        <ScrollableTabs
-          value={activeTab}
-          onChange={setActiveTab}
-          items={[
-            { value: "condition", label: "クエスト条件" },
-            { value: "detail", label: "依頼情報" },
-            { value: "other", label: "その他" },
-            { 
-              value: "comment", 
-              label: "コメント",
-              rightSection: commentCount > 0 ? (
-                <Badge size="xs" color="red" circle>
-                  {commentCount}
-                </Badge>
-              ) : undefined
-            },
-          ]}
-        >
-          {/* クエスト条件タブ */}
-          <Tabs.Panel value="condition" pt="md">
-            <QuestConditionTab
-              level={selectedDetail?.level || 1}
-              category={""}
-              successCondition={selectedDetail?.successCondition || ""}
-              reward={selectedDetail?.reward || 0}
-              exp={selectedDetail?.childExp || 0}
-              requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
-            />
-          </Tabs.Panel>
-
-          {/* 依頼情報タブ */}
-          <Tabs.Panel value="detail" pt="md">
-            <QuestDetailTab 
-              client={templateQuest?.quest?.client || ""}
-              requestDetail={templateQuest?.quest?.requestDetail || ""}
-            />
-          </Tabs.Panel>
-
-          {/* その他情報タブ */}
-          <Tabs.Panel value="other" pt="md">
-            <QuestOtherTab
-              tags={templateQuest?.tags?.map(tag => tag.name) || []}
-              ageFrom={templateQuest?.quest?.ageFrom}
-              ageTo={templateQuest?.quest?.ageTo}
-              monthFrom={templateQuest?.quest?.monthFrom}
-              monthTo={templateQuest?.quest?.monthTo}
-              requiredClearCount={selectedDetail?.requiredClearCount || 0}
-            />
-          </Tabs.Panel>
-
-          {/* コメントタブ */}
-          <Tabs.Panel value="comment" pt="md">
-            <QuestCommentTab />
-          </Tabs.Panel>
-        </ScrollableTabs>
-      </Paper>
-
-      {/* 下部アクションエリア */}
-      <TemplateQuestViewFooter 
-        availableLevels={ availableLevels }
-        selectedLevel={ selectedLevel }
-        onLevelChange={ setSelectedLevel }
-        onBack={ () => router.back() } 
-        familyIcon={ templateQuest?.familyIcon?.name }
-        onDelete={ onDelete }
-        onCreateFromTemplate={ onCreateFromTemplate }
-        onCheckSource={ onCheckSource }
-        hasSourceQuest={ !!templateQuest?.base.publicQuestId }
-      />
-    </Box>
+    <QuestViewLayout
+      questName={templateQuest?.quest?.name || ""}
+      headerColor={{ light: "yellow.3", dark: "yellow.8" }}
+      backgroundColor={{ 
+        light: "rgba(254, 243, 199, 0.5)", 
+        dark: "rgba(161, 98, 7, 0.2)" 
+      }}
+      iconColor={templateQuest?.quest?.iconColor}
+      iconName={templateQuest?.icon?.name}
+      iconSize={templateQuest?.icon?.size ?? 48}
+      isLoading={isLoading}
+      level={selectedDetail?.level || 1}
+      category={""}
+      successCondition={selectedDetail?.successCondition || ""}
+      reward={selectedDetail?.reward || 0}
+      exp={selectedDetail?.childExp || 0}
+      requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
+      client={templateQuest?.quest?.client || ""}
+      requestDetail={templateQuest?.quest?.requestDetail || ""}
+      tags={templateQuest?.tags?.map(tag => tag.name) || []}
+      ageFrom={templateQuest?.quest?.ageFrom}
+      ageTo={templateQuest?.quest?.ageTo}
+      monthFrom={templateQuest?.quest?.monthFrom}
+      monthTo={templateQuest?.quest?.monthTo}
+      requiredClearCount={selectedDetail?.requiredClearCount || 0}
+      commentCount={commentCount}
+      footer={
+        <TemplateQuestViewFooter 
+          availableLevels={ availableLevels }
+          selectedLevel={ selectedLevel }
+          onLevelChange={ setSelectedLevel }
+          onBack={ () => router.back() } 
+          familyIcon={ templateQuest?.familyIcon?.name }
+          onDelete={ onDelete }
+          onCreateFromTemplate={ onCreateFromTemplate }
+          onCheckSource={ onCheckSource }
+          hasSourceQuest={ !!templateQuest?.base.publicQuestId }
+        />
+      }
+    />
   )
 }
