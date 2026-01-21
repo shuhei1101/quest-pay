@@ -128,7 +128,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
           ]}
         >
           {/* クエスト条件タブ */}
-          <Tabs.Panel value="condition" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="condition" pt="md">
             <QuestConditionTab
               level={selectedDetail?.level || 1}
               category={""}
@@ -140,7 +140,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* 依頼情報タブ */}
-          <Tabs.Panel value="detail" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="detail" pt="md">
             <QuestDetailTab 
               client={templateQuest?.quest?.client || ""}
               requestDetail={templateQuest?.quest?.requestDetail || ""}
@@ -148,7 +148,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* その他情報タブ */}
-          <Tabs.Panel value="other" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="other" pt="md">
             <QuestOtherTab
               tags={templateQuest?.tags?.map(tag => tag.name) || []}
               ageFrom={templateQuest?.quest?.ageFrom}
@@ -160,7 +160,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* コメントタブ */}
-          <Tabs.Panel value="comment" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="comment" pt="md">
             <QuestCommentTab />
           </Tabs.Panel>
         </ScrollableTabs>

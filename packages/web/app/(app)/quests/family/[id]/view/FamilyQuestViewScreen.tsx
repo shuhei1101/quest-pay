@@ -81,7 +81,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
           ]}
         >
           {/* クエスト条件タブ */}
-          <Tabs.Panel value="condition" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="condition" pt="md">
             <QuestConditionTab
               level={selectedDetail?.level || 1}
               category={""}
@@ -93,7 +93,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* 依頼情報タブ */}
-          <Tabs.Panel value="detail" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="detail" pt="md">
             <QuestDetailTab 
               client={familyQuest?.quest?.client || ""}
               requestDetail={familyQuest?.quest?.requestDetail || ""}
@@ -101,7 +101,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* その他情報タブ */}
-          <Tabs.Panel value="other" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="other" pt="md">
             <QuestOtherTab
               tags={familyQuest?.tags?.map(tag => tag.name) || []}
               ageFrom={familyQuest?.quest?.ageFrom}
@@ -113,7 +113,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* コメントタブ */}
-          <Tabs.Panel value="comment" pt="md" className="flex-1 overflow-y-auto">
+          <Tabs.Panel value="comment" pt="md">
             <QuestCommentTab />
           </Tabs.Panel>
         </ScrollableTabs>

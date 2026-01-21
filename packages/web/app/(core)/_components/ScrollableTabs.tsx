@@ -75,8 +75,16 @@ export const ScrollableTabs = ({ value, onChange, items, children }: {
   }, [])
 
   return (
-    <div className="w-full">
-      <Tabs value={value} onChange={onChange}>
+    <div className="w-full flex flex-col flex-1 min-h-0">
+      <Tabs 
+        value={value} 
+        onChange={onChange}
+        className="flex-1 min-h-0"
+        styles={{
+          root: { display: "flex", flexDirection: "column", height: "100%" },
+          panel: { flex: 1, minHeight: 0, overflow: "auto", paddingRight: 16},
+        }}
+      >
         {/* タブリスト */}
         <Tabs.List>
           <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
