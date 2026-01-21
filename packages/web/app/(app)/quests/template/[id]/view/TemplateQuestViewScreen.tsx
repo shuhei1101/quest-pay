@@ -1,12 +1,14 @@
 "use client"
 
-import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
+import { Box, Paper, Tabs, LoadingOverlay, Badge } from "@mantine/core"
 import { useState } from "react"
 import { QuestViewHeader } from "../../../view/_components/QuestViewHeader"
 import { QuestViewIcon } from "../../../view/_components/QuestViewIcon"
 import { QuestConditionTab } from "../../../view/_components/QuestConditionTab"
 import { QuestDetailTab } from "../../../view/_components/QuestDetailTab"
 import { QuestOtherTab } from "../../../view/_components/QuestOtherTab"
+import { QuestCommentTab } from "../../../view/_components/QuestCommentTab"
+import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useWindow } from "@/app/(core)/useConstants"
 import { useTemplateQuest } from "./_hooks/useTemplateQuest"
 import { useRouter } from "next/navigation"
@@ -76,6 +78,9 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
     }
   }
 
+  /** コメント数（TODO: 実装時にAPIから取得する） */
+  const commentCount = 0
+
   return (
     <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(161, 98, 7, 0.2)" : "rgba(254, 243, 199, 0.5)" }}>
       {/* ロード中のオーバーレイ */}
@@ -87,7 +92,11 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
       />
 
       {/* クエストアイコン */}
-      <QuestViewIcon />
+      <QuestViewIcon
+        iconColor={templateQuest?.quest?.iconColor}
+        iconName={templateQuest?.icon?.name}
+        iconSize={templateQuest?.icon?.size ?? 48}
+      />
 
       {/* クエスト内容カード */}
       <Paper
@@ -100,23 +109,26 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         }}
       >
         {/* タブ切り替え */}
-        <Tabs 
-          value={activeTab} 
-          onChange={setActiveTab} 
-          className="flex-1 min-h-0"
-          styles={{
-            root: { display: "flex", flexDirection: "column", height: "100%" },
-            panel: { flex: 1, minHeight: 0, overflow: "auto", paddingRight: 16},
-          }}
+        <ScrollableTabs
+          value={activeTab}
+          onChange={setActiveTab}
+          items={[
+            { value: "condition", label: "クエスト条件" },
+            { value: "detail", label: "依頼情報" },
+            { value: "other", label: "その他" },
+            { 
+              value: "comment", 
+              label: "コメント",
+              rightSection: commentCount > 0 ? (
+                <Badge size="xs" color="red" circle>
+                  {commentCount}
+                </Badge>
+              ) : undefined
+            },
+          ]}
         >
-          <Tabs.List grow>
-              <Tabs.Tab value="condition">クエスト条件</Tabs.Tab>
-              <Tabs.Tab value="detail">依頼情報</Tabs.Tab>
-              <Tabs.Tab value="other">その他</Tabs.Tab>
-          </Tabs.List>
-
           {/* クエスト条件タブ */}
-          <Tabs.Panel value="condition" pt="md">
+          <Tabs.Panel value="condition" pt="md" className="flex-1 overflow-y-auto">
             <QuestConditionTab
               level={selectedDetail?.level || 1}
               category={""}
@@ -128,7 +140,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* 依頼情報タブ */}
-          <Tabs.Panel value="detail" pt="md">
+          <Tabs.Panel value="detail" pt="md" className="flex-1 overflow-y-auto">
             <QuestDetailTab 
               client={templateQuest?.quest?.client || ""}
               requestDetail={templateQuest?.quest?.requestDetail || ""}
@@ -136,7 +148,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
           </Tabs.Panel>
 
           {/* その他情報タブ */}
-          <Tabs.Panel value="other" pt="md" className=" flex-1 overflow-y-auto">
+          <Tabs.Panel value="other" pt="md" className="flex-1 overflow-y-auto">
             <QuestOtherTab
               tags={templateQuest?.tags?.map(tag => tag.name) || []}
               ageFrom={templateQuest?.quest?.ageFrom}
@@ -146,7 +158,12 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
               requiredClearCount={selectedDetail?.requiredClearCount || 0}
             />
           </Tabs.Panel>
-        </Tabs>
+
+          {/* コメントタブ */}
+          <Tabs.Panel value="comment" pt="md" className="flex-1 overflow-y-auto">
+            <QuestCommentTab />
+          </Tabs.Panel>
+        </ScrollableTabs>
       </Paper>
 
       {/* 下部アクションエリア */}
