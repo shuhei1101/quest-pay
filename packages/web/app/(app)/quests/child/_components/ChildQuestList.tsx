@@ -11,7 +11,7 @@ import { ChildQuestSortPopup } from "./ChildQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
 import { ChildQuestFilterScheme, type ChildQuest, type ChildQuestFilterType } from "@/app/api/quests/family/[id]/child/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { CHILD_QUEST_VIEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
+import { CHILD_QUEST_VIEW_URL, CHILD_QUESTS_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 子供クエストリストコンポーネント */

@@ -10,7 +10,7 @@ import { TemplateQuestSortPopup } from "./TemplateQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
 import { TemplateQuestFilterScheme, type TemplateQuest, type TemplateQuestFilterType } from "@/app/api/quests/template/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { FAMILY_QUESTS_URL, TEMPLATE_QUEST_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUESTS_URL, TEMPLATE_QUEST_URL, TEMPLATE_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** テンプレートクエストリストコンポーネント */
