@@ -111,7 +111,7 @@ export const ChildQuestList = () => {
         .map(([k, v]) => [k, String(v)])
     )
     const params = new URLSearchParams(paramsObj)
-    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
+    router.push(`${CHILD_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(filter)
   }, [router])
 
@@ -119,13 +119,17 @@ export const ChildQuestList = () => {
   const handleSortSearch = useCallback((newSort: QuestSort) => {
     setSort(newSort)
     // 新しいソート値を使って検索を実行する
-    const paramsObj = Object.fromEntries(
+    const filterParams = Object.fromEntries(
       Object.entries(questFilter)
         .filter(([_, v]) => v !== undefined && v !== null && v !== '')
         .map(([k, v]) => [k, String(v)])
     )
-    const params = new URLSearchParams(paramsObj)
-    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
+    const params = new URLSearchParams({
+      ...filterParams,
+      sortColumn: newSort.column,
+      sortOrder: newSort.order
+    })
+    router.push(`${CHILD_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(questFilter)
   }, [questFilter, router])
 
