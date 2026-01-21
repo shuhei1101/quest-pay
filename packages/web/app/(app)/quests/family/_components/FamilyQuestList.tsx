@@ -99,14 +99,30 @@ export const FamilyQuestList = () => {
   /** フィルター検索時のハンドル */
   const handleFilterSearch = useCallback((filter: FamilyQuestFilterType) => {
     setQuestFilter(filter)
-    handleSearch()
-  }, [handleSearch])
+    // 新しいフィルター値を使って検索を実行する
+    const paramsObj = Object.fromEntries(
+      Object.entries(filter)
+        .filter(([_, v]) => v !== undefined && v !== null && v !== '')
+        .map(([k, v]) => [k, String(v)])
+    )
+    const params = new URLSearchParams(paramsObj)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
+    setSearchFilter(filter)
+  }, [router])
 
   /** ソート検索時のハンドル */
   const handleSortSearch = useCallback((newSort: QuestSort) => {
     setSort(newSort)
-    handleSearch()
-  }, [handleSearch])
+    // 新しいソート値を使って検索を実行する
+    const paramsObj = Object.fromEntries(
+      Object.entries(questFilter)
+        .filter(([_, v]) => v !== undefined && v !== null && v !== '')
+        .map(([k, v]) => [k, String(v)])
+    )
+    const params = new URLSearchParams(paramsObj)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
+    setSearchFilter(questFilter)
+  }, [questFilter, router])
 
   return (
     <QuestListLayout<FamilyQuest, FamilyQuestFilterType, QuestSort>
