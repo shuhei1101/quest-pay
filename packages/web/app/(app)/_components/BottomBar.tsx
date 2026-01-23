@@ -1,13 +1,17 @@
 "use client"
 
-import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, SETTINGS_URL } from '@/app/(core)/endpoints'
 import { Box, ActionIcon } from '@mantine/core'
-import { ClipboardIcon, HomeIcon, UsersIcon, WorldIcon } from '../../(core)/_components/icon'
+import { IconHome2, IconClipboard, IconUsers, IconSettings } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
+import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
+import { menuColors } from '@/app/(core)/_theme/colors'
 
 /** モバイル用ボトムバーを取得する */
 export const BottomBar = () => {
   const router = useRouter()
+  /** ログインユーザ情報 */
+  const { isParent } = useLoginUserInfo()
 
   return (
     <Box
@@ -24,19 +28,21 @@ export const BottomBar = () => {
     >
       {/* ホームアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)}>
-        <HomeIcon stroke={1.4} />
+        <IconHome2 color={menuColors.home} stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_QUESTS_URL)}>
-        <ClipboardIcon stroke={1.4} />
-      </ActionIcon>
-      {/* 地球アイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
-        <WorldIcon stroke={1.4} />
+        <IconClipboard color={menuColors.quest} stroke={1.4} />
       </ActionIcon>
-      {/* 人アイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)}>
-        <UsersIcon stroke={1.4} />
+      {/* メンバーアイコン（親のみ） */}
+      {isParent && (
+        <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)}>
+          <IconUsers color={menuColors.members} stroke={1.4} />
+        </ActionIcon>
+      )}
+      {/* 設定アイコン */}
+      <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)}>
+        <IconSettings color={menuColors.settings} stroke={1.4} />
       </ActionIcon>
     </Box>
   )
