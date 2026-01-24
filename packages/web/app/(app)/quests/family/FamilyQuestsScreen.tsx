@@ -10,6 +10,7 @@ import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
+import { useTabAutoScroll, useTabHorizontalScroll } from "@/app/(core)/_hooks/useTabScrollControl"
 
 /** 有効なタブ値の一覧 */
 const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
@@ -33,6 +34,12 @@ export function FamilyQuestsScreen() {
   }
 
   const [tabValue, setTabValue] = useState<string | null>(getTabFromParams())
+
+  /** タブの自動スクロール制御 */
+  const { tabListRef } = useTabAutoScroll(tabValue)
+
+  /** タブの横スクロール制御 */
+  useTabHorizontalScroll(tabListRef)
 
   /** クエリパラメータが変更された時にタブを更新する */
   useEffect(() => {
@@ -88,17 +95,17 @@ export function FamilyQuestsScreen() {
         {/* タブリスト */}
         <Paper p="xs" withBorder >
           <Tabs.List>
-            <div className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-              <Tabs.Tab value="public" leftSection={<IconWorld color={tabValue == 'public' ? "white" : "rgb(96 165 250)"} size={18} />}>
+            <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+              <Tabs.Tab value="public" data-value="public" leftSection={<IconWorld color={tabValue == 'public' ? "white" : "rgb(96 165 250)"} size={18} />}>
                 公開
               </Tabs.Tab>
-              <Tabs.Tab value="family" leftSection={<IconHome2 color={tabValue == 'family' ? "white" : "rgb(74, 222, 128)"} size={18} />}>
+              <Tabs.Tab value="family" data-value="family" leftSection={<IconHome2 color={tabValue == 'family' ? "white" : "rgb(74, 222, 128)"} size={18} />}>
                 家族
               </Tabs.Tab>
-              <Tabs.Tab value="penalty" leftSection={<IconClipboardOff color={tabValue == 'penalty' ? "white" : "rgb(252, 132, 132)"} size={18} />}>
+              <Tabs.Tab value="penalty" data-value="penalty" leftSection={<IconClipboardOff color={tabValue == 'penalty' ? "white" : "rgb(252, 132, 132)"} size={18} />}>
                 違反リスト
               </Tabs.Tab>
-              <Tabs.Tab value="template" leftSection={<IconClipboard color={tabValue == 'template' ? "white" : "rgb(250 204 21)"} size={18} />}>
+              <Tabs.Tab value="template" data-value="template" leftSection={<IconClipboard color={tabValue == 'template' ? "white" : "rgb(250 204 21)"} size={18} />}>
                 テンプレート
               </Tabs.Tab>
             </div>

@@ -22,7 +22,12 @@ export const metadata: Metadata = {
   title: "お小遣いクエストボード",
   description: "I made a mistake in the app name and called it React.",
   icons: {
-    icon: '/public/favicon.ico'
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
   }
 }
 
@@ -38,16 +43,15 @@ export default function RootLayout({
         <head>
           {/* PWAマニフェスト */}
           <link rel="manifest" href="/manifest.webmanifest" />
-          {/* Apple Touch Icon */}
-          <link rel="apple-touch-icon" href="/icon512_rounded.png" />
           {/* テーマカラー */}
-          <meta name="theme-color" content="#8936FF" />
+          <meta name="theme-color" content="#E0F7FF" />
           {/* Apple PWA設定 */}
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
           <meta name="apple-mobile-web-app-title" content="クエストペイ" />
-          {/* iOSのSafe Area対応 */}
-          <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+          {/* iOSのSafe Area対応とズーム防止 */}
+          {/* maximum-scale=1で入力時の自動ズームを防止 (iOS10+ではピンチズームは依然として可能) */}
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
           <title>お小遣いクエストボード</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
           <ColorSchemeScript />

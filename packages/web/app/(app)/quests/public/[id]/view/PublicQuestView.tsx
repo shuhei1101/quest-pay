@@ -58,16 +58,21 @@ export const PublicQuestView = ({id}: {id: string}) => {
   }
 
   return (
-    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(59, 130, 246, 0.2)" : "rgba(191, 219, 254, 0.5)" }}>
       {/* ロード中のオーバーレイ */}
       <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={publicQuest?.quest?.name || ""}
+        headerColor={{ light: "blue.3", dark: "blue.5" }}
       />
 
       {/* クエストアイコン */}
-      <QuestViewIcon />
+      <QuestViewIcon
+        iconColor={publicQuest?.quest?.iconColor}
+        iconName={publicQuest?.icon?.name}
+        iconSize={publicQuest?.icon?.size ?? 60}
+      />
 
       {/* クエスト内容カード */}
       <Paper
