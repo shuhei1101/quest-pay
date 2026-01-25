@@ -8,12 +8,16 @@ import { ErrorFallback } from '../error/ErrorFallback'
 import { queryClient } from '../tanstack'
 import { ThemeProvider, useThemeContext } from '../_theme/themeContext'
 import { useMemo } from 'react'
+import { ServiceWorkerRegistration } from './ServiceWorkerRegistration'
 
 /** MantineProviderのラッパー（テーマを適用する） */
 const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
   const { currentTheme } = useThemeContext()
 
   const mantineTheme = useMemo(() => {
+    // 入力コンポーネントのデフォルトサイズ（モバイルで拡大しないように16px以上に設定）
+    const inputDefaultProps = { size: "md" }
+
     const themeConfig: any = {
       fontSizes: {
         xs: "14px",
@@ -23,6 +27,16 @@ const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
         xl: "20px",
       },
       defaultRadius: "sm",
+      components: {
+        Input: { defaultProps: inputDefaultProps },
+        TextInput: { defaultProps: inputDefaultProps },
+        PasswordInput: { defaultProps: inputDefaultProps },
+        NumberInput: { defaultProps: inputDefaultProps },
+        Textarea: { defaultProps: inputDefaultProps },
+        Select: { defaultProps: inputDefaultProps },
+        PillsInput: { defaultProps: inputDefaultProps },
+        DateInput: { defaultProps: inputDefaultProps },
+      },
     }
 
     // カスタムカラーが定義されている場合のみ設定する
@@ -39,6 +53,7 @@ const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
   }, [currentTheme])
 
   return (
+    // プロバイダの適用
     <MantineProvider theme={mantineTheme}>
       <ModalsProvider>
         {children}
@@ -53,6 +68,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <MantineThemeWrapper>
+            {/* Service Workerの登録 */}
+            <ServiceWorkerRegistration />
             {children}
           </MantineThemeWrapper>
         </ThemeProvider>

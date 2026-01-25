@@ -2,16 +2,17 @@
 
 import { Button, Checkbox, Paper, PasswordInput, TextInput, Title, Text, Anchor } from "@mantine/core"
 import { FeedbackMessage } from "../../(core)/_components/FeedbackMessageWrapper"
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { IconMail, IconLock } from "@tabler/icons-react"
 import { useLoginForm } from "./_hooks/useLoginForm"
 import { useDisclosure } from "@mantine/hooks"
 import { LoginTypeSelectPopup } from "./_components/LoginTypeSelectPopup"
 import { useLogin } from "./_hooks/useLogin"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL } from "../../(core)/endpoints"
+import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL, FORGOT_PASSWORD_URL, HOME_URL } from "../../(core)/endpoints"
 import Link from "next/link"
 import { devLog } from "@/app/(core)/util"
+import { AccessErrorHandler } from "@/app/(core)/_components/AccessErrorHandler"
 
 export const LoginScreen = () => {
   /** セッションストレージを空にする */
@@ -31,7 +32,7 @@ export const LoginScreen = () => {
     if (!userInfo) {
       openPopup() // タイプ選択ポップアップを表示する
     } else {
-      router.push(QUESTS_URL) // ホーム画面に遷移する
+      router.push(HOME_URL) // ホーム画面に遷移する
     }
   }})
 
@@ -40,6 +41,10 @@ export const LoginScreen = () => {
   
   return (
     <>
+      {/* アクセスエラーハンドラ（useSearchParamsを使用するためSuspenseでラップ） */}
+      <Suspense fallback={null}>
+        <AccessErrorHandler />
+      </Suspense>
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <Paper shadow="md" p="xl" radius="md" className="w-full max-w-md">
           {/* タイトルセクション */}
@@ -67,7 +72,7 @@ export const LoginScreen = () => {
                 required
                 {...register("password")}
               />
-              
+
               {/* ログイン状態保持とパスワード忘れ */}
               <div className="flex items-center justify-between">
                 <Checkbox 
@@ -75,7 +80,7 @@ export const LoginScreen = () => {
                   checked={watch("rememberMe")}
                   onChange={(event) => setValue("rememberMe", event.currentTarget.checked)}
                 />
-                <Anchor size="sm">パスワードをお忘れですか？</Anchor>
+                <Anchor size="sm" component={Link} href={FORGOT_PASSWORD_URL}>パスワードをお忘れですか？</Anchor>
               </div>
 
               {/* ログインボタン */}

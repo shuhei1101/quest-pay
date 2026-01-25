@@ -98,9 +98,12 @@ export async function PUT(
           },
           updatedAt: data.updatedAt,
         },
-        questChildren: data.form.childIds.map((childId) => ({
-          childId: childId,
-        })),
+        questChildren: data.form.childSettings
+          .filter(setting => setting.isActivate || setting.hasQuestChildren) // isActivateがtrueまたはhasQuestChildrenがtrueのもの
+          .map((setting) => ({
+            childId: setting.childId,
+            isActivate: setting.isActivate,
+          })),
         questTags: data.form.tags.map((tagName) => ({
           name: tagName,
         }))

@@ -2,7 +2,7 @@
 
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { HOME_URL, LOGIN_URL } from '@/app/(core)/endpoints'
-import { ActionIcon, Title, Text, Button, LoadingOverlay, Indicator } from '@mantine/core'
+import { ActionIcon, Title, Button, LoadingOverlay, Indicator } from '@mantine/core'
 import { IconHome2, IconMenu2, IconBell, IconLogout, IconLogin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { appStorage } from '../../(core)/_sessionStorage/appStorage'
@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { NotificationModal } from '../notifications/_components/NotificationModal'
 import { useNotifications } from '../notifications/_hooks/useNotifications'
 import { useWindow } from '@/app/(core)/useConstants'
+import { ThemeToggleButton } from './ThemeToggleButton'
 
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
@@ -60,16 +61,11 @@ export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggle
       <Title 
        textWrap='nowrap' order={5} 
         c={`${isDark ? 'white' : 'black'}`}
-      >お小遣いクエストボード</Title>
+      >クエストペイ</Title>
       {/* スペース */}
       <div className='w-full' />
-      {/* ユーザ情報を表示する */}
-      <Text 
-        className={`text-nowrap text-sm`}
-        c={`${isDark ? 'white' : 'black'}`}
-      >
-        {userInfo?.profiles.name}
-      </Text>
+      {/* テーマ切り替えボタン */}
+      <ThemeToggleButton />
       {/* 通知ボタン */}
       {!isGuest && (
         <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
