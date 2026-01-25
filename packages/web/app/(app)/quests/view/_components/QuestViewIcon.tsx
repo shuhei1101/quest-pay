@@ -25,18 +25,18 @@ export const QuestViewIcon = ({
         p="lg" 
         radius="md" 
         bg={isDark ? "gray.6" : "gray.3"}
-        style={{ width: 100, height: 100, display: "flex", alignItems: "center", justifyContent: "center" }}
+        style={{ width: 80, height: 80, display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         {iconName ? (
           <RenderIcon 
             iconName={iconName}
-            iconSize={iconSize ?? 60}
+            iconSize={iconSize ?? 48}
             iconColor={iconColor}
-            size={60}
+            size={48}
             stroke={1.5}
           />
         ) : (
-          <FaQuestion size={60} />
+          <FaQuestion size={48} />
         )}
       </Paper>
     </Center>
