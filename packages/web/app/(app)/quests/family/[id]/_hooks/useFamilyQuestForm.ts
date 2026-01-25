@@ -35,7 +35,7 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
     monthTo: null,
     client: "",
     requestDetail: "",
-    childIds: []
+    childSettings: []
   }
 
   // クエストフォームの状態を作成する
@@ -81,7 +81,11 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
         monthTo: familyQuest.quest.monthTo,
         client: familyQuest.quest.client,
         requestDetail: familyQuest.quest.requestDetail,
-        childIds: familyQuest.children.map(( child ) => child.childId ),
+        childSettings: familyQuest.children.map((child) => ({
+          childId: child.childId,
+          isActivate: child.isActivate ?? true,
+          hasQuestChildren: true,
+        })),
       }
       // 取得フォームを状態にセットする
       setFetchedQuest(fetchedFamilyQuestForm)
@@ -117,7 +121,7 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
     currentQuest.client !== fetchedQuest.client ||
     currentQuest.requestDetail !== fetchedQuest.requestDetail ||
     JSON.stringify(currentQuest.details) !== JSON.stringify(fetchedQuest.details) ||
-    !isSameArray(currentQuest.childIds, fetchedQuest.childIds)
+    JSON.stringify(currentQuest.childSettings) !== JSON.stringify(fetchedQuest.childSettings)
 
   return {
     register,

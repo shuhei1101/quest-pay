@@ -15,9 +15,10 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-          } catch (error) {
-            console.log("supabse生成エラー: ", error)
-            throw error
+          } catch {
+            // Server Componentからの呼び出しではクッキーの変更は無視する
+            // `setAll`はServer ActionまたはRoute Handlerからの呼び出し時のみ動作する
+            // https://nextjs.org/docs/app/api-reference/functions/cookies#options
           }
         },
       },

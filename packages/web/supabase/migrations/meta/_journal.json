@@ -127,6 +127,34 @@
       "when": 1768495494391,
       "tag": "0017_furry_infant_terrible",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1768577728246,
+      "tag": "0018_supreme_sasquatch",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1768578577001,
+      "tag": "0019_loving_lady_bullseye",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1768730007842,
+      "tag": "0020_motionless_sister_grimm",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1768732221552,
+      "tag": "0021_broken_zarek",
+      "breakpoints": true
     }
   ]
 }

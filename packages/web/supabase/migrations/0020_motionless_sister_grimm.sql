@@ -1,0 +1,2 @@
+ALTER TABLE "public_quest_comments" ADD COLUMN "is_liked_by_publisher" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "quest_children" ADD COLUMN "is_enable" boolean DEFAULT true NOT NULL;

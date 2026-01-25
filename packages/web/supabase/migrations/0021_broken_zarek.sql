@@ -1,0 +1,1 @@
+ALTER TABLE "quest_children" DROP COLUMN "is_enable";

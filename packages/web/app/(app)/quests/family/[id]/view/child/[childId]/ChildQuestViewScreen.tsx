@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Paper, Tabs } from "@mantine/core"
+import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState } from "react"
 import { QuestViewHeader } from "../../../../../view/_components/QuestViewHeader"
 import { QuestViewIcon } from "../../../../../view/_components/QuestViewIcon"
@@ -19,6 +19,7 @@ import { useReviewRequest } from "./_hooks/useReviewRequest"
 import { useCancelReview } from "./_hooks/useCancelReview"
 import { useRejectReport } from "./_hooks/useRejectReport"
 import { useApproveReport } from "./_hooks/useApproveReport"
+import { useDeleteChildQuest } from "./_hooks/useDeleteChildQuest"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
 
@@ -26,7 +27,7 @@ import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
 export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string}) => {
   const router = useRouter()
   const {isDark} = useWindow()
-  const {isParent} = useLoginUserInfo()
+  const {isParent, isChild} = useLoginUserInfo()
 
   /** ハンドル（子供用） */
   const {handleReviewRequest, executeReviewRequest, closeModal, isModalOpen, isLoading} = useReviewRequest()
@@ -35,18 +36,21 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
   /** ハンドル（親用） */
   const {handleRejectReport, executeRejectReport, closeModal: closeRejectModal, isModalOpen: isRejectModalOpen, isLoading: isRejectLoading} = useRejectReport()
   const {handleApproveReport, executeApproveReport, closeModal: closeApproveModal, isModalOpen: isApproveModalOpen, isLoading: isApproveLoading} = useApproveReport()
+  const {handleDelete, isLoading: isDeleteLoading} = useDeleteChildQuest()
   
   /** アクティブタブ */
   const [activeTab, setActiveTab] = useState<string | null>("condition")
 
   /** 現在のクエスト状態 */
-  const {childQuest} = useChildQuest({id, childId})
+  const {childQuest, isLoading: questLoading} = useChildQuest({id, childId})
 
   /** 選択中のレベルの詳細を取得する */
   const currentDetail = childQuest?.details?.find(d => d.level === childQuest.children[0].level) || childQuest?.details?.[0]
 
   return (
-    <div className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={questLoading || isDeleteLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       {/* ヘッダー部分 */}
       <QuestViewHeader 
         questName={childQuest?.quest?.name || ""}
@@ -116,7 +120,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
       </Paper>
 
       {/* 下部アクションエリア */}
-      {isParent ? (
+      {isParent && (
         /* 親ユーザの場合 */
         <ParentChildQuestViewFooter
           isPendingReview={childQuest?.children[0].status === "pending_review"}
@@ -126,8 +130,11 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
             updatedAt: childQuest?.base.updatedAt || '',
           })}
           onEdit={() => router.push(FAMILY_QUEST_EDIT_URL(id))}
+          onReset={() => handleDelete({familyQuestId: id, childId})}
         />
-      ) : (
+      )} 
+      
+      {isChild && (
         /* 子供ユーザの場合 */
         <ChildQuestViewFooter 
           onBack={() => router.back()}
@@ -169,6 +176,6 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         isLoading={isApproveLoading || isRejectLoading}
         requestMessage={childQuest?.children[0].requestMessage || undefined}
       />
-    </div>
+    </Box>
   )
 }

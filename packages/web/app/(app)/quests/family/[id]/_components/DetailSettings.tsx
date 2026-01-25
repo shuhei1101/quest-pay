@@ -5,6 +5,7 @@ import { LevelCopyButton } from "./LevelCopyButton"
 import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { modals } from "@mantine/modals"
 import { BaseQuestFormType, isDefaultDetail } from "../../../form"
+import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
 
 /** 詳細設定コンポーネント */
 export const DetailSettings = ({ 
@@ -85,6 +86,30 @@ export const DetailSettings = ({
   const maxLevel = visibleLevels.length > 0 ? Math.max(...visibleLevels) : 1
   const canAddLevel = maxLevel < 5
 
+  /** タブアイテムを生成する */
+  const tabItems: ScrollableTabItem[] = visibleLevels.map((level) => {
+    const levelStr = level.toString()
+    const isCompleted = levels[levelStr]
+    
+    // 該当レベルのdetailインデックスを取得する
+    const detailIndex = watch().details.findIndex(d => d.level === level)
+    // 該当レベルにエラーがあるかチェックする
+    const hasError = detailIndex !== -1 && errors.details?.[detailIndex]
+
+    return {
+      value: levelStr,
+      label: (
+        <Group gap={4} wrap="nowrap">
+          <Text size="sm">レベル {level}</Text>
+          {level === 1 && <Text size="xs" c="red">*</Text>}
+        </Group>
+      ),
+      rightSection: hasError ? <IconAlertCircle size={14} color="red" /> :
+                    isCompleted ? <IconCheck size={14} color="green" /> : 
+                    null
+    }
+  })
+
   /** レベル詳細をコピーする */
   const handleCopyLevel = (fromLevel: number) => {
     if (!activeLevel) return
@@ -108,86 +133,74 @@ export const DetailSettings = ({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <Tabs value={activeLevel} onChange={setActiveLevel} variant="outline">
-        <Group gap="xs" wrap="nowrap">
-          <Tabs.List style={{ flex: 1 }}>
-            {visibleLevels.map((level) => {
-              const levelStr = level.toString()
-              const isCompleted = levels[levelStr]
-              
-              // 該当レベルのdetailインデックスを取得する
-              const detailIndex = watch().details.findIndex(d => d.level === level)
-              // 該当レベルにエラーがあるかチェックする
-              const hasError = detailIndex !== -1 && errors.details?.[detailIndex]
+    <div className="flex flex-col gap-4" style={{ height: '100%' }}>
+      <Tabs value={activeLevel} onChange={setActiveLevel} variant="outline" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        {/* レベルタブヘッダー（固定） */}
+        <div className="px-4 pt-4">
+          <Group gap="xs" wrap="nowrap" style={{ alignItems: 'flex-start' }}>
+            {/* レベルタブ（スクロール可能領域） */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <ScrollableTabs
+                value={activeLevel}
+                onChange={setActiveLevel}
+                items={tabItems}
+              >
+                {/* タブパネルコンテンツはここでは表示しない（下で別途表示） */}
+                <></>
+              </ScrollableTabs>
+            </div>
 
-              return (
-                <Tabs.Tab 
-                  key={level} 
-                  value={levelStr}
-                  rightSection={
-                    hasError ? <IconAlertCircle size={14} color="red" /> :
-                    isCompleted ? <IconCheck size={14} color="green" /> : 
-                    null
-                  }
+            {/* タブ操作ボタン（固定） */}
+            <Group gap="xs" style={{ flexShrink: 0 }}>
+              {/* コピーボタン */}
+              <LevelCopyButton 
+                currentLevel={activeLevel}
+                visibleLevels={visibleLevels}
+                onCopy={handleCopyLevel}
+              />
+
+              {/* 削除ボタン(レベル2以上の場合のみ表示) */}
+              {visibleLevels.length > 1 && (
+                <ActionIcon 
+                  variant="default" 
+                  size="lg"
+                  onClick={handleRemoveLevel}
+                  title="最後のレベルを削除"
                 >
-                  <Group gap={4}>
-                    <Text size="sm">レベル {level}</Text>
-                    {level === 1 && <Text size="xs" c="red">*</Text>}
-                  </Group>
-                </Tabs.Tab>
-              )
-            })}
-          </Tabs.List>
+                  <IconMinus size={18} />
+                </ActionIcon>
+              )}
 
-          {/* タブ操作ボタン */}
-          <Group gap="xs">
-            {/* コピーボタン */}
-            <LevelCopyButton 
-              currentLevel={activeLevel}
-              visibleLevels={visibleLevels}
-              onCopy={handleCopyLevel}
-            />
-
-            {/* 削除ボタン(レベル2以上の場合のみ表示) */}
-            {visibleLevels.length > 1 && (
+              {/* 追加ボタン(レベル5で無効化) */}
               <ActionIcon 
                 variant="default" 
                 size="lg"
-                onClick={handleRemoveLevel}
-                title="最後のレベルを削除"
+                onClick={handleAddLevel}
+                disabled={!canAddLevel}
+                title={canAddLevel ? "新しいレベルを追加" : "最大レベルに達しました"}
               >
-                <IconMinus size={18} />
+                <IconPlus size={18} />
               </ActionIcon>
-            )}
-
-            {/* 追加ボタン(レベル5で無効化) */}
-            <ActionIcon 
-              variant="default" 
-              size="lg"
-              onClick={handleAddLevel}
-              disabled={!canAddLevel}
-              title={canAddLevel ? "新しいレベルを追加" : "最大レベルに達しました"}
-            >
-              <IconPlus size={18} />
-            </ActionIcon>
+            </Group>
           </Group>
-        </Group>
+        </div>
 
-        {visibleLevels.map((level) => (
-          <Tabs.Panel key={level} value={level.toString()} pt="md">
-            <LevelDetailForm 
-              level={level} 
-              onSave={() => onSave(level.toString())}
-              register={register}
-              errors={errors}
-              setValue={setValue}
-              watch={watch}
-            />
-          </Tabs.Panel>
-        ))}
+        {/* タブパネルコンテンツ（スクロール可能） */}
+        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+          {visibleLevels.map((level) => (
+            <Tabs.Panel key={level} value={level.toString()} p="md">
+              <LevelDetailForm 
+                level={level} 
+                onSave={() => onSave(level.toString())}
+                register={register}
+                errors={errors}
+                setValue={setValue}
+                watch={watch}
+              />
+            </Tabs.Panel>
+          ))}
+        </div>
       </Tabs>
-
     </div>
   )
 }

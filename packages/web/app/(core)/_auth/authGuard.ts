@@ -1,12 +1,14 @@
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { getAuthContext } from "./withAuth"
-import { AUTH_ERROR_URL } from "../endpoints"
+import { LOGIN_URL, QUESTS_URL } from "../endpoints"
 import { redirect } from "next/navigation"
+import { addQueryParam } from "../util"
 
-export const authGuard = async ({parentNG = false, childNG = false, guestNG = false}: {
+export const authGuard = async ({parentNG = false, childNG = false, guestNG = false, redirectUrl}: {
   parentNG?: boolean
   childNG?: boolean
   guestNG?: boolean
+  redirectUrl?: string
 }) => {
   // 認証コンテキストを取得する
   const { db, userId } = await getAuthContext()
@@ -17,8 +19,12 @@ export const authGuard = async ({parentNG = false, childNG = false, guestNG = fa
     (parentNG && userInfo?.profiles?.type === "parent") || 
     (childNG && userInfo?.profiles?.type === "child")
   ) {
-    // 権限エラー画面に遷移する
-    redirect(AUTH_ERROR_URL)
+    // エラーメッセージをクエリパラメータに付与する
+    const targetUrl = redirectUrl || LOGIN_URL
+    const urlWithError = addQueryParam(targetUrl, 'error', 'このページにアクセスする権限がありません')
+    
+    // 指定されたURLまたはクエスト画面に遷移する
+    redirect(urlWithError)
   }
   
   return {

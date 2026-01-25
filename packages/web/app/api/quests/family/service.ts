@@ -3,7 +3,7 @@ import { devLog } from "@/app/(core)/util"
 import { Db } from "@/index"
 import { deleteQuest, insertQuest, updateQuest } from "../db"
 import { deleteFamilyQuest, insertFamilyQuest, InsertFamilyQuestRecord, updateFamilyQuest, UpdateFamilyQuestRecord } from "./db"
-import { deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord, updateQuestChild } from "./[id]/child/db"
+import { deleteQuestChild, deleteQuestChildren, insertQuestChildren, InsertQuestChildrenRecord, updateQuestChild, updateQuestChildSettings } from "./[id]/child/db"
 import { deleteQuestTags, insertQuestTags, InsertQuestTagsRecord } from "../tag/db"
 import { deleteQuestDetails, InsertQuestDetailRecord, insertQuestDetails } from "../detail/db"
 import { ChildSelect, FamilyQuestSelect, FamilyQuestUpdate, FamilySelect, ProfileSelect, QuestChildrenSelect, QuestChildrenUpdate, QuestDetailSelect, QuestInsert, QuestSelect, QuestUpdate } from "@/drizzle/schema"
@@ -41,10 +41,10 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
       // 家族クエストを挿入する
       const { id: familyQuestId } = await insertFamilyQuest({db: tx, record: familyQuest, questId })
 
-      // クエスト対象の子供を挿入する
+      // クエスト対象の子供を挿入する（初期状態はnot_started）
       if (questChildren.length > 0) await insertQuestChildren({db: tx, records: questChildren.map(child => ({
         ...child,
-        status: "in_progress"
+        status: "not_started"
       })), familyQuestId})
       
       // タグを挿入する
@@ -97,11 +97,45 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
         updatedAt: familyQuest.updatedAt
       })
 
-      // クエスト対象の子供を削除する
-      await deleteQuestChildren({db: tx, familyQuestId: familyQuest.id})
+      // 現在の家族クエストを取得して、既存の子供設定を確認する
+      const currentFamilyQuest = await fetchFamilyQuest({ db: tx, id: familyQuest.id })
+      const currentChildIds = currentFamilyQuest.children.map(c => c.childId)
+      const newChildIds = questChildren.map(c => c.childId)
 
-      // クエスト対象の子供を挿入する
-      if (questChildren.length > 0) await insertQuestChildren({db: tx, records: questChildren, familyQuestId: familyQuest.id})
+      // 削除対象（フォームから完全に除外されたもののみ）
+      const childIdsToDelete = currentChildIds.filter(id => !newChildIds.includes(id))
+
+      // 新規追加（まだ存在しないもの）
+      const childrenToAdd = questChildren.filter(c => 
+        !currentChildIds.includes(c.childId)
+      )
+
+      // 更新対象（既存のもの）
+      const childrenToUpdate = questChildren.filter(c => 
+        currentChildIds.includes(c.childId)
+      )
+
+      // 削除処理を実行する
+      for (const childId of childIdsToDelete) {
+        await deleteQuestChild({db: tx, familyQuestId: familyQuest.id, childId})
+      }
+
+      // 新規追加処理を実行する
+      if (childrenToAdd.length > 0) {
+        await insertQuestChildren({db: tx, records: childrenToAdd, familyQuestId: familyQuest.id})
+      }
+
+      // 更新処理を実行する（isActivateの変更を反映）
+      for (const child of childrenToUpdate) {
+        await updateQuestChildSettings({
+          db: tx,
+          familyQuestId: familyQuest.id,
+          childId: child.childId,
+          record: {
+            isActivate: child.isActivate,
+          }
+        })
+      }
       
       // タグを削除する
       await deleteQuestTags({db: tx, questId: quest.id})

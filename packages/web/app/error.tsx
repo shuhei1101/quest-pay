@@ -2,8 +2,6 @@
 
 import { Button } from "@mantine/core"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-import toast, { Toaster } from "react-hot-toast"
 import { HOME_URL, LOGIN_URL } from "./(core)/endpoints"
 
 export default function ErrorPage({
@@ -14,11 +12,6 @@ export default function ErrorPage({
   reset: () => void
 }) {
   const router = useRouter()
-  // レンダリング時の処理（パスが変わるたびに実行）
-  useEffect(() => {
-    toast.error(`${error.message}`)
-  }, [])
-
 
   return (
     <>
@@ -36,7 +29,6 @@ export default function ErrorPage({
         </Button>
       </div>
     </div>
-    <Toaster />
     </>
   )
 }
