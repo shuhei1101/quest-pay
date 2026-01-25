@@ -112,7 +112,7 @@ export const QuestViewLayout = ({
 
       {/* クエスト内容カード */}
       <Paper
-        className="flex-1 min-h-0 flex flex-col"
+        className="flex-1 min-h-0"
         p="md" 
         radius="md" 
         style={{ 
