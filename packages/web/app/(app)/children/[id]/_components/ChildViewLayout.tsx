@@ -1,8 +1,7 @@
 "use client"
 
-import { Box, Card, Group, Stack, Text, Badge } from "@mantine/core"
+import { Box, Card, Group, Stack, Text } from "@mantine/core"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
-import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
 import { Child } from "@/app/api/children/query"
 import { calculateAge, formatDate } from "@/app/(core)/util"
 import dayjs from 'dayjs'

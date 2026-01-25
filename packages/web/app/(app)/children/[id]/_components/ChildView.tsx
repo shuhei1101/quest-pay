@@ -1,6 +1,6 @@
 'use client'
 import { Box, Button, LoadingOverlay } from "@mantine/core"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import { useChild } from "../_hook/useChild"
@@ -19,7 +19,7 @@ export const ChildView = ( params: {
   const router = useRouter()
 
   /** 子供ID */
-  const [id, setId] = useState<string>(params.id)
+  const id = params.id
 
   /** 子供情報 */
   const { child, questStats, isLoading } = useChild({childId: id})
