@@ -1,5 +1,5 @@
 import { ActionIcon, Avatar, Button, Group, Indicator, Tooltip } from "@mantine/core"
-import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage } from "@tabler/icons-react"
+import { IconArrowLeft, IconHeart, IconHeartFilled } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 
@@ -7,10 +7,8 @@ import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 export const PublicQuestViewFooter = ({
   familyIcon,
   likeCount,
-  commentCount,
   isLiked,
   onLikeToggle,
-  onComment,
   onFamilyClick,
   availableLevels,
   selectedLevel,
@@ -20,10 +18,8 @@ export const PublicQuestViewFooter = ({
 }: {
   familyIcon?: string
   likeCount: number
-  commentCount: number
   isLiked: boolean
   onLikeToggle?: () => void
-  onComment?: () => void
   onFamilyClick?: () => void
   availableLevels?: number[]
   selectedLevel?: number
@@ -69,13 +65,6 @@ export const PublicQuestViewFooter = ({
           ) : (
             <IconHeart size={28} />
           )}
-        </ActionIcon>
-      </Indicator>
-
-      {/* コメントボタン */}
-      <Indicator label={commentCount} size={18} color="blue" offset={4}>
-        <ActionIcon variant="light" color="blue" size={56} radius="xl" onClick={onComment}>
-          <IconMessage size={28} />
         </ActionIcon>
       </Indicator>
     </Group>
