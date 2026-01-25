@@ -72,16 +72,14 @@ export const LoginScreen = () => {
                 required
                 {...register("password")}
               />
-              
-              {/* ログイン状態保持 */}
-              <Checkbox 
-                label="ログイン状態を保持" 
-                checked={watch("rememberMe")}
-                onChange={(event) => setValue("rememberMe", event.currentTarget.checked)}
-              />
-              
-              {/* パスワード忘れ */}
-              <div className="text-center">
+
+              {/* ログイン状態保持とパスワード忘れ */}
+              <div className="flex items-center justify-between">
+                <Checkbox 
+                  label="ログイン状態を保持" 
+                  checked={watch("rememberMe")}
+                  onChange={(event) => setValue("rememberMe", event.currentTarget.checked)}
+                />
                 <Anchor size="sm" component={Link} href={FORGOT_PASSWORD_URL}>パスワードをお忘れですか？</Anchor>
               </div>
 

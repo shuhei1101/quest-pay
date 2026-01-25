@@ -1,12 +1,12 @@
 "use client"
 
 import { Button, Paper, TextInput, Title, Text, Anchor } from "@mantine/core"
-import { FeedbackMessage } from "../../(core)/_components/FeedbackMessageWrapper"
+import { FeedbackMessage } from "../../../(core)/_components/FeedbackMessageWrapper"
 import { IconMail } from "@tabler/icons-react"
 import { useForgotPasswordForm } from "./_hooks/useForgotPasswordForm"
 import { useForgotPassword } from "./_hooks/useForgotPassword"
 import { useRouter } from "next/navigation"
-import { LOGIN_URL } from "../../(core)/endpoints"
+import { LOGIN_URL } from "../../../(core)/endpoints"
 import Link from "next/link"
 
 export const ForgotPasswordScreen = () => {

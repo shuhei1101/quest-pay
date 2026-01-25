@@ -1,12 +1,12 @@
 "use client"
 
 import { Button, Paper, PasswordInput, Title, Text, Anchor } from "@mantine/core"
-import { FeedbackMessage } from "../../(core)/_components/FeedbackMessageWrapper"
+import { FeedbackMessage } from "../../../(core)/_components/FeedbackMessageWrapper"
 import { IconLock } from "@tabler/icons-react"
 import { useResetPasswordForm } from "./_hooks/useResetPasswordForm"
 import { useResetPassword } from "./_hooks/useResetPassword"
 import { useRouter } from "next/navigation"
-import { LOGIN_URL } from "../../(core)/endpoints"
+import { LOGIN_URL } from "../../../(core)/endpoints"
 import Link from "next/link"
 
 export const ResetPasswordScreen = () => {
