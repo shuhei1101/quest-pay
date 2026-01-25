@@ -25,7 +25,7 @@ const calculateGrade = (birthday: string | null | undefined): string | null => {
   // 4月1日時点での年齢を基準に学年を計算する
   let ageAtApril = currentYear - birthYear
   
-  // 4月1日より前に生まれた場合は1歳引く
+  // 4月1日より後に生まれた場合は1歳引く
   if (birthDate.getMonth() + 1 > 4 || (birthDate.getMonth() + 1 === 4 && birthDate.getDate() > 1)) {
     ageAtApril--
   }
@@ -121,13 +121,13 @@ export const ChildViewLayout = ({
   // 誕生日をフォーマットする
   const formattedBirthday = formatDate(child?.profiles?.birthday)
   
-  // 合計報酬額を計算する（ダミーデータ、実際のロジックは後で実装）
+  // 合計報酬額を計算する（TODO: 実際のAPIデータに置き換える）
   const totalReward = 10000
   
-  // 定額報酬を取得する（ダミーデータ、実際のロジックは後で実装）
+  // 定額報酬を取得する（TODO: 実際のAPIデータに置き換える）
   const fixedReward = 1900
   
-  // 今月の報酬を取得する（ダミーデータ、実際のロジックは後で実装）
+  // 今月の報酬を取得する（TODO: 実際のAPIデータに置き換える）
   const monthlyReward = 3000
   const monthlyRewardDate = "2024/6/30"
 
@@ -154,9 +154,6 @@ export const ChildViewLayout = ({
             <div>
               <Text size="xl" fw={700}>
                 {child?.profiles?.name ?? ""}くん
-              </Text>
-              <Text size="sm" c="dimmed">
-                @test
               </Text>
             </div>
           </Group>
