@@ -15,10 +15,11 @@ export const useUpdateFamilyQuest = () => {
 
   /** 更新処理 */
   const mutation = useMutation({
-    mutationFn: ({form, familyQuestId, updatedAt}: {form: FamilyQuestFormType, familyQuestId: string, updatedAt: string}) => putFamilyQuest({
+    mutationFn: ({form, familyQuestId, familyQuestUpdatedAt, questUpdatedAt}: {form: FamilyQuestFormType, familyQuestId: string, familyQuestUpdatedAt: string, questUpdatedAt: string}) => putFamilyQuest({
       request: {
         form,
-        updatedAt
+        familyQuestUpdatedAt,
+        questUpdatedAt,
       },
       familyQuestId
     }),
@@ -33,15 +34,14 @@ export const useUpdateFamilyQuest = () => {
   })
 
   /** 更新ハンドル */
-  const handleUpdate = ({form, familyQuestId, updatedAt}: {form: FamilyQuestFormType, familyQuestId?: string, updatedAt?: string}) => {
-    if (!familyQuestId || !updatedAt) throw new ClientValueError()
+  const handleUpdate = ({form, familyQuestId, updatedAt, questUpdatedAt}: {form: FamilyQuestFormType, familyQuestId?: string, updatedAt?: string, questUpdatedAt?: string}) => {
+    if (!familyQuestId || !updatedAt || !questUpdatedAt) throw new ClientValueError()
     if (!window.confirm('更新します。よろしいですか？')) return
-    mutation.mutate({form, familyQuestId, updatedAt})
+    mutation.mutate({form, familyQuestId, familyQuestUpdatedAt: updatedAt, questUpdatedAt})
   }
 
   return {
     handleUpdate,
     isLoading: mutation.isPending,
   }
-  
 }
