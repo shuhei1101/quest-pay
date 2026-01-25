@@ -3,6 +3,7 @@
 import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Slider, Stack, Text } from "@mantine/core"
 import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget } from "@tabler/icons-react"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
+import { useWindow } from "@/app/(core)/useConstants"
 
 /** クエスト条件タブ */
 export const QuestConditionTab = ({
@@ -30,6 +31,9 @@ export const QuestConditionTab = ({
   currentClearCount?: number
   requiredClearCount?: number
 }) => {
+
+  const { isMobile } = useWindow()
+ 
   return (
     <Stack gap="md" className="overflow-y-auto">
       {/* クエストレベル */}
@@ -41,29 +45,29 @@ export const QuestConditionTab = ({
         <Group justify="end">
           <Rating value={level} count={maxLevel} readOnly size="lg" />
         </Group>
-        {/* レベルアップまでの進捗（子供用） */}
-        {type === "child" && currentClearCount !== undefined && requiredClearCount !== undefined && requiredClearCount > 0 && (
-          <Box mt={8}>
-            <Text size="sm" c="dimmed" mb={4}>
-              次レベルまで: {currentClearCount} / {requiredClearCount} 回クリア
-            </Text>
-            <Slider
-              value={Math.min(currentClearCount, requiredClearCount)}
-              max={requiredClearCount}
-              marks={[
-                { value: 0, label: '0' },
-                { value: requiredClearCount, label: `${requiredClearCount}` },
-              ]}
-              label={(value) => `${value}回`}
-              color="blue"
-              size="md"
-              disabled
-              styles={{
-                markLabel: { fontSize: '12px' },
-              }}
-            />
-          </Box>
-        )}
+          {/* レベルアップまでの進捗（子供用） */}
+          {type === "child" && currentClearCount !== undefined && requiredClearCount !== undefined && requiredClearCount > 0 && (
+            <Box mt={8} className="w-full flex flex-col items-end">
+              <Text size="sm" c="dimmed" mb={4}>
+                次レベルまで: {currentClearCount} / {requiredClearCount} 回クリア
+              </Text>
+              <Slider className={isMobile ? "w-full" : "w-1/2"}
+                value={Math.min(currentClearCount, requiredClearCount)}
+                max={requiredClearCount}
+                marks={[
+                  { value: 0, label: '0' },
+                  { value: requiredClearCount, label: `${requiredClearCount}` },
+                ]}
+                label={(value) => `${value}回`}
+                color="blue"
+                size="md"
+                disabled
+                styles={{
+                  markLabel: { fontSize: '12px' },
+                }}
+              />
+            </Box>
+          )}
       </Box>
 
       <Divider />
@@ -74,7 +78,7 @@ export const QuestConditionTab = ({
           <IconCategory size={20} />
           <Text fw={500}>クエストカテゴリ</Text>
         </Group>
-        <Text ta="right" c="dimmed">{category}</Text>
+        <Text ta="right" >{category}</Text>
       </Box>
 
       <Divider />

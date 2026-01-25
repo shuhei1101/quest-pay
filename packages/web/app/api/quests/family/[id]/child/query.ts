@@ -1,7 +1,7 @@
 import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
-import { familyQuests, icons, IconSelect, questChildren, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, ChildSelect, FamilyQuestSelect, QuestChildrenSelect, children } from "@/drizzle/schema"
+import { familyQuests, icons, IconSelect, questChildren, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, ChildSelect, FamilyQuestSelect, QuestChildrenSelect, children, questCategories, QuestCategorySelect } from "@/drizzle/schema"
 import { and, asc, count, countDistinct, desc, eq, inArray, like } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
@@ -31,6 +31,7 @@ export type ChildQuest = {
   details: QuestDetailSelect[]
   icon: IconSelect | null
   children: QuestChildrenSelect[]
+  category: QuestCategorySelect | null
 }
 
 /** クエリ結果をFetchChildQuestsItemの配列に変換する */
@@ -41,6 +42,7 @@ const buildResult = (rows: {
   quest_tags?: QuestTagSelect | null
   icons: IconSelect | null
   quest_children: QuestChildrenSelect | null
+  quest_categories?: QuestCategorySelect | null
 }[]): ChildQuest[] => {
   const map = new Map<string, ChildQuest>()
 
@@ -56,6 +58,7 @@ const buildResult = (rows: {
         details: [],
         icon: row.icons,
         children: [],
+        category: row.quest_categories ?? null,
       })
     }
 
@@ -94,6 +97,7 @@ export const fetchChildQuests = async ({ params, db, childId, familyId }: {
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(questChildren, eq(questChildren.familyQuestId, familyQuests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
+      .leftJoin(questCategories, eq(quests.categoryId, questCategories.id))
       .where(and(...conditions, eq(questChildren.childId, childId), eq(familyQuests.familyId, familyId), eq(questChildren.isActivate, true)))
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
@@ -141,6 +145,7 @@ export const fetchChildQuest = async ({familyQuestId, db, childId}: {
       .leftJoin(questDetails, eq(questDetails.questId, quests.id))
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .leftJoin(icons, eq(quests.iconId, icons.id))
+      .leftJoin(questCategories, eq(quests.categoryId, questCategories.id))
       .where(and(eq(familyQuests.id, familyQuestId), eq(questChildren.childId, childId)))
 
     // データを結果オブジェクトに変換する
