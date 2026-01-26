@@ -60,7 +60,8 @@ export const APPROVE_REPORT_API_URL = (familyQuestId: string, childId: string) =
 // 公開クエスト
 export const PUBLIC_QUESTS_URL = `${QUESTS_URL}/public`
 export const PUBLIC_QUEST_EDIT_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`
-export const PUBLIC_QUEST_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`
+export const PUBLIC_QUEST_VIEW_URL = (publicQuestId: string) => `${PUBLIC_QUEST_EDIT_URL(publicQuestId)}/view`
+export const PUBLIC_QUEST_URL = (publicQuestId: string) => `${PUBLIC_QUEST_VIEW_URL(publicQuestId)}`
 export const PUBLIC_QUESTS_API_URL = `${QUESTS_API_URL}/public`
 export const PUBLIC_QUEST_API_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_API_URL}/${publicQuestId}`
 // 有効化・無効化API

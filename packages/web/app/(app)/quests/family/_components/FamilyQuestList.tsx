@@ -92,7 +92,7 @@ export const FamilyQuestList = () => {
     <FamilyQuestCardLayout
       key={index}
       familyQuest={quest}
-      onClick={(id) => router.push(FAMILY_QUEST_EDIT_URL(id))}
+      onClick={(id) => router.push(FAMILY_QUEST_VIEW_URL(id))}
     />
   ), [router])
 
