@@ -2,12 +2,16 @@ import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { FamilyQuest } from "@/app/api/quests/family/query"
 import { Badge, Card, Group, Text, Avatar, Tooltip } from "@mantine/core"
 import { IconWorld } from "@tabler/icons-react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 家族クエストカードレイアウトコンポーネント */
 export const FamilyQuestCardLayout = ({familyQuest, onClick}: {
   familyQuest: FamilyQuest,
   onClick: (questId: string) => void
 }) => {
+  /** テーマ情報 */
+  const { colors } = useTheme()
+
   return (
     <Card 
       shadow="sm" 
@@ -16,7 +20,10 @@ export const FamilyQuestCardLayout = ({familyQuest, onClick}: {
       withBorder
       onClick={() => onClick(familyQuest.base.id)}
       className="cursor-pointer quest-card hover:shadow-md transition-shadow"
-      style={{ borderColor: familyQuest.quest.iconColor || undefined }}
+      style={{ 
+        borderColor: familyQuest.quest.iconColor || colors.cardStyles.border,
+        backgroundColor: colors.cardStyles.background,
+      }}
     >
       {/* カードヘッダー部分 */}
       <Group justify="space-between" mb="xs">
@@ -32,14 +39,14 @@ export const FamilyQuestCardLayout = ({familyQuest, onClick}: {
       </Group>
       
       {/* クエスト名 */}
-      <Text fw={700} size="lg" mb="xs" lineClamp={2}>
+      <Text fw={700} size="lg" mb="xs" lineClamp={2} c={colors.textColors.primary}>
         {familyQuest.quest.name}
       </Text>
       
       {/* 受注している子供の人数とアイコン */}
       {familyQuest.children.length > 0 ? (
         <Group gap="xs" mb="xs">
-          <Text size="sm" c="dimmed">
+          <Text size="sm" c={colors.textColors.secondary}>
             受注中:
           </Text>
           <Avatar.Group spacing="sm">
@@ -63,7 +70,7 @@ export const FamilyQuestCardLayout = ({familyQuest, onClick}: {
           </Avatar.Group>
         </Group>
       ) : (
-        <Text size="sm" c="dimmed" mb="xs">
+        <Text size="sm" c={colors.textColors.secondary} mb="xs">
           受注なし
         </Text>
       )}

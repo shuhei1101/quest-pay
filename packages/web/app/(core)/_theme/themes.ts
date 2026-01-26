@@ -26,6 +26,22 @@ export const defaultTheme: AppThemeConfig = {
       default: "#e5e7eb",
       focus: "#ec4899",
     },
+    cardStyles: {
+      background: "#ffffff",
+      border: "#e5e7eb",
+      hoverShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#ffffff",
+      border: "#e5e7eb",
+      focusBorder: "#ec4899",
+    },
   },
   dark: {
     buttonColors: {
@@ -48,6 +64,22 @@ export const defaultTheme: AppThemeConfig = {
     borderColors: {
       default: "#4b5563",
       focus: "#ec4899",
+    },
+    cardStyles: {
+      background: "#2d2d2d",
+      border: "#4b5563",
+      hoverShadow: "0 4px 6px rgba(0, 0, 0, 0.4)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#1a1a1a",
+      border: "#4b5563",
+      focusBorder: "#ec4899",
     },
   },
   colors: {
@@ -92,6 +124,22 @@ export const blueTheme: AppThemeConfig = {
       default: "#e2e8f0",
       focus: "#3b82f6",
     },
+    cardStyles: {
+      background: "#ffffff",
+      border: "#e2e8f0",
+      hoverShadow: "0 4px 6px rgba(59, 130, 246, 0.1)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#ffffff",
+      border: "#e2e8f0",
+      focusBorder: "#3b82f6",
+    },
   },
   dark: {
     buttonColors: {
@@ -114,6 +162,22 @@ export const blueTheme: AppThemeConfig = {
     borderColors: {
       default: "#475569",
       focus: "#3b82f6",
+    },
+    cardStyles: {
+      background: "#1e293b",
+      border: "#475569",
+      hoverShadow: "0 4px 6px rgba(59, 130, 246, 0.2)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#0f172a",
+      border: "#475569",
+      focusBorder: "#3b82f6",
     },
   },
   colors: {
@@ -158,6 +222,22 @@ export const greenTheme: AppThemeConfig = {
       default: "#bbf7d0",
       focus: "#22c55e",
     },
+    cardStyles: {
+      background: "#ffffff",
+      border: "#bbf7d0",
+      hoverShadow: "0 4px 6px rgba(34, 197, 94, 0.1)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#ffffff",
+      border: "#bbf7d0",
+      focusBorder: "#22c55e",
+    },
   },
   dark: {
     buttonColors: {
@@ -180,6 +260,22 @@ export const greenTheme: AppThemeConfig = {
     borderColors: {
       default: "#15803d",
       focus: "#22c55e",
+    },
+    cardStyles: {
+      background: "#14532d",
+      border: "#15803d",
+      hoverShadow: "0 4px 6px rgba(34, 197, 94, 0.2)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#0a1f14",
+      border: "#15803d",
+      focusBorder: "#22c55e",
     },
   },
   colors: {
@@ -224,6 +320,22 @@ export const purpleTheme: AppThemeConfig = {
       default: "#e9d5ff",
       focus: "#a855f7",
     },
+    cardStyles: {
+      background: "#ffffff",
+      border: "#e9d5ff",
+      hoverShadow: "0 4px 6px rgba(168, 85, 247, 0.1)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#ffffff",
+      border: "#e9d5ff",
+      focusBorder: "#a855f7",
+    },
   },
   dark: {
     buttonColors: {
@@ -246,6 +358,22 @@ export const purpleTheme: AppThemeConfig = {
     borderColors: {
       default: "#7e22ce",
       focus: "#a855f7",
+    },
+    cardStyles: {
+      background: "#2e1a47",
+      border: "#7e22ce",
+      hoverShadow: "0 4px 6px rgba(168, 85, 247, 0.2)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#1a0a2e",
+      border: "#7e22ce",
+      focusBorder: "#a855f7",
     },
   },
   colors: {

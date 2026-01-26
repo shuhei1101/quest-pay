@@ -2,13 +2,14 @@
 
 import { ActionIcon, Tooltip } from "@mantine/core"
 import { IconTrash } from "@tabler/icons-react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 削除アイコンボタンを表示する */
 export const DeleteIconButton = ({
   onClick,
   loading = false,
   disabled = false,
-  color = "red.7",
+  color,
   size = "lg",
   tooltip = "削除",
 }: {
@@ -25,10 +26,13 @@ export const DeleteIconButton = ({
   /** ツールチップテキスト */
   tooltip?: string
 }) => {
+  /** テーマ情報 */
+  const { colors: themeColors } = useTheme()
+
   return (
     <Tooltip label={tooltip}>
       <ActionIcon
-        color={color}
+        color={color || themeColors.buttonColors.danger}
         size={size}
         loading={loading}
         disabled={disabled}

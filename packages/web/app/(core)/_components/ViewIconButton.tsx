@@ -2,13 +2,14 @@
 
 import { ActionIcon, Tooltip } from "@mantine/core"
 import { IconEye } from "@tabler/icons-react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 表示確認アイコンボタンを表示する */
 export const ViewIconButton = ({
   onClick,
   loading = false,
   disabled = false,
-  color = "cyan",
+  color,
   size = "lg",
   tooltip = "表示確認",
 }: {
@@ -25,10 +26,13 @@ export const ViewIconButton = ({
   /** ツールチップテキスト */
   tooltip?: string
 }) => {
+  /** テーマ情報 */
+  const { colors: themeColors } = useTheme()
+
   return (
     <Tooltip label={tooltip}>
       <ActionIcon
-        color={color}
+        color={color || themeColors.buttonColors.secondary}
         size={size}
         loading={loading}
         disabled={disabled}

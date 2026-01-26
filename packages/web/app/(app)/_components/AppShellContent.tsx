@@ -58,7 +58,7 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
 
         {/* サイドメニュー */}
         <AppShell.Navbar>
-          <SideMenu isMobile={isMobile} isDark={isDark} opened={opened} onClose={close} />
+          <SideMenu isMobile={isMobile} opened={opened} onClose={close} />
         </AppShell.Navbar>
 
         {/* メインコンテンツ */}
@@ -69,7 +69,7 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
         {/* モバイル用フッター */}
         {isMobile && (
           <AppShell.Footer>
-            <BottomBar isDark={isDark} />
+            <BottomBar />
           </AppShell.Footer>
         )}
       </AppShell>

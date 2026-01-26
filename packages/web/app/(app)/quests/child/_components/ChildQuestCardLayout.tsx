@@ -3,12 +3,16 @@ import { ChildQuest } from "@/app/api/quests/family/[id]/child/query"
 import { Badge, Card, Group, Text, Progress, Stack } from "@mantine/core"
 import { formatRelativeTime } from "@/app/(core)/util"
 import { IconStar } from "@tabler/icons-react"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 子供クエストカードレイアウトコンポーネント */
 export const ChildQuestCardLayout = ({childQuest, onClick}: {
   childQuest: ChildQuest,
   onClick: (questId: string) => void
 }) => {
+  /** テーマ情報 */
+  const { colors } = useTheme()
+
   // 子供クエスト情報を取得する（最初の子供の情報を使用）
   const questChild = childQuest.children[0]
   
@@ -21,9 +25,13 @@ export const ChildQuestCardLayout = ({childQuest, onClick}: {
         radius="md" 
         withBorder
         className="quest-card"
-        style={{ opacity: 0.6 }}
+        style={{ 
+          opacity: 0.6,
+          backgroundColor: colors.cardStyles.background,
+          borderColor: colors.cardStyles.border,
+        }}
       >
-        <Text c="dimmed" ta="center">
+        <Text c={colors.textColors.secondary} ta="center">
           クエストデータが見つかりません
         </Text>
       </Card>
@@ -80,7 +88,10 @@ export const ChildQuestCardLayout = ({childQuest, onClick}: {
       withBorder
       onClick={() => onClick(childQuest.base.id)}
       className="cursor-pointer quest-card hover:shadow-md transition-shadow"
-      style={{ borderColor: childQuest.quest.iconColor || undefined }}
+      style={{ 
+        borderColor: childQuest.quest.iconColor || colors.cardStyles.border,
+        backgroundColor: colors.cardStyles.background,
+      }}
     >
       {/* カードヘッダー部分 */}
       <Group justify="space-between" mb="xs">
@@ -103,18 +114,18 @@ export const ChildQuestCardLayout = ({childQuest, onClick}: {
       </Group>
       
       {/* クエスト名 */}
-      <Text fw={700} size="lg" mb="xs" lineClamp={2}>
+      <Text fw={700} size="lg" mb="xs" lineClamp={2} c={colors.textColors.primary}>
         {childQuest.quest.name}
       </Text>
       
       {/* 報酬と経験値 */}
       <Group gap="md" mb="xs">
-        <Text size="sm" fw={500}>
+        <Text size="sm" fw={500} c={colors.textColors.primary}>
           報酬: {reward}円
         </Text>
         <Group gap={4}>
           <IconStar size={16} color="gold" fill="gold" />
-          <Text size="sm" fw={500}>
+          <Text size="sm" fw={500} c={colors.textColors.primary}>
             {exp} EXP
           </Text>
         </Group>
@@ -122,7 +133,7 @@ export const ChildQuestCardLayout = ({childQuest, onClick}: {
       
       {/* 進捗状況 */}
       <Stack gap="xs" mb="xs">
-        <Text size="sm" c="dimmed">
+        <Text size="sm" c={colors.textColors.secondary}>
           進捗: {currentCompletionCount}/{requiredCompletionCount}回達成
         </Text>
         <Progress 
@@ -135,13 +146,13 @@ export const ChildQuestCardLayout = ({childQuest, onClick}: {
       
       {/* 次レベルまで */}
       {remainingClearCount > 0 && (
-        <Text size="xs" c="dimmed" mb="xs">
+        <Text size="xs" c={colors.textColors.secondary} mb="xs">
           次のレベルまであと{remainingClearCount}回
         </Text>
       )}
       
       {/* 最終更新日 */}
-      <Text size="xs" c="dimmed" ta="right">
+      <Text size="xs" c={colors.textColors.secondary} ta="right">
         {lastUpdated}
       </Text>
     </Card>
