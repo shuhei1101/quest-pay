@@ -28,6 +28,14 @@ export const RenderIcon = ({iconName, iconSize, iconColor, ...props}: {
     IconQuestionMark
 
   return (
-    <IconComponent color={iconColor == null || iconColor == "" && isDark ? "#848484" : "#000"} size={iconSize} {...props} />
+    <IconComponent 
+      color={
+        (iconColor == null || iconColor == "") 
+          ? (isDark ? "#848484" : "#000") 
+          : iconColor
+      } 
+      size={iconSize} 
+      {...props} 
+    />
   )
 }

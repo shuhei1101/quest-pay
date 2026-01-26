@@ -17,9 +17,9 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
   /** ブレークポイント */
   const { isMobile, isDark } = useWindow()
 
-  /** コンテンツ領域の高さ（ヘッダー60px + パディング2rem + モバイル時フッター60px） */
+  /** コンテンツ領域の高さ（ヘッダー60px + パディング2rem + モバイル時フッター70px） */
   const contentHeight = isMobile
-    ? 'calc(100dvh - 60px - 2rem - 60px)'
+    ? 'calc(100dvh - 60px - 2rem - 70px)'
     : 'calc(100dvh - 60px - 2rem)'
 
   return (
@@ -38,7 +38,7 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
             desktop: false,
           },
         }}
-        footer={isMobile ? { height: 60, offset: true } : undefined}
+        footer={isMobile ? { height: 70, offset: true } : undefined}
         padding="md"
         __vars={{
           '--content-height': contentHeight,

@@ -32,10 +32,12 @@ body {
 /* !importantを使用する理由: モバイルブラウザ（iOS Safari、Android Chrome等）は
    16px未満の入力フィールドにフォーカスすると自動的にズームインするため、
    サードパーティコンポーネントを含むすべての入力要素に確実に適用する必要がある */
+/* touch-action: manipulationを追加することで、ダブルタップズームを無効化する */
 input,
 textarea,
 select {
   font-size: 16px !important;
+  touch-action: manipulation !important;
 }
 
 .neonButton {

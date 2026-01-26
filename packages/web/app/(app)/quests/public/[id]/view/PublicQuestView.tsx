@@ -1,13 +1,7 @@
 "use client"
 
-import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState } from "react"
-import { QuestViewHeader } from "../../../view/_components/QuestViewHeader"
-import { QuestViewIcon } from "../../../view/_components/QuestViewIcon"
-import { QuestConditionTab } from "../../../view/_components/QuestConditionTab"
-import { QuestDetailTab } from "../../../view/_components/QuestDetailTab"
-import { QuestOtherTab } from "../../../view/_components/QuestOtherTab"
-import { ParentQuestViewFooter } from "../../../family/[id]/view/_components/ParentQuestViewFooter"
+import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
 import { useWindow } from "@/app/(core)/useConstants"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
 import { useRouter } from "next/navigation"
@@ -20,10 +14,7 @@ import { useCancelQuestLike } from "./_hooks/useCancelQuestLike"
 /** 公開クエスト閲覧画面 */
 export const PublicQuestView = ({id}: {id: string}) => {
   const router = useRouter()
-  const {isDark} = useWindow()
   
-  /** アクティブタブ */
-  const [activeTab, setActiveTab] = useState<string | null>("condition")
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
@@ -57,91 +48,49 @@ export const PublicQuestView = ({id}: {id: string}) => {
     }
   }
 
+  /** コメント数（TODO: 実装時にAPIから取得する） */
+  const commentCount = 0
+
   return (
-    <Box pos="relative" className="flex flex-col p-4 h-full min-h-0" style={{ backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)" }}>
-      {/* ロード中のオーバーレイ */}
-      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
-      {/* ヘッダー部分 */}
-      <QuestViewHeader 
-        questName={publicQuest?.quest?.name || ""}
-      />
-
-      {/* クエストアイコン */}
-      <QuestViewIcon />
-
-      {/* クエスト内容カード */}
-      <Paper
-        className="flex-1 min-h-0"
-        p="md" 
-        radius="md" 
-        style={{ 
-          backgroundColor: isDark ? "#544c4c" : "#fffef5",
-          boxShadow: "4px 4px 8px rgba(0,0,0,0.15)",
-        }}
-      >
-        {/* タブ切り替え */}
-        <Tabs 
-          value={activeTab} 
-          onChange={setActiveTab} 
-          className="flex-1 min-h-0"
-          styles={{
-            root: { display: "flex", flexDirection: "column", height: "100%" },
-            panel: { flex: 1, minHeight: 0, overflow: "auto", paddingRight: 16},
-          }}
-        >
-          <Tabs.List grow>
-              <Tabs.Tab value="condition">クエスト条件</Tabs.Tab>
-              <Tabs.Tab value="detail">依頼情報</Tabs.Tab>
-              <Tabs.Tab value="other">その他</Tabs.Tab>
-          </Tabs.List>
-
-          {/* クエスト条件タブ */}
-          <Tabs.Panel value="condition" pt="md">
-            <QuestConditionTab
-              level={selectedDetail?.level || 1}
-              category={""}
-              successCondition={selectedDetail?.successCondition || ""}
-              reward={selectedDetail?.reward || 0}
-              exp={selectedDetail?.childExp || 0}
-              requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
-            />
-          </Tabs.Panel>
-
-          {/* 依頼情報タブ */}
-          <Tabs.Panel value="detail" pt="md">
-            <QuestDetailTab 
-              client={publicQuest?.quest?.client || ""}
-              requestDetail={publicQuest?.quest?.requestDetail || ""}
-            />
-          </Tabs.Panel>
-
-          {/* その他情報タブ */}
-          <Tabs.Panel value="other" pt="md" className=" flex-1 overflow-y-auto">
-            <QuestOtherTab
-              tags={publicQuest?.tags?.map(tag => tag.name) || []}
-              ageFrom={publicQuest?.quest?.ageFrom}
-              ageTo={publicQuest?.quest?.ageTo}
-              monthFrom={publicQuest?.quest?.monthFrom}
-              monthTo={publicQuest?.quest?.monthTo}
-              requiredClearCount={selectedDetail?.requiredClearCount || 0}
-            />
-          </Tabs.Panel>
-        </Tabs>
-      </Paper>
-
-      {/* 下部アクションエリア */}
-      <PublicQuestViewFooter 
-        availableLevels={ availableLevels }
-        selectedLevel={ selectedLevel }
-        onLevelChange={ setSelectedLevel }
-        onBack={ () => router.back() } 
-        familyIcon={ publicQuest?.familyIcon?.name }
-        likeCount={ likeCount || 0 } 
-        commentCount={ 0 } 
-        isLiked={ isLike }
-        onLikeToggle={ likeToggleHandle }
-        isLikeLoading={ isLikeLoading || isCancelLikeLoading }
-      />
-    </Box>
+    <QuestViewLayout
+      questName={publicQuest?.quest?.name || ""}
+      headerColor={{ light: "blue.3", dark: "blue.5" }}
+      backgroundColor={{ 
+        light: "rgba(191, 219, 254, 0.5)", 
+        dark: "rgba(59, 130, 246, 0.2)" 
+      }}
+      iconColor={publicQuest?.quest?.iconColor}
+      iconName={publicQuest?.icon?.name}
+      iconSize={publicQuest?.icon?.size ?? 48}
+      isLoading={isLoading}
+      level={selectedDetail?.level || 1}
+      category={""}
+      successCondition={selectedDetail?.successCondition || ""}
+      reward={selectedDetail?.reward || 0}
+      exp={selectedDetail?.childExp || 0}
+      requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
+      client={publicQuest?.quest?.client || ""}
+      requestDetail={publicQuest?.quest?.requestDetail || ""}
+      tags={publicQuest?.tags?.map(tag => tag.name) || []}
+      ageFrom={publicQuest?.quest?.ageFrom}
+      ageTo={publicQuest?.quest?.ageTo}
+      monthFrom={publicQuest?.quest?.monthFrom}
+      monthTo={publicQuest?.quest?.monthTo}
+      requiredClearCount={selectedDetail?.requiredClearCount || 0}
+      commentCount={commentCount}
+      footer={
+        <PublicQuestViewFooter 
+          availableLevels={ availableLevels }
+          selectedLevel={ selectedLevel }
+          onLevelChange={ setSelectedLevel }
+          onBack={ () => router.back() } 
+          familyIcon={ publicQuest?.familyIcon?.name }
+          likeCount={ likeCount || 0 } 
+          isLiked={ isLike }
+          onLikeToggle={ likeToggleHandle }
+          isLikeLoading={ isLikeLoading || isCancelLikeLoading }
+        />
+      }
+    />
   )
 }
