@@ -53,7 +53,7 @@ export const PublicQuestList = () => {
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
 
   /** クエスト一覧 */
-  const { fetchedQuests, isLoading, totalRecords, maxPage } = usePublicQuests({
+  const { fetchedQuests, isLoading, totalRecords, maxPage, refetch } = usePublicQuests({
     filter: searchFilter,
     sortColumn: sort.column,
     sortOrder: sort.order,
@@ -115,6 +115,11 @@ export const PublicQuestList = () => {
     handleSearch()
   }, [handleSearch])
 
+  /** リフレッシュハンドル */
+  const handleRefresh = useCallback(async () => {
+    await refetch()
+  }, [refetch])
+
   return (
     <QuestListLayout<PublicQuest, PublicQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -130,6 +135,7 @@ export const PublicQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
+      onRefresh={handleRefresh}
       filterPopup={
         <PublicQuestFilterPopup
           close={closeFilter}

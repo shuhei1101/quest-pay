@@ -9,6 +9,7 @@ import { QuestCategorySelect, QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
 import { devLog } from "@/app/(core)/util"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
+import { PullToRefresh } from "@/app/(core)/_components/PullToRefresh"
 
 type QuestItem = {
   quest: QuestSelect
@@ -31,6 +32,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   sortPopup,
   onFilterOpen,
   onSortOpen,
+  onRefresh,
 }: {
   /** 表示するクエスト一覧 */
   quests: T[]
@@ -62,6 +64,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   onFilterOpen: () => void
   /** ソートポップアップ開くハンドル */
   onSortOpen: () => void
+  /** リフレッシュハンドル */
+  onRefresh?: () => Promise<void>
 }) => {
   /** タブ状態 */
   const [tabValue, setTabValue] = useState<string | null>(TAB_ALL)
@@ -134,10 +138,19 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
     setDisplayQuests([])
   }
 
+  /** リフレッシュハンドル */
+  const handleRefresh = async () => {
+    if (onRefresh) {
+      await onRefresh()
+    }
+  }
+
   return (
     <div className="w-full">
-      {/* クエストカテゴリタブ */}
-      <QuestCategoryTabs
+      {/* プル トゥ リフレッシュ */}
+      <PullToRefresh onRefresh={handleRefresh}>
+        {/* クエストカテゴリタブ */}
+        <QuestCategoryTabs
         tabValue={tabValue}
         onTabChange={setTabValue}
         categories={questCategories}
@@ -217,6 +230,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
 
         <div className="m-5" />
       </QuestCategoryTabs>
+      </PullToRefresh>
 
       {/* フィルターポップアップ */}
       {filterPopup}
