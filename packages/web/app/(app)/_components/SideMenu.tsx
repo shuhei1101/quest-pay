@@ -7,12 +7,15 @@ import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
 import { RenderIcon } from '@/app/(app)/icons/_components/RenderIcon'
+import { useTheme } from '@/app/(core)/_theme/useTheme'
 
 /** サイドメニューを取得する */
-export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean, isDark: boolean, opened: boolean, onClose: () => void}) => {
+export const SideMenu = ({isMobile, opened, onClose}: {isMobile: boolean, opened: boolean, onClose: () => void}) => {
   const router = useRouter()
   /** ログインユーザ情報 */
   const { isParent, userInfo } = useLoginUserInfo()
+  /** テーマ情報 */
+  const { colors, isDark } = useTheme()
 
   /** メニューアイテム */
   const menuItems = (
@@ -141,7 +144,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
   }
 
   return (
-    <div className={`${isDark ? "bg-zinc-800!" : "bg-zinc-600!"} text-white h-full`}>
+    <div style={{ backgroundColor: colors.backgroundColors.card, color: colors.textColors.primary, height: '100%' }}>
       {opened ? (
         <ScrollArea h="100%">{menuItems}</ScrollArea>
       ) : (
