@@ -2,7 +2,7 @@
 
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { ClientAuthError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"

@@ -6,7 +6,7 @@ import { getFamilyQuest } from "@/app/api/quests/family/[id]/client"
 import { useState } from "react"
 import { devLog, isSameArray } from "@/app/(core)/util"
 import { useMantineTheme } from "@mantine/core"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 
 /** クエストフォームを取得する */

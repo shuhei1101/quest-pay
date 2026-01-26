@@ -3,7 +3,7 @@
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { devLog } from "@/app/(core)/util"
 import { getIcons } from "@/app/api/icons/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"

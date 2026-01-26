@@ -1,5 +1,5 @@
 import { Button, Input, Modal, Space, Text } from "@mantine/core"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { FAMILY_NEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useEffect, useState } from "react"
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"

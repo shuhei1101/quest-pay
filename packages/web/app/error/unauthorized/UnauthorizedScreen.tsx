@@ -4,7 +4,7 @@ import { Button, Center, Paper, Title, Text, Alert } from "@mantine/core"
 import { IconLock, IconHome, IconArrowLeft } from "@tabler/icons-react"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { useEffect } from "react"
 import { FeedbackMessage } from "@/app/(core)/_components/FeedbackMessageWrapper"
 

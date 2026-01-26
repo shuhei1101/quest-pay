@@ -5,7 +5,8 @@ import { FamilyMemberList } from "./_components/FamilyMemberList"
 import { useEffect, useState } from "react"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
 import { IconAdjustments } from "@tabler/icons-react"
-import { useRouter, usePathname } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
+import { usePathname } from "next/navigation"
 import { FAMILIES_MEMBERS_CHILD_NEW_URL } from "@/app/(core)/endpoints"
 
 export default function FamilyMembersLayout({ children }: {

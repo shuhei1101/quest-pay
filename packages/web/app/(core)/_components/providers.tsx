@@ -9,6 +9,8 @@ import { queryClient } from '../tanstack'
 import { ThemeProvider, useThemeContext } from '../_theme/themeContext'
 import { useMemo } from 'react'
 import { ServiceWorkerRegistration } from './ServiceWorkerRegistration'
+import { GlobalLoadingOverlay } from './GlobalLoadingOverlay'
+import { Suspense } from 'react'
 
 /** MantineProviderのラッパー（テーマを適用する） */
 const MantineThemeWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -70,6 +72,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <MantineThemeWrapper>
             {/* Service Workerの登録 */}
             <ServiceWorkerRegistration />
+            {/* グローバルローディングオーバーレイ（useSearchParamsを使用するためSuspenseでラップ） */}
+            <Suspense fallback={null}>
+              <GlobalLoadingOverlay />
+            </Suspense>
             {children}
           </MantineThemeWrapper>
         </ThemeProvider>

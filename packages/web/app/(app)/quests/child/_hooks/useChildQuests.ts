@@ -2,7 +2,7 @@
 
 import { SortOrder } from "@/app/(core)/schema"
 import { getChildQuests } from "@/app/api/children/[id]/quests/client"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import type { QuestColumn } from "@/drizzle/schema"
 import { ChildQuestFilterType } from "@/app/api/quests/family/[id]/child/query"

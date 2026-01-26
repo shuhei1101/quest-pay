@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { useMutation } from "@tanstack/react-query"
 import { ClientValueError } from "@/app/(core)/error/appError"
 import { handleAppError } from "@/app/(core)/error/handler/client"

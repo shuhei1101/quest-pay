@@ -3,7 +3,7 @@
 import { Modal, Paper, ScrollArea, Stack, Text, Title, LoadingOverlay, Badge, Group, Button } from "@mantine/core"
 import { IconClock, IconBell, IconChecks } from "@tabler/icons-react"
 import { useNotifications } from "../_hooks/useNotifications"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { NotificationSelect } from "@/drizzle/schema"
 import { useReadNotifications } from "../_hooks/useReadNotifications"
 

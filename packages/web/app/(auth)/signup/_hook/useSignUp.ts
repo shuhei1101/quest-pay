@@ -4,7 +4,7 @@ import toast from "react-hot-toast"
 import { createClient } from "@/app/(core)/_supabase/client"
 import { AuthFormType } from "../../login/form"
 import { useMutation } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { VERIFY_EMAIL_URL } from "@/app/(core)/endpoints"
 
 /** サインアップ時のハンドル */

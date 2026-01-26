@@ -6,7 +6,7 @@ import { ChildFormSchema, ChildFormType } from "../form"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { devLog } from "@/app/(core)/util"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { getChild } from "@/app/api/children/[id]/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 

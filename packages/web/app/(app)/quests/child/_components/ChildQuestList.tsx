@@ -1,6 +1,7 @@
 "use client"
 
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
+import { useSearchParams } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 import { useChildQuests } from "../_hooks/useChildQuests"
 import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"

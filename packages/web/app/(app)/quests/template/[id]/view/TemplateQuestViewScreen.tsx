@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
 import { useTemplateQuest } from "./_hooks/useTemplateQuest"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { TemplateQuestViewFooter } from "./_components/TemplateQuestViewFooter"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { FAMILY_QUEST_NEW_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"

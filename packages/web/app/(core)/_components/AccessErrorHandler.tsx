@@ -2,7 +2,8 @@
 
 import { useEffect } from "react"
 import toast from "react-hot-toast"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
+import { useSearchParams } from "next/navigation"
 
 /** アクセスエラーをハンドリングするコンポーネント */
 export const AccessErrorHandler = () => {

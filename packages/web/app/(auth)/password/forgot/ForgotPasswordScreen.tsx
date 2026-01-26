@@ -5,7 +5,7 @@ import { FeedbackMessage } from "../../../(core)/_components/FeedbackMessageWrap
 import { IconMail } from "@tabler/icons-react"
 import { useForgotPasswordForm } from "./_hooks/useForgotPasswordForm"
 import { useForgotPassword } from "./_hooks/useForgotPassword"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { LOGIN_URL } from "../../../(core)/endpoints"
 import Link from "next/link"
 
