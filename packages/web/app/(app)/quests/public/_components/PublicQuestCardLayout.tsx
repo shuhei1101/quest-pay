@@ -6,12 +6,16 @@ import { Badge, Card, Group, Text, Stack, Flex } from "@mantine/core"
 import { IconHeart, IconMessageCircle } from "@tabler/icons-react"
 import { formatAgeRange, formatMonthRange } from "@/app/(core)/util"
 import { useLikeCount } from "../[id]/view/_hooks/useLikeCount"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 公開クエストカードレイアウトコンポーネント */
 export const PublicQuestCardLayout = ({publicQuest, onClick}: {
   publicQuest: PublicQuest,
   onClick: (questId: string) => void
 }) => {
+  /** テーマ情報 */
+  const { colors } = useTheme()
+
   // レベル1の報酬を取得する
   const level1Detail = publicQuest.details.find(d => d.level === 1)
   const reward = level1Detail?.reward ?? 0
@@ -33,7 +37,10 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
       withBorder
       onClick={() => onClick(publicQuest.base.id)}
       className="cursor-pointer quest-card hover:shadow-md transition-shadow"
-      style={{ borderColor: publicQuest.quest.iconColor || undefined }}
+      style={{ 
+        borderColor: publicQuest.quest.iconColor || colors.cardStyles.border,
+        backgroundColor: colors.cardStyles.background,
+      }}
     >
       {/* カードヘッダー部分 */}
       <Flex justify="space-between" align="flex-start" mb="xs">
@@ -47,14 +54,14 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
           
           {/* クエスト名と基本情報 */}
           <Stack gap={4} style={{ flex: 1 }}>
-            <Text fw={700} size="md" lineClamp={1}>
+            <Text fw={700} size="md" lineClamp={1} c={colors.textColors.primary}>
               {publicQuest.quest.name}
             </Text>
             <Group gap="xs">
-              <Text size="xs" c="dimmed">
+              <Text size="xs" c={colors.textColors.secondary}>
                 {ageRange}
               </Text>
-              <Text size="xs" fw={500}>
+              <Text size="xs" fw={500} c={colors.textColors.primary}>
                 {reward}円〜
               </Text>
             </Group>
@@ -99,7 +106,7 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
             iconColor={publicQuest.family?.iconColor}
           />
         )}
-        <Text size="xs" c="dimmed">
+        <Text size="xs" c={colors.textColors.secondary}>
           {publicQuest.family?.onlineName || "不明な家族"}
         </Text>
       </Group>
