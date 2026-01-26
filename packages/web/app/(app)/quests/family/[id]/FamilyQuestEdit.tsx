@@ -115,7 +115,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   /** フォーム送信ハンドル */
   const onSubmit = handleSubmit((form) => {
     if (familyQuestId) {
-      handleUpdate({ form, familyQuestId, updatedAt: fetchedEntity?.base.updatedAt })
+      handleUpdate({ form, familyQuestId, updatedAt: fetchedEntity?.base.updatedAt, questUpdatedAt: fetchedEntity?.quest.updatedAt })
     } else {
       handleRegister({ form })
     }

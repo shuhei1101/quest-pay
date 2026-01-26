@@ -1,6 +1,6 @@
 "use client"
 
-import { HOME_URL, PROFILE_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text } from '@mantine/core'
 import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
@@ -111,15 +111,6 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
   /** ミニメニューアイテム */
   const miniMenuItems = (
     <>
-      {/* プロフィールアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(PROFILE_URL)} size="lg">
-        <RenderIcon 
-          iconName={userInfo?.icons?.name} 
-          iconColor={userInfo?.profiles?.iconColor} 
-          size={28} 
-          stroke={1.5} 
-        />
-      </ActionIcon>
       {/* ホームアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)}>
         <IconHome2 color={menuColors.home} stroke={1.4} />
