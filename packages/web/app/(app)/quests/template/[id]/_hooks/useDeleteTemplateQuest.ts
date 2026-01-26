@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useMutation } from "@tanstack/react-query"
 import { deleteTemplateQuest } from "@/app/api/quests/template/[id]/client"

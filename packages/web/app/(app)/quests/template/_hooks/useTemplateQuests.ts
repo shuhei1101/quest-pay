@@ -2,7 +2,7 @@
 
 import { SortOrder } from "@/app/(core)/schema"
 import { getTemplateQuests } from "@/app/api/quests/template/client"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import type { QuestColumn } from "@/drizzle/schema"
 import { TemplateQuestFilterType } from "@/app/api/quests/template/query"

@@ -4,7 +4,8 @@ import { Button, Center, Paper, Title, Text, Alert } from "@mantine/core"
 import { FeedbackMessage } from "../../../(core)/_components/FeedbackMessageWrapper"
 import { IconMail } from "@tabler/icons-react"
 import { useResendEmail } from "./_hook/useResendEmail"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
+import { useSearchParams } from "next/navigation"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
 
 export const VerifyEmail = () => {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { getTemplateQuest } from "@/app/api/quests/template/[id]/client"
 import { useQuery } from "@tanstack/react-query"

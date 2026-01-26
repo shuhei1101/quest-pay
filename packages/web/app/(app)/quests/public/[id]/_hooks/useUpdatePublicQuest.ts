@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { PublicQuestFormType } from "../form"
 import toast from "react-hot-toast"

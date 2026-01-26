@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { FamilyQuestFormType } from "../form"
 import { postFamilyQuest } from "@/app/api/quests/family/client"

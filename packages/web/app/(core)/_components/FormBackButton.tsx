@@ -1,5 +1,5 @@
 import { Button } from "@mantine/core"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 
 export const FormBackButton = ({isValueChanged, previousScreenURL}: {
   isValueChanged: boolean,

@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@mantine/core"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { HOME_URL, LOGIN_URL } from "./(core)/endpoints"
 
 export default function ErrorPage({

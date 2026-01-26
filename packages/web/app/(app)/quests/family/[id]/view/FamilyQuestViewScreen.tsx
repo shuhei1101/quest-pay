@@ -4,7 +4,7 @@ import { useState } from "react"
 import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
 import { ParentQuestViewFooter } from "./_components/ParentQuestViewFooter"
 import { useFamilyQuest } from "./_hooks/useFamilyQuest"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 
 /** 家族クエスト閲覧画面 */
 export const FamilyQuestViewScreen = ({id}: {id: string}) => {

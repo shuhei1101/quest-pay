@@ -1,5 +1,5 @@
 "use client"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { SimpleGrid } from "@mantine/core"
 import { ChildCardLayout } from "../../../children/_components/ChildCardLayout"
 import { useChildren } from "@/app/(app)/children/_hook/useChildren"

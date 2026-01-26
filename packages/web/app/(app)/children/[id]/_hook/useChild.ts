@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { getChild } from "@/app/api/children/[id]/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 

@@ -2,7 +2,7 @@ import { FamilyInviteType } from "../form"
 import { devLog } from "@/app/(core)/util"
 import toast from "react-hot-toast"
 import { useMutation } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { postFamilyInvite } from "@/app/api/families/invite/client"
 
 export const useSendInviteMail = () => {

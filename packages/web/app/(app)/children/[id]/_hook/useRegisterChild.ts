@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/app/(core)/_hooks/useRouter"
 import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 import { postChild } from "@/app/api/children/client"
