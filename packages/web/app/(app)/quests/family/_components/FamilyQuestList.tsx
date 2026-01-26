@@ -105,8 +105,11 @@ export const FamilyQuestList = () => {
         .filter(([_, v]) => v !== undefined && v !== null && v !== '')
         .map(([k, v]) => [k, String(v)])
     )
-    const params = new URLSearchParams(paramsObj)
-    router.push(`${FAMILY_QUESTS_URL}?tab=family&${params.toString()}`)
+    const params = new URLSearchParams({
+      tab: 'family',
+      ...paramsObj
+    })
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(filter)
   }, [router])
 
@@ -120,11 +123,12 @@ export const FamilyQuestList = () => {
         .map(([k, v]) => [k, String(v)])
     )
     const params = new URLSearchParams({
+      tab: 'family',
       ...filterParams,
       sortColumn: newSort.column,
       sortOrder: newSort.order
     })
-    router.push(`${FAMILY_QUESTS_URL}?tab=family&${params.toString()}`)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(questFilter)
   }, [questFilter, router])
 

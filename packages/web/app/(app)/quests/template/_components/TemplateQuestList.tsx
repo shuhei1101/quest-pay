@@ -109,8 +109,11 @@ export const TemplateQuestList = () => {
         .filter(([_, v]) => v !== undefined && v !== null && v !== '')
         .map(([k, v]) => [k, String(v)])
     )
-    const params = new URLSearchParams(paramsObj)
-    router.push(`${TEMPLATE_QUESTS_URL}?tab=template&${params.toString()}`)
+    const params = new URLSearchParams({
+      tab: 'template',
+      ...paramsObj
+    })
+    router.push(`${TEMPLATE_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(filter)
   }, [router])
 
@@ -124,11 +127,12 @@ export const TemplateQuestList = () => {
         .map(([k, v]) => [k, String(v)])
     )
     const params = new URLSearchParams({
+      tab: 'template',
       ...filterParams,
       sortColumn: newSort.column,
       sortOrder: newSort.order
     })
-    router.push(`${TEMPLATE_QUESTS_URL}?tab=template&${params.toString()}`)
+    router.push(`${TEMPLATE_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(questFilter)
   }, [questFilter, router])
 

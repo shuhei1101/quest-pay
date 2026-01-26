@@ -112,8 +112,11 @@ export const PublicQuestList = () => {
         .filter(([_, v]) => v !== undefined && v !== null && v !== '')
         .map(([k, v]) => [k, String(v)])
     )
-    const params = new URLSearchParams(paramsObj)
-    router.push(`${PUBLIC_QUESTS_URL}?tab=public&${params.toString()}`)
+    const params = new URLSearchParams({
+      tab: 'public',
+      ...paramsObj
+    })
+    router.push(`${PUBLIC_QUESTS_URL}?${params.toString()}`)
     setPage(1)
     setSearchFilter(filter)
   }, [router])
@@ -128,11 +131,12 @@ export const PublicQuestList = () => {
         .map(([k, v]) => [k, String(v)])
     )
     const params = new URLSearchParams({
+      tab: 'public',
       ...filterParams,
       sortColumn: newSort.column,
       sortOrder: newSort.order
     })
-    router.push(`${PUBLIC_QUESTS_URL}?tab=public&${params.toString()}`)
+    router.push(`${PUBLIC_QUESTS_URL}?${params.toString()}`)
     setPage(1)
     setSearchFilter(questFilter)
   }, [questFilter, router])
