@@ -10,14 +10,12 @@ import { createClient } from '../../(core)/_supabase/client'
 import { useState } from 'react'
 import { NotificationModal } from '../notifications/_components/NotificationModal'
 import { useNotifications } from '../notifications/_hooks/useNotifications'
-import { useWindow } from '@/app/(core)/useConstants'
 import { ThemeToggleButton } from './ThemeToggleButton'
 import { useTheme } from '@/app/(core)/_theme/useTheme'
 
 /** アプリヘッダーを取得する */
 export const AppHeader = ({isMobile, onToggleMenu}: {isMobile: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
-  const {isDark} = useWindow()
   /** ログインユーザ情報 */
   const { userInfo, isLoading, isGuest } = useLoginUserInfo()
   /** 通知モーダルの開閉状態 */
