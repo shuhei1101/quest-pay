@@ -9,17 +9,17 @@ type PullToRefreshProps = {
   children: ReactNode
   /** リフレッシュ時のコールバック */
   onRefresh: () => Promise<void>
-  /** リフレッシュ中かどうか */
-  isRefreshing?: boolean
   /** プルダウンの閾値（ピクセル） */
   threshold?: number
 }
+
+/** プルを開始するための最小距離（ピクセル） */
+const MIN_PULL_DISTANCE = 10
 
 /** プル トゥ リフレッシュコンポーネント */
 export const PullToRefresh = ({
   children,
   onRefresh,
-  isRefreshing = false,
   threshold = 80,
 }: PullToRefreshProps) => {
   /** プルダウンの距離 */
@@ -53,7 +53,7 @@ export const PullToRefresh = ({
       setPullDistance(Math.min(distance, threshold * 1.5))
       
       // デフォルトのスクロール動作を防ぐ
-      if (distance > 10) {
+      if (distance > MIN_PULL_DISTANCE) {
         e.preventDefault()
       }
     }
