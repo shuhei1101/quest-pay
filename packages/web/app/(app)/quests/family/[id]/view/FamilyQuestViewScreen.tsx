@@ -17,7 +17,6 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
   const {familyQuest, isLoading} = useFamilyQuest({id})
-  
   /** 編集モーダル制御状態 */
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false)
 

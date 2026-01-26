@@ -25,13 +25,10 @@ export const PublicQuestView = ({id}: {id: string}) => {
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
   const {publicQuest, isLoading} = usePublicQuest({id})
-  
   /** ログインユーザ情報 */
   const { userInfo } = useLoginUserInfo()
-  
   /** 編集権限があるかどうか */
   const hasEditPermission = publicQuest?.base.familyId === userInfo?.profiles?.familyId
-  
   /** 編集モーダル制御状態 */
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false)
 
