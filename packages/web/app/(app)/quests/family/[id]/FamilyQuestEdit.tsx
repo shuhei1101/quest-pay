@@ -11,7 +11,7 @@ import { useDeleteFamilyQuest } from "./_hooks/useDeleteFamilyQuest"
 import { useDisclosure } from "@mantine/hooks"
 import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
 import { useRouter } from "next/navigation"
-import { FAMILY_QUEST_VIEW_URL, PUBLIC_QUEST_EDIT_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUEST_VIEW_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
 import { usePublishFamilyQuest } from "./_hooks/usePublishFamilyQuest"
 import { QuestEditLayout } from "../../_components/QuestEditLayout"
 import { FamilyQuestFormType } from "./form"
@@ -21,7 +21,6 @@ import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
 import { DeleteIconButton } from "@/app/(core)/_components/DeleteIconButton"
 import { SaveIconButton } from "@/app/(core)/_components/SaveIconButton"
-import { ViewIconButton } from "@/app/(core)/_components/ViewIconButton"
 import { PublishIconButton } from "@/app/(core)/_components/PublishIconButton"
 import { CheckPublicQuestIconButton } from "@/app/(core)/_components/CheckPublicQuestIconButton"
 
@@ -193,10 +192,6 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
             onClick={() => handlePublish({ familyQuestId: familyQuestId! })}
           />
         ),
-        <ViewIconButton
-          key="view"
-          onClick={() => router.push(FAMILY_QUEST_VIEW_URL(familyQuestId!))}
-        />,
         <DeleteIconButton
           key="delete"
           loading={submitLoading}
