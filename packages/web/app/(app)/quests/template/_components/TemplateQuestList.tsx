@@ -53,7 +53,7 @@ export const TemplateQuestList = () => {
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
 
   /** クエスト一覧 */
-  const { fetchedQuests, isLoading, totalRecords, maxPage } = useTemplateQuests({
+  const { fetchedQuests, isLoading, totalRecords, maxPage, refetch } = useTemplateQuests({
     filter: searchFilter,
     sortColumn: sort.column,
     sortOrder: sort.order,
@@ -112,6 +112,11 @@ export const TemplateQuestList = () => {
     handleSearch()
   }, [handleSearch])
 
+  /** リフレッシュハンドル */
+  const handleRefresh = useCallback(async () => {
+    await refetch()
+  }, [refetch])
+
   return (
     <QuestListLayout<TemplateQuest, TemplateQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -127,6 +132,7 @@ export const TemplateQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
+      onRefresh={handleRefresh}
       filterPopup={
         <TemplateQuestFilterPopup
           close={closeFilter}

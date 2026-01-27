@@ -53,7 +53,7 @@ export const ChildQuestList = () => {
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
 
   /** クエスト一覧 */
-  const { fetchedQuests, isLoading, totalRecords, maxPage } = useChildQuests({
+  const { fetchedQuests, isLoading, totalRecords, maxPage, refetch } = useChildQuests({
     childId: userInfo?.children?.id,
     filter: searchFilter,
     sortColumn: sort.column,
@@ -113,6 +113,11 @@ export const ChildQuestList = () => {
     handleSearch()
   }, [handleSearch])
 
+  /** リフレッシュハンドル */
+  const handleRefresh = useCallback(async () => {
+    await refetch()
+  }, [refetch])
+
   return (
     <QuestListLayout<ChildQuest, ChildQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -128,6 +133,7 @@ export const ChildQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
+      onRefresh={handleRefresh}
       filterPopup={
         <ChildQuestFilterPopup
           close={closeFilter}
