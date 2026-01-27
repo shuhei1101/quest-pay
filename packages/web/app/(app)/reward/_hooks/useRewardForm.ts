@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { AgeRewardFormSchema, AgeRewardFormType, LevelRewardFormSchema, LevelRewardFormType } from "../form"
-import { putFamilyAgeRewardTable } from "@/app/api/allowance/age/client"
-import { putFamilyLevelRewardTable } from "@/app/api/allowance/level/client"
+import { putFamilyAgeRewardTable } from "@/app/api/reward/age/client"
+import { putFamilyLevelRewardTable } from "@/app/api/reward/level/client"
 import { useRouter } from "next/navigation"
-import { ALLOWANCE_VIEW_URL } from "@/app/(core)/endpoints"
+import { REWARD_VIEW_URL } from "@/app/(core)/endpoints"
 import toast from "react-hot-toast"
 
 /** 年齢別報酬フォームを取得する */
@@ -25,7 +25,7 @@ export const useAgeRewardForm = ({ defaultValues }: { defaultValues: AgeRewardFo
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ageRewardTable"] })
       toast.success("定額報酬を更新しました")
-      router.push(ALLOWANCE_VIEW_URL)
+      router.push(REWARD_VIEW_URL)
     },
     onError: () => {
       toast.error("定額報酬の更新に失敗しました")
@@ -62,7 +62,7 @@ export const useLevelRewardForm = ({ defaultValues }: { defaultValues: LevelRewa
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["levelRewardTable"] })
       toast.success("ランク報酬を更新しました")
-      router.push(ALLOWANCE_VIEW_URL)
+      router.push(REWARD_VIEW_URL)
     },
     onError: () => {
       toast.error("ランク報酬の更新に失敗しました")

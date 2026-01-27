@@ -3,7 +3,7 @@ import { Box, Text, Table, LoadingOverlay, Button, Group, Tabs } from "@mantine/
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ALLOWANCE_URL } from "@/app/(core)/endpoints"
+import { REWARD_URL } from "@/app/(core)/endpoints"
 import { IconEdit } from "@tabler/icons-react"
 
 /** 学年区分の定義 */
@@ -25,8 +25,8 @@ const getGradeName = (age: number): string => {
   return `${age}歳`
 }
 
-/** お小遣い閲覧レイアウト */
-export const AllowanceViewLayout = ({
+/** 報酬閲覧レイアウト */
+export const RewardViewLayout = ({
   ageRewards,
   levelRewards,
   isLoading
@@ -67,7 +67,7 @@ export const AllowanceViewLayout = ({
         {/* 編集ボタン */}
         <Button 
           leftSection={<IconEdit size={16} />} 
-          onClick={() => router.push(ALLOWANCE_URL)}
+          onClick={() => router.push(REWARD_URL)}
           variant="light"
         >
           編集

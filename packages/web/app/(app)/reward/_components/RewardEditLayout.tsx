@@ -3,7 +3,7 @@ import { Box, Text, Table, LoadingOverlay, Button, Group, NumberInput, ActionIco
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ALLOWANCE_VIEW_URL } from "@/app/(core)/endpoints"
+import { REWARD_VIEW_URL } from "@/app/(core)/endpoints"
 import { IconDeviceFloppy, IconRotate } from "@tabler/icons-react"
 import { UseFormReturn } from "react-hook-form"
 import { AgeRewardFormType, LevelRewardFormType } from "../form"
@@ -27,8 +27,8 @@ const getGradeName = (age: number): string => {
   return `${age}歳`
 }
 
-/** お小遣い編集レイアウト */
-export const AllowanceEditLayout = ({
+/** 報酬編集レイアウト */
+export const RewardEditLayout = ({
   ageForm,
   levelForm,
   isLoading,

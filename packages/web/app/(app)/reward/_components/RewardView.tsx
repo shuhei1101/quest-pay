@@ -1,9 +1,9 @@
 "use client"
-import { AllowanceViewLayout } from "./AllowanceViewLayout"
-import { useAgeRewardTable, useLevelRewardTable } from "../_hooks/useAllowance"
+import { RewardViewLayout } from "./RewardViewLayout"
+import { useAgeRewardTable, useLevelRewardTable } from "../_hooks/useReward"
 
-/** お小遣い閲覧画面 */
-export const AllowanceView = () => {
+/** 報酬閲覧画面 */
+export const RewardView = () => {
   // データを取得する
   const { data: ageData, isLoading: isAgeLoading } = useAgeRewardTable()
   const { data: levelData, isLoading: isLevelLoading } = useLevelRewardTable()
@@ -12,11 +12,11 @@ export const AllowanceView = () => {
 
   // データが取得できるまで待つ
   if (!ageData || !levelData) {
-    return <AllowanceViewLayout ageRewards={[]} levelRewards={[]} isLoading={true} />
+    return <RewardViewLayout ageRewards={[]} levelRewards={[]} isLoading={true} />
   }
 
   return (
-    <AllowanceViewLayout
+    <RewardViewLayout
       ageRewards={ageData.ageRewardTable.rewards}
       levelRewards={levelData.levelRewardTable.rewards}
       isLoading={isLoading}

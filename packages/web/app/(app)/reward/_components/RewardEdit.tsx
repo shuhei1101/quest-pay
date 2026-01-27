@@ -1,11 +1,11 @@
 "use client"
-import { AllowanceEditLayout } from "./AllowanceEditLayout"
-import { useAgeRewardTable, useLevelRewardTable } from "../_hooks/useAllowance"
-import { useAgeRewardForm, useLevelRewardForm } from "../_hooks/useAllowanceForm"
+import { RewardEditLayout } from "./RewardEditLayout"
+import { useAgeRewardTable, useLevelRewardTable } from "../_hooks/useReward"
+import { useAgeRewardForm, useLevelRewardForm } from "../_hooks/useRewardForm"
 import { useMemo } from "react"
 
-/** お小遣い編集画面 */
-export const AllowanceEdit = () => {
+/** 報酬編集画面 */
+export const RewardEdit = () => {
   // データを取得する
   const { data: ageData, isLoading: isAgeLoading } = useAgeRewardTable()
   const { data: levelData, isLoading: isLevelLoading } = useLevelRewardTable()
@@ -31,7 +31,7 @@ export const AllowanceEdit = () => {
   }
 
   return (
-    <AllowanceEditLayout
+    <RewardEditLayout
       ageForm={ageForm}
       levelForm={levelForm}
       isLoading={isLoading}

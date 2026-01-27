@@ -1,4 +1,4 @@
-import { AllowanceView } from "../_components/AllowanceView"
+import { RewardView } from "../_components/RewardView"
 import { authGuard } from "@/app/(core)/_auth/authGuard"
 import { QUESTS_URL } from "@/app/(core)/endpoints"
 
@@ -8,7 +8,7 @@ export default async function Page() {
 
   return (
     <>
-      <AllowanceView />
+      <RewardView />
     </>
   )
 }

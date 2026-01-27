@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { getFamilyAgeRewardTable } from "@/app/api/allowance/age/client"
-import { getFamilyLevelRewardTable } from "@/app/api/allowance/level/client"
+import { getFamilyAgeRewardTable } from "@/app/api/reward/age/client"
+import { getFamilyLevelRewardTable } from "@/app/api/reward/level/client"
 
 /** 年齢別報酬テーブルを取得する */
 export const useAgeRewardTable = () => {

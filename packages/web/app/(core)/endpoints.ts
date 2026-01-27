@@ -150,11 +150,11 @@ export const PROFILE_URL = `/profile`
 // 設定
 export const SETTINGS_URL = `/settings`
 
-// お小遣い設定（定額報酬）
-export const ALLOWANCE_URL = `/allowance`
-export const ALLOWANCE_VIEW_URL = `${ALLOWANCE_URL}/view`
-export const ALLOWANCE_API_URL = `/api${ALLOWANCE_URL}`
+// 報酬設定（定額報酬）
+export const REWARD_URL = `/reward`
+export const REWARD_VIEW_URL = `${REWARD_URL}/view`
+export const REWARD_API_URL = `/api${REWARD_URL}`
 // 年齢別報酬テーブル
-export const FAMILY_AGE_REWARD_TABLE_API_URL = `${ALLOWANCE_API_URL}/age`
+export const FAMILY_AGE_REWARD_TABLE_API_URL = `${REWARD_API_URL}/age`
 // レベル別報酬テーブル
-export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${ALLOWANCE_API_URL}/level`
+export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/level`

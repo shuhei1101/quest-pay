@@ -1,4 +1,4 @@
-import { AllowanceEdit } from "./_components/AllowanceEdit"
+import { RewardEdit } from "./_components/RewardEdit"
 import { authGuard } from "@/app/(core)/_auth/authGuard"
 import { QUESTS_URL } from "@/app/(core)/endpoints"
 
@@ -8,7 +8,7 @@ export default async function Page() {
 
   return (
     <>
-      <AllowanceEdit />
+      <RewardEdit />
     </>
   )
 }
