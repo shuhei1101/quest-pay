@@ -6,7 +6,7 @@ import { fetchFamilyLevelRewardTable } from "./query"
 import { fetchUserInfoByUserId } from "../../users/query"
 import { eq, and } from "drizzle-orm"
 import { rewardByLevels } from "@/drizzle/schema"
-import z from "zod"
+import { z } from "zod"
 
 /** 家族のレベル別報酬テーブルを取得する */
 export type GetFamilyLevelRewardTableResponse = {

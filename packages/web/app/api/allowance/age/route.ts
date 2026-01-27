@@ -6,7 +6,7 @@ import { fetchFamilyAgeRewardTable } from "./query"
 import { fetchUserInfoByUserId } from "../../users/query"
 import { eq, and } from "drizzle-orm"
 import { rewardByAges } from "@/drizzle/schema"
-import z from "zod"
+import { z } from "zod"
 
 /** 家族の年齢別報酬テーブルを取得する */
 export type GetFamilyAgeRewardTableResponse = {

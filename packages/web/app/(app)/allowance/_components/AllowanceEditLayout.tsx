@@ -138,8 +138,8 @@ export const AllowanceEditLayout = ({
                         variant="light"
                         onClick={() => {
                           const amount = window.prompt(`${group.name}の一括設定金額を入力してください（円/月）`)
-                          if (amount !== null) {
-                            handleBatchSet(group.ages, parseInt(amount) || 0)
+                          if (amount !== null && amount.trim() !== "") {
+                            handleBatchSet(group.ages, parseInt(amount, 10) || 0)
                           }
                         }}
                       >
