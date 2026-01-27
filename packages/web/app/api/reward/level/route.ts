@@ -2,15 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchFamilyLevelRewardTable } from "./query"
+import { getOrCreateFamilyLevelRewardTable, updateFamilyLevelRewards } from "./service"
 import { fetchUserInfoByUserId } from "../../users/query"
-import { eq, and } from "drizzle-orm"
-import { rewardByLevels } from "@/drizzle/schema"
 import { z } from "zod"
 
 /** 家族のレベル別報酬テーブルを取得する */
 export type GetFamilyLevelRewardTableResponse = {
-  levelRewardTable: Awaited<ReturnType<typeof fetchFamilyLevelRewardTable>>
+  levelRewardTable: Awaited<ReturnType<typeof getOrCreateFamilyLevelRewardTable>>
 }
 export async function GET(req: NextRequest) {
   return withRouteErrorHandling(async () => {
@@ -22,7 +20,7 @@ export async function GET(req: NextRequest) {
     if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
 
     // レベル別報酬テーブルを取得する
-    const data = await fetchFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
+    const data = await getOrCreateFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
 
     return NextResponse.json({ levelRewardTable: data } as GetFamilyLevelRewardTableResponse)
   })
@@ -53,21 +51,14 @@ export async function PUT(req: NextRequest) {
     const data = PutFamilyLevelRewardTableRequestSchema.parse(body)
 
     // レベル別報酬テーブルを取得する
-    const levelRewardTable = await fetchFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
+    const levelRewardTable = await getOrCreateFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
 
     // 報酬を更新する
-    for (const reward of data.rewards) {
-      await db
-        .update(rewardByLevels)
-        .set({ amount: reward.amount })
-        .where(
-          and(
-            eq(rewardByLevels.type, "family"),
-            eq(rewardByLevels.levelRewardTableId, levelRewardTable.table.id),
-            eq(rewardByLevels.level, reward.level)
-          )
-        )
-    }
+    await updateFamilyLevelRewards({
+      db,
+      levelRewardTableId: levelRewardTable.table.id,
+      rewards: data.rewards
+    })
 
     return NextResponse.json({})
   })

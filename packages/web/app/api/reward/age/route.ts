@@ -2,15 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchFamilyAgeRewardTable } from "./query"
+import { getOrCreateFamilyAgeRewardTable, updateFamilyAgeRewards } from "./service"
 import { fetchUserInfoByUserId } from "../../users/query"
-import { eq, and } from "drizzle-orm"
-import { rewardByAges } from "@/drizzle/schema"
 import { z } from "zod"
 
 /** 家族の年齢別報酬テーブルを取得する */
 export type GetFamilyAgeRewardTableResponse = {
-  ageRewardTable: Awaited<ReturnType<typeof fetchFamilyAgeRewardTable>>
+  ageRewardTable: Awaited<ReturnType<typeof getOrCreateFamilyAgeRewardTable>>
 }
 export async function GET(req: NextRequest) {
   return withRouteErrorHandling(async () => {
@@ -22,7 +20,7 @@ export async function GET(req: NextRequest) {
     if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
 
     // 年齢別報酬テーブルを取得する
-    const data = await fetchFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
+    const data = await getOrCreateFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
 
     return NextResponse.json({ ageRewardTable: data } as GetFamilyAgeRewardTableResponse)
   })
@@ -53,21 +51,14 @@ export async function PUT(req: NextRequest) {
     const data = PutFamilyAgeRewardTableRequestSchema.parse(body)
 
     // 年齢別報酬テーブルを取得する
-    const ageRewardTable = await fetchFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
+    const ageRewardTable = await getOrCreateFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
 
     // 報酬を更新する
-    for (const reward of data.rewards) {
-      await db
-        .update(rewardByAges)
-        .set({ amount: reward.amount })
-        .where(
-          and(
-            eq(rewardByAges.type, "family"),
-            eq(rewardByAges.ageRewardTableId, ageRewardTable.table.id),
-            eq(rewardByAges.age, reward.age)
-          )
-        )
-    }
+    await updateFamilyAgeRewards({
+      db,
+      ageRewardTableId: ageRewardTable.table.id,
+      rewards: data.rewards
+    })
 
     return NextResponse.json({})
   })

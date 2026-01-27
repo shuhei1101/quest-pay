@@ -15,7 +15,7 @@ export const fetchFamilyAgeRewardTable = async ({
 }: {
   db: Db
   familyId: string
-}): Promise<FetchFamilyAgeRewardTableResult> => {
+}): Promise<FetchFamilyAgeRewardTableResult | null> => {
   // 家族の年齢別報酬テーブルを取得する
   const familyTable = await db
     .select()
@@ -23,25 +23,9 @@ export const fetchFamilyAgeRewardTable = async ({
     .where(eq(familyAgeRewardTables.familyId, familyId))
     .limit(1)
 
-  // テーブルが存在しない場合は作成する
+  // テーブルが存在しない場合はnullを返す
   if (!familyTable.length) {
-    const [newTable] = await db
-      .insert(familyAgeRewardTables)
-      .values({ familyId })
-      .returning()
-    
-    // デフォルトの年齢別報酬を作成する（5歳～22歳まで、月額0円）
-    const defaultRewards = Array.from({ length: 18 }, (_, i) => ({
-      type: "family" as const,
-      ageRewardTableId: newTable.id,
-      age: i + 5,
-      amount: 0
-    }))
-    
-    await db.insert(rewardByAges).values(defaultRewards)
-    
-    // 再度取得する
-    return fetchFamilyAgeRewardTable({ db, familyId })
+    return null
   }
 
   // 報酬データを取得する
