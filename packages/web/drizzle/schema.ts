@@ -463,3 +463,143 @@ export const commentUpvotes = pgTable("comment_upvotes", {
 }, (table) => [
   sql`PRIMARY KEY (${table.commentId}, ${table.profileId})`,
 ])
+
+/** お小遣いテーブルタイプ */
+export const allowanceTableType = pgEnum("allowance_table_type", [
+  "template",
+  "public",
+  "family",
+  "child"
+])
+
+/** 年齢別お小遣い額 */
+export const allowanceByAges = {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** お小遣いテーブルタイプ */
+  type: allowanceTableType("type").notNull().default("template"),
+  /** お小遣いテーブルID（外部参照先テーブルはtypeによって決まる） */
+  allowanceTableId: uuid("allowance_table_id").notNull(),
+  /** 年齢 */
+  age: integer("age").notNull().unique(),
+  /** お小遣い額 */
+  amount: integer("amount").notNull(),
+}
+
+/** お小遣いテーブル（家族）  */
+export const familyAllowanceTables = pgTable("family_allowance_tables", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type FamilyAllowanceTableSelect = typeof familyAllowanceTables.$inferSelect
+export type FamilyAllowanceTableInsert = Omit<typeof familyAllowanceTables.$inferInsert, "id" | "createdAt" | "updatedAt">
+
+/** お小遣いテーブル（オンライン） */
+export const publicAllowanceByAges = pgTable("public_allowance_by_ages", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** お小遣いテーブルID */
+  publicAllowanceTableId: uuid("public_allowance_table_id").notNull().references(() => familyAllowanceTables.id, { onDelete: "cascade" }),
+  /** 共有元の家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
+  /** 有効フラグ */
+  isActivate: boolean("is_activate").notNull().default(false),
+}) 
+export type PublicAllowanceByAgesSelect = typeof publicAllowanceByAges.$inferSelect
+export type PublicAllowanceByAgesInsert = Omit<typeof publicAllowanceByAges.$inferInsert, "id">
+
+/** お小遣いテーブル（子供） */
+export const childAllowanceByAges = pgTable("child_allowance_by_ages", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 子供ID */
+  childId: uuid("child_id").notNull().references(() => children.id, { onDelete: "cascade" }),
+})
+export type ChildAllowanceByAgesSelect = typeof childAllowanceByAges.$inferSelect
+export type ChildAllowanceByAgesInsert = Omit<typeof childAllowanceByAges.$inferInsert, "id">
+
+/** お小遣いテーブル（テンプレート） */
+export const templateAllowanceByAges = pgTable("template_allowance_by_ages", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 保存元の共有お小遣いテーブルID */
+  publicAllowanceTableId: uuid("public_allowance_table_id").notNull().references(() => publicAllowanceByAges.id, { onDelete: "restrict" }),
+  /** 保存した家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
+})
+export type TemplateAllowanceByAgesSelect = typeof templateAllowanceByAges.$inferSelect
+export type TemplateAllowanceByAgesInsert = Omit<typeof templateAllowanceByAges.$inferInsert, "id">
+
+/** レベルテーブルタイプ */
+export const levelTableType = pgEnum("level_table_type", [
+  "template",
+  "public",
+  "family",
+  "child"
+])
+
+/** レベル別お小遣い額 */
+export const levelByAges = {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** レベルテーブルタイプ */
+  type: levelTableType("type").notNull().default("template"),
+  /** レベルテーブルID（外部参照先テーブルはtypeによって決まる） */
+  levelTableId: uuid("level_table_id").notNull(),
+  /** レベル */
+  level: integer("level").notNull().unique(),
+  /** 必要経験値 */
+  requiredExp: integer("required_exp").notNull(),
+}
+
+/** レベルテーブル（家族）  */
+export const familyLevelTables = pgTable("family_level_tables", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type FamilyLevelTableSelect = typeof familyLevelTables.$inferSelect
+export type FamilyLevelTableInsert = Omit<typeof familyLevelTables.$inferInsert, "id" | "createdAt" | "updatedAt">
+
+/** レベルテーブル（オンライン） */
+export const publicLevelByAges = pgTable("public_level_by_ages", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** レベルテーブルID */
+  publicLevelTableId: uuid("public_level_table_id").notNull().references(() => familyLevelTables.id, { onDelete: "cascade" }),
+  /** 共有元の家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
+  /** 有効フラグ */
+  isActivate: boolean("is_activate").notNull().default(false),
+}) 
+export type PublicLevelByAgesSelect = typeof publicLevelByAges.$inferSelect
+export type PublicLevelByAgesInsert = Omit<typeof publicLevelByAges.$inferInsert, "id">
+
+/** レベルテーブル（子供） */
+export const childLevelByAges = pgTable("child_level_by_ages", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 子供ID */
+  childId: uuid("child_id").notNull().references(() => children.id, { onDelete: "cascade" }),
+})
+export type ChildLevelByAgesSelect = typeof childLevelByAges.$inferSelect
+export type ChildLevelByAgesInsert = Omit<typeof childLevelByAges.$inferInsert, "id">
+
+/** レベルテーブル（テンプレート） */
+export const templateLevelByAges = pgTable("template_level_by_ages", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 保存元の共有レベルテーブルID */
+  publicLevelTableId: uuid("public_level_table_id").notNull().references(() => publicLevelByAges.id, { onDelete: "restrict" }),
+  /** 保存した家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "restrict" }),
+})
+export type TemplateLevelByAgesSelect = typeof templateLevelByAges.$inferSelect
+export type TemplateLevelByAgesInsert = Omit<typeof templateLevelByAges.$inferInsert, "id">
