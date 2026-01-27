@@ -1,5 +1,5 @@
 "use client"
-import { Box, Text, Table, LoadingOverlay, Button, Group, NumberInput, ActionIcon } from "@mantine/core"
+import { Box, Text, Table, LoadingOverlay, Button, Group, NumberInput, ActionIcon, Tabs } from "@mantine/core"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -120,7 +120,7 @@ export const AllowanceEditLayout = ({
         ]}
       >
         {/* お小遣いタブ */}
-        <ScrollableTabs.Panel value="age">
+        <Tabs.Panel value="age">
           <Box className="space-y-6">
             {GRADE_GROUPS.map((group) => {
               const groupTotal = calculateGroupTotal(group.ages)
@@ -159,7 +159,6 @@ export const AllowanceEditLayout = ({
                             <Table.Td width="50%">{getGradeName(age)}</Table.Td>
                             <Table.Td width="50%">
                               <NumberInput
-                                {...ageForm.register(`rewards.${rewardIndex}.amount`, { valueAsNumber: true })}
                                 value={ageRewards[rewardIndex]?.amount || 0}
                                 onChange={(value) => {
                                   ageForm.setValue(`rewards.${rewardIndex}.amount`, Number(value) || 0)
@@ -191,19 +190,21 @@ export const AllowanceEditLayout = ({
               <Table>
                 <Table.Tbody>
                   <Table.Tr>
-                    <Table.Td width="50%" fw={700} size="lg">合計</Table.Td>
-                    <Table.Td width="50%" className="text-right" fw={700} size="lg">
-                      {calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年
+                    <Table.Td width="50%" fw={700}>
+                      <Text size="lg" fw={700}>合計</Text>
+                    </Table.Td>
+                    <Table.Td width="50%" className="text-right" fw={700}>
+                      <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
                     </Table.Td>
                   </Table.Tr>
                 </Table.Tbody>
               </Table>
             </Box>
           </Box>
-        </ScrollableTabs.Panel>
+        </Tabs.Panel>
 
         {/* ランク報酬タブ */}
-        <ScrollableTabs.Panel value="level">
+        <Tabs.Panel value="level">
           <Box>
             <Table striped withTableBorder withColumnBorders>
               <Table.Tbody>
@@ -212,7 +213,6 @@ export const AllowanceEditLayout = ({
                     <Table.Td width="50%">ランク{reward.level}</Table.Td>
                     <Table.Td width="50%">
                       <NumberInput
-                        {...levelForm.register(`rewards.${index}.amount`, { valueAsNumber: true })}
                         value={reward.amount}
                         onChange={(value) => {
                           levelForm.setValue(`rewards.${index}.amount`, Number(value) || 0)
@@ -228,7 +228,7 @@ export const AllowanceEditLayout = ({
               </Table.Tbody>
             </Table>
           </Box>
-        </ScrollableTabs.Panel>
+        </Tabs.Panel>
       </ScrollableTabs>
 
       {/* フローティング保存ボタン（モバイル用） */}

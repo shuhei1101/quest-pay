@@ -1,15 +1,21 @@
-import { eq, and, sql } from "drizzle-orm"
-import type { DrizzleClient } from "@/app/(core)/_db/drizzle"
-import { familyAgeRewardTables, rewardByAges, families } from "@/drizzle/schema"
+import { eq, and } from "drizzle-orm"
+import type { Db } from "@/index"
+import { familyAgeRewardTables, rewardByAges, type RewardByAgeSelect, type FamilyAgeRewardTableSelect } from "@/drizzle/schema"
+
+/** 返り値の型 */
+type FetchFamilyAgeRewardTableResult = {
+  table: FamilyAgeRewardTableSelect
+  rewards: RewardByAgeSelect[]
+}
 
 /** 家族の年齢別報酬テーブルを取得する */
 export const fetchFamilyAgeRewardTable = async ({
   db,
   familyId
 }: {
-  db: DrizzleClient
+  db: Db
   familyId: string
-}) => {
+}): Promise<FetchFamilyAgeRewardTableResult> => {
   // 家族の年齢別報酬テーブルを取得する
   const familyTable = await db
     .select()

@@ -1,5 +1,5 @@
 "use client"
-import { Box, Text, Table, LoadingOverlay, Button, Group } from "@mantine/core"
+import { Box, Text, Table, LoadingOverlay, Button, Group, Tabs } from "@mantine/core"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -84,7 +84,7 @@ export const AllowanceViewLayout = ({
         ]}
       >
         {/* お小遣いタブ */}
-        <ScrollableTabs.Panel value="age">
+        <Tabs.Panel value="age">
           <Box className="space-y-6">
             {GRADE_GROUPS.map((group) => {
               const groupTotal = calculateGroupTotal(group.ages)
@@ -127,19 +127,21 @@ export const AllowanceViewLayout = ({
               <Table>
                 <Table.Tbody>
                   <Table.Tr>
-                    <Table.Td width="50%" fw={700} size="lg">合計</Table.Td>
-                    <Table.Td width="50%" className="text-right" fw={700} size="lg">
-                      {calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年
+                    <Table.Td width="50%" fw={700}>
+                      <Text size="lg" fw={700}>合計</Text>
+                    </Table.Td>
+                    <Table.Td width="50%" className="text-right" fw={700}>
+                      <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
                     </Table.Td>
                   </Table.Tr>
                 </Table.Tbody>
               </Table>
             </Box>
           </Box>
-        </ScrollableTabs.Panel>
+        </Tabs.Panel>
 
         {/* ランク報酬タブ */}
-        <ScrollableTabs.Panel value="level">
+        <Tabs.Panel value="level">
           <Box>
             <Table striped withTableBorder withColumnBorders>
               <Table.Tbody>
@@ -152,7 +154,7 @@ export const AllowanceViewLayout = ({
               </Table.Tbody>
             </Table>
           </Box>
-        </ScrollableTabs.Panel>
+        </Tabs.Panel>
       </ScrollableTabs>
     </Box>
   )

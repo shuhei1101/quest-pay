@@ -14,14 +14,7 @@ export const useAgeRewardForm = ({ defaultValues }: { defaultValues: AgeRewardFo
   const queryClient = useQueryClient()
 
   // フォームの状態を作成する
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-    reset
-  } = useForm<AgeRewardFormType>({
+  const form = useForm<AgeRewardFormType>({
     resolver: zodResolver(AgeRewardFormSchema),
     defaultValues
   })
@@ -40,19 +33,14 @@ export const useAgeRewardForm = ({ defaultValues }: { defaultValues: AgeRewardFo
   })
 
   /** 現在の入力データ */
-  const current = watch()
+  const current = form.watch()
 
   /** 値を変更したかどうか */
   const isValueChanged = JSON.stringify(current) !== JSON.stringify(defaultValues)
 
   return {
-    register,
-    errors,
-    setValue,
-    watch,
+    ...form,
     isValueChanged,
-    setForm: reset,
-    handleSubmit,
     mutation
   }
 }
@@ -63,14 +51,7 @@ export const useLevelRewardForm = ({ defaultValues }: { defaultValues: LevelRewa
   const queryClient = useQueryClient()
 
   // フォームの状態を作成する
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-    reset
-  } = useForm<LevelRewardFormType>({
+  const form = useForm<LevelRewardFormType>({
     resolver: zodResolver(LevelRewardFormSchema),
     defaultValues
   })
@@ -89,19 +70,14 @@ export const useLevelRewardForm = ({ defaultValues }: { defaultValues: LevelRewa
   })
 
   /** 現在の入力データ */
-  const current = watch()
+  const current = form.watch()
 
   /** 値を変更したかどうか */
   const isValueChanged = JSON.stringify(current) !== JSON.stringify(defaultValues)
 
   return {
-    register,
-    errors,
-    setValue,
-    watch,
+    ...form,
     isValueChanged,
-    setForm: reset,
-    handleSubmit,
     mutation
   }
 }
