@@ -149,3 +149,9 @@ export const PROFILE_URL = `/profile`
 
 // 設定
 export const SETTINGS_URL = `/settings`
+
+// お小遣い設定
+export const ALLOWANCE_TABLES_URL = `/allowance-tables`
+export const ALLOWANCE_TABLE_VIEW_URL = `${ALLOWANCE_TABLES_URL}/view`
+export const ALLOWANCE_TABLE_EDIT_URL = `${ALLOWANCE_TABLES_URL}/edit`
+export const ALLOWANCE_TABLES_API_URL = `/api${ALLOWANCE_TABLES_URL}`
