@@ -1,10 +1,8 @@
 'use client'
 import { useState, useEffect } from "react"
-import { Box, Button, Text, TextInput, ActionIcon, Switch } from "@mantine/core"
+import { Box, Button, Text, TextInput, Switch } from "@mantine/core"
 import { useRouter } from "next/navigation"
 import { ALLOWANCE_TABLE_VIEW_URL } from "@/app/(core)/endpoints"
-import { IconArrowLeft, IconDeviceFloppy } from "@tabler/icons-react"
-import { useUpdateAllowanceTables } from "../../_hook/useUpdateAllowanceTables"
 
 type AllowanceByAge = {
   age: number
@@ -13,12 +11,13 @@ type AllowanceByAge = {
 
 /** お小遣い編集画面レイアウト */
 export const AllowanceTableEditLayout = ({
-  initialAllowanceByAges = []
+  initialAllowanceByAges = [],
+  onUpdate
 }: {
   initialAllowanceByAges?: AllowanceByAge[]
+  onUpdate?: (allowanceByAges: AllowanceByAge[]) => void
 }) => {
   const router = useRouter()
-  const { updateAllowanceTables, isUpdating } = useUpdateAllowanceTables()
   
   // 表示モード（false: 学年別, true: 年齢別）
   const [isAgeMode, setIsAgeMode] = useState(false)
@@ -28,16 +27,7 @@ export const AllowanceTableEditLayout = ({
 
   /** 初期データを設定する */
   useEffect(() => {
-    if (initialAllowanceByAges.length === 0) {
-      // デフォルトで5歳から22歳までのデータを作成する
-      const defaultAges: AllowanceByAge[] = []
-      for (let age = 5; age <= 22; age++) {
-        defaultAges.push({ age, amount: 0 })
-      }
-      setAllowanceByAges(defaultAges)
-    } else {
-      setAllowanceByAges(initialAllowanceByAges)
-    }
+    setAllowanceByAges(initialAllowanceByAges)
   }, [initialAllowanceByAges])
 
   /** 年齢を学年に変換する */
@@ -74,9 +64,9 @@ export const AllowanceTableEditLayout = ({
 
   /** 金額を更新する */
   const updateAmount = (age: number, amount: number) => {
-    setAllowanceByAges(prev =>
-      prev.map(item => item.age === age ? { ...item, amount } : item)
-    )
+    const updated = allowanceByAges.map(item => item.age === age ? { ...item, amount } : item)
+    setAllowanceByAges(updated)
+    onUpdate?.(updated)
   }
 
   /** 年数設定ボタンをクリックする */
@@ -91,39 +81,14 @@ export const AllowanceTableEditLayout = ({
     console.log("一括設定:", category)
   }
 
-  /** 保存する */
-  const handleSave = () => {
-    updateAllowanceTables({
-      allowanceByAges: allowanceByAges.map(item => ({ age: item.age, amount: item.amount })),
-      levelRewards: [] // レベル報酬は別タブで編集するため空配列
-    })
-  }
-
   const grouped = groupedByCategory()
   const categories = ["小学生以前", "小学生", "中学生", "高校生", "大学生"]
 
   return (
     <div className="flex flex-col gap-4 pb-20">
       {/* ヘッダー */}
-      <div className="flex items-center justify-between">
-        {/* 戻るボタン */}
-        <ActionIcon
-          variant="subtle"
-          onClick={() => router.push(ALLOWANCE_TABLE_VIEW_URL)}
-        >
-          <IconArrowLeft size={24} />
-        </ActionIcon>
-
+      <div className="flex items-center justify-center">
         <Text size="xl" fw={700}>定額報酬の編集</Text>
-
-        {/* 保存ボタン */}
-        <ActionIcon
-          variant="subtle"
-          onClick={handleSave}
-          loading={isUpdating}
-        >
-          <IconDeviceFloppy size={24} />
-        </ActionIcon>
       </div>
 
       {/* 年齢別表示切り替え */}

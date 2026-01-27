@@ -1,14 +1,19 @@
 'use client'
-import { useState } from "react"
-import { LoadingOverlay, Tabs, Button, ActionIcon } from "@mantine/core"
+import { useState, useEffect } from "react"
+import { LoadingOverlay, Tabs, ActionIcon } from "@mantine/core"
 import { useRouter } from "next/navigation"
 import { useAllowanceTables } from "../_hook/useAllowanceTables"
 import { useUpdateAllowanceTables } from "../_hook/useUpdateAllowanceTables"
-import { AllowanceTableEditLayout } from "./edit/_components/AllowanceTableEditLayout"
-import { LevelRewardEditLayout } from "./edit/_components/LevelRewardEditLayout"
+import { AllowanceTableEditLayout } from "./_components/AllowanceTableEditLayout"
+import { LevelRewardEditLayout } from "./_components/LevelRewardEditLayout"
 import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
 import { ALLOWANCE_TABLE_VIEW_URL } from "@/app/(core)/endpoints"
 import { IconArrowLeft, IconDeviceFloppy, IconRefresh } from "@tabler/icons-react"
+
+type AllowanceByAge = {
+  age: number
+  amount: number
+}
 
 type LevelReward = {
   level: number
@@ -22,8 +27,34 @@ export const AllowanceTableEdit = () => {
   const { updateAllowanceTables, isUpdating } = useUpdateAllowanceTables()
   const [activeTab, setActiveTab] = useState<string | null>("allowance")
   
-  // レベル報酬の一時保存用
+  // 編集中のデータを保持する
+  const [tempAllowanceByAges, setTempAllowanceByAges] = useState<AllowanceByAge[]>([])
   const [tempLevelRewards, setTempLevelRewards] = useState<LevelReward[]>([])
+
+  /** 初期データを設定する */
+  useEffect(() => {
+    if (allowanceTable?.allowanceByAges) {
+      setTempAllowanceByAges(allowanceTable.allowanceByAges)
+    } else {
+      // デフォルトで5歳から22歳までのデータを作成する
+      const defaultAges: AllowanceByAge[] = []
+      for (let age = 5; age <= 22; age++) {
+        defaultAges.push({ age, amount: 0 })
+      }
+      setTempAllowanceByAges(defaultAges)
+    }
+
+    if (levelTable?.levelRewards) {
+      setTempLevelRewards(levelTable.levelRewards)
+    } else {
+      // デフォルトでランク1から12までのデータを作成する
+      const defaultLevels: LevelReward[] = []
+      for (let level = 1; level <= 12; level++) {
+        defaultLevels.push({ level, amount: 0 })
+      }
+      setTempLevelRewards(defaultLevels)
+    }
+  }, [allowanceTable, levelTable])
 
   /** タブアイテム */
   const tabItems: ScrollableTabItem[] = [
@@ -33,14 +64,12 @@ export const AllowanceTableEdit = () => {
 
   /** 保存する */
   const handleSave = () => {
-    // TODO: お小遣いとランク報酬の両方のデータを保存する
-    // 現在のタブに応じて適切なデータを保存する
-    if (activeTab === "level") {
-      updateAllowanceTables({
-        allowanceByAges: allowanceTable?.allowanceByAges?.map(item => ({ age: item.age, amount: item.amount })) || [],
-        levelRewards: tempLevelRewards
-      })
-    }
+    updateAllowanceTables({
+      allowanceByAges: tempAllowanceByAges.map(item => ({ age: item.age, amount: item.amount })),
+      levelRewards: tempLevelRewards.map(item => ({ level: item.level, amount: item.amount }))
+    })
+    // 保存後に閲覧画面に戻る
+    router.push(ALLOWANCE_TABLE_VIEW_URL)
   }
 
   return (
@@ -73,6 +102,8 @@ export const AllowanceTableEdit = () => {
             variant="subtle"
             onClick={handleSave}
             loading={isUpdating}
+            disabled={isUpdating}
+            color="blue"
           >
             <IconDeviceFloppy size={24} />
           </ActionIcon>
@@ -84,14 +115,15 @@ export const AllowanceTableEdit = () => {
         {/* お小遣いタブ */}
         <Tabs.Panel value="allowance">
           <AllowanceTableEditLayout
-            initialAllowanceByAges={allowanceTable?.allowanceByAges || []}
+            initialAllowanceByAges={tempAllowanceByAges}
+            onUpdate={setTempAllowanceByAges}
           />
         </Tabs.Panel>
 
         {/* ランク報酬タブ */}
         <Tabs.Panel value="level">
           <LevelRewardEditLayout
-            initialLevelRewards={levelTable?.levelRewards || []}
+            initialLevelRewards={tempLevelRewards}
             onUpdate={setTempLevelRewards}
           />
         </Tabs.Panel>

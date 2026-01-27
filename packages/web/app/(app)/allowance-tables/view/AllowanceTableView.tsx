@@ -2,8 +2,8 @@
 import { useState } from "react"
 import { LoadingOverlay, Tabs } from "@mantine/core"
 import { useAllowanceTables } from "../_hook/useAllowanceTables"
-import { AllowanceTableViewLayout } from "./view/_components/AllowanceTableViewLayout"
-import { LevelRewardViewLayout } from "./view/_components/LevelRewardViewLayout"
+import { AllowanceTableViewLayout } from "./_components/AllowanceTableViewLayout"
+import { LevelRewardViewLayout } from "./_components/LevelRewardViewLayout"
 import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
 
 /** お小遣いテーブル閲覧画面 */
