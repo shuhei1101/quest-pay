@@ -45,7 +45,7 @@ export const ChildView = ( params: {
         {/* トップバー */}
         <div className="flex items-center gap-3 justify-end mb-4">
           {/* 招待コードボタン（user_idが存在しない場合のみ表示） */}
-          {child?.profiles?.userId ?? (
+          {!child?.profiles?.userId && (
             <Button 
               variant="outline"
               onClick={openInviteCode}
