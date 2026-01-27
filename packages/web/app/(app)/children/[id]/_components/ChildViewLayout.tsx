@@ -1,6 +1,7 @@
 "use client"
 
-import { Box, Card, Group, Stack, Text } from "@mantine/core"
+import { Box, Card, Group, Stack, Text, SimpleGrid } from "@mantine/core"
+import { IconCake, IconCalendar, IconSchool } from "@tabler/icons-react"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { Child } from "@/app/api/children/query"
 import { calculateAge, formatDate } from "@/app/(core)/util"
@@ -160,57 +161,56 @@ export const ChildViewLayout = ({
           
           {/* プロフィール情報 */}
           <Stack gap="xs">
-            {age !== null && (
-              <Text size="sm">年齢：{age}歳</Text>
-            )}
-            {formattedBirthday && (
-              <Text size="sm">誕生日：{formattedBirthday}</Text>
-            )}
-            {grade && (
-              <Text size="sm">学年：{grade}</Text>
-            )}
+            {/* 年齢 */}
+            <Group gap="xs">
+              <IconCake size={18} />
+              <Text size="sm">年齢：{age !== null ? `${age}歳` : ""}</Text>
+            </Group>
+            {/* 誕生日 */}
+            <Group gap="xs">
+              <IconCalendar size={18} />
+              <Text size="sm">誕生日：{formattedBirthday || ""}</Text>
+            </Group>
+            {/* 学年 */}
+            <Group gap="xs">
+              <IconSchool size={18} />
+              <Text size="sm">学年：{grade || ""}</Text>
+            </Group>
           </Stack>
           
-          {/* 統計カード群（2行） */}
-          <Stack gap="md">
-            {/* 1行目：ランク、達成クエスト、合計報酬額 */}
-            <Group gap="md" justify="space-between">
-              <StatCard 
-                label="ランク" 
-                value={child?.children?.currentLevel ?? 1} 
-                color="#9C27B0"
-                onClick={onRankClick}
-              />
-              <StatCard 
-                label="達成クエスト" 
-                value={questStats?.completedCount ?? 0} 
-                color="#F44336"
-                onClick={onCompletedQuestClick}
-              />
-              <StatCard 
-                label="合計報酬額" 
-                value={`${totalReward}円`} 
-                color="#FF9800"
-                onClick={onTotalRewardClick}
-              />
-            </Group>
-            
-            {/* 2行目：定額報酬、貯金 */}
-            <Group gap="md" justify="flex-start">
-              <StatCard 
-                label="定額報酬" 
-                value={`${fixedReward}円/月`} 
-                color="#00BCD4"
-                onClick={onFixedRewardClick}
-              />
-              <StatCard 
-                label="貯金" 
-                value={`${child?.children?.currentSavings ?? 0}円`} 
-                color="#4CAF50"
-                onClick={onSavingsClick}
-              />
-            </Group>
-          </Stack>
+          {/* 統計カード群（GRID レイアウト） */}
+          <SimpleGrid cols={3} spacing="md">
+            <StatCard 
+              label="ランク" 
+              value={child?.children?.currentLevel ?? 1} 
+              color="#9C27B0"
+              onClick={onRankClick}
+            />
+            <StatCard 
+              label="達成クエスト" 
+              value={questStats?.completedCount ?? 0} 
+              color="#F44336"
+              onClick={onCompletedQuestClick}
+            />
+            <StatCard 
+              label="合計報酬額" 
+              value={`${totalReward}円`} 
+              color="#FF9800"
+              onClick={onTotalRewardClick}
+            />
+            <StatCard 
+              label="定額報酬" 
+              value={`${fixedReward}円/月`} 
+              color="#00BCD4"
+              onClick={onFixedRewardClick}
+            />
+            <StatCard 
+              label="貯金" 
+              value={`${child?.children?.currentSavings ?? 0}円`} 
+              color="#4CAF50"
+              onClick={onSavingsClick}
+            />
+          </SimpleGrid>
         </Stack>
       </Card>
       
