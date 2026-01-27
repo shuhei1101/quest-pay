@@ -69,18 +69,6 @@ export const AllowanceTableEditLayout = ({
     onUpdate?.(updated)
   }
 
-  /** 年数設定ボタンをクリックする */
-  const handleYearsSet = (category: string) => {
-    // TODO: 年数設定ダイアログを表示する
-    console.log("年数設定:", category)
-  }
-
-  /** 一括設定ボタンをクリックする */
-  const handleBulkSet = (category: string) => {
-    // TODO: 一括設定ダイアログを表示する
-    console.log("一括設定:", category)
-  }
-
   const grouped = groupedByCategory()
   const categories = ["小学生以前", "小学生", "中学生", "高校生", "大学生"]
 
@@ -115,14 +103,6 @@ export const AllowanceTableEditLayout = ({
               {/* カテゴリヘッダー */}
               <div className="flex justify-between items-center mb-2">
                 <Text size="lg" fw={600}>{category}</Text>
-                <div className="flex gap-2">
-                  <Button size="xs" variant="light" onClick={() => handleYearsSet(category)}>
-                    年数設定
-                  </Button>
-                  <Button size="xs" variant="light" onClick={() => handleBulkSet(category)}>
-                    一括設定
-                  </Button>
-                </div>
               </div>
 
               {/* 年齢別表示の場合の範囲入力 */}

@@ -4,7 +4,7 @@ import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchAllowanceTableByFamilyId, fetchLevelTableByFamilyId } from "./query"
 import { fetchUserInfoByUserId } from "../users/query"
-import z from "zod"
+import { z } from "zod"
 import { eq } from "drizzle-orm"
 import { 
   familyAllowanceTables, 

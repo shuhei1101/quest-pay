@@ -62,8 +62,8 @@ export const AllowanceTableViewLayout = ({
 
   /** 全体の合計金額を計算する */
   const calculateGrandTotal = () => {
-    const years = allowanceByAges.length
-    return allowanceByAges.reduce((sum, item) => sum + item.amount * 12, 0) * years
+    // 各年齢の年間金額の合計を返す
+    return allowanceByAges.reduce((sum, item) => sum + item.amount * 12, 0)
   }
 
   const grouped = groupedByCategory()
@@ -146,7 +146,7 @@ export const AllowanceTableViewLayout = ({
             <div className="flex justify-between py-3 px-2 text-xl font-bold">
               <Text size="xl" fw={700}>合計</Text>
               <Text size="xl" fw={700}>
-                {calculateGrandTotal().toLocaleString()}円/{allowanceByAges.length}年
+                {calculateGrandTotal().toLocaleString()}円/年
               </Text>
             </div>
           </>

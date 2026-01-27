@@ -68,8 +68,6 @@ export const AllowanceTableEdit = () => {
       allowanceByAges: tempAllowanceByAges.map(item => ({ age: item.age, amount: item.amount })),
       levelRewards: tempLevelRewards.map(item => ({ level: item.level, amount: item.amount }))
     })
-    // 保存後に閲覧画面に戻る
-    router.push(ALLOWANCE_TABLE_VIEW_URL)
   }
 
   return (
