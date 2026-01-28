@@ -2,13 +2,18 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { getOrCreateFamilyLevelRewardTable, updateFamilyLevelRewards } from "../service"
+import { getOrCreateFamilyLevelRewardTable } from "./service"
+import { fetchLevelRewards } from "../query"
+import { updateFamilyLevelRewards } from "../service"
 import { fetchUserInfoByUserId } from "../../../users/query"
 import { z } from "zod"
 
 /** 家族のレベル別報酬テーブルを取得する */
 export type GetFamilyLevelRewardTableResponse = {
-  levelRewardTable: Awaited<ReturnType<typeof getOrCreateFamilyLevelRewardTable>>
+  levelRewardTable: {
+    table: Awaited<ReturnType<typeof getOrCreateFamilyLevelRewardTable>>
+    rewards: Awaited<ReturnType<typeof fetchLevelRewards>>
+  }
 }
 export async function GET(req: NextRequest) {
   return withRouteErrorHandling(async () => {
@@ -19,10 +24,18 @@ export async function GET(req: NextRequest) {
     const userInfo = await fetchUserInfoByUserId({ userId, db })
     if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
 
-    // レベル別報酬テーブルを取得する
-    const data = await getOrCreateFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
+    // レベル別報酬テーブルを取得または作成する
+    const table = await getOrCreateFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
+    
+    // 報酬データを取得する
+    const rewards = await fetchLevelRewards({ db, levelRewardTableId: table.id })
 
-    return NextResponse.json({ levelRewardTable: data } as GetFamilyLevelRewardTableResponse)
+    return NextResponse.json({ 
+      levelRewardTable: {
+        table,
+        rewards
+      }
+    } as GetFamilyLevelRewardTableResponse)
   })
 }
 
@@ -50,13 +63,13 @@ export async function PUT(req: NextRequest) {
     const body = await req.json()
     const data = PutFamilyLevelRewardTableRequestSchema.parse(body)
 
-    // レベル別報酬テーブルを取得する
-    const levelRewardTable = await getOrCreateFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
+    // レベル別報酬テーブルを取得または作成する
+    const table = await getOrCreateFamilyLevelRewardTable({ db, familyId: userInfo.profiles.familyId })
 
     // 報酬を更新する
     await updateFamilyLevelRewards({
       db,
-      levelRewardTableId: levelRewardTable.table.id,
+      levelRewardTableId: table.id,
       rewards: data.rewards
     })
 

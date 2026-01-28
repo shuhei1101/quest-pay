@@ -2,13 +2,18 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { getOrCreateFamilyAgeRewardTable, updateFamilyAgeRewards } from "../service"
+import { getOrCreateFamilyAgeRewardTable } from "./service"
+import { fetchAgeRewards } from "../query"
+import { updateFamilyAgeRewards } from "../service"
 import { fetchUserInfoByUserId } from "../../../users/query"
 import { z } from "zod"
 
 /** 家族の年齢別報酬テーブルを取得する */
 export type GetFamilyAgeRewardTableResponse = {
-  ageRewardTable: Awaited<ReturnType<typeof getOrCreateFamilyAgeRewardTable>>
+  ageRewardTable: {
+    table: Awaited<ReturnType<typeof getOrCreateFamilyAgeRewardTable>>
+    rewards: Awaited<ReturnType<typeof fetchAgeRewards>>
+  }
 }
 export async function GET(req: NextRequest) {
   return withRouteErrorHandling(async () => {
@@ -19,10 +24,18 @@ export async function GET(req: NextRequest) {
     const userInfo = await fetchUserInfoByUserId({ userId, db })
     if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
 
-    // 年齢別報酬テーブルを取得する
-    const data = await getOrCreateFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
+    // 年齢別報酬テーブルを取得または作成する
+    const table = await getOrCreateFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
+    
+    // 報酬データを取得する
+    const rewards = await fetchAgeRewards({ db, ageRewardTableId: table.id })
 
-    return NextResponse.json({ ageRewardTable: data } as GetFamilyAgeRewardTableResponse)
+    return NextResponse.json({ 
+      ageRewardTable: {
+        table,
+        rewards
+      }
+    } as GetFamilyAgeRewardTableResponse)
   })
 }
 
@@ -50,13 +63,13 @@ export async function PUT(req: NextRequest) {
     const body = await req.json()
     const data = PutFamilyAgeRewardTableRequestSchema.parse(body)
 
-    // 年齢別報酬テーブルを取得する
-    const ageRewardTable = await getOrCreateFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
+    // 年齢別報酬テーブルを取得または作成する
+    const table = await getOrCreateFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
 
     // 報酬を更新する
     await updateFamilyAgeRewards({
       db,
-      ageRewardTableId: ageRewardTable.table.id,
+      ageRewardTableId: table.id,
       rewards: data.rewards
     })
 
