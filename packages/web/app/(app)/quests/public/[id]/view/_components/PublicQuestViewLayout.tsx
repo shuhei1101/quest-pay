@@ -5,7 +5,6 @@ import { useState, ReactNode } from "react"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useWindow } from "@/app/(core)/useConstants"
 import { QuestViewHeader } from "@/app/(app)/quests/view/_components/QuestViewHeader"
-import { QuestViewIcon } from "@/app/(app)/quests/view/_components/QuestViewIcon"
 import { QuestConditionTab } from "@/app/(app)/quests/view/_components/QuestConditionTab"
 import { QuestDetailTab } from "@/app/(app)/quests/view/_components/QuestDetailTab"
 import { QuestOtherTab } from "@/app/(app)/quests/view/_components/QuestOtherTab"
@@ -106,13 +105,6 @@ export const PublicQuestViewLayout = ({
         headerColor={headerColor}
       />
 
-      {/* クエストアイコン */}
-      <QuestViewIcon
-        iconColor={iconColor}
-        iconName={iconName}
-        iconSize={iconSize ?? 48}
-      />
-
       {/* クエスト内容カード */}
       <Paper
         className="flex-1 min-h-0"
@@ -151,6 +143,9 @@ export const PublicQuestViewLayout = ({
               reward={reward}
               exp={exp}
               requiredCompletionCount={requiredCompletionCount}
+              iconName={iconName}
+              iconSize={iconSize}
+              iconColor={iconColor}
             />
           </Tabs.Panel>
 

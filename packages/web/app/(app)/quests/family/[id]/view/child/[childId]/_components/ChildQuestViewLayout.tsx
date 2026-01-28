@@ -3,7 +3,6 @@
 import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState, ReactNode } from "react"
 import { QuestViewHeader } from "../../../../../../view/_components/QuestViewHeader"
-import { QuestViewIcon } from "../../../../../../view/_components/QuestViewIcon"
 import { QuestConditionTab } from "../../../../../../view/_components/QuestConditionTab"
 import { QuestDetailTab } from "../../../../../../view/_components/QuestDetailTab"
 import { QuestOtherTab } from "../../../../../../view/_components/QuestOtherTab"
@@ -99,13 +98,6 @@ export const ChildQuestViewLayout = ({
         headerColor={headerColor}
       />
 
-      {/* クエストアイコン */}
-      <QuestViewIcon
-        iconColor={iconColor}
-        iconName={iconName}
-        iconSize={iconSize ?? 48}
-      />
-
       {/* クエスト内容カード */}
       <Paper
         className="flex-1 min-h-0"
@@ -135,6 +127,9 @@ export const ChildQuestViewLayout = ({
               reward={reward}
               exp={exp}
               requiredCompletionCount={requiredCompletionCount}
+              iconName={iconName}
+              iconSize={iconSize}
+              iconColor={iconColor}
             />
           </Tabs.Panel>
 
