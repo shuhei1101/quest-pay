@@ -26,7 +26,7 @@ import { PublishIconButton } from "@/app/(core)/_components/PublishIconButton"
 import { CheckPublicQuestIconButton } from "@/app/(core)/_components/CheckPublicQuestIconButton"
 
 /** 家族クエスト編集コンポーネント */
-export const FamilyQuestEdit = ({ id }: { id?: string }) => {
+export const FamilyQuestEdit = ({ id, defaultTab }: { id?: string, defaultTab?: string }) => {
   const router = useRouter()
 
   /** 家族クエストID */
@@ -131,6 +131,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
       questId={familyQuestId}
       isLoading={questLoading}
       onSubmit={onSubmit}
+      defaultTab={defaultTab}
       tabs={[
         {
           value: "basic",
