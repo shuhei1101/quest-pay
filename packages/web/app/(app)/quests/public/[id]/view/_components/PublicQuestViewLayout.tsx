@@ -2,17 +2,17 @@
 
 import { Box, Paper, Tabs, LoadingOverlay, Badge } from "@mantine/core"
 import { useState, ReactNode } from "react"
-import { QuestViewHeader } from "./QuestViewHeader"
-import { QuestViewIcon } from "./QuestViewIcon"
-import { QuestConditionTab } from "./QuestConditionTab"
-import { QuestDetailTab } from "./QuestDetailTab"
-import { QuestOtherTab } from "./QuestOtherTab"
-import { QuestCommentTab } from "./QuestCommentTab"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useWindow } from "@/app/(core)/useConstants"
+import { QuestViewHeader } from "@/app/(app)/quests/view/_components/QuestViewHeader"
+import { QuestViewIcon } from "@/app/(app)/quests/view/_components/QuestViewIcon"
+import { QuestConditionTab } from "@/app/(app)/quests/view/_components/QuestConditionTab"
+import { QuestDetailTab } from "@/app/(app)/quests/view/_components/QuestDetailTab"
+import { QuestOtherTab } from "@/app/(app)/quests/view/_components/QuestOtherTab"
+import { QuestCommentTab } from "@/app/(app)/quests/view/_components/QuestCommentTab"
 
-/** クエスト閲覧レイアウトのプロパティ */
-type QuestViewLayoutProps = {
+/** 公開クエスト閲覧レイアウトのプロパティ */
+type PublicQuestViewLayoutProps = {
   /** クエスト名 */
   questName: string
   /** ヘッダーの色設定 */
@@ -57,12 +57,14 @@ type QuestViewLayoutProps = {
   requiredClearCount: number
   /** コメント数 */
   commentCount?: number
+  /** 公開クエストID */
+  publicQuestId: string
   /** フッター要素 */
   footer: ReactNode
 }
 
-/** クエスト閲覧画面の共通レイアウト */
-export const QuestViewLayout = ({
+/** 公開クエスト閲覧画面の共通レイアウト */
+export const PublicQuestViewLayout = ({
   questName,
   headerColor,
   backgroundColor,
@@ -85,8 +87,9 @@ export const QuestViewLayout = ({
   monthTo,
   requiredClearCount,
   commentCount = 0,
+  publicQuestId,
   footer,
-}: QuestViewLayoutProps) => {
+}: PublicQuestViewLayoutProps) => {
   const {isDark} = useWindow()
   
   /** アクティブタブ */
@@ -173,7 +176,7 @@ export const QuestViewLayout = ({
 
           {/* コメントタブ */}
           <Tabs.Panel value="comment" pt="md">
-            <QuestCommentTab />
+            <QuestCommentTab id={publicQuestId} />
           </Tabs.Panel>
         </ScrollableTabs>
       </Paper>

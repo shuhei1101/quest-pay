@@ -50,8 +50,6 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
 
   /** ローディング状態を統合する */
   const isLoading = isPostingComment || isUpvoting || isDownvoting || isReporting || isDeleting || isPinning || isPublisherLiking
-  /** いいねされているかどうか */
-  const { isLike } = useIsLike({ id })
 
   /** コメント投稿ハンドル */
   const handleSubmit = () => {
@@ -165,23 +163,6 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
         backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)",
       }}
     >
-      {/* ヘッダー部分 */}
-      <Group justify="space-between" mb="md">
-        <Text size="xl" fw={700}>
-          コメント
-        </Text>
-        <Button
-          size="sm"
-          radius="xl"
-          color="gray"
-          variant="outline"
-          leftSection={<IconArrowLeft size={18} />}
-          onClick={() => router.back()}
-        >
-          戻る
-        </Button>
-      </Group>
-
       {/* コメント一覧カード */}
       <Paper
         className="flex-1 min-h-0"
@@ -389,14 +370,14 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
 
       {/* コメント入力欄 */}
       <Box mt="md">
-        <Group align="flex-end" gap="md">
+        <Group align="" gap="md">
           <Textarea
             placeholder="コメントを入力してください"
             value={comment}
             onChange={(e) => setComment(e.currentTarget.value)}
-            minRows={2}
+            minRows={1}
             maxRows={4}
-            style={{ flex: 1 }}
+            className="flex-1"
           />
           <Button
             size="md"

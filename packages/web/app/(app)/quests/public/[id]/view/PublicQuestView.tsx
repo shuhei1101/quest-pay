@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
+import { PublicQuestViewLayout } from "./_components/PublicQuestViewLayout"
 import { useWindow } from "@/app/(core)/useConstants"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
 import { useRouter } from "next/navigation"
@@ -54,7 +54,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
   }
 
   return (
-    <QuestViewLayout
+    <PublicQuestViewLayout
       questName={publicQuest?.quest?.name || ""}
       headerColor={{ light: "blue.3", dark: "blue.5" }}
       backgroundColor={{ 
@@ -80,6 +80,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
       monthTo={publicQuest?.quest?.monthTo}
       requiredClearCount={selectedDetail?.requiredClearCount || 0}
       commentCount={commentCount}
+      publicQuestId={id}
       footer={
         <PublicQuestViewFooter 
           availableLevels={ availableLevels }
