@@ -22,7 +22,7 @@ export const ChildForm = ( params: {
   const [id, setId] = useState<string | undefined>(params.id)
 
   /** ハンドル */
-  const { handleRegister } = useRegisterChild({setId})
+  const { handleRegister, isLoading: isSubmitting } = useRegisterChild({setId})
 
   /** アイコン情報 */
   const { iconById } = useIcons()
@@ -38,7 +38,7 @@ export const ChildForm = ( params: {
         <div>
         <Box pos="relative" className="max-w-120">
           {/* ロード中のオーバーレイ */}
-          <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
+          <LoadingOverlay visible={isLoading || isSubmitting} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
           {/* 子供入力フォーム */}
           <form onSubmit={handleSubmit((form) => handleRegister({form}))}>
             {/* 入力欄のコンテナ */}
@@ -79,7 +79,7 @@ export const ChildForm = ( params: {
             <Space h="md" />
             {/* サブミットボタン */}
             <Group>
-              <Button type="submit" variant="gradient" >保存</Button>
+              <Button type="submit" variant="gradient" loading={isSubmitting} disabled={isLoading || isSubmitting}>保存</Button>
             </Group>
           </form>
         </Box>

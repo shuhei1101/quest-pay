@@ -37,7 +37,8 @@ export async function GET(
 /** 家族クエストを更新する */
 export const PutFamilyQuestRequestScheme = z.object({
   form: FamilyQuestFormScheme,
-  updatedAt: z.string(),
+  familyQuestUpdatedAt: z.string(),
+  questUpdatedAt: z.string(),
 })
 export type PutFamilyQuestRequest = z.infer<typeof PutFamilyQuestRequestScheme>
 export async function PUT(
@@ -72,7 +73,7 @@ export async function PUT(
           record: {
             familyId: userInfo.profiles.familyId,
           },
-          updatedAt: data.updatedAt,
+          updatedAt: data.familyQuestUpdatedAt,
         },
         questDetails: data.form.details.map((detail) => ({
           level: detail.level,
@@ -96,11 +97,14 @@ export async function PUT(
             requestDetail: data.form.requestDetail,
             client: data.form.client,
           },
-          updatedAt: data.updatedAt,
+          updatedAt: data.questUpdatedAt,
         },
-        questChildren: data.form.childIds.map((childId) => ({
-          childId: childId,
-        })),
+        questChildren: data.form.childSettings
+          .filter(setting => setting.isActivate || setting.hasQuestChildren) // isActivateがtrueまたはhasQuestChildrenがtrueのもの
+          .map((setting) => ({
+            childId: setting.childId,
+            isActivate: setting.isActivate,
+          })),
         questTags: data.form.tags.map((tagName) => ({
           name: tagName,
         }))
