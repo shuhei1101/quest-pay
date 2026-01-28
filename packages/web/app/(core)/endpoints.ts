@@ -155,6 +155,6 @@ export const REWARD_URL = `/reward`
 export const REWARD_VIEW_URL = `${REWARD_URL}/view`
 export const REWARD_API_URL = `/api${REWARD_URL}`
 // 年齢別報酬テーブル
-export const FAMILY_AGE_REWARD_TABLE_API_URL = `${REWARD_API_URL}/age/table`
+export const FAMILY_AGE_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-age/table`
 // レベル別報酬テーブル
-export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/level/table`
+export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-level/table`
