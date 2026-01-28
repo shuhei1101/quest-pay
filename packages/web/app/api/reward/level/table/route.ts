@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { getOrCreateFamilyLevelRewardTable, updateFamilyLevelRewards } from "./service"
-import { fetchUserInfoByUserId } from "../../users/query"
+import { getOrCreateFamilyLevelRewardTable, updateFamilyLevelRewards } from "../service"
+import { fetchUserInfoByUserId } from "../../../users/query"
 import { z } from "zod"
 
 /** 家族のレベル別報酬テーブルを取得する */
