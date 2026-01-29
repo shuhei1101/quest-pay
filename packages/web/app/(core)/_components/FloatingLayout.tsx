@@ -50,8 +50,8 @@ export const FloatingLayout = ({
         <div
           style={{
             position: "fixed",
-            top: isMobile ? "20px" : "20px",
-            left: isMobile ? "20px" : "20px",
+            top: "20px",
+            left: "20px",
             zIndex: 3000,
           }}
         >
@@ -64,8 +64,8 @@ export const FloatingLayout = ({
         <div
           style={{
             position: "fixed",
-            top: isMobile ? "20px" : "20px",
-            right: isMobile ? "20px" : "20px",
+            top: "20px",
+            right: isMobile ? "20px" : "40px",
             zIndex: 3000,
           }}
         >
@@ -79,7 +79,7 @@ export const FloatingLayout = ({
           style={{
             position: "fixed",
             bottom: isMobile ? "80px" : "40px",
-            left: isMobile ? "20px" : "20px",
+            left: "20px",
             zIndex: 3000,
           }}
         >
