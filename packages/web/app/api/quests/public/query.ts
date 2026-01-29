@@ -11,6 +11,7 @@ import { alias } from "drizzle-orm/pg-core"
 export const PublicQuestFilterScheme = z.object({
   name: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  categoryId: z.string().optional(),
 })
 export type PublicQuestFilterType = z.infer<typeof PublicQuestFilterScheme>
 
@@ -90,6 +91,13 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
 
     if (params.name !== undefined) conditions.push(like(quests.name, `%${params.name}%`))
     if (params.tags.length !== 0) conditions.push(inArray(questTags.name, params.tags))
+    if (params.categoryId !== undefined) {
+      if (params.categoryId === "null") {
+        conditions.push(eq(quests.categoryId, null))
+      } else {
+        conditions.push(eq(quests.categoryId, params.categoryId))
+      }
+    }
     conditions.push(familyId 
           ? or(
               eq(publicQuests.isActivate, true),
@@ -103,6 +111,7 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
       .select({ id: publicQuests.id })
       .from(publicQuests)
       .innerJoin(quests, eq(publicQuests.questId, quests.id))
+      .leftJoin(questTags, eq(questTags.questId, quests.id))
       .where(and(...conditions))
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
@@ -134,6 +143,7 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
         .select({ total: count() })
         .from(publicQuests)
         .innerJoin(quests, eq(publicQuests.questId, quests.id))
+        .leftJoin(questTags, eq(questTags.questId, quests.id))
         .where(and(...conditions))
     ])
 

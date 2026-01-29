@@ -10,6 +10,7 @@ import { SortOrderScheme } from "@/app/(core)/schema"
 export const ChildQuestFilterScheme = z.object({
   name: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  categoryId: z.string().optional(),
 })
 export type ChildQuestFilterType = z.infer<typeof ChildQuestFilterScheme>
 
@@ -86,6 +87,13 @@ export const fetchChildQuests = async ({ params, db, childId, familyId }: {
 
     if (params.name !== undefined) conditions.push(like(quests.name, `%${params.name}%`))
     if (params.tags.length !== 0) conditions.push(inArray(questTags.name, params.tags))
+    if (params.categoryId !== undefined) {
+      if (params.categoryId === "null") {
+        conditions.push(eq(quests.categoryId, null))
+      } else {
+        conditions.push(eq(quests.categoryId, params.categoryId))
+      }
+    }
 
     // データを取得する
     const [rows, [{ total }]] = await Promise.all([

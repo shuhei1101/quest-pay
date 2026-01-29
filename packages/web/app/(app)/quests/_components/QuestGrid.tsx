@@ -61,25 +61,6 @@ export const QuestGrid = <T extends QuestItem>({
     return 4
   }
 
-  /** タブによってフィルタリングされたクエストを取得する */
-  const getFilteredQuests = () => {
-    if (!tabValue || tabValue === TAB_ALL) {
-      return quests
-    }
-    
-    if (tabValue === TAB_OTHERS) {
-      return quests.filter((quest) => quest.quest.categoryId === null)
-    }
-    
-    // カテゴリ名からIDを逆引き
-    const categoryId = Object.entries(questCategoryById ?? {})
-      .find(([_, category]) => category.name === tabValue)?.[0]
-    
-    return quests.filter((quest) => String(quest.quest.categoryId) === categoryId)
-  }
-
-  const filteredQuests = getFilteredQuests()
-
   /** スクロールイベントを監視する */
   useEffect(() => {
     const container = scrollContainerRef.current
@@ -114,7 +95,7 @@ export const QuestGrid = <T extends QuestItem>({
     // 少し遅延させてから実行（レンダリング完了後）
     const timeoutId = setTimeout(checkContentHeight, 100)
     return () => clearTimeout(timeoutId)
-  }, [filteredQuests.length, onScrollBottom])
+  }, [quests.length, onScrollBottom])
 
   /** 左右スワイプ時のハンドル */
   const handlers = useSwipeable({
@@ -161,7 +142,7 @@ export const QuestGrid = <T extends QuestItem>({
     >
       {/* クエストグリッド */}
       <SimpleGrid cols={getGridCols()} spacing="md">
-        {filteredQuests.map((quest, index) => renderQuest(quest, index))}
+        {quests.map((quest, index) => renderQuest(quest, index))}
       </SimpleGrid>
       
       {/* 無限スクロール用のセンチネル（カードが見切れないよう余白を確保する） */}

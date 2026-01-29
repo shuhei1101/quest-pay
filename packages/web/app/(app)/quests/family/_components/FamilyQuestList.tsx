@@ -108,6 +108,17 @@ export const FamilyQuestList = () => {
     handleSearch()
   }, [handleSearch])
 
+  /** カテゴリ変更時のハンドル */
+  const handleCategoryChange = useCallback((categoryId: string | undefined) => {
+    // カテゴリIDをフィルターに設定する
+    setSearchFilter((prev) => ({
+      ...prev,
+      categoryId
+    }))
+    // ページをリセットする
+    setPage(1)
+  }, [])
+
   return (
     <QuestListLayout<FamilyQuest, FamilyQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -123,6 +134,7 @@ export const FamilyQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
+      onCategoryChange={handleCategoryChange}
       filterPopup={
         <FamilyQuestFilterPopup
           close={closeFilter}
