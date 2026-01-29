@@ -1,14 +1,14 @@
 "use client"
 
-import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, SETTINGS_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL } from '@/app/(core)/endpoints'
 import { Box, ActionIcon } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconMenu2 } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
 
 /** モバイル用ボトムバーを取得する */
-export const BottomBar = ({isDark}: {isDark: boolean}) => {
+export const BottomBar = ({isDark, onToggleMenu}: {isDark: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
   /** ログインユーザ情報 */
   const { isParent } = useLoginUserInfo()
@@ -40,9 +40,9 @@ export const BottomBar = ({isDark}: {isDark: boolean}) => {
           <IconUsers color={menuColors.members} stroke={1.4} />
         </ActionIcon>
       )}
-      {/* 設定アイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)}>
-        <IconSettings color={menuColors.settings} stroke={1.4} />
+      {/* メニュー開閉ボタン */}
+      <ActionIcon variant="subtle" onClick={onToggleMenu} aria-label="メニューを開く">
+        <IconMenu2 stroke={1.4} />
       </ActionIcon>
     </Box>
   )
