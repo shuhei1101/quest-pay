@@ -4,7 +4,7 @@ import { AppError } from "@/app/(core)/error/appError"
 import { PostCommentReportRequest } from "./route"
 
 /** コメントを報告する */
-export const reportComment = async ({
+export const reportPublicQuestComment = async ({
   publicQuestId,
   commentId,
   reason,
@@ -13,7 +13,7 @@ export const reportComment = async ({
   commentId: string
   reason: string
 }) => {
-  devLog("reportComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_REPORT_API_URL(publicQuestId, commentId) })
+  devLog("reportPublicQuestComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_REPORT_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_REPORT_API_URL(publicQuestId, commentId), {
     method: "POST",

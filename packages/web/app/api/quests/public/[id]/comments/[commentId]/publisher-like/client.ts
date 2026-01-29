@@ -3,14 +3,14 @@ import { devLog } from "@/app/(core)/util"
 import { AppError } from "@/app/(core)/error/appError"
 
 /** コメントに公開者いいねを付ける */
-export const likeByPublisher = async ({
+export const likePublicQuestCommentByPublisher = async ({
   publicQuestId,
   commentId,
 }: {
   publicQuestId: string
   commentId: string
 }) => {
-  devLog("likeByPublisher.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId) })
+  devLog("likePublicQuestCommentByPublisher.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId), {
     method: "POST",
@@ -24,14 +24,14 @@ export const likeByPublisher = async ({
 }
 
 /** コメントの公開者いいねを解除する */
-export const unlikeByPublisher = async ({
+export const unlikePublicQuestCommentByPublisher = async ({
   publicQuestId,
   commentId,
 }: {
   publicQuestId: string
   commentId: string
 }) => {
-  devLog("unlikeByPublisher.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId) })
+  devLog("unlikePublicQuestCommentByPublisher.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL(publicQuestId, commentId), {
     method: "DELETE",

@@ -3,14 +3,14 @@ import { devLog } from "@/app/(core)/util"
 import { AppError } from "@/app/(core)/error/appError"
 
 /** コメントをピン留めする */
-export const pinComment = async ({
+export const pinPublicQuestComment = async ({
   publicQuestId,
   commentId,
 }: {
   publicQuestId: string
   commentId: string
 }) => {
-  devLog("pinComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId) })
+  devLog("pinPublicQuestComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId), {
     method: "POST",
@@ -24,14 +24,14 @@ export const pinComment = async ({
 }
 
 /** コメントのピン留めを解除する */
-export const unpinComment = async ({
+export const unpinPublicQuestComment = async ({
   publicQuestId,
   commentId,
 }: {
   publicQuestId: string
   commentId: string
 }) => {
-  devLog("unpinComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId) })
+  devLog("unpinPublicQuestComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_PIN_API_URL(publicQuestId, commentId), {
     method: "DELETE",

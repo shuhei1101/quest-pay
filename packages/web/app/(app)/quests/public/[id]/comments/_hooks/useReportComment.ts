@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query"
 import { handleAppError } from "@/app/(core)/error/handler/client"
-import { reportComment } from "@/app/api/quests/public/[id]/comments/[commentId]/report/client"
+import { reportPublicQuestComment } from "@/app/api/quests/public/[id]/comments/[commentId]/report/client"
 import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
@@ -20,7 +20,7 @@ export const useReportComment = () => {
       publicQuestId: string
       commentId: string
       reason: string
-    }) => reportComment({ publicQuestId, commentId, reason }),
+    }) => reportPublicQuestComment({ publicQuestId, commentId, reason }),
     onSuccess: (_data, variables) => {
       toast.success("報告しました", { duration: 2000 })
       // コメント一覧を再取得する

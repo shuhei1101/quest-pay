@@ -3,14 +3,14 @@ import { devLog } from "@/app/(core)/util"
 import { AppError } from "@/app/(core)/error/appError"
 
 /** コメントを削除する */
-export const deleteComment = async ({
+export const deletePublicQuestComment = async ({
   publicQuestId,
   commentId,
 }: {
   publicQuestId: string
   commentId: string
 }) => {
-  devLog("deleteComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId) })
+  devLog("deletePublicQuestComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId), {
     method: "DELETE",

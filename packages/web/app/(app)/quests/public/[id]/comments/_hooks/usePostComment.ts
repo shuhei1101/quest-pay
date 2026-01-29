@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query"
 import { handleAppError } from "@/app/(core)/error/handler/client"
-import { postComment } from "@/app/api/quests/public/[id]/comments/client"
+import { postPublicQuestComment } from "@/app/api/quests/public/[id]/comments/client"
 import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
@@ -13,7 +13,7 @@ export const usePostComment = () => {
   
   const mutation = useMutation({
     mutationFn: ({ publicQuestId, content }: { publicQuestId: string; content: string }) =>
-      postComment({ publicQuestId, content }),
+      postPublicQuestComment({ publicQuestId, content }),
     onSuccess: (_data, variables) => {
       toast.success("コメントを投稿しました", { duration: 2000 })
       // コメント一覧を再取得する

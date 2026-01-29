@@ -3,14 +3,14 @@ import { devLog } from "@/app/(core)/util"
 import { AppError } from "@/app/(core)/error/appError"
 
 /** コメントに低評価を付ける */
-export const downvoteComment = async ({
+export const downvotePublicQuestComment = async ({
   publicQuestId,
   commentId,
 }: {
   publicQuestId: string
   commentId: string
 }) => {
-  devLog("downvoteComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId) })
+  devLog("downvotePublicQuestComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId), {
     method: "POST",
@@ -24,14 +24,14 @@ export const downvoteComment = async ({
 }
 
 /** コメントの低評価を取り消す */
-export const removeDownvote = async ({
+export const removePublicQuestCommentDownvote = async ({
   publicQuestId,
   commentId,
 }: {
   publicQuestId: string
   commentId: string
 }) => {
-  devLog("removeDownvote.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId) })
+  devLog("removePublicQuestCommentDownvote.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId), {
     method: "DELETE",

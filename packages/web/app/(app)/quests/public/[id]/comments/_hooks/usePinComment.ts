@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query"
 import { handleAppError } from "@/app/(core)/error/handler/client"
-import { pinComment, unpinComment } from "@/app/api/quests/public/[id]/comments/[commentId]/pin/client"
+import { pinPublicQuestComment, unpinPublicQuestComment } from "@/app/api/quests/public/[id]/comments/[commentId]/pin/client"
 import { queryClient } from "@/app/(core)/tanstack"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
@@ -13,7 +13,7 @@ export const usePinComment = () => {
   
   const pinMutation = useMutation({
     mutationFn: ({ publicQuestId, commentId }: { publicQuestId: string; commentId: string }) =>
-      pinComment({ publicQuestId, commentId }),
+      pinPublicQuestComment({ publicQuestId, commentId }),
     onSuccess: (_data, variables) => {
       toast.success("ピン留めしました", { duration: 2000 })
       // コメント一覧を再取得する
@@ -24,7 +24,7 @@ export const usePinComment = () => {
 
   const unpinMutation = useMutation({
     mutationFn: ({ publicQuestId, commentId }: { publicQuestId: string; commentId: string }) =>
-      unpinComment({ publicQuestId, commentId }),
+      unpinPublicQuestComment({ publicQuestId, commentId }),
     onSuccess: (_data, variables) => {
       toast.success("ピン留め解除しました", { duration: 2000 })
       // コメント一覧を再取得する
