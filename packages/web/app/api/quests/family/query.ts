@@ -2,7 +2,7 @@ import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { familyQuests, FamilyQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect } from "@/drizzle/schema"
-import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
+import { and, asc, count, desc, eq, inArray, isNull, like } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
 
@@ -85,9 +85,9 @@ export const fetchFamilyQuests = async ({ params, db, familyId }: {
     if (params.tags.length !== 0) conditions.push(inArray(questTags.name, params.tags))
     if (params.categoryId !== undefined) {
       if (params.categoryId === "null") {
-        conditions.push(eq(quests.categoryId, null))
+        conditions.push(isNull(quests.categoryId))
       } else {
-        conditions.push(eq(quests.categoryId, params.categoryId))
+        conditions.push(eq(quests.categoryId, parseInt(params.categoryId)))
       }
     }
 
