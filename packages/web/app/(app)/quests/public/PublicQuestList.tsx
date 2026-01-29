@@ -47,7 +47,7 @@ export const PublicQuestList = () => {
 
   /** ページャ状態 */
   const [page, setPage] = useState<number>(1)
-  const pageSize = 100
+  const pageSize = 30
 
   /** クエストカテゴリ */
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()

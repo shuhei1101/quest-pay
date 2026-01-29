@@ -92,7 +92,7 @@ export const calculatePagination = (params: {
   pageSize?: number
 }) => {
   const page = Math.max(1, params.page ?? 1)
-  const pageSize = Math.min(100, params.pageSize ?? 20)
+  const pageSize = Math.min(30, params.pageSize ?? 20)
   const offset = (page - 1) * pageSize
   return { pageSize, offset }
 }
