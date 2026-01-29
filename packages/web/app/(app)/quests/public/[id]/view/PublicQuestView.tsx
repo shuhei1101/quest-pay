@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
+import { PublicQuestViewLayout } from "./_components/PublicQuestViewLayout"
 import { useWindow } from "@/app/(core)/useConstants"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
 import { useRouter } from "next/navigation"
@@ -10,6 +10,8 @@ import { useLikeQuest } from "./_hooks/useLikeQuest"
 import { useLikeCount } from "./_hooks/useLikeCount"
 import { useIsLike } from "./_hooks/useIsLike"
 import { useCancelQuestLike } from "./_hooks/useCancelQuestLike"
+import { PUBLIC_QUEST_COMMENTS_URL } from "@/app/(core)/endpoints"
+import { useCommentsCount } from "../comments/_hooks/useCommentsCount"
 
 /** 公開クエスト閲覧画面 */
 export const PublicQuestView = ({id}: {id: string}) => {
@@ -32,6 +34,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
   /** いいねされているかどうか */
   const { isLike } = useIsLike({ id })
 
+  /** コメント数 */
+  const { count: commentCount } = useCommentsCount({ publicQuestId: id })
+
   /** いいねハンドル */
   const { handleLike, isLoading: isLikeLoading } = useLikeQuest()
   /** いいね解除ハンドル */
@@ -48,11 +53,8 @@ export const PublicQuestView = ({id}: {id: string}) => {
     }
   }
 
-  /** コメント数（TODO: 実装時にAPIから取得する） */
-  const commentCount = 0
-
   return (
-    <QuestViewLayout
+    <PublicQuestViewLayout
       questName={publicQuest?.quest?.name || ""}
       headerColor={{ light: "blue.3", dark: "blue.5" }}
       backgroundColor={{ 
@@ -78,6 +80,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
       monthTo={publicQuest?.quest?.monthTo}
       requiredClearCount={selectedDetail?.requiredClearCount || 0}
       commentCount={commentCount}
+      publicQuestId={id}
       footer={
         <PublicQuestViewFooter 
           availableLevels={ availableLevels }

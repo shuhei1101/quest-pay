@@ -1,6 +1,6 @@
 "use client"
 
-import { QuestViewLayout } from "../../../../../view/_components/QuestViewLayout"
+import { ChildQuestViewLayout } from "./_components/ChildQuestViewLayout"
 import { ChildQuestViewFooter } from "./_components/ChildQuestViewFooter"
 import { ParentChildQuestViewFooter } from "./_components/ParentChildQuestViewFooter"
 import { ReviewRequestModal } from "./_components/ReviewRequestModal"
@@ -40,7 +40,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
   return (
     <Fragment>
       {/* クエスト閲覧レイアウト */}
-      <QuestViewLayout
+      <ChildQuestViewLayout
         questName={childQuest?.quest?.name || ""}
         backgroundColor={{ light: "rgba(120, 53, 15, 0.2)", dark: "rgba(255, 255, 255, 0.2)" }}
         isLoading={questLoading || isDeleteLoading}
@@ -58,7 +58,6 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         monthFrom={childQuest?.quest?.monthFrom}
         monthTo={childQuest?.quest?.monthTo}
         requiredClearCount={currentDetail?.requiredClearCount || 0}
-        commentCount={0}
         footer={
           isParent ? (
             /* 親ユーザの場合 */

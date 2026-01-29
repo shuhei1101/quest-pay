@@ -458,6 +458,8 @@ export const commentUpvotes = pgTable("comment_upvotes", {
   commentId: uuid("comment_id").notNull(),
   /** プロフィールID */
   profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  /** タイプ */
+  type: commentUpvoteType("type").notNull(),
   /** タイムスタンプ */
   ...timestamps,
 }, (table) => [
