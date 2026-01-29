@@ -42,7 +42,7 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
   }, [deleteLoading, updateLoading])
 
   /** 公開クエストフォームを取得する */
-  const { register, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity } = usePublicQuestForm({ publicQuestId })
+  const { register, setForm, errors, setValue, watch, isValueChanged, handleSubmit, isLoading: questLoading, fetchedEntity, fetchedQuest } = usePublicQuestForm({ publicQuestId })
 
   /** アクティブレベル */
   const [activeLevel, setActiveLevel] = useState<string | null>(() => {
@@ -102,6 +102,12 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
   const handleCheckOriginalQuest = () => {
     if (isValueChanged) if (!confirm("変更内容が保存されていません。移動してもよろしいですか？")) return
     router.push(FAMILY_QUEST_EDIT_URL(fetchedEntity?.familyQuest?.id || ""))
+  }
+
+  /** 元に戻すハンドル */
+  const handleReset = () => {
+    if (!window.confirm('入力内容を元に戻します。よろしいですか？')) return
+    setForm(fetchedQuest)
   }
 
   /** 各タブのエラーチェックフラグ */

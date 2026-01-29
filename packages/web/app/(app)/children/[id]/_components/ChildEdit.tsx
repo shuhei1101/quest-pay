@@ -30,8 +30,14 @@ export const ChildForm = ( params: {
   /** 子供アイコン選択ポップアッププロパティ */
   const [childIconOpened, { open: openChildIcon, close: closeChildIcon }] = useDisclosure(false)
 
+  /** 元に戻すハンドル */
+  const handleReset = () => {
+    if (!window.confirm('入力内容を元に戻します。よろしいですか？')) return
+    setForm(fetchedChild)
+  }
+
   // 子供登録フォームを取得する
-  const { register: childRegister, errors, setValue: setChildValue, watch: watchChild, isValueChanged, handleSubmit, isLoading } = useChildForm({childId: id})
+  const { register: childRegister, errors, setValue: setChildValue, watch: watchChild, isValueChanged, handleSubmit, setForm, isLoading, fetchedChild } = useChildForm({childId: id})
 
   return (
     <>
@@ -78,8 +84,23 @@ export const ChildForm = ( params: {
             </div>
             <Space h="md" />
             {/* サブミットボタン */}
-            <Group>
-              <Button type="submit" variant="gradient" loading={isSubmitting} disabled={isLoading || isSubmitting}>保存</Button>
+            <Group justify="space-between">
+              {/* 左側のボタン */}
+              <Group>
+                {id && (
+                  <Button 
+                    color="gray.6" 
+                    onClick={handleReset} 
+                    disabled={!isValueChanged}
+                  >
+                    元に戻す
+                  </Button>
+                )}
+              </Group>
+              {/* 右側のボタン */}
+              <Group>
+                <Button type="submit" variant="gradient" loading={isSubmitting} disabled={isLoading || isSubmitting}>保存</Button>
+              </Group>
             </Group>
           </form>
         </Box>
