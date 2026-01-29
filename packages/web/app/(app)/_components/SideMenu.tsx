@@ -31,12 +31,17 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
 
   /** ログアウトボタン押下時のハンドル */
   const handleLogout = async () => {
-    // ログアウトする
-    await createClient().auth.signOut()
-    // 次画面で表示するメッセージを登録する
-    appStorage.feedbackMessage.set({ message: "サインアウトしました", type: "success" })
-    // ログイン画面に遷移する
-    router.push(`${LOGIN_URL}`)
+    try {
+      // ログアウトする
+      await createClient().auth.signOut()
+      // 次画面で表示するメッセージを登録する
+      appStorage.feedbackMessage.set({ message: "サインアウトしました", type: "success" })
+      // ログイン画面に遷移する
+      router.push(`${LOGIN_URL}`)
+    } catch (error) {
+      console.error('ログアウトエラー:', error)
+      appStorage.feedbackMessage.set({ message: "ログアウトに失敗しました", type: "error" })
+    }
   }
 
   /** メニューアイテム */
@@ -136,14 +141,12 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   /** ミニメニューアイテム */
   const miniMenuItems = (
     <>
-      {/* ロード中のオーバーレイ */}
-      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 0 }} loaderProps={{ children: ' ' }} />
       {/* ホームボタン（アプリアイコン） */}
-      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} size="lg">
+      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} size="xl" aria-label="ホーム">
         <Image src="/icon512_maskable.png" alt="ホーム" width={32} height={32} />
       </ActionIcon>
       {/* メニュー開閉ボタン */}
-      <ActionIcon variant="subtle" onClick={onToggle} size="lg">
+      <ActionIcon variant="subtle" onClick={onToggle} size="xl" aria-label="メニュー切り替え">
         {opened ? (
           <IconChevronLeft size={24} stroke={1.5} />
         ) : (
@@ -175,6 +178,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
             onClick={() => setIsNotificationOpen(true)} 
             variant="subtle" 
             size="xl"
+            aria-label="通知"
           >
             <IconBell style={{ width: '60%', height: '60%' }} stroke={1.5} />
           </ActionIcon>
@@ -203,7 +207,9 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   }
 
   return (
-    <div className={`${isDark ? "bg-zinc-800!" : "bg-zinc-600!"} text-white h-full`}>
+    <div className={`${isDark ? "bg-zinc-800!" : "bg-zinc-600!"} text-white h-full relative`}>
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 0 }} loaderProps={{ children: ' ' }} />
       {opened ? (
         <ScrollArea h="100%">{menuItems}</ScrollArea>
       ) : (
