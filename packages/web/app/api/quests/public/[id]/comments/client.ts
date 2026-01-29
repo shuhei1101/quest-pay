@@ -44,4 +44,3 @@ export const postPublicQuestComment = async ({
     throw AppError.fromResponse(data, res.status)
   }
 }
-
