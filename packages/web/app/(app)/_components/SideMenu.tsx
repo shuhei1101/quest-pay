@@ -1,18 +1,43 @@
 "use client"
 
-import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL } from '@/app/(core)/endpoints'
-import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus } from '@tabler/icons-react'
+import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL, LOGIN_URL } from '@/app/(core)/endpoints'
+import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
 import { RenderIcon } from '@/app/(app)/icons/_components/RenderIcon'
+import Image from 'next/image'
+import { ThemeToggleButton } from './ThemeToggleButton'
+import { useState } from 'react'
+import { NotificationModal } from '../notifications/_components/NotificationModal'
+import { useNotifications } from '../notifications/_hooks/useNotifications'
+import { appStorage } from '../../(core)/_sessionStorage/appStorage'
+import { createClient } from '../../(core)/_supabase/client'
 
 /** サイドメニューを取得する */
-export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean, isDark: boolean, opened: boolean, onClose: () => void}) => {
+export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobile: boolean, isDark: boolean, opened: boolean, onClose: () => void, onToggle: () => void}) => {
   const router = useRouter()
   /** ログインユーザ情報 */
-  const { isParent, userInfo } = useLoginUserInfo()
+  const { isParent, userInfo, isLoading, isGuest } = useLoginUserInfo()
+  /** 通知モーダルの開閉状態 */
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+  
+  /** 通知データ */
+  const { notifications } = useNotifications()
+  
+  /** 未読数を計算する */
+  const unreadCount = notifications.filter(n => !n.isRead).length
+
+  /** ログアウトボタン押下時のハンドル */
+  const handleLogout = async () => {
+    // ログアウトする
+    await createClient().auth.signOut()
+    // 次画面で表示するメッセージを登録する
+    appStorage.feedbackMessage.set({ message: "サインアウトしました", type: "success" })
+    // ログイン画面に遷移する
+    router.push(`${LOGIN_URL}`)
+  }
 
   /** メニューアイテム */
   const menuItems = (
@@ -111,10 +136,22 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
   /** ミニメニューアイテム */
   const miniMenuItems = (
     <>
-      {/* ホームアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)}>
-        <IconHome2 color={menuColors.home} stroke={1.4} />
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 0 }} loaderProps={{ children: ' ' }} />
+      {/* ホームボタン（アプリアイコン） */}
+      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} size="lg">
+        <Image src="/icon512_maskable.png" alt="ホーム" width={32} height={32} />
       </ActionIcon>
+      {/* メニュー開閉ボタン */}
+      <ActionIcon variant="subtle" onClick={onToggle} size="lg">
+        {opened ? (
+          <IconChevronLeft size={24} stroke={1.5} />
+        ) : (
+          <IconChevronRight size={24} stroke={1.5} />
+        )}
+      </ActionIcon>
+      {/* 薄い線で境界 */}
+      <Divider className="w-4/5" />
       {/* クエストアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
         <IconClipboard color={menuColors.quest} stroke={1.4} />
@@ -129,6 +166,31 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
       <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)}>
         <IconSettings color={menuColors.settings} stroke={1.4} />
       </ActionIcon>
+      {/* カラーパレット */}
+      <ThemeToggleButton />
+      {/* 通知ボタン */}
+      {!isGuest && (
+        <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
+          <ActionIcon
+            onClick={() => setIsNotificationOpen(true)} 
+            variant="subtle" 
+            size="xl"
+          >
+            <IconBell style={{ width: '60%', height: '60%' }} stroke={1.5} />
+          </ActionIcon>
+        </Indicator>
+      )}
+      {/* ログアウトボタン */}
+      {!isGuest && (
+        <ActionIcon
+          onClick={handleLogout}
+          variant="subtle"
+          size="xl"
+          aria-label="ログアウト"
+        >
+          <IconLogout style={{ width: '60%', height: '60%' }} stroke={1.5} />
+        </ActionIcon>
+      )}
     </>
   )
 
@@ -149,6 +211,11 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
           {miniMenuItems}
         </div>
       )}
+      {/* 通知モーダル */}
+      <NotificationModal 
+        isOpen={isNotificationOpen} 
+        onClose={() => setIsNotificationOpen(false)} 
+      />
     </div>
   )
 }
