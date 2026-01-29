@@ -15,6 +15,11 @@ export const AUTH_ERROR_URL = `${ERROR_URL}/unauthorized`
 // ログイン
 export const LOGIN_URL = `/login`
 
+// パスワードリセット
+export const PASSWORD_URL = `/password`
+export const FORGOT_PASSWORD_URL = `${PASSWORD_URL}/forgot`
+export const RESET_PASSWORD_URL = `${PASSWORD_URL}/reset`
+
 // サインアップ
 export const SIGNUP_URL = `/signup`
 

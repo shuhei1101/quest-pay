@@ -23,6 +23,21 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* スクロールを防止 */
+  overflow: hidden;
+  height: 100dvh;
+}
+
+/* モバイルで入力時に拡大しないようにフォントサイズを16px以上に設定 */
+/* !importantを使用する理由: モバイルブラウザ（iOS Safari、Android Chrome等）は
+   16px未満の入力フィールドにフォーカスすると自動的にズームインするため、
+   サードパーティコンポーネントを含むすべての入力要素に確実に適用する必要がある */
+/* touch-action: manipulationを追加することで、ダブルタップズームを無効化する */
+input,
+textarea,
+select {
+  font-size: 16px !important;
+  touch-action: manipulation !important;
 }
 
 .neonButton {

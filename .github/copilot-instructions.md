@@ -35,10 +35,19 @@
 - フックからはclient.tsを経由してAPIを呼び出すこと
 - フックでAPIを呼び出す場合、必ず`useMutation`か`useQuery`を使用すること
 
-## 画面デザイン（Mock）の作成
-- Mockコンポーネントの命名は`Mock` + 元コンポーネント名 + `A`とすること
-  - 例: `MockLevelSettingsA`
-  - A以降は必要に応じてB、Cと増やしていく（ユーザが要求した場合のみ）
+## フロント設計、実装
+- フロントは以下の役割で実装する
+  - page.tsx: 画面のリダイレクトを担当する。基本はサーバーコンポーネントで実装する
+  - pageから呼ばれるコンポーネント: 画面の実装部分を担当する。主にapiを呼び出したり、Xxxレイアウトコンポーネントを使用して画面を構成する
+  - XxxLayout.tsx: 画面のレイアウトを担当する。Layoutは直接apiを叩かず、引数で受け取ったデータを表示することに専念する
+
+## api側
+- client.ts: APIクライアントを実装する
+- route.ts: APIルートを実装する
+- db: DBアクセスを実装する（単一テーブル更新系）
+- dbHelper.ts: DBアクセスのヘルパー関数を実装する（排他制御系）
+- service.ts: client.tsでdb.tsを複数回呼ぶ場合のトランザクション用
+- query.ts: DBの読み取り専用クエリを実装する
 
 ## 型
 - `entity.ts`ファイルにZodスキーマの型を共有しているため、必要であればこちらを利用すること（間違っても同じような型を生成しないこと）
@@ -96,3 +105,8 @@ export const useChildForm = ({childId}: {childId?: string}) => {
 ## 命名規則
 - 閲覧画面: 〇〇View
 - 編集画面: 〇〇Edit
+
+## 共通コンポーネント
+- 共通コンポーネントは`app/(core)/_components/`以下に配置すること
+- 共通タブ: `ScrollableTabs`
+- 

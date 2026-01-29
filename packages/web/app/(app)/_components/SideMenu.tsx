@@ -1,7 +1,7 @@
 "use client"
 
-import { HOME_URL, PROFILE_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL } from '@/app/(core)/endpoints'
-import { NavLink, ScrollArea, Drawer, ActionIcon } from '@mantine/core'
+import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL } from '@/app/(core)/endpoints'
+import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text } from '@mantine/core'
 import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
@@ -17,6 +17,35 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
   /** メニューアイテム */
   const menuItems = (
     <>
+      {/* プロフィールカード */}
+      <Card 
+        className='m-3 cursor-pointer hover:shadow-md transition-shadow'
+        onClick={() => router.push(PROFILE_URL)}
+        padding="md"
+        radius="md"
+        withBorder
+      >
+        <div className='flex items-center gap-3'>
+          {/* アイコン */}
+          <RenderIcon 
+            iconName={userInfo?.icons?.name} 
+            iconColor={userInfo?.profiles?.iconColor} 
+            size={32} 
+            stroke={1.5} 
+          />
+          {/* 名前情報 */}
+          <div className='flex flex-col'>
+            {/* 家族名 */}
+            <Text size="xs" c="dimmed" className='font-medium'>
+              {userInfo?.families?.localName}
+            </Text>
+            {/* 自身の名前 */}
+            <Text size="md" className='font-bold'>
+              {userInfo?.profiles?.name}
+            </Text>
+          </div>
+        </div>
+      </Card>
       {/* ホーム */}
       <NavLink
         className='side-nav'
@@ -69,20 +98,6 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
           leftSection={<IconUsers color={menuColors.members} size={18} stroke={1.2} />}
         />
       )}
-      {/* プロフィール */}
-      <NavLink
-        className='side-nav'
-        href={`${PROFILE_URL}`}
-        label="プロフィール"
-        leftSection={
-          <RenderIcon 
-            iconName={userInfo?.icons?.name} 
-            iconColor={userInfo?.profiles?.iconColor} 
-            size={18} 
-            stroke={1.2} 
-          />
-        }
-      />
       {/* 設定 */}
       <NavLink
         className='side-nav'
@@ -110,15 +125,6 @@ export const SideMenu = ({isMobile, isDark, opened, onClose}: {isMobile: boolean
           <IconUsers color={menuColors.members} stroke={1.4} />
         </ActionIcon>
       )}
-      {/* プロフィールアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(PROFILE_URL)}>
-        <RenderIcon 
-          iconName={userInfo?.icons?.name} 
-          iconColor={userInfo?.profiles?.iconColor} 
-          size={24} 
-          stroke={1.4} 
-        />
-      </ActionIcon>
       {/* 設定アイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)}>
         <IconSettings color={menuColors.settings} stroke={1.4} />

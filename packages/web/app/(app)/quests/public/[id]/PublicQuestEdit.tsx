@@ -14,6 +14,11 @@ import { useActivatePublicQuest } from "./_hooks/useActivatePublicQuest"
 import { useDeactivatePublicQuest } from "./_hooks/useDeactivatePublicQuest"
 import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
 import { useRouter } from "next/navigation"
+import { DeleteIconButton } from "@/app/(core)/_components/DeleteIconButton"
+import { SaveIconButton } from "@/app/(core)/_components/SaveIconButton"
+import { PublishIconButton } from "@/app/(core)/_components/PublishIconButton"
+import { UnpublishIconButton } from "@/app/(core)/_components/UnpublishIconButton"
+import { CheckOriginalIconButton } from "@/app/(core)/_components/CheckOriginalIconButton"
 
 /** 公開クエスト編集コンポーネント */
 export const PublicQuestEdit = ({ id }: { id: string }) => {
@@ -153,53 +158,44 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
         },
       ]}
       editActions={[
-        {
-          label: "元に戻す",
-          color: "gray.6",
-          onClick: handleReset,
-          disabled: !isValueChanged,
-          alignLeft: true,
-        },
-        // 公開元のクエストを確認するボタン
-        {
-          label: "元の家族クエストを確認",
-          color: "blue.7",
-          onClick: handleCheckOriginalQuest,
-        },
-        // 公開・非公開切替ボタン
-        fetchedEntity?.base.isActivate ? 
-        {
-          label: "非公開にする",
-          color: "gray.7",
-          loading: deactivateLoading,
-          onClick: () => handleDeactivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
-        } : {
-          label: "公開にする",
-          color: "green.7",
-          loading: activateLoading,
-          onClick: () => handleActivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
-        },
-        // 削除ボタン
-        {
-          label: "削除",
-          color: "red.7",
-          loading: submitLoading,
-          onClick: () => handleDelete({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
-        },
-        // 更新ボタン
-        {
-          label: "更新",
-          type: "submit",
-          loading: submitLoading,
-          disabled: !isValueChanged,
-        },
+        <CheckOriginalIconButton
+          key="check-original"
+          onClick={handleCheckOriginalQuest}
+        />,
+        fetchedEntity?.base.isActivate ? (
+          <UnpublishIconButton
+            key="unpublish"
+            loading={deactivateLoading}
+            onClick={() => handleDeactivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
+          />
+        ) : (
+          <PublishIconButton
+            key="publish"
+            loading={activateLoading}
+            onClick={() => handleActivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
+            tooltip="公開にする"
+          />
+        ),
+        <DeleteIconButton
+          key="delete"
+          loading={submitLoading}
+          onClick={() => handleDelete({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
+        />,
+        <SaveIconButton
+          key="save"
+          type="submit"
+          loading={submitLoading}
+          disabled={!isValueChanged}
+          tooltip="更新"
+        />,
       ]}
       createActions={[
-        {
-          label: "登録",
-          type: "submit",
-          loading: submitLoading,
-        },
+        <SaveIconButton
+          key="save"
+          type="submit"
+          loading={submitLoading}
+          tooltip="登録"
+        />,
       ]}
       popups={
         <IconSelectPopup

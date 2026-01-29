@@ -64,3 +64,4 @@ Thumbs.db
 supabase/.output/
 
 /generated/prisma
+package-lock.json

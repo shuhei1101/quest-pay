@@ -47,7 +47,7 @@ export const PublicQuestList = () => {
 
   /** ページャ状態 */
   const [page, setPage] = useState<number>(1)
-  const pageSize = 10
+  const pageSize = 100
 
   /** クエストカテゴリ */
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
@@ -72,8 +72,11 @@ export const PublicQuestList = () => {
     const params = new URLSearchParams(paramsObj)
 
     // フィルターをURLに反映する
-    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
+    router.push(`${PUBLIC_QUEST_URL}?${params.toString()}`)
 
+    // ページをリセットする
+    setPage(1)
+    
     // 検索フィルターを更新し、一覧を更新する
     setSearchFilter(questFilter)
   }, [questFilter, router])

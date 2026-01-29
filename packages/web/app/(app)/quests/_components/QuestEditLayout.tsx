@@ -1,9 +1,8 @@
 "use client"
 
-import { Box, Button, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
-import { useState, ReactNode, useEffect } from "react"
+import { Box, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
+import { useState, ReactNode } from "react"
 import { IconAlertCircle } from "@tabler/icons-react"
-import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch, UseFormHandleSubmit } from "react-hook-form"
 
 /** クエスト編集レイアウトのタブ設定 */
 type TabConfig = {
@@ -17,24 +16,6 @@ type TabConfig = {
   content: ReactNode
 }
 
-/** クエスト編集レイアウトのアクションボタン */
-type ActionButton = {
-  /** ボタンのラベル */
-  label: string
-  /** クリック時のハンドラ */
-  onClick?: () => void
-  /** フォーム送信ボタンかどうか */
-  type?: "button" | "submit"
-  /** ボタンの色 */
-  color?: string
-  /** ローディング状態 */
-  loading?: boolean
-  /** 無効状態 */
-  disabled?: boolean
-  /** 左側に配置するかどうか */
-  alignLeft?: boolean
-}
-
 /** クエスト編集レイアウトProps */
 type QuestEditLayoutProps<TForm extends Record<string, unknown>> = {
   /** クエストID（新規作成時はundefined） */
@@ -46,9 +27,9 @@ type QuestEditLayoutProps<TForm extends Record<string, unknown>> = {
   /** タブ設定 */
   tabs: TabConfig[]
   /** 編集モード時のアクションボタン */
-  editActions: ActionButton[]
+  editActions: ReactNode[]
   /** 新規作成モード時のアクションボタン */
-  createActions: ActionButton[]
+  createActions: ReactNode[]
   /** フローティングポップアップコンポーネント */
   popups?: ReactNode
 }
@@ -77,7 +58,7 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 
         {/* クエスト入力フォーム */}
         <form onSubmit={onSubmit}>
-          <Paper p="md" withBorder style={{ height: 'calc(100vh - 60px - 2rem)', display: 'flex', flexDirection: 'column' }}>
+          <Paper p="md" withBorder style={{ height: 'var(--content-height)', display: 'flex', flexDirection: 'column' }}>
             <Tabs value={activeTab} onChange={setActiveTab} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
               {/* タブリスト */}
               <Tabs.List>
@@ -98,7 +79,12 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
                   key={tab.value}
                   value={tab.value}
                   pt="xs"
-                  style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}
+                  style={{ 
+                    flex: 1, 
+                    // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
+                    overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
+                    overflowX: 'hidden' 
+                  }}
                 >
                   {tab.content}
                 </Tabs.Panel>
@@ -106,37 +92,8 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
             </Tabs>
 
             {/* アクションボタン */}
-            <Group mt="md" justify="space-between">
-              {/* 左側のボタン */}
-              <Group>
-                {actionButtons.filter(action => action.alignLeft).map((action, index) => (
-                  <Button
-                    key={`left-${index}`}
-                    type={action.type ?? "button"}
-                    color={action.color}
-                    loading={action.loading}
-                    disabled={action.disabled}
-                    onClick={action.type !== "submit" ? action.onClick : undefined}
-                  >
-                    {action.label}
-                  </Button>
-                ))}
-              </Group>
-              {/* 右側のボタン */}
-              <Group>
-                {actionButtons.filter(action => !action.alignLeft).map((action, index) => (
-                  <Button
-                    key={`right-${index}`}
-                    type={action.type ?? "button"}
-                    color={action.color}
-                    loading={action.loading}
-                    disabled={action.disabled}
-                    onClick={action.type !== "submit" ? action.onClick : undefined}
-                  >
-                    {action.label}
-                  </Button>
-                ))}
-              </Group>
+            <Group mt="md" justify="flex-end" gap="xs">
+              {actionButtons}
             </Group>
           </Paper>
         </form>
