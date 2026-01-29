@@ -1,10 +1,10 @@
 "use client"
 
-import { Box, Paper, Text, Textarea, Button, LoadingOverlay, Stack, Group, ActionIcon, Menu, Avatar, Badge, Indicator } from "@mantine/core"
+import { Box, Paper, Text, Textarea, Button, LoadingOverlay, Stack, Group } from "@mantine/core"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useWindow } from "@/app/(core)/useConstants"
-import { IconArrowLeft, IconDots, IconThumbUp, IconThumbDown, IconFlag, IconTrash, IconHeart, IconCrown, IconPin } from "@tabler/icons-react"
+import { IconArrowLeft } from "@tabler/icons-react"
 import { usePublicQuestComments } from "./_hooks/usePublicQuestComments"
 import { usePostComment } from "./_hooks/usePostComment"
 import { useUpvoteComment } from "./_hooks/useUpvoteComment"
@@ -15,8 +15,8 @@ import { usePinComment } from "./_hooks/usePinComment"
 import { usePublisherLike } from "./_hooks/usePublisherLike"
 import { usePublicQuest } from "../view/_hooks/usePublicQuest"
 import { useIsLike } from "../view/_hooks/useIsLike"
-import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
+import { CommentItemLayout } from "./_components/CommentItemLayout"
 
 /** 公開クエストコメント画面 */
 export const PublicQuestComments = ({ id }: { id: string }) => {
@@ -186,178 +186,21 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
           <Stack gap="md">
             {comments && comments.length > 0 ? (
               comments.map((commentItem) => (
-                <Paper
+                <CommentItemLayout
                   key={commentItem.id}
-                  p="md"
-                  radius="md"
-                  withBorder
-                  style={{
-                    backgroundColor: isDark ? "#3d3838" : "#ffffff",
-                  }}
-                >
-                  <Group justify="space-between" align="flex-start">
-                    {/* ユーザ情報 */}
-                    <Group gap="sm">
-                      {/* 家族アイコン */}
-                      <Box pos="relative">
-                        <Avatar size="lg" radius="xl" color={commentItem.profile.iconColor}>
-                          <RenderIcon iconName={commentItem.icon.name} size={32} />
-                        </Avatar>
-                        {/* 王冠アイコン（作成者） */}
-                        {isQuestCreator(commentItem.profile.familyId) && (
-                          <Box
-                            pos="absolute"
-                            top={-8}
-                            right={-8}
-                            style={{
-                              backgroundColor: "#ffd700",
-                              borderRadius: "50%",
-                              padding: 4,
-                            }}
-                          >
-                            <IconCrown size={16} color="#fff" />
-                          </Box>
-                        )}
-                        {/* ハートアイコン（いいね） */}
-                        {hasLiked(commentItem.profile.familyId) && (
-                          <Box
-                            pos="absolute"
-                            bottom={-8}
-                            right={-8}
-                            style={{
-                              backgroundColor: "#ff6b6b",
-                              borderRadius: "50%",
-                              padding: 4,
-                            }}
-                          >
-                            <IconHeart size={16} color="#fff" />
-                          </Box>
-                        )}
-                      </Box>
-
-                      {/* ユーザ名と投稿日時 */}
-                      <Stack gap={0}>
-                        <Group gap="xs">
-                          <Text fw={700}>{commentItem.profile.name}</Text>
-                          {/* ピン留めアイコン */}
-                          {commentItem.isPinned && (
-                            <IconPin size={16} color="#228be6" />
-                          )}
-                          {/* 公開者いいねバッジ */}
-                          {commentItem.isLikedByPublisher && (
-                            <Badge
-                              size="xs"
-                              variant="light"
-                              color="red"
-                              leftSection={<IconHeart size={12} />}
-                            >
-                              公開者
-                            </Badge>
-                          )}
-                        </Group>
-                        <Text size="xs" c="dimmed">
-                          {new Date(commentItem.createdAt).toLocaleString("ja-JP")}
-                        </Text>
-                      </Stack>
-                    </Group>
-
-                    {/* 三点リーダメニュー */}
-                    <Menu shadow="md" width={200}>
-                      <Menu.Target>
-                        <ActionIcon variant="subtle" color="gray">
-                          <IconDots size={18} />
-                        </ActionIcon>
-                      </Menu.Target>
-
-                      <Menu.Dropdown>
-                        {/* ピン留め（公開者家族のみ） */}
-                        {isPublisherFamily() && (
-                          <Menu.Item
-                            leftSection={<IconPin size={16} />}
-                            onClick={() => handlePinClick(commentItem.id, commentItem.isPinned)}
-                          >
-                            {commentItem.isPinned ? "ピン留め解除" : "ピン留め"}
-                          </Menu.Item>
-                        )}
-
-                        {/* 公開者いいね（公開者家族のみ） */}
-                        {isPublisherFamily() && (
-                          <Menu.Item
-                            leftSection={<IconHeart size={16} />}
-                            onClick={() => handlePublisherLikeClick(commentItem.id, commentItem.isLikedByPublisher)}
-                            color={commentItem.isLikedByPublisher ? "red" : undefined}
-                          >
-                            {commentItem.isLikedByPublisher ? "公開者いいね解除" : "公開者いいね"}
-                          </Menu.Item>
-                        )}
-
-                        {/* 区切り線（公開者家族の場合） */}
-                        {isPublisherFamily() && <Menu.Divider />}
-
-                        {/* 高評価 */}
-                        <Menu.Item
-                          leftSection={<IconThumbUp size={16} />}
-                          onClick={() => handleUpvoteClick(commentItem.id)}
-                          disabled={commentItem.isUpvoted}
-                        >
-                          高評価 ({commentItem.upvoteCount})
-                        </Menu.Item>
-
-                        {/* 低評価 */}
-                        <Menu.Item
-                          leftSection={<IconThumbDown size={16} />}
-                          onClick={() => handleDownvoteClick(commentItem.id)}
-                          disabled={commentItem.isDownvoted}
-                        >
-                          低評価 ({commentItem.downvoteCount})
-                        </Menu.Item>
-
-                        {/* 報告 */}
-                        <Menu.Item
-                          leftSection={<IconFlag size={16} />}
-                          onClick={() => handleReportClick(commentItem.id)}
-                        >
-                          報告
-                        </Menu.Item>
-
-                        {/* 削除（自分のコメントのみ） */}
-                        {userInfo?.profiles?.id === commentItem.profileId && (
-                          <>
-                            <Menu.Divider />
-                            <Menu.Item
-                              color="red"
-                              leftSection={<IconTrash size={16} />}
-                              onClick={() => handleDeleteClick(commentItem.id)}
-                            >
-                              削除
-                            </Menu.Item>
-                          </>
-                        )}
-                      </Menu.Dropdown>
-                    </Menu>
-                  </Group>
-
-                  {/* コメント内容 */}
-                  <Text mt="sm">{commentItem.content}</Text>
-
-                  {/* 評価バッジ */}
-                  <Group gap="xs" mt="sm">
-                    <Badge
-                      leftSection={<IconThumbUp size={12} />}
-                      variant={commentItem.isUpvoted ? "filled" : "light"}
-                      color="blue"
-                    >
-                      {commentItem.upvoteCount}
-                    </Badge>
-                    <Badge
-                      leftSection={<IconThumbDown size={12} />}
-                      variant={commentItem.isDownvoted ? "filled" : "light"}
-                      color="gray"
-                    >
-                      {commentItem.downvoteCount}
-                    </Badge>
-                  </Group>
-                </Paper>
+                  commentItem={commentItem}
+                  isDark={isDark}
+                  isQuestCreator={isQuestCreator(commentItem.profile.familyId)}
+                  hasLiked={hasLiked(commentItem.profile.familyId)}
+                  isPublisherFamily={isPublisherFamily()}
+                  isCurrentUser={userInfo?.profiles?.id === commentItem.profileId}
+                  onUpvote={() => handleUpvoteClick(commentItem.id)}
+                  onDownvote={() => handleDownvoteClick(commentItem.id)}
+                  onReport={() => handleReportClick(commentItem.id)}
+                  onDelete={() => handleDeleteClick(commentItem.id)}
+                  onPin={() => handlePinClick(commentItem.id, commentItem.isPinned)}
+                  onPublisherLike={() => handlePublisherLikeClick(commentItem.id, commentItem.isLikedByPublisher)}
+                />
               ))
             ) : (
               <Text c="dimmed" ta="center" py="xl">
