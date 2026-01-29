@@ -28,6 +28,7 @@ export const useChildQuests = ({filter, sortColumn, sortOrder, page, pageSize, c
       params: {
         tags: filter.tags,
         name: filter.name,
+        categoryId: filter.categoryId,
         sortColumn,
         sortOrder,
         page,

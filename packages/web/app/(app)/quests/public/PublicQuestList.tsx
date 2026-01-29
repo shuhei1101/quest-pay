@@ -115,6 +115,17 @@ export const PublicQuestList = () => {
     handleSearch()
   }, [handleSearch])
 
+  /** カテゴリ変更時のハンドル */
+  const handleCategoryChange = useCallback((categoryId: string | undefined) => {
+    // カテゴリIDをフィルターに設定する
+    setSearchFilter((prev) => ({
+      ...prev,
+      categoryId
+    }))
+    // ページをリセットする
+    setPage(1)
+  }, [])
+
   return (
     <QuestListLayout<PublicQuest, PublicQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -130,6 +141,7 @@ export const PublicQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
+      onCategoryChange={handleCategoryChange}
       filterPopup={
         <PublicQuestFilterPopup
           close={closeFilter}

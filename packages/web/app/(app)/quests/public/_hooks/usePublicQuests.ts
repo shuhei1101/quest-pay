@@ -25,6 +25,7 @@ export const usePublicQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
     queryFn: () => getPublicQuests({
       tags: filter.tags,
       name: filter.name,
+      categoryId: filter.categoryId,
       sortColumn,
       sortOrder,
       page,

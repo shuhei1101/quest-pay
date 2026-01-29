@@ -25,6 +25,7 @@ export const useFamilyQuests = ({filter, sortColumn, sortOrder, page, pageSize}:
     queryFn: () => getFamilyQuests({
       tags: filter.tags,
       name: filter.name,
+      categoryId: filter.categoryId,
       sortColumn,
       sortOrder,
       page,
