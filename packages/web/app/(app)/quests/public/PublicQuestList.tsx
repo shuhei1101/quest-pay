@@ -10,7 +10,7 @@ import { PublicQuestSortPopup } from "./_components/PublicQuestSortPopup"
 import { QuestListLayout } from "../_components/QuestListLayout"
 import { PublicQuestFilterScheme, type PublicQuest, type PublicQuestFilterType } from "@/app/api/quests/public/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { FAMILY_QUESTS_URL, PUBLIC_QUEST_EDIT_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUESTS_URL, PUBLIC_QUEST_EDIT_URL, PUBLIC_QUEST_URL, PUBLIC_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 公開クエストリストコンポーネント */
@@ -106,14 +106,40 @@ export const PublicQuestList = () => {
   /** フィルター検索時のハンドル */
   const handleFilterSearch = useCallback((filter: PublicQuestFilterType) => {
     setQuestFilter(filter)
-    handleSearch()
-  }, [handleSearch])
+    // 新しいフィルター値を使って検索を実行する
+    const paramsObj = Object.fromEntries(
+      Object.entries(filter)
+        .filter(([_, v]) => v !== undefined && v !== null && v !== '')
+        .map(([k, v]) => [k, String(v)])
+    )
+    const params = new URLSearchParams({
+      tab: 'public',
+      ...paramsObj
+    })
+    router.push(`${PUBLIC_QUESTS_URL}?${params.toString()}`)
+    setPage(1)
+    setSearchFilter(filter)
+  }, [router])
 
   /** ソート検索時のハンドル */
   const handleSortSearch = useCallback((newSort: QuestSort) => {
     setSort(newSort)
-    handleSearch()
-  }, [handleSearch])
+    // 新しいソート値を使って検索を実行する
+    const filterParams = Object.fromEntries(
+      Object.entries(questFilter)
+        .filter(([_, v]) => v !== undefined && v !== null && v !== '')
+        .map(([k, v]) => [k, String(v)])
+    )
+    const params = new URLSearchParams({
+      tab: 'public',
+      ...filterParams,
+      sortColumn: newSort.column,
+      sortOrder: newSort.order
+    })
+    router.push(`${PUBLIC_QUESTS_URL}?${params.toString()}`)
+    setPage(1)
+    setSearchFilter(questFilter)
+  }, [questFilter, router])
 
   return (
     <QuestListLayout<PublicQuest, PublicQuestFilterType, QuestSort>
