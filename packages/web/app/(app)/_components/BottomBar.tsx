@@ -27,22 +27,22 @@ export const BottomBar = ({isDark, onToggleMenu}: {isDark: boolean, onToggleMenu
       }}
     >
       {/* ホームアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} aria-label="ホーム">
         <IconHome2 color={menuColors.home} stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)} aria-label="クエスト">
         <IconClipboard color={menuColors.quest} stroke={1.4} />
       </ActionIcon>
       {/* メンバーアイコン（親のみ） */}
       {isParent && (
-        <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)}>
+        <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)} aria-label="メンバー">
           <IconUsers color={menuColors.members} stroke={1.4} />
         </ActionIcon>
       )}
       {/* メニュー開閉ボタン */}
       <ActionIcon variant="subtle" onClick={onToggleMenu} aria-label="メニューを開く">
-        <IconMenu2 stroke={1.4} />
+        <IconMenu2 color={isDark ? "white" : "black"} stroke={1.4} />
       </ActionIcon>
     </Box>
   )
