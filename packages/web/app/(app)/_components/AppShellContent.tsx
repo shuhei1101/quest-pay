@@ -5,7 +5,6 @@ import { useDisclosure } from '@mantine/hooks'
 import { Suspense } from 'react'
 import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from './BackgroundWrapper'
-import { AppHeader } from './AppHeader'
 import { SideMenu } from './SideMenu'
 import { BottomBar } from './BottomBar'
 import { AccessErrorHandler } from '../../(core)/_components/AccessErrorHandler'
@@ -17,10 +16,10 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
   /** ブレークポイント */
   const { isMobile, isDark } = useWindow()
 
-  /** コンテンツ領域の高さ（ヘッダー60px + パディング2rem + モバイル時フッター70px） */
+  /** コンテンツ領域の高さ（パディング2rem + モバイル時フッター70px） */
   const contentHeight = isMobile
-    ? 'calc(100dvh - 60px - 2rem - 70px)'
-    : 'calc(100dvh - 60px - 2rem)'
+    ? 'calc(100dvh - 2rem - 70px)'
+    : 'calc(100dvh - 2rem)'
 
   return (
     <BackgroundWrapper>
@@ -29,7 +28,6 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
         <AccessErrorHandler />
       </Suspense>
       <AppShell
-        header={{ height: 60 }}
         navbar={{
           width: opened ? 200 : 60,
           breakpoint: 601,
@@ -44,21 +42,9 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
           '--content-height': contentHeight,
         }}
       >
-        {/* ヘッダー */}
-        <AppShell.Header style={{
-          display: "flex",
-          alignItems: "center",
-          color: "black",
-          paddingLeft: "10px",
-          paddingRight: "10px",
-          gap: "8px",
-        }} >
-          <AppHeader isMobile={isMobile} onToggleMenu={toggle} />
-        </AppShell.Header>
-
         {/* サイドメニュー */}
         <AppShell.Navbar>
-          <SideMenu isMobile={isMobile} isDark={isDark} opened={opened} onClose={close} />
+          <SideMenu isMobile={isMobile} isDark={isDark} opened={opened} onClose={close} onToggle={toggle} />
         </AppShell.Navbar>
 
         {/* メインコンテンツ */}
