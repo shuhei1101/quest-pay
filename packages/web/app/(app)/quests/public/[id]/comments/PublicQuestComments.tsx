@@ -1,10 +1,9 @@
 "use client"
 
-import { Box, Paper, Text, Textarea, Button, LoadingOverlay, Stack, Group } from "@mantine/core"
+import { Box, Textarea, Button, Group } from "@mantine/core"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useWindow } from "@/app/(core)/useConstants"
-import { IconArrowLeft } from "@tabler/icons-react"
 import { usePublicQuestComments } from "./_hooks/usePublicQuestComments"
 import { usePostComment } from "./_hooks/usePostComment"
 import { useUpvoteComment } from "./_hooks/useUpvoteComment"
@@ -16,7 +15,7 @@ import { usePublisherLike } from "./_hooks/usePublisherLike"
 import { usePublicQuest } from "../view/_hooks/usePublicQuest"
 import { useIsLike } from "../view/_hooks/useIsLike"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
-import { CommentItemLayout } from "./_components/CommentItemLayout"
+import { CommentsLayout } from "./_components/CommentsLayout"
 
 /** 公開クエストコメント画面 */
 export const PublicQuestComments = ({ id }: { id: string }) => {
@@ -163,53 +162,22 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
         backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)",
       }}
     >
-      {/* コメント一覧カード */}
-      <Paper
-        className="flex-1 min-h-0"
-        p="md"
-        radius="md"
-        style={{
-          backgroundColor: isDark ? "#544c4c" : "#fffef5",
-          boxShadow: "4px 4px 8px rgba(0,0,0,0.15)",
-          overflow: "auto",
-        }}
-      >
-        <Box pos="relative" className="h-full">
-          {/* ロード中のオーバーレイ */}
-          <LoadingOverlay
-            visible={isLoading}
-            zIndex={1000}
-            overlayProps={{ radius: "sm", blur: 2 }}
-          />
-
-          {/* コメント一覧 */}
-          <Stack gap="md">
-            {comments && comments.length > 0 ? (
-              comments.map((commentItem) => (
-                <CommentItemLayout
-                  key={commentItem.id}
-                  commentItem={commentItem}
-                  isDark={isDark}
-                  isQuestCreator={isQuestCreator(commentItem.profile.familyId)}
-                  hasLiked={hasLiked(commentItem.profile.familyId)}
-                  isPublisherFamily={isPublisherFamily()}
-                  isCurrentUser={userInfo?.profiles?.id === commentItem.profileId}
-                  onUpvote={() => handleUpvoteClick(commentItem.id)}
-                  onDownvote={() => handleDownvoteClick(commentItem.id)}
-                  onReport={() => handleReportClick(commentItem.id)}
-                  onDelete={() => handleDeleteClick(commentItem.id)}
-                  onPin={() => handlePinClick(commentItem.id, commentItem.isPinned)}
-                  onPublisherLike={() => handlePublisherLikeClick(commentItem.id, commentItem.isLikedByPublisher)}
-                />
-              ))
-            ) : (
-              <Text c="dimmed" ta="center" py="xl">
-                まだコメントがありません
-              </Text>
-            )}
-          </Stack>
-        </Box>
-      </Paper>
+      {/* コメント一覧 */}
+      <CommentsLayout
+        comments={comments}
+        isDark={isDark}
+        isLoading={isLoading}
+        isQuestCreator={isQuestCreator}
+        hasLiked={hasLiked}
+        isPublisherFamily={isPublisherFamily()}
+        isCurrentUser={(profileId) => userInfo?.profiles?.id === profileId}
+        onUpvote={handleUpvoteClick}
+        onDownvote={handleDownvoteClick}
+        onReport={handleReportClick}
+        onDelete={handleDeleteClick}
+        onPin={handlePinClick}
+        onPublisherLike={handlePublisherLikeClick}
+      />
 
       {/* コメント入力欄 */}
       <Box mt="md">
