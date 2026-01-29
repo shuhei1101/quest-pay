@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
+import { FamilyQuestViewLayout } from "./_components/FamilyQuestViewLayout"
 import { ParentQuestViewFooter } from "./_components/ParentQuestViewFooter"
 import { useFamilyQuest } from "./_hooks/useFamilyQuest"
 import { useRouter } from "next/navigation"
@@ -21,11 +21,8 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   /** 利用可能なレベル一覧を取得する */
   const availableLevels = familyQuest?.details?.map(d => d.level).filter((level): level is number => level !== null && level !== undefined) || []
 
-  /** コメント数（TODO: 実装時にAPIから取得する） */
-  const commentCount = 0
-
   return (
-    <QuestViewLayout
+    <FamilyQuestViewLayout
       questName={familyQuest?.quest?.name || ""}
       backgroundColor={{ 
         light: "rgba(120, 53, 15, 0.2)", 
@@ -49,7 +46,6 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
       monthFrom={familyQuest?.quest?.monthFrom}
       monthTo={familyQuest?.quest?.monthTo}
       requiredClearCount={selectedDetail?.requiredClearCount || 0}
-      commentCount={commentCount}
       footer={
         <ParentQuestViewFooter 
           availableLevels={availableLevels}
