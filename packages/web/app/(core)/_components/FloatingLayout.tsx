@@ -2,7 +2,24 @@
 import { ReactNode } from "react"
 import { useWindow } from "../useConstants"
 
-/** フローティングレイアウトコンポーネントを表示する */
+/**
+ * フローティングレイアウトコンポーネントを表示する
+ * 
+ * 画面の四隅にフローティングボタンを配置できるレイアウトコンポーネント。
+ * 画面全体をこのコンポーネントでラップして使用する。
+ * 
+ * @example
+ * ```tsx
+ * <FloatingLayout
+ *   topLeft={<ActionIcon><IconHome /></ActionIcon>}
+ *   topRight={<ActionIcon><IconSettings /></ActionIcon>}
+ *   bottomLeft={<ActionIcon><IconBell /></ActionIcon>}
+ *   bottomRight={<ActionIcon><IconPlus /></ActionIcon>}
+ * >
+ *   <div>メインコンテンツ</div>
+ * </FloatingLayout>
+ * ```
+ */
 export const FloatingLayout = ({
   children,
   topLeft,
