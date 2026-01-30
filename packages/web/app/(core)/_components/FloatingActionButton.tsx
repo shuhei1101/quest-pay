@@ -33,6 +33,7 @@ export const FloatingActionButton = ({
   closeOnOutsideClick = true,
   mainButtonSize = 60,
   subButtonSize = 50,
+  disablePositioning = false,
 }: {
   /** 展開するアクションアイテムの配列 */
   items: FloatingActionItem[]
@@ -60,6 +61,8 @@ export const FloatingActionButton = ({
   mainButtonSize?: number
   /** サブボタンのサイズ */
   subButtonSize?: number
+  /** positioningを無効化するか（FloatingLayout内で使用する場合はtrueに設定） */
+  disablePositioning?: boolean
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isMobile } = useWindow()
@@ -102,7 +105,10 @@ export const FloatingActionButton = ({
   return (
     <div
       ref={containerRef}
-      style={{
+      style={disablePositioning ? {
+        position: "relative",
+        zIndex: 3000,
+      } : {
         position: "fixed",
         zIndex: 3000,
         right: isMobile ? rightMobile : rightDesktop,

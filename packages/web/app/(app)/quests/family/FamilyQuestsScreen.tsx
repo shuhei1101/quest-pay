@@ -88,6 +88,7 @@ export function FamilyQuestsScreen() {
           items={actionItems}
           mainButtonColor="pink"
           subButtonColor="pink"
+          disablePositioning={true}
         />
       }
     >
