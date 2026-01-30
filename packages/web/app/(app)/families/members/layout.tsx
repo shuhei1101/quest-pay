@@ -26,9 +26,6 @@ export default function FamilyMembersLayout({ children }: {
   /** 現在選択中のID */
   const selectedId = getSelectedIdFromPath()
 
-  /** フローティングアクションボタンの開閉状態 */
-  const [open, setOpen] = useState(false)
-
   /** フローティングアクションアイテム */
   const actionItems: FloatingActionItem[] = [
     { 
@@ -70,8 +67,6 @@ export default function FamilyMembersLayout({ children }: {
       </div>
       <FloatingActionButton
         items={actionItems}
-        open={open}
-        onToggle={setOpen}
         mainButtonColor="pink"
         subButtonColor="pink"
       />

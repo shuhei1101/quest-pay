@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, ReactNode } from "react"
+import { useEffect, useRef, useState, useCallback, ReactNode } from "react"
 import { ActionIcon, MantineColor } from "@mantine/core"
 import { IconPlus, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -21,8 +21,8 @@ export type FloatingActionItem = {
 /** 展開型フローティングアクションボタンを表示する */
 export const FloatingActionButton = ({
   items,
-  open,
-  onToggle,
+  open: externalOpen,
+  onToggle: externalOnToggle,
   mainButtonColor = "pink",
   subButtonColor = "pink",
   mainIcon = <IconPlus style={{ width: "70%", height: "70%" }} />,
@@ -33,13 +33,14 @@ export const FloatingActionButton = ({
   closeOnOutsideClick = true,
   mainButtonSize = 60,
   subButtonSize = 50,
+  disablePositioning = false,
 }: {
   /** 展開するアクションアイテムの配列 */
   items: FloatingActionItem[]
-  /** 開閉状態 */
-  open: boolean
-  /** 開閉状態を変更する関数 */
-  onToggle: (open: boolean) => void
+  /** 開閉状態（外部制御する場合のみ指定） */
+  open?: boolean
+  /** 開閉状態を変更する関数（外部制御する場合のみ指定） */
+  onToggle?: (open: boolean) => void
   /** メインボタンの色 */
   mainButtonColor?: MantineColor
   /** サブボタンの色 */
@@ -60,9 +61,29 @@ export const FloatingActionButton = ({
   mainButtonSize?: number
   /** サブボタンのサイズ */
   subButtonSize?: number
+  /** positioningを無効化するか（FloatingLayout内で使用する場合はtrueに設定） */
+  disablePositioning?: boolean
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isMobile } = useWindow()
+
+  /** 内部で管理する開閉状態 */
+  const [internalOpen, setInternalOpen] = useState(false)
+
+  /** 外部制御かどうかを判定する */
+  const isExternalControl = externalOpen !== undefined && externalOnToggle !== undefined
+
+  /** 実際に使用する開閉状態 */
+  const actualOpen = isExternalControl ? externalOpen : internalOpen
+
+  /** 実際に使用する開閉切り替え関数 */
+  const handleToggle = useCallback((newOpen: boolean) => {
+    if (isExternalControl) {
+      externalOnToggle(newOpen)
+    } else {
+      setInternalOpen(newOpen)
+    }
+  }, [isExternalControl, externalOnToggle])
 
   // 外側クリックで閉じる
   useEffect(() => {
@@ -72,19 +93,22 @@ export const FloatingActionButton = ({
       if (!containerRef.current) return
 
       // 展開中 ＋ コンテナの外をクリックした場合
-      if (open && !containerRef.current.contains(e.target as Node)) {
-        onToggle(false)
+      if (actualOpen && !containerRef.current.contains(e.target as Node)) {
+        handleToggle(false)
       }
     }
 
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [open, closeOnOutsideClick, onToggle])
+  }, [actualOpen, closeOnOutsideClick, handleToggle])
 
   return (
     <div
       ref={containerRef}
-      style={{
+      style={disablePositioning ? {
+        position: "relative",
+        zIndex: 3000,
+      } : {
         position: "fixed",
         zIndex: 3000,
         right: isMobile ? rightMobile : rightDesktop,
@@ -92,7 +116,7 @@ export const FloatingActionButton = ({
       }}
     >
       <AnimatePresence>
-        {open &&
+        {actualOpen &&
           items.map((item, i) => (
             <motion.div
               key={i}
@@ -125,14 +149,14 @@ export const FloatingActionButton = ({
         radius="xl"
         variant="filled"
         color={mainButtonColor}
-        onClick={() => onToggle(!open)}
+        onClick={() => handleToggle(!actualOpen)}
         style={{
           width: mainButtonSize,
           height: mainButtonSize,
           boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
         }}
       >
-        {open ? <IconX style={{ width: "70%", height: "70%" }} /> : mainIcon}
+        {actualOpen ? <IconX style={{ width: "70%", height: "70%" }} /> : mainIcon}
       </ActionIcon>
     </div>
   )
