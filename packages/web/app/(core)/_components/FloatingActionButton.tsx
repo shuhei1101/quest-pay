@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, ReactNode } from "react"
+import { useEffect, useRef, useState, ReactNode } from "react"
 import { ActionIcon, MantineColor } from "@mantine/core"
 import { IconPlus, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -21,8 +21,8 @@ export type FloatingActionItem = {
 /** 展開型フローティングアクションボタンを表示する */
 export const FloatingActionButton = ({
   items,
-  open,
-  onToggle,
+  open: externalOpen,
+  onToggle: externalOnToggle,
   mainButtonColor = "pink",
   subButtonColor = "pink",
   mainIcon = <IconPlus style={{ width: "70%", height: "70%" }} />,
@@ -36,10 +36,10 @@ export const FloatingActionButton = ({
 }: {
   /** 展開するアクションアイテムの配列 */
   items: FloatingActionItem[]
-  /** 開閉状態 */
-  open: boolean
-  /** 開閉状態を変更する関数 */
-  onToggle: (open: boolean) => void
+  /** 開閉状態（外部制御する場合のみ指定） */
+  open?: boolean
+  /** 開閉状態を変更する関数（外部制御する場合のみ指定） */
+  onToggle?: (open: boolean) => void
   /** メインボタンの色 */
   mainButtonColor?: MantineColor
   /** サブボタンの色 */
@@ -63,6 +63,15 @@ export const FloatingActionButton = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isMobile } = useWindow()
+
+  /** 内部で管理する開閉状態 */
+  const [internalOpen, setInternalOpen] = useState(false)
+
+  /** 実際に使用する開閉状態（外部制御がある場合はそれを優先） */
+  const open = externalOpen !== undefined ? externalOpen : internalOpen
+  
+  /** 実際に使用する開閉切り替え関数 */
+  const onToggle = externalOnToggle !== undefined ? externalOnToggle : setInternalOpen
 
   // 外側クリックで閉じる
   useEffect(() => {

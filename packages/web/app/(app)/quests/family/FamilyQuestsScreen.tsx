@@ -47,9 +47,6 @@ export function FamilyQuestsScreen() {
     const newTab = isValidTab(tabParam) ? tabParam : 'public'
     setTabValue(newTab)
   }, [searchParams])
-
-  /** フローティングアクションボタンの開閉状態 */
-  const [open, setOpen] = useState(false)
   
   const actionItems: FloatingActionItem[] = [
     { 
@@ -151,8 +148,6 @@ export function FamilyQuestsScreen() {
     
     <FloatingActionButton
       items={actionItems}
-      open={open}
-      onToggle={setOpen}
       mainButtonColor="pink"
       subButtonColor="pink"
     />
