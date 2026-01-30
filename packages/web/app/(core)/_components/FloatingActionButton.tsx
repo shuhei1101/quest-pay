@@ -71,7 +71,7 @@ export const FloatingActionButton = ({
   const isExternalControl = externalOpen !== undefined && externalOnToggle !== undefined
 
   /** 実際に使用する開閉状態 */
-  const open = isExternalControl ? externalOpen : internalOpen
+  const actualOpen = isExternalControl ? externalOpen : internalOpen
 
   /** 実際に使用する開閉切り替え関数 */
   const handleToggle = useCallback((newOpen: boolean) => {
@@ -90,14 +90,14 @@ export const FloatingActionButton = ({
       if (!containerRef.current) return
 
       // 展開中 ＋ コンテナの外をクリックした場合
-      if (open && !containerRef.current.contains(e.target as Node)) {
+      if (actualOpen && !containerRef.current.contains(e.target as Node)) {
         handleToggle(false)
       }
     }
 
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [open, closeOnOutsideClick, handleToggle])
+  }, [actualOpen, closeOnOutsideClick, handleToggle])
 
   return (
     <div
@@ -110,7 +110,7 @@ export const FloatingActionButton = ({
       }}
     >
       <AnimatePresence>
-        {open &&
+        {actualOpen &&
           items.map((item, i) => (
             <motion.div
               key={i}
@@ -143,14 +143,14 @@ export const FloatingActionButton = ({
         radius="xl"
         variant="filled"
         color={mainButtonColor}
-        onClick={() => handleToggle(!open)}
+        onClick={() => handleToggle(!actualOpen)}
         style={{
           width: mainButtonSize,
           height: mainButtonSize,
           boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
         }}
       >
-        {open ? <IconX style={{ width: "70%", height: "70%" }} /> : mainIcon}
+        {actualOpen ? <IconX style={{ width: "70%", height: "70%" }} /> : mainIcon}
       </ActionIcon>
     </div>
   )

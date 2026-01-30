@@ -8,6 +8,7 @@ import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
+import { FloatingLayout } from "@/app/(core)/_components/FloatingLayout"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
 import { useTabAutoScroll, useTabHorizontalScroll } from "@/app/(core)/_hooks/useTabScrollControl"
@@ -81,76 +82,78 @@ export function FamilyQuestsScreen() {
   )
 
   return (
-      <>
-    <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }} color={
-      tabValue == 'public' ? "rgb(96 165 250)" :
-      tabValue == 'family' ? "rgb(74, 222, 128)" :
-      tabValue == 'penalty' ? "rgb(252, 132, 132)" :
-      tabValue == 'template' ? "rgb(250 204 21)" : "blue"
-    }  >
-      <div className="flex flex-col gap-4" style={{ flex: 1, overflow: 'hidden' }}>
-        {/* タブリスト */}
-        <Paper p="xs" withBorder >
-          <Tabs.List>
-            <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-              <Tabs.Tab value="public" data-value="public" leftSection={<IconWorld color={tabValue == 'public' ? "white" : "rgb(96 165 250)"} size={18} />}>
-                公開
-              </Tabs.Tab>
-              <Tabs.Tab value="family" data-value="family" leftSection={<IconHome2 color={tabValue == 'family' ? "white" : "rgb(74, 222, 128)"} size={18} />}>
-                家族
-              </Tabs.Tab>
-              <Tabs.Tab value="penalty" data-value="penalty" leftSection={<IconClipboardOff color={tabValue == 'penalty' ? "white" : "rgb(252, 132, 132)"} size={18} />}>
-                違反リスト
-              </Tabs.Tab>
-              <Tabs.Tab value="template" data-value="template" leftSection={<IconClipboard color={tabValue == 'template' ? "white" : "rgb(250 204 21)"} size={18} />}>
-                テンプレート
-              </Tabs.Tab>
-            </div>
-            </Tabs.List>
+    <FloatingLayout
+      bottomRight={
+        <FloatingActionButton
+          items={actionItems}
+          mainButtonColor="pink"
+          subButtonColor="pink"
+        />
+      }
+    >
+      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }} color={
+        tabValue == 'public' ? "rgb(96 165 250)" :
+        tabValue == 'family' ? "rgb(74, 222, 128)" :
+        tabValue == 'penalty' ? "rgb(252, 132, 132)" :
+        tabValue == 'template' ? "rgb(250 204 21)" : "blue"
+      }  >
+        <div className="flex flex-col gap-4" style={{ flex: 1, overflow: 'hidden' }}>
+          {/* タブリスト */}
+          <Paper p="xs" withBorder >
+            <Tabs.List>
+              <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+                <Tabs.Tab value="public" data-value="public" leftSection={<IconWorld color={tabValue == 'public' ? "white" : "rgb(96 165 250)"} size={18} />}>
+                  公開
+                </Tabs.Tab>
+                <Tabs.Tab value="family" data-value="family" leftSection={<IconHome2 color={tabValue == 'family' ? "white" : "rgb(74, 222, 128)"} size={18} />}>
+                  家族
+                </Tabs.Tab>
+                <Tabs.Tab value="penalty" data-value="penalty" leftSection={<IconClipboardOff color={tabValue == 'penalty' ? "white" : "rgb(252, 132, 132)"} size={18} />}>
+                  違反リスト
+                </Tabs.Tab>
+                <Tabs.Tab value="template" data-value="template" leftSection={<IconClipboard color={tabValue == 'template' ? "white" : "rgb(250 204 21)"} size={18} />}>
+                  テンプレート
+                </Tabs.Tab>
+              </div>
+              </Tabs.List>
+          </Paper>
+
+          {/* タブパネル */}
+          <Paper p="xs" withBorder style={{ flex: 1 }}>
+
+            <Tabs.Panel value="public">
+              <Suspense fallback={
+                <Center className="my-8">
+                  <Loader size="lg" />
+                </Center>
+              }>
+                <PublicQuestList />
+              </Suspense>
+            </Tabs.Panel>
+            <Tabs.Panel value="family">
+              <Suspense fallback={
+                <Center className="my-8">
+                  <Loader size="lg" />
+                </Center>
+              }>
+                <FamilyQuestList />
+              </Suspense>
+            </Tabs.Panel>
+            <Tabs.Panel value="penalty">
+              違反リスト
+            </Tabs.Panel>
+            <Tabs.Panel value="template">
+              <Suspense fallback={
+                <Center className="my-8">
+                  <Loader size="lg" />
+                </Center>
+              }>
+                <TemplateQuestList />
+              </Suspense>
+            </Tabs.Panel>
         </Paper>
-
-        {/* タブパネル */}
-        <Paper p="xs" withBorder style={{ flex: 1 }}>
-
-          <Tabs.Panel value="public">
-            <Suspense fallback={
-              <Center className="my-8">
-                <Loader size="lg" />
-              </Center>
-            }>
-              <PublicQuestList />
-            </Suspense>
-          </Tabs.Panel>
-          <Tabs.Panel value="family">
-            <Suspense fallback={
-              <Center className="my-8">
-                <Loader size="lg" />
-              </Center>
-            }>
-              <FamilyQuestList />
-            </Suspense>
-          </Tabs.Panel>
-          <Tabs.Panel value="penalty">
-            違反リスト
-          </Tabs.Panel>
-          <Tabs.Panel value="template">
-            <Suspense fallback={
-              <Center className="my-8">
-                <Loader size="lg" />
-              </Center>
-            }>
-              <TemplateQuestList />
-            </Suspense>
-          </Tabs.Panel>
-      </Paper>
-    </div>
-    </Tabs>
-    
-    <FloatingActionButton
-      items={actionItems}
-      mainButtonColor="pink"
-      subButtonColor="pink"
-    />
-    </>
+      </div>
+      </Tabs>
+    </FloatingLayout>
   )
 }
