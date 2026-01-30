@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, useState, ReactNode } from "react"
+import { useEffect, useRef, useState, useCallback, ReactNode } from "react"
 import { ActionIcon, MantineColor } from "@mantine/core"
 import { IconPlus, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -67,11 +67,20 @@ export const FloatingActionButton = ({
   /** 内部で管理する開閉状態 */
   const [internalOpen, setInternalOpen] = useState(false)
 
-  /** 実際に使用する開閉状態（外部制御がある場合はそれを優先） */
-  const open = externalOpen !== undefined ? externalOpen : internalOpen
-  
+  /** 外部制御かどうかを判定する */
+  const isExternalControl = externalOpen !== undefined && externalOnToggle !== undefined
+
+  /** 実際に使用する開閉状態 */
+  const open = isExternalControl ? externalOpen : internalOpen
+
   /** 実際に使用する開閉切り替え関数 */
-  const onToggle = externalOnToggle !== undefined ? externalOnToggle : setInternalOpen
+  const handleToggle = useCallback((newOpen: boolean) => {
+    if (isExternalControl) {
+      externalOnToggle(newOpen)
+    } else {
+      setInternalOpen(newOpen)
+    }
+  }, [isExternalControl, externalOnToggle])
 
   // 外側クリックで閉じる
   useEffect(() => {
@@ -82,13 +91,13 @@ export const FloatingActionButton = ({
 
       // 展開中 ＋ コンテナの外をクリックした場合
       if (open && !containerRef.current.contains(e.target as Node)) {
-        onToggle(false)
+        handleToggle(false)
       }
     }
 
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [open, closeOnOutsideClick, onToggle])
+  }, [open, closeOnOutsideClick, handleToggle])
 
   return (
     <div
@@ -134,7 +143,7 @@ export const FloatingActionButton = ({
         radius="xl"
         variant="filled"
         color={mainButtonColor}
-        onClick={() => onToggle(!open)}
+        onClick={() => handleToggle(!open)}
         style={{
           width: mainButtonSize,
           height: mainButtonSize,
