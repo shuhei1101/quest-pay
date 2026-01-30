@@ -64,3 +64,6 @@ supabase/.output/
 
 /generated/prisma
 package-lock.json
+
+# テスト用ページ
+packages/web/app/test/floating-layout/
