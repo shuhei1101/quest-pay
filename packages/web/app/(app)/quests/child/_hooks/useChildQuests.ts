@@ -20,7 +20,7 @@ export const useChildQuests = ({filter, sortColumn, sortOrder, page, pageSize, c
   const router = useRouter()
   
   // 検索条件に紐づくクエストリストを取得する
-  const { error, data, isLoading} = useQuery({
+  const { error, data, isLoading, refetch } = useQuery({
     queryKey: ["childQuests", filter, sortColumn, sortOrder, page, pageSize, childId],
     retry: false,
     queryFn: () => getChildQuests({
@@ -48,5 +48,6 @@ export const useChildQuests = ({filter, sortColumn, sortOrder, page, pageSize, c
     totalRecords: data?.totalRecords ?? 0,
     maxPage: Math.ceil((data?.totalRecords ?? 0) / pageSize),
     isLoading,
+    refetch,
   }
 }

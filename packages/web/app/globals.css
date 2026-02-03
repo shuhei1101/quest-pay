@@ -85,3 +85,37 @@ select {
   background-color: rgba(0, 113, 243, 0.293);
   box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
 }
+
+/* react-pull-to-refresh スタイル */
+.ptr {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ptr__children {
+  overflow: auto;
+  flex: 1;
+}
+
+.ptr__pull-down,
+.ptr__pull-up {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  color: var(--foreground);
+  opacity: 0.5;
+  transition: all 0.2s;
+}
+
+.ptr__pull-down--pull-more,
+.ptr__pull-up--pull-more {
+  opacity: 0.8;
+}
+
+.ptr__pull-down--loading,
+.ptr__pull-up--loading {
+  height: 50px;
+}
+
