@@ -104,13 +104,14 @@ select {
   justify-content: center;
   align-items: center;
   height: 50px;
-  color: #999;
+  color: var(--foreground);
+  opacity: 0.5;
   transition: all 0.2s;
 }
 
 .ptr__pull-down--pull-more,
 .ptr__pull-up--pull-more {
-  color: #333;
+  opacity: 0.8;
 }
 
 .ptr__pull-down--loading,
