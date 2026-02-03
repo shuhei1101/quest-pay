@@ -12,7 +12,7 @@ import { BasicSettings } from "../../family/[id]/_components/BasicSettings"
 import { DetailSettings } from "../../family/[id]/_components/DetailSettings"
 import { useActivatePublicQuest } from "./_hooks/useActivatePublicQuest"
 import { useDeactivatePublicQuest } from "./_hooks/useDeactivatePublicQuest"
-import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 import { useRouter } from "next/navigation"
 import { DeleteIconButton } from "@/app/(core)/_components/DeleteIconButton"
 import { SaveIconButton } from "@/app/(core)/_components/SaveIconButton"
@@ -101,7 +101,7 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
   /** 元のクエスト確認ボタン */
   const handleCheckOriginalQuest = () => {
     if (isValueChanged) if (!confirm("変更内容が保存されていません。移動してもよろしいですか？")) return
-    router.push(FAMILY_QUEST_EDIT_URL(fetchedEntity?.familyQuest?.id || ""))
+    router.push(FAMILY_QUEST_VIEW_URL(fetchedEntity?.familyQuest?.id || ""))
   }
 
   /** 各タブのエラーチェックフラグ */

@@ -2,7 +2,7 @@ import { calculatePagination, devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { templateQuests, TemplateQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, familyQuests, FamilyQuestSelect, FamilyInsert, FamilySelect, families, publicQuests, PublicQuestSelect } from "@/drizzle/schema"
-import { and, asc, count, desc, eq, inArray, like } from "drizzle-orm"
+import { and, asc, count, desc, eq, inArray, isNull, like } from "drizzle-orm"
 import z from "zod"
 import { SortOrderScheme } from "@/app/(core)/schema"
 
@@ -10,6 +10,7 @@ import { SortOrderScheme } from "@/app/(core)/schema"
 export const TemplateQuestFilterScheme = z.object({
   name: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  categoryId: z.string().optional(),
 })
 export type TemplateQuestFilterType = z.infer<typeof TemplateQuestFilterScheme>
 
@@ -86,6 +87,13 @@ export const fetchTemplateQuests = async ({ params, db, familyId }: {
 
     if (params.name !== undefined) conditions.push(like(quests.name, `%${params.name}%`))
     if (params.tags.length !== 0) conditions.push(inArray(questTags.name, params.tags))
+    if (params.categoryId !== undefined) {
+      if (params.categoryId === "null") {
+        conditions.push(isNull(quests.categoryId))
+      } else {
+        conditions.push(eq(quests.categoryId, parseInt(params.categoryId)))
+      }
+    }
 
     // データを取得する
     const [rows, [{ total }]] = await Promise.all([
@@ -107,6 +115,8 @@ export const fetchTemplateQuests = async ({ params, db, familyId }: {
       db
       .select({ total: count() })
       .from(templateQuests)
+      .innerJoin(quests, eq(templateQuests.questId, quests.id))
+      .leftJoin(questTags, eq(questTags.questId, quests.id))
       .where(and(...conditions, eq(templateQuests.familyId, familyId)))
     ])
 
