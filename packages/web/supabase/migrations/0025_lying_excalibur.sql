@@ -1,0 +1,1 @@
+ALTER TABLE "comment_upvotes" ADD COLUMN "type" "comment_upvote_type" NOT NULL;

@@ -9,6 +9,7 @@ import { QuestCategorySelect, QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
 import { devLog } from "@/app/(core)/util"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
+import { PullToRefresh } from "@/app/(core)/_components/PullToRefresh"
 
 type QuestItem = {
   quest: QuestSelect
@@ -31,6 +32,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   sortPopup,
   onFilterOpen,
   onSortOpen,
+  onRefresh,
+  onCategoryChange,
 }: {
   /** 表示するクエスト一覧 */
   quests: T[]
@@ -62,9 +65,36 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   onFilterOpen: () => void
   /** ソートポップアップ開くハンドル */
   onSortOpen: () => void
+  /** リフレッシュハンドル */
+  onRefresh?: () => Promise<void>
+  /** カテゴリ変更時のハンドル */
+  onCategoryChange: (categoryId: string | undefined) => void
 }) => {
   /** タブ状態 */
   const [tabValue, setTabValue] = useState<string | null>(TAB_ALL)
+
+  /** タブ変更時のハンドル */
+  const handleTabChange = (value: string | null) => {
+    setTabValue(value)
+    
+    // カテゴリIDを特定する
+    let categoryId: string | undefined
+    
+    if (value === TAB_ALL) {
+      // 「すべて」タブの場合はカテゴリIDなし
+      categoryId = undefined
+    } else if (value === TAB_OTHERS) {
+      // 「その他」タブの場合はnullを表す特別な文字列
+      categoryId = "null"
+    } else {
+      // カテゴリ名からIDを取得する
+      categoryId = Object.entries(questCategoryById ?? {})
+        .find(([_, category]) => category.name === value)?.[0]
+    }
+    
+    // カテゴリ変更イベントを発火する
+    onCategoryChange(categoryId)
+  }
 
   /** タブリスト */
   const tabList = [
@@ -134,12 +164,19 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
     setDisplayQuests([])
   }
 
+  /** リフレッシュハンドル */
+  const handleRefresh = async () => {
+    if (onRefresh) {
+      await onRefresh()
+    }
+  }
+
   return (
     <div className="w-full">
       {/* クエストカテゴリタブ */}
       <QuestCategoryTabs
         tabValue={tabValue}
-        onTabChange={setTabValue}
+        onTabChange={handleTabChange}
         categories={questCategories}
       >
         <div className="m-3" />
@@ -153,8 +190,10 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
 
         <div className="m-3" />
 
-        {/* すべてタブのパネル */}
-        <Tabs.Panel value={TAB_ALL} key={0}>
+        {/* プル トゥ リフレッシュ */}
+        <PullToRefresh onRefresh={handleRefresh}>
+          {/* すべてタブのパネル */}
+          <Tabs.Panel value={TAB_ALL} key={0}>
           <QuestGrid<T>
             quests={displayQuests}
             renderQuest={renderQuestCard}
@@ -216,6 +255,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
         </Tabs.Panel>
 
         <div className="m-5" />
+        </PullToRefresh>
       </QuestCategoryTabs>
 
       {/* フィルターポップアップ */}

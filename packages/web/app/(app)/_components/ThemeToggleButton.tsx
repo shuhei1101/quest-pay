@@ -6,15 +6,23 @@ import { useTheme } from '@/app/(core)/_theme/useTheme'
 import { themes, ThemeKey } from '@/app/(core)/_theme/themes'
 
 /** テーマ切り替えボタンを取得する */
-export const ThemeToggleButton = () => {
+export const ThemeToggleButton = ({
+  variant = "subtle",
+  size = 24,
+  iconStroke = 1.5
+}: {
+  variant?: "subtle" | "filled" | "light" | "outline" | "default" | "transparent"
+  size?: number
+  iconStroke?: number
+}) => {
   const { themeKey, setTheme } = useTheme()
 
   return (
     <Menu shadow="md" width={200}>
       {/* テーマ切り替えボタン */}
       <Menu.Target>
-        <ActionIcon variant="subtle" size="xl" aria-label="テーマ切り替え">
-          <IconPalette style={{ width: '70%', height: '70%' }} stroke={1.5} />
+        <ActionIcon variant={variant} size={size} aria-label="テーマ切り替え">
+          <IconPalette size={size} stroke={iconStroke} />
         </ActionIcon>
       </Menu.Target>
 

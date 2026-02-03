@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
+import { TemplateQuestViewLayout } from "./_components/TemplateQuestViewLayout"
 import { useTemplateQuest } from "./_hooks/useTemplateQuest"
 import { useRouter } from "next/navigation"
 import { TemplateQuestViewFooter } from "./_components/TemplateQuestViewFooter"
@@ -71,7 +71,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   const commentCount = 0
 
   return (
-    <QuestViewLayout
+    <TemplateQuestViewLayout
       questName={templateQuest?.quest?.name || ""}
       headerColor={{ light: "yellow.3", dark: "yellow.8" }}
       backgroundColor={{ 
@@ -96,7 +96,6 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
       monthFrom={templateQuest?.quest?.monthFrom}
       monthTo={templateQuest?.quest?.monthTo}
       requiredClearCount={selectedDetail?.requiredClearCount || 0}
-      commentCount={commentCount}
       footer={
         <TemplateQuestViewFooter 
           availableLevels={ availableLevels }

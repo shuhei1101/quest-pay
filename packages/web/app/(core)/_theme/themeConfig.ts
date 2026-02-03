@@ -40,6 +40,35 @@ export type ColorConfig = {
     /** フォーカス時 */
     focus: string
   }
+  /** カードの設定 */
+  cardStyles: {
+    /** 背景色 */
+    background: string
+    /** 枠線の色 */
+    border: string
+    /** ホバー時の影 */
+    hoverShadow: string
+  }
+  /** バッジの色 */
+  badgeColors: {
+    /** 情報バッジ */
+    info: string
+    /** 警告バッジ */
+    warning: string
+    /** エラーバッジ */
+    error: string
+    /** 成功バッジ */
+    success: string
+  }
+  /** 入力フォームの色 */
+  inputColors: {
+    /** 背景色 */
+    background: string
+    /** 枠線の色 */
+    border: string
+    /** フォーカス時の枠線 */
+    focusBorder: string
+  }
 }
 
 /** アプリで使用するカラーテーマの設定 */
