@@ -116,7 +116,7 @@ export const PublicQuestList = () => {
       tab: 'public',
       ...paramsObj
     })
-    router.push(`${PUBLIC_QUESTS_URL}?${params.toString()}`)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
     setPage(1)
     setSearchFilter(filter)
   }, [router])
@@ -136,7 +136,7 @@ export const PublicQuestList = () => {
       sortColumn: newSort.column,
       sortOrder: newSort.order
     })
-    router.push(`${PUBLIC_QUESTS_URL}?${params.toString()}`)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
     setPage(1)
     setSearchFilter(questFilter)
   }, [questFilter, router])

@@ -113,7 +113,7 @@ export const TemplateQuestList = () => {
       tab: 'template',
       ...paramsObj
     })
-    router.push(`${TEMPLATE_QUESTS_URL}?${params.toString()}`)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(filter)
   }, [router])
 
@@ -132,7 +132,7 @@ export const TemplateQuestList = () => {
       sortColumn: newSort.column,
       sortOrder: newSort.order
     })
-    router.push(`${TEMPLATE_QUESTS_URL}?${params.toString()}`)
+    router.push(`${FAMILY_QUESTS_URL}?${params.toString()}`)
     setSearchFilter(questFilter)
   }, [questFilter, router])
 
