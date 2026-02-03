@@ -25,6 +25,7 @@ export const useTemplateQuests = ({filter, sortColumn, sortOrder, page, pageSize
     queryFn: () => getTemplateQuests({
       tags: filter.tags,
       name: filter.name,
+      categoryId: filter.categoryId,
       sortColumn,
       sortOrder,
       page,
