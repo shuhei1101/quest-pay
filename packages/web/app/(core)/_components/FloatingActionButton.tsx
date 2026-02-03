@@ -5,17 +5,55 @@ import { IconPlus, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useWindow } from "../useConstants"
 
+/** 展開パターンの種類 */
+export type ExpandPattern = "manual" | "right" | "left"
+
 export type FloatingActionItem = {
   /** アイコン要素 */
   icon: ReactNode
-  /** X軸の移動距離 */
-  x: number
-  /** Y軸の移動距離 */
-  y: number
+  /** X軸の移動距離（patternが"manual"の場合のみ必須） */
+  x?: number
+  /** Y軸の移動距離（patternが"manual"の場合のみ必須） */
+  y?: number
   /** クリック時のコールバック */
   onClick: () => void
   /** 個別の色設定(オプション) */
   color?: MantineColor
+}
+
+/**
+ * パターンに基づいてアイテムの座標を計算する
+ * @param items アイテム配列
+ * @param pattern 展開パターン
+ * @param spacing アイテム間の間隔
+ */
+const calculateItemPositions = (
+  items: FloatingActionItem[],
+  pattern: ExpandPattern,
+  spacing: number
+): Array<{ x: number; y: number }> => {
+  if (pattern === "manual") {
+    // 手動指定の場合はそのまま返す
+    return items.map(item => ({ x: item.x || 0, y: item.y || 0 }))
+  }
+
+  if (pattern === "right") {
+    // 右に展開する
+    return items.map((_, index) => ({
+      x: spacing * (index + 1),
+      y: 0,
+    }))
+  }
+
+  if (pattern === "left") {
+    // 左に展開する
+    return items.map((_, index) => ({
+      x: -spacing * (index + 1),
+      y: 0,
+    }))
+  }
+
+  return []
 }
 
 /** 展開型フローティングアクションボタンを表示する */
@@ -23,6 +61,8 @@ export const FloatingActionButton = ({
   items,
   open: externalOpen,
   onToggle: externalOnToggle,
+  pattern = "manual",
+  spacing = 70,
   mainButtonColor = "pink",
   subButtonColor = "pink",
   mainIcon = <IconPlus style={{ width: "70%", height: "70%" }} />,
@@ -41,6 +81,10 @@ export const FloatingActionButton = ({
   open?: boolean
   /** 開閉状態を変更する関数（外部制御する場合のみ指定） */
   onToggle?: (open: boolean) => void
+  /** 展開パターン */
+  pattern?: ExpandPattern
+  /** アイテム間の間隔（patternが"right"または"left"の場合に使用） */
+  spacing?: number
   /** メインボタンの色 */
   mainButtonColor?: MantineColor
   /** サブボタンの色 */
@@ -85,6 +129,9 @@ export const FloatingActionButton = ({
     }
   }, [isExternalControl, externalOnToggle])
 
+  // パターンに基づいてアイテムの座標を計算する
+  const itemPositions = calculateItemPositions(items, pattern, spacing)
+
   // 外側クリックで閉じる
   useEffect(() => {
     if (!closeOnOutsideClick) return
@@ -117,31 +164,34 @@ export const FloatingActionButton = ({
     >
       <AnimatePresence>
         {actualOpen &&
-          items.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 0, y: 0 }}
-              animate={{ opacity: 1, x: item.x, y: item.y }}
-              exit={{ opacity: 0, x: 0, y: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              style={{ position: "absolute" }}
-            >
-              <ActionIcon
-                size="xl"
-                radius="xl"
-                variant="white"
-                color={item.color || subButtonColor}
-                onClick={item.onClick}
-                style={{
-                  width: subButtonSize,
-                  height: subButtonSize,
-                  boxShadow: "0 6px 16px rgba(0,0,0,0.18)",
-                }}
+          items.map((item, i) => {
+            const position = itemPositions[i]
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: 0, y: 0 }}
+                animate={{ opacity: 1, x: position.x, y: position.y }}
+                exit={{ opacity: 0, x: 0, y: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                style={{ position: "absolute" }}
               >
-                {item.icon}
-              </ActionIcon>
-            </motion.div>
-          ))}
+                <ActionIcon
+                  size="xl"
+                  radius="xl"
+                  variant="white"
+                  color={item.color || subButtonColor}
+                  onClick={item.onClick}
+                  style={{
+                    width: subButtonSize,
+                    height: subButtonSize,
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.18)",
+                  }}
+                >
+                  {item.icon}
+                </ActionIcon>
+              </motion.div>
+            )
+          })}
       </AnimatePresence>
 
       {/* メインボタン */}
