@@ -53,7 +53,7 @@ export const TemplateQuestList = () => {
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
 
   /** クエスト一覧 */
-  const { fetchedQuests, isLoading, totalRecords, maxPage } = useTemplateQuests({
+  const { fetchedQuests, isLoading, totalRecords, maxPage, refetch } = useTemplateQuests({
     filter: searchFilter,
     sortColumn: sort.column,
     sortOrder: sort.order,
@@ -112,6 +112,21 @@ export const TemplateQuestList = () => {
     handleSearch()
   }, [handleSearch])
 
+  /** リフレッシュハンドル */
+  const handleRefresh = useCallback(async () => {
+    await refetch()
+  }, [refetch])
+  /** カテゴリ変更時のハンドル */
+  const handleCategoryChange = useCallback((categoryId: string | undefined) => {
+    // カテゴリIDをフィルターに設定する
+    setSearchFilter((prev) => ({
+      ...prev,
+      categoryId
+    }))
+    // ページをリセットする
+    setPage(1)
+  }, [])
+
   return (
     <QuestListLayout<TemplateQuest, TemplateQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -127,6 +142,8 @@ export const TemplateQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
+      onRefresh={handleRefresh}
+      onCategoryChange={handleCategoryChange}
       filterPopup={
         <TemplateQuestFilterPopup
           close={closeFilter}

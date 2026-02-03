@@ -1,9 +1,10 @@
 "use client"
 
-import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Slider, Stack, Text } from "@mantine/core"
+import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Slider, Stack, Text, Grid } from "@mantine/core"
 import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget } from "@tabler/icons-react"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
 import { useWindow } from "@/app/(core)/useConstants"
+import { QuestViewIcon } from "./QuestViewIcon"
 
 /** クエスト条件タブ */
 export const QuestConditionTab = ({
@@ -18,6 +19,9 @@ export const QuestConditionTab = ({
   type,
   currentClearCount,
   requiredClearCount,
+  iconName,
+  iconSize,
+  iconColor,
 }: {
   level: number
   maxLevel?: number
@@ -30,56 +34,78 @@ export const QuestConditionTab = ({
   type?: "parent" | "child" | "online"
   currentClearCount?: number
   requiredClearCount?: number
+  iconName?: string
+  iconSize?: number
+  iconColor?: string
 }) => {
 
   const { isMobile } = useWindow()
  
   return (
     <Stack gap="md" className="overflow-y-auto">
-      {/* クエストレベル */}
-      <Box>
-        <Group gap="xs" mb={4}>
-          <LevelIcon size={20} />
-          <Text fw={500}>クエストレベル</Text>
-        </Group>
-        <Group justify="end">
-          <Rating value={level} count={maxLevel} readOnly size="lg" />
-        </Group>
-          {/* レベルアップまでの進捗（子供用） */}
-          {type === "child" && currentClearCount !== undefined && requiredClearCount !== undefined && requiredClearCount > 0 && (
-            <Box mt={8} className="w-full flex flex-col items-end">
-              <Text size="sm" c="dimmed" mb={4}>
-                次レベルまで: {currentClearCount} / {requiredClearCount} 回クリア
-              </Text>
-              <Slider className={isMobile ? "w-full" : "w-1/2"}
-                value={Math.min(currentClearCount, requiredClearCount)}
-                max={requiredClearCount}
-                marks={[
-                  { value: 0, label: '0' },
-                  { value: requiredClearCount, label: `${requiredClearCount}` },
-                ]}
-                label={(value) => `${value}回`}
-                color="blue"
-                size="md"
-                disabled
-                styles={{
-                  markLabel: { fontSize: '12px' },
-                }}
-              />
+      {/* 上部：アイコンとレベル・カテゴリ */}
+      <Grid gutter="md">
+        {/* 左側：クエストアイコン（1の割合） */}
+        <Grid.Col span={4}>
+          <Box className="flex items-center justify-center h-full">
+            <QuestViewIcon
+              iconColor={iconColor}
+              iconName={iconName}
+              iconSize={iconSize ?? 48}
+            />
+          </Box>
+        </Grid.Col>
+
+        {/* 右側：レベルとカテゴリ（2の割合） */}
+        <Grid.Col span={8}>
+          <Stack gap="md">
+            {/* クエストレベル */}
+            <Box>
+              <Group gap="xs" mb={4}>
+                <LevelIcon size={20} />
+                <Text fw={500}>クエストレベル</Text>
+              </Group>
+              <Group justify="flex-end">
+                <Rating value={level} count={maxLevel} readOnly size="lg" />
+              </Group>
+              {/* レベルアップまでの進捗（子供用） */}
+              {type === "child" && currentClearCount !== undefined && requiredClearCount !== undefined && requiredClearCount > 0 && (
+                <Box mt={8} className="w-full flex flex-col items-end">
+                  <Text size="sm" c="dimmed" mb={4}>
+                    次レベルまで: {currentClearCount} / {requiredClearCount} 回クリア
+                  </Text>
+                  <Slider className={isMobile ? "w-full" : "w-1/2"}
+                    value={Math.min(currentClearCount, requiredClearCount)}
+                    max={requiredClearCount}
+                    marks={[
+                      { value: 0, label: '0' },
+                      { value: requiredClearCount, label: `${requiredClearCount}` },
+                    ]}
+                    label={(value) => `${value}回`}
+                    color="blue"
+                    size="md"
+                    disabled
+                    styles={{
+                      markLabel: { fontSize: '12px' },
+                    }}
+                  />
+                </Box>
+              )}
             </Box>
-          )}
-      </Box>
 
-      <Divider />
-
-      {/* クエストカテゴリ */}
-      <Box>
-        <Group gap="xs" mb={4}>
-          <IconCategory size={20} />
-          <Text fw={500}>クエストカテゴリ</Text>
-        </Group>
-        <Text ta="right" >{category}</Text>
-      </Box>
+            {/* クエストカテゴリ */}
+            <Box>
+              <Group gap="xs" mb={4}>
+                <IconCategory size={20} />
+                <Text fw={500}>クエストカテゴリ</Text>
+              </Group>
+              <Group justify="flex-end">
+                <Text>{category}</Text>
+              </Group>
+            </Box>
+          </Stack>
+        </Grid.Col>
+      </Grid>
 
       <Divider />
 

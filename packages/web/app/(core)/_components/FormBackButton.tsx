@@ -1,10 +1,14 @@
 import { Button } from "@mantine/core"
 import { useRouter } from "next/navigation"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 export const FormBackButton = ({isValueChanged, previousScreenURL}: {
   isValueChanged: boolean,
   previousScreenURL: string
 }) => {
+  /** テーマ情報 */
+  const { colors } = useTheme()
+
   const onClick = () => {
     if (isValueChanged) {
       const isOk = window.confirm(
@@ -18,6 +22,6 @@ export const FormBackButton = ({isValueChanged, previousScreenURL}: {
 
   const router = useRouter()
   return (
-    <Button variant="outline" onClick={onClick}>閉じる</Button>
+    <Button variant="outline" onClick={onClick} color={colors.buttonColors.default}>閉じる</Button>
   )
 }

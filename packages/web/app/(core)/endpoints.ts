@@ -60,7 +60,8 @@ export const APPROVE_REPORT_API_URL = (familyQuestId: string, childId: string) =
 // 公開クエスト
 export const PUBLIC_QUESTS_URL = `${QUESTS_URL}/public`
 export const PUBLIC_QUEST_EDIT_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`
-export const PUBLIC_QUEST_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_URL}/${publicQuestId}`
+export const PUBLIC_QUEST_VIEW_URL = (publicQuestId: string) => `${PUBLIC_QUEST_EDIT_URL(publicQuestId)}/view`
+export const PUBLIC_QUEST_URL = (publicQuestId: string) => `${PUBLIC_QUEST_VIEW_URL(publicQuestId)}`
 export const PUBLIC_QUESTS_API_URL = `${QUESTS_API_URL}/public`
 export const PUBLIC_QUEST_API_URL = (publicQuestId: string) => `${PUBLIC_QUESTS_API_URL}/${publicQuestId}`
 // 有効化・無効化API
@@ -73,6 +74,23 @@ export const PUBLIC_QUEST_LIKE_CANCEL_API_URL = (publicQuestId: string) => `${PU
 export const PUBLIC_QUEST_LIKE_COUNT_API_URL = (publicQuestId: string) => `${PUBLIC_QUEST_LIKE_API_URL(publicQuestId)}/count`
 // 家族クエストIDに紐づく公開クエスト取得API
 export const PUBLIC_QUEST_BY_FAMILY_QUEST_ID_API_URL = (familyQuestId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/public`
+// 公開クエストコメント画面
+export const PUBLIC_QUEST_COMMENTS_URL = (publicQuestId: string) => `${PUBLIC_QUEST_URL(publicQuestId)}/comments`
+// 公開クエストコメントAPI
+export const PUBLIC_QUEST_COMMENTS_API_URL = (publicQuestId: string) => `${PUBLIC_QUEST_API_URL(publicQuestId)}/comments`
+export const PUBLIC_QUEST_COMMENT_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENTS_API_URL(publicQuestId)}/${commentId}`
+// コメント数取得API
+export const PUBLIC_QUEST_COMMENTS_COUNT_API_URL = (publicQuestId: string) => `${PUBLIC_QUEST_COMMENTS_API_URL(publicQuestId)}/count`
+// コメント高評価API
+export const PUBLIC_QUEST_COMMENT_UPVOTE_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/upvote`
+// コメント低評価API
+export const PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/downvote`
+// コメント報告API
+export const PUBLIC_QUEST_COMMENT_REPORT_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/report`
+// コメントピン留めAPI
+export const PUBLIC_QUEST_COMMENT_PIN_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/pin`
+// コメント公開者いいねAPI
+export const PUBLIC_QUEST_COMMENT_PUBLISHER_LIKE_API_URL = (publicQuestId: string, commentId: string) => `${PUBLIC_QUEST_COMMENT_API_URL(publicQuestId, commentId)}/publisher-like`
 
 
 // テンプレートクエスト

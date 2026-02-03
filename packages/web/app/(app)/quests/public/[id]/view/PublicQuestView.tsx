@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
+import { PublicQuestViewLayout } from "./_components/PublicQuestViewLayout"
 import { useWindow } from "@/app/(core)/useConstants"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
 import { useRouter } from "next/navigation"
@@ -10,6 +10,14 @@ import { useLikeQuest } from "./_hooks/useLikeQuest"
 import { useLikeCount } from "./_hooks/useLikeCount"
 import { useIsLike } from "./_hooks/useIsLike"
 import { useCancelQuestLike } from "./_hooks/useCancelQuestLike"
+import { PUBLIC_QUEST_COMMENTS_URL } from "@/app/(core)/endpoints"
+import { useCommentsCount } from "../comments/_hooks/useCommentsCount"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
+import { useDisclosure } from "@mantine/hooks"
+import { QuestEditModal } from "../../../_components/QuestEditModal"
+import { PublicQuestEdit } from "../PublicQuestEdit"
+import { Button, Group } from "@mantine/core"
+import { IconEdit } from "@tabler/icons-react"
 
 /** 公開クエスト閲覧画面 */
 export const PublicQuestView = ({id}: {id: string}) => {
@@ -19,6 +27,12 @@ export const PublicQuestView = ({id}: {id: string}) => {
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
   const {publicQuest, isLoading} = usePublicQuest({id})
+  /** ログインユーザ情報 */
+  const { userInfo } = useLoginUserInfo()
+  /** 編集権限があるかどうか */
+  const hasEditPermission = publicQuest?.base.familyId === userInfo?.profiles?.familyId
+  /** 編集モーダル制御状態 */
+  const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false)
 
   /** 選択中のレベルの詳細を取得する */
   const selectedDetail = publicQuest?.details?.find(d => d.level === selectedLevel) || publicQuest?.details?.[0]
@@ -31,6 +45,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
 
   /** いいねされているかどうか */
   const { isLike } = useIsLike({ id })
+
+  /** コメント数 */
+  const { count: commentCount } = useCommentsCount({ publicQuestId: id })
 
   /** いいねハンドル */
   const { handleLike, isLoading: isLikeLoading } = useLikeQuest()
@@ -48,11 +65,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
     }
   }
 
-  /** コメント数（TODO: 実装時にAPIから取得する） */
-  const commentCount = 0
-
   return (
-    <QuestViewLayout
+    <>
+    <PublicQuestViewLayout
       questName={publicQuest?.quest?.name || ""}
       headerColor={{ light: "blue.3", dark: "blue.5" }}
       backgroundColor={{ 
@@ -78,6 +93,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
       monthTo={publicQuest?.quest?.monthTo}
       requiredClearCount={selectedDetail?.requiredClearCount || 0}
       commentCount={commentCount}
+      publicQuestId={id}
       footer={
         <PublicQuestViewFooter 
           availableLevels={ availableLevels }
@@ -92,5 +108,16 @@ export const PublicQuestView = ({id}: {id: string}) => {
         />
       }
     />
+      
+      {/* 編集モーダル */}
+      {hasEditPermission && (
+        <QuestEditModal
+          opened={editModalOpened}
+          onClose={closeEditModal}
+        >
+          <PublicQuestEdit id={id} />
+        </QuestEditModal>
+      )}
+    </>
   )
 }
