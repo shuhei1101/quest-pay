@@ -2,12 +2,16 @@ import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { TemplateQuest } from "@/app/api/quests/template/query"
 import { Badge, Card, Group, Text } from "@mantine/core"
 import { formatAgeRange, formatMonthRange, formatRelativeTime } from "@/app/(core)/util"
+import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** テンプレートクエストカードレイアウトコンポーネント */
 export const TemplateQuestCardLayout = ({templateQuest, onClick}: {
   templateQuest: TemplateQuest,
   onClick: (questId: string) => void
 }) => {
+  /** テーマ情報 */
+  const { colors } = useTheme()
+
   // レベル1の報酬を取得する
   const level1Detail = templateQuest.details.find(d => d.level === 1)
   const reward = level1Detail?.reward ?? 0
@@ -29,7 +33,10 @@ export const TemplateQuestCardLayout = ({templateQuest, onClick}: {
       withBorder
       onClick={() => onClick(templateQuest.base.id)}
       className="cursor-pointer quest-card hover:shadow-md transition-shadow"
-      style={{ borderColor: templateQuest.quest.iconColor || undefined }}
+      style={{ 
+        borderColor: templateQuest.quest.iconColor || colors.cardStyles.border,
+        backgroundColor: colors.cardStyles.background,
+      }}
     >
       {/* カードヘッダー部分 */}
       <Group justify="space-between" mb="xs">
@@ -41,23 +48,23 @@ export const TemplateQuestCardLayout = ({templateQuest, onClick}: {
         />
         
         {/* 保存日 */}
-        <Text size="xs" c="dimmed">
+        <Text size="xs" c={colors.textColors.secondary}>
           {savedDate}に保存
         </Text>
       </Group>
       
       {/* クエスト名 */}
-      <Text fw={700} size="lg" mb="xs" lineClamp={2}>
+      <Text fw={700} size="lg" mb="xs" lineClamp={2} c={colors.textColors.primary}>
         {templateQuest.quest.name}
       </Text>
       
       {/* 対象年齢 */}
-      <Text size="sm" c="dimmed" mb="xs">
+      <Text size="sm" c={colors.textColors.secondary} mb="xs">
         対象年齢: {ageRange}
       </Text>
       
       {/* 報酬の目安 */}
-      <Text size="sm" fw={500} mb="xs">
+      <Text size="sm" fw={500} mb="xs" c={colors.textColors.primary}>
         報酬: {reward}円〜
       </Text>
       
@@ -74,7 +81,7 @@ export const TemplateQuestCardLayout = ({templateQuest, onClick}: {
       
       {/* 対象月 */}
       {monthRange && (
-        <Text size="xs" c="dimmed" mb="xs">
+        <Text size="xs" c={colors.textColors.secondary} mb="xs">
           {monthRange}
         </Text>
       )}
@@ -89,7 +96,7 @@ export const TemplateQuestCardLayout = ({templateQuest, onClick}: {
               iconColor={templateQuest.family.iconColor}
             />
           )}
-          <Text size="xs" c="dimmed">
+          <Text size="xs" c={colors.textColors.secondary}>
             {templateQuest.family.onlineName || "不明な家族"}
           </Text>
         </Group>
