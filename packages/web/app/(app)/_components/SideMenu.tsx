@@ -2,7 +2,7 @@
 
 import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL, LOGIN_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout, IconMenu2, IconX } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout, IconMenu2, IconX, IconPinnedOff } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
@@ -46,8 +46,8 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
 
   /** メニューアイテム */
   const menuItems = (
-    <>
-      {/* ヘッダー部分（アプリアイコン、アプリ名、閉じるボタン） */}
+    <div className="relative">
+      {/* ヘッダー部分（アプリアイコン、アプリ名） */}
       <div className='flex items-center justify-between p-3 border-b border-gray-600'>
         <div className='flex items-center gap-3'>
           {/* アプリアイコン */}
@@ -55,11 +55,9 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
           {/* アプリ名 */}
           <Text size="lg" className='font-bold'>クエストペイ</Text>
         </div>
-        {/* 閉じるボタン */}
-        <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
-          <IconX size={20} stroke={1.5} />
-        </ActionIcon>
       </div>
+      {/* 境界線 */}
+      <Divider className="mx-3 my-2" />
       {/* プロフィールカード */}
       <Card 
         className='m-3 cursor-pointer hover:shadow-md transition-shadow'
@@ -151,38 +149,40 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {/* 境界線 */}
       <Divider className="mx-3 my-2" />
       {/* カラーパレット */}
-      <div className="px-3">
-        <ThemeToggleButton />
+      <NavLink
+          className='side-nav'
+          label="カラーパレット"
+          leftSection={<ThemeToggleButton size={18} iconStroke={1.2} />}
+        />
+      {/* 通知 */}
+      {!isGuest && (
+        <NavLink
+          className='side-nav'
+          onClick={() => setIsNotificationOpen(true)}
+          label="通知"
+          leftSection={
+            <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0} inline>
+              <IconBell size={18} stroke={1.2} />
+            </Indicator>
+          }
+        />
+      )}
+      {/* ログアウト */}
+      {!isGuest && (
+        <NavLink
+          className='side-nav'
+          onClick={handleLogout}
+          label="ログアウト"
+          leftSection={<IconLogout size={18} stroke={1.2} />}
+        />
+      )}
+      {/* 閉じるボタン */}
+      <div className="absolute top-0 right-0 z-10">
+        <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
+          <IconPinnedOff size={20} stroke={1.5} />
+        </ActionIcon>
       </div>
-      {/* 通知ボタン */}
-      {!isGuest && (
-        <div className="px-3 py-2">
-          <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
-            <ActionIcon
-              onClick={() => setIsNotificationOpen(true)} 
-              variant="subtle" 
-              size="xl"
-              aria-label="通知"
-            >
-              <IconBell style={{ width: '60%', height: '60%' }} stroke={1.5} />
-            </ActionIcon>
-          </Indicator>
-        </div>
-      )}
-      {/* ログアウトボタン */}
-      {!isGuest && (
-        <div className="px-3 py-2">
-          <ActionIcon
-            onClick={handleLogout}
-            variant="subtle"
-            size="xl"
-            aria-label="ログアウト"
-          >
-            <IconLogout style={{ width: '60%', height: '60%' }} stroke={1.5} />
-          </ActionIcon>
-        </div>
-      )}
-    </>
+    </div>
   )
 
   /** ミニメニューアイテム */
@@ -192,6 +192,8 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       <ActionIcon variant="subtle" onClick={onToggle} size="xl" aria-label="メニューを開く">
         <IconMenu2 size={24} stroke={1.5} />
       </ActionIcon>
+      {/* 薄い線で境界 */}
+      <Divider className="w-4/5" />
       {/* ホームアイコン */}
       <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} size="xl" aria-label="ホーム">
         <IconHome2 color={menuColors.home} stroke={1.4} />
@@ -213,7 +215,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {/* 薄い線で境界 */}
       <Divider className="w-4/5" />
       {/* カラーパレット */}
-      <ThemeToggleButton />
+      <ThemeToggleButton  />
       {/* 通知ボタン */}
       {!isGuest && (
         <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
