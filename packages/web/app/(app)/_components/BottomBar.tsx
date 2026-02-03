@@ -9,12 +9,12 @@ import { menuColors } from '@/app/(core)/_theme/colors'
 import { useTheme } from '@/app/(core)/_theme/useTheme'
 
 /** モバイル用ボトムバーを取得する */
-export const BottomBar = () => {
+export const BottomBar = ({isDark}: {isDark: boolean}) => {
   const router = useRouter()
   /** ログインユーザ情報 */
   const { isParent } = useLoginUserInfo()
   /** テーマ情報 */
-  const { colors, isDark } = useTheme()
+  const { colors } = useTheme()
 
   return (
     <Box

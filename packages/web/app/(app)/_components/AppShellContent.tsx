@@ -69,7 +69,7 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
         {/* モバイル用フッター */}
         {isMobile && (
           <AppShell.Footer>
-            <BottomBar />
+            <BottomBar isDark={isDark} />
           </AppShell.Footer>
         )}
       </AppShell>

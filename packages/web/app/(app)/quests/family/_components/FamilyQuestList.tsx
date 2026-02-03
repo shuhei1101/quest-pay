@@ -10,7 +10,7 @@ import { FamilyQuestSortPopup } from "./FamilyQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
 import { FamilyQuestFilterScheme, type FamilyQuest, type FamilyQuestFilterType } from "@/app/api/quests/family/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { FAMILY_QUEST_EDIT_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUEST_VIEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 
 /** 家族クエストリストコンポーネント */
 export const FamilyQuestList = () => {
@@ -92,7 +92,7 @@ export const FamilyQuestList = () => {
     <FamilyQuestCardLayout
       key={index}
       familyQuest={quest}
-      onClick={(id) => router.push(FAMILY_QUEST_EDIT_URL(id))}
+      onClick={(id) => router.push(FAMILY_QUEST_VIEW_URL(id))}
     />
   ), [router])
 

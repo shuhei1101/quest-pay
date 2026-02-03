@@ -19,11 +19,11 @@ export const theme = createTheme({
   // },
 
   fontSizes: {
-    xs: "14px",
-    sm: "15px",
-    md: "16px",
-    lg: "18px",
-    xl: "20px",
+    xs: "12px",
+    sm: "13px",
+    md: "14px",
+    lg: "16px",
+    xl: "18px",
   },
   // defaultGradient: {
   //   from: '#fff5ff',
