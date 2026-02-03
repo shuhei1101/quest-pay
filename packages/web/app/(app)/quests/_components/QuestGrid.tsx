@@ -133,6 +133,42 @@ export const QuestGrid = <T extends QuestItem>({
     return () => clearTimeout(timeoutId)
   }, [filteredQuests.length, onScrollBottom])
 
+  /** スクロールイベントを監視する */
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container || !onScrollBottom) return
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container
+      // 下端から100px以内に到達したらコールバックを実行する
+      if (scrollHeight - scrollTop - clientHeight < 100) {
+        onScrollBottom()
+      }
+    }
+
+    container.addEventListener("scroll", handleScroll)
+    return () => container.removeEventListener("scroll", handleScroll)
+  }, [onScrollBottom])
+
+  /** コンテンツの高さを監視し、スクロールバーが表示されない場合は自動的に次のページを取得する */
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container || !onScrollBottom) return
+
+    // コンテンツの高さがコンテナの高さより小さい場合、次のページを取得する
+    const checkContentHeight = () => {
+      const { scrollHeight, clientHeight } = container
+      if (scrollHeight <= clientHeight) {
+        // スクロールバーが表示されていない（コンテンツが少ない）
+        onScrollBottom()
+      }
+    }
+
+    // 少し遅延させてから実行（レンダリング完了後）
+    const timeoutId = setTimeout(checkContentHeight, 100)
+    return () => clearTimeout(timeoutId)
+  }, [filteredQuests.length, onScrollBottom])
+
   /** 左右スワイプ時のハンドル */
   const handlers = useSwipeable({
     onSwiped: (event) => {

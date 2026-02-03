@@ -11,7 +11,7 @@ import { ChildQuestSortPopup } from "./ChildQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
 import { ChildQuestFilterScheme, type ChildQuest, type ChildQuestFilterType } from "@/app/api/quests/family/[id]/child/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { CHILD_QUEST_VIEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
+import { CHILD_QUEST_VIEW_URL, CHILD_QUESTS_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 子供クエストリストコンポーネント */
@@ -104,14 +104,34 @@ export const ChildQuestList = () => {
   /** フィルター検索時のハンドル */
   const handleFilterSearch = useCallback((filter: ChildQuestFilterType) => {
     setQuestFilter(filter)
-    handleSearch()
-  }, [handleSearch])
+    // 新しいフィルター値を使って検索を実行する
+    const paramsObj = Object.fromEntries(
+      Object.entries(filter)
+        .filter(([_, v]) => v !== undefined && v !== null && v !== '')
+        .map(([k, v]) => [k, String(v)])
+    )
+    const params = new URLSearchParams(paramsObj)
+    router.push(`${CHILD_QUESTS_URL}?${params.toString()}`)
+    setSearchFilter(filter)
+  }, [router])
 
   /** ソート検索時のハンドル */
   const handleSortSearch = useCallback((newSort: QuestSort) => {
     setSort(newSort)
-    handleSearch()
-  }, [handleSearch])
+    // 新しいソート値を使って検索を実行する
+    const filterParams = Object.fromEntries(
+      Object.entries(questFilter)
+        .filter(([_, v]) => v !== undefined && v !== null && v !== '')
+        .map(([k, v]) => [k, String(v)])
+    )
+    const params = new URLSearchParams({
+      ...filterParams,
+      sortColumn: newSort.column,
+      sortOrder: newSort.order
+    })
+    router.push(`${CHILD_QUESTS_URL}?${params.toString()}`)
+    setSearchFilter(questFilter)
+  }, [questFilter, router])
 
   /** リフレッシュハンドル */
   const handleRefresh = useCallback(async () => {
