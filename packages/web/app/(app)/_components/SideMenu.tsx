@@ -148,6 +148,40 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         label="設定"
         leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
       />
+      {/* 境界線 */}
+      <Divider className='mx-3 my-2' />
+      {/* カラーパレット */}
+      <div className='px-3'>
+        <ThemeToggleButton />
+      </div>
+      {/* 通知ボタン */}
+      {!isGuest && (
+        <div className='px-3 py-2'>
+          <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
+            <ActionIcon
+              onClick={() => setIsNotificationOpen(true)} 
+              variant="subtle" 
+              size="xl"
+              aria-label="通知"
+            >
+              <IconBell style={{ width: '60%', height: '60%' }} stroke={1.5} />
+            </ActionIcon>
+          </Indicator>
+        </div>
+      )}
+      {/* ログアウトボタン */}
+      {!isGuest && (
+        <div className='px-3 py-2'>
+          <ActionIcon
+            onClick={handleLogout}
+            variant="subtle"
+            size="xl"
+            aria-label="ログアウト"
+          >
+            <IconLogout style={{ width: '60%', height: '60%' }} stroke={1.5} />
+          </ActionIcon>
+        </div>
+      )}
     </>
   )
 
