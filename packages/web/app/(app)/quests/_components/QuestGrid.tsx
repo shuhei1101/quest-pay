@@ -131,7 +131,7 @@ export const QuestGrid = <T extends QuestItem>({
     // 少し遅延させてから実行（レンダリング完了後）
     const timeoutId = setTimeout(checkContentHeight, 100)
     return () => clearTimeout(timeoutId)
-  }, [filteredQuests.length, onScrollBottom])
+  }, [quests.length, onScrollBottom])
 
   /** スクロールイベントを監視する */
   useEffect(() => {
@@ -167,7 +167,7 @@ export const QuestGrid = <T extends QuestItem>({
     // 少し遅延させてから実行（レンダリング完了後）
     const timeoutId = setTimeout(checkContentHeight, 100)
     return () => clearTimeout(timeoutId)
-  }, [filteredQuests.length, onScrollBottom])
+  }, [quests.length, onScrollBottom])
 
   /** 左右スワイプ時のハンドル */
   const handlers = useSwipeable({
