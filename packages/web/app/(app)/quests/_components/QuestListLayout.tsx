@@ -147,10 +147,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
 
   return (
     <div className="w-full">
-      {/* プル トゥ リフレッシュ */}
-      <PullToRefresh onRefresh={handleRefresh}>
-        {/* クエストカテゴリタブ */}
-        <QuestCategoryTabs
+      {/* クエストカテゴリタブ */}
+      <QuestCategoryTabs
         tabValue={tabValue}
         onTabChange={setTabValue}
         categories={questCategories}
@@ -166,8 +164,10 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
 
         <div className="m-3" />
 
-        {/* すべてタブのパネル */}
-        <Tabs.Panel value={TAB_ALL} key={0}>
+        {/* プル トゥ リフレッシュ */}
+        <PullToRefresh onRefresh={handleRefresh}>
+          {/* すべてタブのパネル */}
+          <Tabs.Panel value={TAB_ALL} key={0}>
           <QuestGrid<T>
             quests={displayQuests}
             renderQuest={renderQuestCard}
@@ -229,8 +229,8 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
         </Tabs.Panel>
 
         <div className="m-5" />
+        </PullToRefresh>
       </QuestCategoryTabs>
-      </PullToRefresh>
 
       {/* フィルターポップアップ */}
       {filterPopup}
