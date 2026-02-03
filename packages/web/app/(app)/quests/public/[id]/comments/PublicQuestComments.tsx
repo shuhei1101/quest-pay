@@ -66,18 +66,28 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
 
   /** 高評価ハンドル */
   const handleUpvoteClick = (commentId: string) => {
+    // コメントの現在の高評価状態を取得する
+    const comment = comments?.find((c) => c.id === commentId)
+    if (!comment) return
+
     handleUpvote({
       publicQuestId: id,
       commentId,
+      isUpvoted: comment.isUpvoted,
       onSuccess: refetch,
     })
   }
 
   /** 低評価ハンドル */
   const handleDownvoteClick = (commentId: string) => {
+    // コメントの現在の低評価状態を取得する
+    const comment = comments?.find((c) => c.id === commentId)
+    if (!comment) return
+
     handleDownvote({
       publicQuestId: id,
       commentId,
+      isDownvoted: comment.isDownvoted,
       onSuccess: refetch,
     })
   }
@@ -177,6 +187,7 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
         onDelete={handleDeleteClick}
         onPin={handlePinClick}
         onPublisherLike={handlePublisherLikeClick}
+        onRefetch={refetch}
       />
 
       {/* コメント入力欄 */}

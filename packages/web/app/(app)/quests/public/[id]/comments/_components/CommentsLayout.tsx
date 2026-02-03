@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Paper, LoadingOverlay, Stack, Text, Group, Select } from "@mantine/core"
-import { useState, useMemo } from "react"
+import { useState, useEffect } from "react"
 import { CommentItemLayout } from "./CommentItemLayout"
 
 type CommentItem = {
@@ -39,6 +39,7 @@ type CommentsLayoutProps = {
   onDelete: (commentId: string) => void
   onPin: (commentId: string, isPinned: boolean) => void
   onPublisherLike: (commentId: string, isLiked: boolean) => void
+  onRefetch: () => void
 }
 
 type SortType = "newest" | "likes"
@@ -58,12 +59,18 @@ export const CommentsLayout = ({
   onDelete,
   onPin,
   onPublisherLike,
+  onRefetch,
 }: CommentsLayoutProps) => {
   /** ソート方法 */
   const [sortType, setSortType] = useState<SortType>("newest")
 
-  /** ソート済みのコメント一覧を取得する */
-  const sortedComments = useMemo(() => {
+  /** ソート変更時にサーバーから再取得する */
+  useEffect(() => {
+    onRefetch()
+  }, [sortType])
+
+  /** ソート済みのコメント一覧を取得する（ピン留めコメントを最上位に固定） */
+  const sortedComments = (() => {
     if (!comments || comments.length === 0) return []
 
     // コメントをコピーしてソート
@@ -90,7 +97,7 @@ export const CommentsLayout = ({
     })
 
     return sorted
-  }, [comments, sortType])
+  })()
 
   return (
     <Paper

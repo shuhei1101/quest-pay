@@ -158,13 +158,21 @@ export const CommentItemLayout = ({
                 {isPublisherFamily && <Menu.Divider />}
 
                 {/* 高評価 */}
-                <Menu.Item leftSection={<IconThumbUp size={16} />} onClick={onUpvote} disabled={commentItem.isUpvoted}>
-                  高評価 ({commentItem.upvoteCount})
+                <Menu.Item 
+                  leftSection={<IconThumbUp size={16} />} 
+                  onClick={onUpvote}
+                  color={commentItem.isUpvoted ? "blue" : undefined}
+                >
+                  {commentItem.isUpvoted ? "高評価を取り消す" : "高評価"} ({commentItem.upvoteCount})
                 </Menu.Item>
 
                 {/* 低評価 */}
-                <Menu.Item leftSection={<IconThumbDown size={16} />} onClick={onDownvote} disabled={commentItem.isDownvoted}>
-                  低評価 ({commentItem.downvoteCount})
+                <Menu.Item 
+                  leftSection={<IconThumbDown size={16} />} 
+                  onClick={onDownvote}
+                  color={commentItem.isDownvoted ? "gray" : undefined}
+                >
+                  {commentItem.isDownvoted ? "低評価を取り消す" : "低評価"} ({commentItem.downvoteCount})
                 </Menu.Item>
 
                 {/* 報告 */}
@@ -197,7 +205,6 @@ export const CommentItemLayout = ({
               color="blue"
               size="sm"
               onClick={onUpvote}
-              disabled={commentItem.isUpvoted}
             >
               <IconThumbUp size={14} />
             </ActionIcon>
@@ -210,7 +217,6 @@ export const CommentItemLayout = ({
               color="gray"
               size="sm"
               onClick={onDownvote}
-              disabled={commentItem.isDownvoted}
             >
               <IconThumbDown size={14} />
             </ActionIcon>
