@@ -159,21 +159,21 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         <IconMenu2 size={24} stroke={1.5} />
       </ActionIcon>
       {/* ホームアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} aria-label="ホーム">
+      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} size="xl" aria-label="ホーム">
         <IconHome2 color={menuColors.home} stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)} aria-label="クエスト">
+      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)} size="xl" aria-label="クエスト">
         <IconClipboard color={menuColors.quest} stroke={1.4} />
       </ActionIcon>
       {/* メンバーアイコン（親のみ） */}
       {isParent && (
-        <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)} aria-label="メンバー">
+        <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)} size="xl" aria-label="メンバー">
           <IconUsers color={menuColors.members} stroke={1.4} />
         </ActionIcon>
       )}
       {/* 設定アイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)} aria-label="設定">
+      <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)} size="xl" aria-label="設定">
         <IconSettings color={menuColors.settings} stroke={1.4} />
       </ActionIcon>
       {/* 薄い線で境界 */}
