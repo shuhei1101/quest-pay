@@ -1,18 +1,16 @@
 "use client"
 
-import { Box, Paper, Tabs, LoadingOverlay, Badge } from "@mantine/core"
+import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
 import { useState, ReactNode } from "react"
-import { QuestViewHeader } from "./QuestViewHeader"
-import { QuestViewIcon } from "./QuestViewIcon"
-import { QuestConditionTab } from "./QuestConditionTab"
-import { QuestDetailTab } from "./QuestDetailTab"
-import { QuestOtherTab } from "./QuestOtherTab"
-import { QuestCommentTab } from "./QuestCommentTab"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useWindow } from "@/app/(core)/useConstants"
+import { QuestViewHeader } from "@/app/(app)/quests/view/_components/QuestViewHeader"
+import { QuestDetailTab } from "@/app/(app)/quests/view/_components/QuestDetailTab"
+import { QuestConditionTab } from "@/app/(app)/quests/view/_components/QuestConditionTab"
+import { QuestOtherTab } from "@/app/(app)/quests/view/_components/QuestOtherTab"
 
-/** クエスト閲覧レイアウトのプロパティ */
-type QuestViewLayoutProps = {
+/** テンプレートクエスト閲覧レイアウトのプロパティ */
+type TemplateQuestViewLayoutProps = {
   /** クエスト名 */
   questName: string
   /** ヘッダーの色設定 */
@@ -55,14 +53,12 @@ type QuestViewLayoutProps = {
   monthTo?: number | null
   /** 必要クリア回数 */
   requiredClearCount: number
-  /** コメント数 */
-  commentCount?: number
   /** フッター要素 */
   footer: ReactNode
 }
 
-/** クエスト閲覧画面の共通レイアウト */
-export const QuestViewLayout = ({
+/** テンプレートクエスト閲覧画面の共通レイアウト */
+export const TemplateQuestViewLayout = ({
   questName,
   headerColor,
   backgroundColor,
@@ -84,9 +80,8 @@ export const QuestViewLayout = ({
   monthFrom,
   monthTo,
   requiredClearCount,
-  commentCount = 0,
   footer,
-}: QuestViewLayoutProps) => {
+}: TemplateQuestViewLayoutProps) => {
   const {isDark} = useWindow()
   
   /** アクティブタブ */
@@ -101,13 +96,6 @@ export const QuestViewLayout = ({
       <QuestViewHeader 
         questName={questName}
         headerColor={headerColor}
-      />
-
-      {/* クエストアイコン */}
-      <QuestViewIcon
-        iconColor={iconColor}
-        iconName={iconName}
-        iconSize={iconSize ?? 48}
       />
 
       {/* クエスト内容カード */}
@@ -128,15 +116,6 @@ export const QuestViewLayout = ({
             { value: "condition", label: "クエスト条件" },
             { value: "detail", label: "依頼情報" },
             { value: "other", label: "その他" },
-            { 
-              value: "comment", 
-              label: "コメント",
-              rightSection: commentCount > 0 ? (
-                <Badge size="xs" color="red" circle>
-                  {commentCount}
-                </Badge>
-              ) : undefined
-            },
           ]}
         >
           {/* クエスト条件タブ */}
@@ -148,6 +127,9 @@ export const QuestViewLayout = ({
               reward={reward}
               exp={exp}
               requiredCompletionCount={requiredCompletionCount}
+              iconName={iconName}
+              iconSize={iconSize}
+              iconColor={iconColor}
             />
           </Tabs.Panel>
 
@@ -169,11 +151,6 @@ export const QuestViewLayout = ({
               monthTo={monthTo}
               requiredClearCount={requiredClearCount}
             />
-          </Tabs.Panel>
-
-          {/* コメントタブ */}
-          <Tabs.Panel value="comment" pt="md">
-            <QuestCommentTab />
           </Tabs.Panel>
         </ScrollableTabs>
       </Paper>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
+import { PublicQuestViewLayout } from "./_components/PublicQuestViewLayout"
 import { useWindow } from "@/app/(core)/useConstants"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
 import { useRouter } from "next/navigation"
@@ -10,6 +10,8 @@ import { useLikeQuest } from "./_hooks/useLikeQuest"
 import { useLikeCount } from "./_hooks/useLikeCount"
 import { useIsLike } from "./_hooks/useIsLike"
 import { useCancelQuestLike } from "./_hooks/useCancelQuestLike"
+import { PUBLIC_QUEST_COMMENTS_URL } from "@/app/(core)/endpoints"
+import { useCommentsCount } from "../comments/_hooks/useCommentsCount"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { useDisclosure } from "@mantine/hooks"
 import { QuestEditModal } from "../../../_components/QuestEditModal"
@@ -44,6 +46,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
   /** いいねされているかどうか */
   const { isLike } = useIsLike({ id })
 
+  /** コメント数 */
+  const { count: commentCount } = useCommentsCount({ publicQuestId: id })
+
   /** いいねハンドル */
   const { handleLike, isLoading: isLikeLoading } = useLikeQuest()
   /** いいね解除ハンドル */
@@ -60,65 +65,49 @@ export const PublicQuestView = ({id}: {id: string}) => {
     }
   }
 
-  /** コメント数（TODO: 実装時にAPIから取得する） */
-  const commentCount = 0
-
   return (
     <>
-      <QuestViewLayout
-        questName={publicQuest?.quest?.name || ""}
-        headerColor={{ light: "blue.3", dark: "blue.5" }}
-        backgroundColor={{ 
-          light: "rgba(191, 219, 254, 0.5)", 
-          dark: "rgba(59, 130, 246, 0.2)" 
-        }}
-        iconColor={publicQuest?.quest?.iconColor}
-        iconName={publicQuest?.icon?.name}
-        iconSize={publicQuest?.icon?.size ?? 48}
-        isLoading={isLoading}
-        level={selectedDetail?.level || 1}
-        category={""}
-        successCondition={selectedDetail?.successCondition || ""}
-        reward={selectedDetail?.reward || 0}
-        exp={selectedDetail?.childExp || 0}
-        requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
-        client={publicQuest?.quest?.client || ""}
-        requestDetail={publicQuest?.quest?.requestDetail || ""}
-        tags={publicQuest?.tags?.map(tag => tag.name) || []}
-        ageFrom={publicQuest?.quest?.ageFrom}
-        ageTo={publicQuest?.quest?.ageTo}
-        monthFrom={publicQuest?.quest?.monthFrom}
-        monthTo={publicQuest?.quest?.monthTo}
-        requiredClearCount={selectedDetail?.requiredClearCount || 0}
-        commentCount={commentCount}
-        footer={
-          <Group justify="center" mt="xl" gap="md">
-            <PublicQuestViewFooter 
-              availableLevels={ availableLevels }
-              selectedLevel={ selectedLevel }
-              onLevelChange={ setSelectedLevel }
-              onBack={ () => router.back() } 
-              familyIcon={ publicQuest?.familyIcon?.name }
-              likeCount={ likeCount || 0 } 
-              isLiked={ isLike }
-              onLikeToggle={ likeToggleHandle }
-              isLikeLoading={ isLikeLoading || isCancelLikeLoading }
-            />
-            {/* 編集ボタン（権限がある場合のみ表示） */}
-            {hasEditPermission && (
-              <Button 
-                size="md" 
-                radius="xl" 
-                color="blue"
-                leftSection={<IconEdit size={18} />}
-                onClick={openEditModal}
-              >
-                編集する
-              </Button>
-            )}
-          </Group>
-        }
-      />
+    <PublicQuestViewLayout
+      questName={publicQuest?.quest?.name || ""}
+      headerColor={{ light: "blue.3", dark: "blue.5" }}
+      backgroundColor={{ 
+        light: "rgba(191, 219, 254, 0.5)", 
+        dark: "rgba(59, 130, 246, 0.2)" 
+      }}
+      iconColor={publicQuest?.quest?.iconColor}
+      iconName={publicQuest?.icon?.name}
+      iconSize={publicQuest?.icon?.size ?? 48}
+      isLoading={isLoading}
+      level={selectedDetail?.level || 1}
+      category={""}
+      successCondition={selectedDetail?.successCondition || ""}
+      reward={selectedDetail?.reward || 0}
+      exp={selectedDetail?.childExp || 0}
+      requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
+      client={publicQuest?.quest?.client || ""}
+      requestDetail={publicQuest?.quest?.requestDetail || ""}
+      tags={publicQuest?.tags?.map(tag => tag.name) || []}
+      ageFrom={publicQuest?.quest?.ageFrom}
+      ageTo={publicQuest?.quest?.ageTo}
+      monthFrom={publicQuest?.quest?.monthFrom}
+      monthTo={publicQuest?.quest?.monthTo}
+      requiredClearCount={selectedDetail?.requiredClearCount || 0}
+      commentCount={commentCount}
+      publicQuestId={id}
+      footer={
+        <PublicQuestViewFooter 
+          availableLevels={ availableLevels }
+          selectedLevel={ selectedLevel }
+          onLevelChange={ setSelectedLevel }
+          onBack={ () => router.back() } 
+          familyIcon={ publicQuest?.familyIcon?.name }
+          likeCount={ likeCount || 0 } 
+          isLiked={ isLike }
+          onLikeToggle={ likeToggleHandle }
+          isLikeLoading={ isLikeLoading || isCancelLikeLoading }
+        />
+      }
+    />
       
       {/* 編集モーダル */}
       {hasEditPermission && (

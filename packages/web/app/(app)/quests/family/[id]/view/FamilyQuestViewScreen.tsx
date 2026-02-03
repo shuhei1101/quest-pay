@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
+import { FamilyQuestViewLayout } from "./_components/FamilyQuestViewLayout"
 import { ParentQuestViewFooter } from "./_components/ParentQuestViewFooter"
 import { useFamilyQuest } from "./_hooks/useFamilyQuest"
 import { useRouter } from "next/navigation"
@@ -26,45 +26,41 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   /** 利用可能なレベル一覧を取得する */
   const availableLevels = familyQuest?.details?.map(d => d.level).filter((level): level is number => level !== null && level !== undefined) || []
 
-  /** コメント数（TODO: 実装時にAPIから取得する） */
-  const commentCount = 0
-
   return (
     <>
-      <QuestViewLayout
-        questName={familyQuest?.quest?.name || ""}
-        backgroundColor={{ 
-          light: "rgba(120, 53, 15, 0.2)", 
-          dark: "rgba(255, 255, 255, 0.2)" 
-        }}
-        iconName={familyQuest?.icon?.name}
-        iconSize={familyQuest?.icon?.size ?? 48}
-        iconColor={familyQuest?.quest?.iconColor}
-        isLoading={isLoading}
-        level={selectedDetail?.level || 1}
-        category={""}
-        successCondition={selectedDetail?.successCondition || ""}
-        reward={selectedDetail?.reward || 0}
-        exp={selectedDetail?.childExp || 0}
-        requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
-        client={familyQuest?.quest?.client || ""}
-        requestDetail={familyQuest?.quest?.requestDetail || ""}
-        tags={familyQuest?.tags?.map(tag => tag.name) || []}
-        ageFrom={familyQuest?.quest?.ageFrom}
-        ageTo={familyQuest?.quest?.ageTo}
-        monthFrom={familyQuest?.quest?.monthFrom}
-        monthTo={familyQuest?.quest?.monthTo}
-        requiredClearCount={selectedDetail?.requiredClearCount || 0}
-        commentCount={commentCount}
-        footer={
-          <ParentQuestViewFooter 
-            availableLevels={availableLevels}
-            selectedLevel={selectedLevel}
-            onLevelChange={setSelectedLevel}
-            onBack={() => router.back()}
-          />
-        }
-      />
+    <FamilyQuestViewLayout
+      questName={familyQuest?.quest?.name || ""}
+      backgroundColor={{ 
+        light: "rgba(120, 53, 15, 0.2)", 
+        dark: "rgba(255, 255, 255, 0.2)" 
+      }}
+      iconName={familyQuest?.icon?.name}
+      iconSize={familyQuest?.icon?.size ?? 48}
+      iconColor={familyQuest?.quest?.iconColor}
+      isLoading={isLoading}
+      level={selectedDetail?.level || 1}
+      category={""}
+      successCondition={selectedDetail?.successCondition || ""}
+      reward={selectedDetail?.reward || 0}
+      exp={selectedDetail?.childExp || 0}
+      requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
+      client={familyQuest?.quest?.client || ""}
+      requestDetail={familyQuest?.quest?.requestDetail || ""}
+      tags={familyQuest?.tags?.map(tag => tag.name) || []}
+      ageFrom={familyQuest?.quest?.ageFrom}
+      ageTo={familyQuest?.quest?.ageTo}
+      monthFrom={familyQuest?.quest?.monthFrom}
+      monthTo={familyQuest?.quest?.monthTo}
+      requiredClearCount={selectedDetail?.requiredClearCount || 0}
+      footer={
+        <ParentQuestViewFooter 
+          availableLevels={availableLevels}
+          selectedLevel={selectedLevel}
+          onLevelChange={setSelectedLevel}
+          onBack={() => router.back()}
+        />
+      }
+    />
       {/* 編集モーダル */}
       <QuestEditModal
         opened={editModalOpened}
