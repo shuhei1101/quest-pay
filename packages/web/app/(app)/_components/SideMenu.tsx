@@ -2,7 +2,7 @@
 
 import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL, LOGIN_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout, IconMenu2, IconX } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
@@ -47,6 +47,19 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   /** メニューアイテム */
   const menuItems = (
     <>
+      {/* ヘッダー部分（アプリアイコン、アプリ名、閉じるボタン） */}
+      <div className='flex items-center justify-between p-3 border-b border-gray-600'>
+        <div className='flex items-center gap-3'>
+          {/* アプリアイコン */}
+          <Image src="/icon512_maskable.png" alt="アプリアイコン" width={40} height={40} />
+          {/* アプリ名 */}
+          <Text size="lg" className='font-bold'>クエストペイ</Text>
+        </div>
+        {/* 閉じるボタン */}
+        <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
+          <IconX size={20} stroke={1.5} />
+        </ActionIcon>
+      </div>
       {/* プロフィールカード */}
       <Card 
         className='m-3 cursor-pointer hover:shadow-md transition-shadow'
@@ -141,34 +154,30 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   /** ミニメニューアイテム */
   const miniMenuItems = (
     <>
-      {/* ホームボタン（アプリアイコン） */}
-      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} size="xl" aria-label="ホーム">
-        <Image src="/icon512_maskable.png" alt="ホーム" width={32} height={32} />
+      {/* メニュー開閉ボタン（ハンバーガーメニュー） */}
+      <ActionIcon variant="subtle" onClick={onToggle} size="xl" aria-label="メニューを開く">
+        <IconMenu2 size={24} stroke={1.5} />
       </ActionIcon>
-      {/* メニュー開閉ボタン */}
-      <ActionIcon variant="subtle" onClick={onToggle} size="xl" aria-label="メニュー切り替え">
-        {opened ? (
-          <IconChevronLeft size={24} stroke={1.5} />
-        ) : (
-          <IconChevronRight size={24} stroke={1.5} />
-        )}
+      {/* ホームアイコン */}
+      <ActionIcon variant="subtle" onClick={() => router.push(HOME_URL)} aria-label="ホーム">
+        <IconHome2 color={menuColors.home} stroke={1.4} />
       </ActionIcon>
-      {/* 薄い線で境界 */}
-      <Divider className="w-4/5" />
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)} aria-label="クエスト">
         <IconClipboard color={menuColors.quest} stroke={1.4} />
       </ActionIcon>
       {/* メンバーアイコン（親のみ） */}
       {isParent && (
-        <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)}>
+        <ActionIcon variant="subtle" onClick={() => router.push(FAMILY_MEMBERS_URL)} aria-label="メンバー">
           <IconUsers color={menuColors.members} stroke={1.4} />
         </ActionIcon>
       )}
       {/* 設定アイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)}>
+      <ActionIcon variant="subtle" onClick={() => router.push(SETTINGS_URL)} aria-label="設定">
         <IconSettings color={menuColors.settings} stroke={1.4} />
       </ActionIcon>
+      {/* 薄い線で境界 */}
+      <Divider className="w-4/5" />
       {/* カラーパレット */}
       <ThemeToggleButton />
       {/* 通知ボタン */}
