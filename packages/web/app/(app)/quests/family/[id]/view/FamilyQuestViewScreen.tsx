@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { QuestViewLayout } from "../../../view/_components/QuestViewLayout"
 import { FamilyQuestViewLayout } from "./_components/FamilyQuestViewLayout"
 import { ParentQuestViewFooter } from "./_components/ParentQuestViewFooter"
 import { useFamilyQuest } from "./_hooks/useFamilyQuest"
