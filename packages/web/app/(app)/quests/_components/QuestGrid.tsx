@@ -61,24 +61,41 @@ export const QuestGrid = <T extends QuestItem>({
     return 4
   }
 
-  /** タブによってフィルタリングされたクエストを取得する */
-  const getFilteredQuests = () => {
-    if (!tabValue || tabValue === TAB_ALL) {
-      return quests
-    }
-    
-    if (tabValue === TAB_OTHERS) {
-      return quests.filter((quest) => quest.quest.categoryId === null)
-    }
-    
-    // カテゴリ名からIDを逆引き
-    const categoryId = Object.entries(questCategoryById ?? {})
-      .find(([_, category]) => category.name === tabValue)?.[0]
-    
-    return quests.filter((quest) => String(quest.quest.categoryId) === categoryId)
-  }
+  /** スクロールイベントを監視する */
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container || !onScrollBottom) return
 
-  const filteredQuests = getFilteredQuests()
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container
+      // 下端から100px以内に到達したらコールバックを実行する
+      if (scrollHeight - scrollTop - clientHeight < 100) {
+        onScrollBottom()
+      }
+    }
+
+    container.addEventListener("scroll", handleScroll)
+    return () => container.removeEventListener("scroll", handleScroll)
+  }, [onScrollBottom])
+
+  /** コンテンツの高さを監視し、スクロールバーが表示されない場合は自動的に次のページを取得する */
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container || !onScrollBottom) return
+
+    // コンテンツの高さがコンテナの高さより小さい場合、次のページを取得する
+    const checkContentHeight = () => {
+      const { scrollHeight, clientHeight } = container
+      if (scrollHeight <= clientHeight) {
+        // スクロールバーが表示されていない（コンテンツが少ない）
+        onScrollBottom()
+      }
+    }
+
+    // 少し遅延させてから実行（レンダリング完了後）
+    const timeoutId = setTimeout(checkContentHeight, 100)
+    return () => clearTimeout(timeoutId)
+  }, [quests.length, onScrollBottom])
 
   /** スクロールイベントを監視する */
   useEffect(() => {
@@ -161,7 +178,7 @@ export const QuestGrid = <T extends QuestItem>({
     >
       {/* クエストグリッド */}
       <SimpleGrid cols={getGridCols()} spacing="md">
-        {filteredQuests.map((quest, index) => renderQuest(quest, index))}
+        {quests.map((quest, index) => renderQuest(quest, index))}
       </SimpleGrid>
       
       {/* 無限スクロール用のセンチネル（カードが見切れないよう余白を確保する） */}

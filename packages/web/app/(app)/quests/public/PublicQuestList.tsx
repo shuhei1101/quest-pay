@@ -10,7 +10,7 @@ import { PublicQuestSortPopup } from "./_components/PublicQuestSortPopup"
 import { QuestListLayout } from "../_components/QuestListLayout"
 import { PublicQuestFilterScheme, type PublicQuest, type PublicQuestFilterType } from "@/app/api/quests/public/query"
 import type { QuestSort } from "@/drizzle/schema"
-import { FAMILY_QUESTS_URL, PUBLIC_QUEST_EDIT_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUESTS_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 公開クエストリストコンポーネント */
@@ -53,7 +53,7 @@ export const PublicQuestList = () => {
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
 
   /** クエスト一覧 */
-  const { fetchedQuests, isLoading, totalRecords, maxPage } = usePublicQuests({
+  const { fetchedQuests, isLoading, totalRecords, maxPage, refetch } = usePublicQuests({
     filter: searchFilter,
     sortColumn: sort.column,
     sortOrder: sort.order,
@@ -115,6 +115,21 @@ export const PublicQuestList = () => {
     handleSearch()
   }, [handleSearch])
 
+  /** リフレッシュハンドル */
+  const handleRefresh = useCallback(async () => {
+    await refetch()
+  }, [refetch])
+  /** カテゴリ変更時のハンドル */
+  const handleCategoryChange = useCallback((categoryId: string | undefined) => {
+    // カテゴリIDをフィルターに設定する
+    setSearchFilter((prev) => ({
+      ...prev,
+      categoryId
+    }))
+    // ページをリセットする
+    setPage(1)
+  }, [])
+
   return (
     <QuestListLayout<PublicQuest, PublicQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -130,6 +145,8 @@ export const PublicQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
+      onRefresh={handleRefresh}
+      onCategoryChange={handleCategoryChange}
       filterPopup={
         <PublicQuestFilterPopup
           close={closeFilter}

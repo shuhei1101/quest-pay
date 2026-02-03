@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
 import { RenderIcon } from '@/app/(app)/icons/_components/RenderIcon'
+import { useTheme } from '@/app/(core)/_theme/useTheme'
 import Image from 'next/image'
 import { ThemeToggleButton } from './ThemeToggleButton'
 import { useState } from 'react'
@@ -22,7 +23,8 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   const { isParent, userInfo, isLoading, isGuest } = useLoginUserInfo()
   /** 通知モーダルの開閉状態 */
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
-  
+  /** テーマ情報 */
+  const { colors } = useTheme()
   /** 通知データ */
   const { notifications } = useNotifications()
   
@@ -43,6 +45,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       appStorage.feedbackMessage.set({ message: "ログアウトに失敗しました", type: "error" })
     }
   }
+
 
   /** メニューアイテム */
   const menuItems = (
@@ -252,7 +255,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   }
 
   return (
-    <div className={`${isDark ? "bg-zinc-800!" : "bg-zinc-600!"} text-white h-full relative`}>
+    <div style={{ backgroundColor: colors.backgroundColors.card, color: colors.textColors.primary, height: '100%' }}>
       {/* ロード中のオーバーレイ */}
       <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 0 }} loaderProps={{ children: ' ' }} />
       {opened ? (

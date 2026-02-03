@@ -6,19 +6,22 @@ import { IconHome2, IconClipboard, IconUsers, IconMenu2 } from '@tabler/icons-re
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
+import { useTheme } from '@/app/(core)/_theme/useTheme'
 
 /** モバイル用ボトムバーを取得する */
 export const BottomBar = ({isDark, onToggleMenu}: {isDark: boolean, onToggleMenu: () => void}) => {
   const router = useRouter()
   /** ログインユーザ情報 */
   const { isParent } = useLoginUserInfo()
+  /** テーマ情報 */
+  const { colors } = useTheme()
 
   return (
     <Box
       style={{
         width: "100%",
         height: "70px",
-        background: isDark ? "rgba(39, 39, 42, 0.9)" : "rgba(255, 255, 255, 0.9)",
+        background: colors.backgroundColors.default,
         backdropFilter: "blur(8px)",
         display: "flex",
         justifyContent: "space-around",

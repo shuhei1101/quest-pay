@@ -14,7 +14,7 @@ import { useRejectReport } from "./_hooks/useRejectReport"
 import { useApproveReport } from "./_hooks/useApproveReport"
 import { useDeleteChildQuest } from "./_hooks/useDeleteChildQuest"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
-import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 import { Fragment } from "react"
 
 /** 子供クエスト閲覧画面 */
@@ -69,7 +69,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
                 childId,
                 updatedAt: childQuest?.base.updatedAt || '',
               })}
-              onEdit={() => router.push(FAMILY_QUEST_EDIT_URL(id))}
+              onEdit={() => router.push(FAMILY_QUEST_VIEW_URL(id))}
               onReset={() => handleDelete({familyQuestId: id, childId})}
             />
           ) : isChild ? (
