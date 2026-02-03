@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchChild } from "../query"
+import { fetchChild, fetchChildQuestStats } from "../query"
 import { fetchUserInfoByUserId } from "../../users/query"
 
 
 /** 子供を取得する */
 export type GetChildResponse = {
   child: Awaited<ReturnType<typeof fetchChild>>
+  questStats: Awaited<ReturnType<typeof fetchChildQuestStats>>
 }
 export async function GET(
   req: NextRequest,
@@ -34,6 +35,9 @@ export async function GET(
     // 家族IDが一致しない場合
     if (userInfo.profiles.familyId !== data.profiles?.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
 
-    return NextResponse.json({child: data} as GetChildResponse)
+    // クエスト統計を取得する
+    const questStats = await fetchChildQuestStats({db, childId})
+
+    return NextResponse.json({child: data, questStats} as GetChildResponse)
   })
 }
