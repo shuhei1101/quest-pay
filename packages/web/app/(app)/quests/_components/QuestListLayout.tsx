@@ -201,7 +201,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             onScrollBottom={handleScrollBottom}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
-            onTabChange={setTabValue}
+            onTabChange={handleTabChange}
             tabList={tabList}
           />
           {/* ローディング表示 */}
@@ -222,7 +222,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
               onScrollBottom={handleScrollBottom}
               tabValue={tabValue}
               questCategoryById={questCategoryById}
-              onTabChange={setTabValue}
+              onTabChange={handleTabChange}
               tabList={tabList}
             />
             {/* ローディング表示 */}
@@ -243,7 +243,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
             onScrollBottom={handleScrollBottom}
             tabValue={tabValue}
             questCategoryById={questCategoryById}
-            onTabChange={setTabValue}
+            onTabChange={handleTabChange}
             tabList={tabList}
           />
           {/* ローディング表示 */}
