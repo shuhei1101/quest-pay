@@ -171,6 +171,9 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
     }
   }
 
+  /** ローディング表示の高さ */
+  const LOADING_HEIGHT = "calc(100vh - 200px)"
+
   return (
     <div className="w-full">
       {/* クエストカテゴリタブ */}
@@ -196,7 +199,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
           <Tabs.Panel value={TAB_ALL} key={0}>
           {/* 初回ローディング中（クエスト0件かつローディング中）の表示 */}
           {isLoading && displayQuests.length === 0 ? (
-            <Center style={{ height: "calc(100vh - 200px)" }}>
+            <Center style={{ height: LOADING_HEIGHT }}>
               <Loader size="md" />
             </Center>
           ) : (
@@ -226,7 +229,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
           <Tabs.Panel value={category.name} key={category.id}>
             {/* 初回ローディング中（クエスト0件かつローディング中）の表示 */}
             {isLoading && displayQuests.length === 0 ? (
-              <Center style={{ height: "calc(100vh - 200px)" }}>
+              <Center style={{ height: LOADING_HEIGHT }}>
                 <Loader size="md" />
               </Center>
             ) : (
@@ -256,7 +259,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
         <Tabs.Panel value={TAB_OTHERS} key={-1}>
           {/* 初回ローディング中（クエスト0件かつローディング中）の表示 */}
           {isLoading && displayQuests.length === 0 ? (
-            <Center style={{ height: "calc(100vh - 200px)" }}>
+            <Center style={{ height: LOADING_HEIGHT }}>
               <Loader size="md" />
             </Center>
           ) : (
