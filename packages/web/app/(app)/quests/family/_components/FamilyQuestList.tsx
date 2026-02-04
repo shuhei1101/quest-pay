@@ -132,10 +132,6 @@ export const FamilyQuestList = () => {
     setSearchFilter(questFilter)
   }, [questFilter, router])
 
-  /** リフレッシュハンドル */
-  const handleRefresh = useCallback(async () => {
-    await refetch()
-  }, [refetch])
   /** カテゴリ変更時のハンドル */
   const handleCategoryChange = useCallback((categoryId: string | undefined) => {
     // カテゴリIDをフィルターに設定する
@@ -162,7 +158,6 @@ export const FamilyQuestList = () => {
       questCategoryById={questCategoryById}
       onFilterOpen={openFilter}
       onSortOpen={openSort}
-      onRefresh={handleRefresh}
       onCategoryChange={handleCategoryChange}
       filterPopup={
         <FamilyQuestFilterPopup
