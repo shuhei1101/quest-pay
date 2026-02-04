@@ -10,7 +10,6 @@ import { QuestCategoryById } from "@/app/api/quests/category/service"
 import { devLog } from "@/app/(core)/util"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
-
 type QuestItem = {
   quest: QuestSelect
 }
