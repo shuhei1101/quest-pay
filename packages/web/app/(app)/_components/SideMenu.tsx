@@ -182,7 +182,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {/* 閉じるボタン */}
       <div className="absolute top-0 right-0 z-10">
         <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
-          <IconPinnedOff size={20} stroke={1.5} />
+          <IconPinnedOff size={20} stroke={1.5} color='gray-0.5' />
         </ActionIcon>
       </div>
     </div>

@@ -9,7 +9,6 @@ import { QuestCategorySelect, QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
 import { devLog } from "@/app/(core)/util"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
-import { PullToRefresh } from "@/app/(core)/_components/PullToRefresh"
 
 type QuestItem = {
   quest: QuestSelect
@@ -32,7 +31,6 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   sortPopup,
   onFilterOpen,
   onSortOpen,
-  onRefresh,
   onCategoryChange,
 }: {
   /** 表示するクエスト一覧 */
@@ -65,8 +63,6 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   onFilterOpen: () => void
   /** ソートポップアップ開くハンドル */
   onSortOpen: () => void
-  /** リフレッシュハンドル */
-  onRefresh?: () => Promise<void>
   /** カテゴリ変更時のハンドル */
   onCategoryChange: (categoryId: string | undefined) => void
 }) => {
@@ -164,12 +160,10 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
     setDisplayQuests([])
   }
 
-  /** リフレッシュハンドル */
-  const handleRefresh = async () => {
-    if (onRefresh) {
-      await onRefresh()
-    }
-  }
+
+
+  /** ローディング表示の高さ */
+  const LOADING_HEIGHT = "calc(100vh - 200px)"
 
   return (
     <div className="w-full">
@@ -190,72 +184,96 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
 
         <div className="m-3" />
 
-        {/* プル トゥ リフレッシュ */}
-        <PullToRefresh onRefresh={handleRefresh}>
-          {/* すべてタブのパネル */}
-          <Tabs.Panel value={TAB_ALL} key={0}>
-          <QuestGrid<T>
-            quests={displayQuests}
-            renderQuest={renderQuestCard}
-            sentinelRef={sentinelRef}
-            onScrollBottom={handleScrollBottom}
-            tabValue={tabValue}
-            questCategoryById={questCategoryById}
-            onTabChange={setTabValue}
-            tabList={tabList}
-          />
-          {/* ローディング表示 */}
-          {isLoading && (
-            <Center className="my-4">
+        {/* すべてタブのパネル */}
+        <Tabs.Panel value={TAB_ALL} key={0}>
+          {/* 初回ローディング中（クエスト0件かつローディング中）の表示 */}
+          {isLoading && displayQuests.length === 0 ? (
+            <Center style={{ height: LOADING_HEIGHT }}>
               <Loader size="md" />
             </Center>
+          ) : (
+            <>
+              <QuestGrid<T>
+                quests={displayQuests}
+                renderQuest={renderQuestCard}
+                sentinelRef={sentinelRef}
+                onScrollBottom={handleScrollBottom}
+                tabValue={tabValue}
+                questCategoryById={questCategoryById}
+                onTabChange={handleTabChange}
+                tabList={tabList}
+              />
+              {/* 追加ページローディング表示 */}
+              {isLoading && displayQuests.length > 0 && (
+                <Center className="my-4">
+                  <Loader size="md" />
+                </Center>
+              )}
+            </>
           )}
         </Tabs.Panel>
 
         {/* カテゴリごとのパネル */}
         {questCategories.map((category) => (
           <Tabs.Panel value={category.name} key={category.id}>
-            <QuestGrid<T>
-              quests={displayQuests}
-              renderQuest={renderQuestCard}
-              sentinelRef={sentinelRef}
-              onScrollBottom={handleScrollBottom}
-              tabValue={tabValue}
-              questCategoryById={questCategoryById}
-              onTabChange={setTabValue}
-              tabList={tabList}
-            />
-            {/* ローディング表示 */}
-            {isLoading && (
-              <Center className="my-4">
+            {/* 初回ローディング中（クエスト0件かつローディング中）の表示 */}
+            {isLoading && displayQuests.length === 0 ? (
+              <Center style={{ height: LOADING_HEIGHT }}>
                 <Loader size="md" />
               </Center>
+            ) : (
+              <>
+                <QuestGrid<T>
+                  quests={displayQuests}
+                  renderQuest={renderQuestCard}
+                  sentinelRef={sentinelRef}
+                  onScrollBottom={handleScrollBottom}
+                  tabValue={tabValue}
+                  questCategoryById={questCategoryById}
+                  onTabChange={handleTabChange}
+                  tabList={tabList}
+                />
+                {/* 追加ページローディング表示 */}
+                {isLoading && displayQuests.length > 0 && (
+                  <Center className="my-4">
+                    <Loader size="md" />
+                  </Center>
+                )}
+              </>
             )}
           </Tabs.Panel>
         ))}
 
         {/* その他タブのパネル */}
         <Tabs.Panel value={TAB_OTHERS} key={-1}>
-          <QuestGrid<T>
-            quests={displayQuests}
-            renderQuest={renderQuestCard}
-            sentinelRef={sentinelRef}
-            onScrollBottom={handleScrollBottom}
-            tabValue={tabValue}
-            questCategoryById={questCategoryById}
-            onTabChange={setTabValue}
-            tabList={tabList}
-          />
-          {/* ローディング表示 */}
-          {isLoading && (
-            <Center className="my-4">
+          {/* 初回ローディング中（クエスト0件かつローディング中）の表示 */}
+          {isLoading && displayQuests.length === 0 ? (
+            <Center style={{ height: LOADING_HEIGHT }}>
               <Loader size="md" />
             </Center>
+          ) : (
+            <>
+              <QuestGrid<T>
+                quests={displayQuests}
+                renderQuest={renderQuestCard}
+                sentinelRef={sentinelRef}
+                onScrollBottom={handleScrollBottom}
+                tabValue={tabValue}
+                questCategoryById={questCategoryById}
+                onTabChange={handleTabChange}
+                tabList={tabList}
+              />
+              {/* 追加ページローディング表示 */}
+              {isLoading && displayQuests.length > 0 && (
+                <Center className="my-4">
+                  <Loader size="md" />
+                </Center>
+              )}
+            </>
           )}
         </Tabs.Panel>
 
         <div className="m-5" />
-        </PullToRefresh>
       </QuestCategoryTabs>
 
       {/* フィルターポップアップ */}
