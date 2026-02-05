@@ -180,11 +180,13 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         />
       )}
       {/* 閉じるボタン */}
-      <div className="absolute top-0 right-0 z-10">
-        <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
-          <IconPinnedOff size={20} stroke={1.5} color='gray-0.5' />
-        </ActionIcon>
-      </div>
+      {!isMobile && (
+        <div className="absolute top-0 right-0 z-10">
+          <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
+            <IconPinnedOff size={20} stroke={1} color={isDark ? '#f5f5f5' : '#808080'} />
+          </ActionIcon>
+        </div>
+      )}
     </div>
   )
 
@@ -248,7 +250,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
 
   if (isMobile) {
     return (
-      <Drawer opened={opened} onClose={onClose} title="メニュー" size="xs" >
+      <Drawer opened={opened} onClose={onClose}  size="xs" >
         {menuItems}
       </Drawer>
     )
@@ -261,7 +263,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {opened ? (
         <ScrollArea h="100%">{menuItems}</ScrollArea>
       ) : (
-        <div className="flex flex-col items-center gap-4 py-4">
+        <div className="flex flex-col items-center gap-2 py-4">
           {miniMenuItems}
         </div>
       )}

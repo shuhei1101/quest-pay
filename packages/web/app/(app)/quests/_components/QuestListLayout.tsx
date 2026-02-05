@@ -1,5 +1,5 @@
 "use client"
-import { useState, ReactNode, useEffect } from "react"
+import { useState, ReactNode, useEffect, memo, useCallback, useMemo } from "react"
 import { Tabs, Loader, Center } from "@mantine/core"
 import { useDisclosure, useIntersection } from "@mantine/hooks"
 import { QuestCategoryTabs } from "./QuestCategoryTabs"
@@ -15,7 +15,7 @@ type QuestItem = {
 }
 
 /** クエストリストレイアウトコンポーネント */
-export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
+const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
   quests,
   page,
   maxPage,
@@ -69,8 +69,15 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   /** タブ状態 */
   const [tabValue, setTabValue] = useState<string | null>(TAB_ALL)
 
+  /** タブリスト */
+  const tabList = useMemo(() => [
+    TAB_ALL,
+    ...questCategories.map(c => c.name),
+    TAB_OTHERS
+  ], [questCategories])
+
   /** タブ変更時のハンドル */
-  const handleTabChange = (value: string | null) => {
+  const handleTabChange = useCallback((value: string | null) => {
     setTabValue(value)
     
     // カテゴリIDを特定する
@@ -90,14 +97,7 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
     
     // カテゴリ変更イベントを発火する
     onCategoryChange(categoryId)
-  }
-
-  /** タブリスト */
-  const tabList = [
-    TAB_ALL,
-    ...questCategories.map(c => c.name),
-    TAB_OTHERS
-  ]
+  }, [questCategoryById, onCategoryChange])
 
   /** 現在のクエスト一覧状態 */
   const [displayQuests, setDisplayQuests] = useState<T[]>([])
@@ -122,14 +122,14 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   const [isLoadingMore, setIsLoadingMore] = useState(false)
 
   /** スクロール最下部検知時のハンドル */
-  const handleScrollBottom = () => {
+  const handleScrollBottom = useCallback(() => {
     devLog("スクロール最下部検知。現在のページ: ", { page, maxPage, totalRecords, isLoading, isLoadingMore })
     // 次のページが存在し、かつ現在読み込み中でない場合のみ実行する
     if (page < maxPage && !isLoading && !isLoadingMore) {
       setIsLoadingMore(true)
       onPageChange(page + 1)
     }
-  }
+  }, [page, maxPage, totalRecords, isLoading, isLoadingMore, onPageChange])
 
   /** ローディング状態が変わったらフラグをリセットする */
   useEffect(() => {
@@ -149,16 +149,16 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
   }, [quests, page])
 
   /** 検索テキスト変更＋検索実行のハンドル */
-  const handleSearchWithText = (searchText: string) => {
+  const handleSearchWithText = useCallback((searchText: string) => {
     onSearchTextChange(searchText)
     onSearch()
-  }
+  }, [onSearchTextChange, onSearch])
 
   /** 検索実行前のリセット処理 */
-  const resetForSearch = () => {
+  const resetForSearch = useCallback(() => {
     onPageChange(1)
     setDisplayQuests([])
-  }
+  }, [onPageChange])
 
 
 
@@ -284,3 +284,6 @@ export const QuestListLayout = <T extends QuestItem, TFilter, TSort>({
     </div>
   )
 }
+
+/** メモ化されたクエストリストレイアウトコンポーネント */
+export const QuestListLayout = memo(QuestListLayoutComponent) as typeof QuestListLayoutComponent
