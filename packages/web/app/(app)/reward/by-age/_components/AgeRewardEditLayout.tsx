@@ -1,8 +1,10 @@
 "use client"
-import { Box, Text, Table, Button, Group, NumberInput } from "@mantine/core"
-import { GRADE_GROUPS, getGradeName } from "../../util/gradeUtil"
+import { Box, Text, Table, Button, Group, NumberInput, ActionIcon, Modal, Slider, RangeSlider } from "@mantine/core"
+import { GRADE_GROUPS, getGradeName, getDisplayName, DisplayMode } from "../../util/utils"
 import { UseFormReturn } from "react-hook-form"
 import { AgeRewardFormType } from "../form"
+import { IconSwitchHorizontal, IconFilter } from "@tabler/icons-react"
+import { useState } from "react"
 
 /** お小遣い編集レイアウト */
 export const AgeRewardEditLayout = ({
@@ -13,6 +15,11 @@ export const AgeRewardEditLayout = ({
   onSubmit: (data: AgeRewardFormType) => void
 }) => {
   const ageRewards = form.watch("rewards")
+  const [displayMode, setDisplayMode] = useState<DisplayMode>("grade")
+  const [ageRange, setAgeRange] = useState<[number, number]>([5, 22])
+  const [batchModalOpened, setBatchModalOpened] = useState(false)
+  const [batchAmount, setBatchAmount] = useState<number>(0)
+  const [selectedGroup, setSelectedGroup] = useState<{name: string, ages: number[]} | null>(null)
 
   /** 年齢別の合計金額を計算する */
   const calculateAgeTotal = () => {
@@ -28,19 +35,68 @@ export const AgeRewardEditLayout = ({
   }
 
   /** 一括設定処理 */
-  const handleBatchSet = (ages: number[], amount: number) => {
+  const handleBatchSet = (ages: number[]) => {
     const updatedRewards = ageRewards.map(reward => {
       if (ages.includes(reward.age)) {
-        return { ...reward, amount }
+        return { ...reward, amount: batchAmount }
       }
       return reward
     })
     form.setValue("rewards", updatedRewards, { shouldDirty: true })
+    setBatchModalOpened(false)
+    setBatchAmount(0)
+  }
+
+  /** 年齢範囲でフィルタリングされたグループを取得する */
+  const getFilteredGroups = () => {
+    return GRADE_GROUPS.map(group => ({
+      ...group,
+      ages: group.ages.filter(age => age >= ageRange[0] && age <= ageRange[1])
+    })).filter(group => group.ages.length > 0)
   }
 
   return (
     <Box className="space-y-6">
-      {GRADE_GROUPS.map((group) => {
+      {/* 表示切り替えと年齢範囲設定のコントロール */}
+      <Group justify="flex-end" gap="xs">
+        {/* 表示モード切り替えボタン */}
+        <Button
+          size="compact-sm"
+          variant="light"
+          leftSection={<IconSwitchHorizontal size={16} />}
+          onClick={() => setDisplayMode(displayMode === "age" ? "grade" : "age")}
+        >
+          {displayMode === "age" ? "学年表示" : "年齢表示"}
+        </Button>
+        {/* 年齢範囲設定ボタン */}
+        <Button
+          size="compact-sm"
+          variant="light"
+          leftSection={<IconFilter size={16} />}
+        >
+          {ageRange[0]}歳〜{ageRange[1]}歳
+        </Button>
+      </Group>
+
+      {/* 年齢範囲スライダー */}
+      <Box>
+        <Text size="sm" mb="xs" c="dimmed">年齢範囲を設定</Text>
+        <RangeSlider
+          min={5}
+          max={22}
+          value={ageRange}
+          onChange={setAgeRange}
+          marks={[
+            { value: 5, label: '5歳' },
+            { value: 10, label: '10歳' },
+            { value: 15, label: '15歳' },
+            { value: 20, label: '20歳' },
+            { value: 22, label: '22歳' },
+          ]}
+        />
+      </Box>
+
+      {getFilteredGroups().map((group) => {
         const groupTotal = calculateGroupTotal(group.ages)
         const years = group.ages.length
 
@@ -55,10 +111,8 @@ export const AgeRewardEditLayout = ({
                   size="compact-xs" 
                   variant="light"
                   onClick={() => {
-                    const amount = window.prompt(`${group.name}の一括設定金額を入力してください（円/月）`)
-                    if (amount !== null && amount.trim() !== "") {
-                      handleBatchSet(group.ages, parseInt(amount, 10) || 0)
-                    }
+                    setSelectedGroup(group)
+                    setBatchModalOpened(true)
                   }}
                 >
                   設定
@@ -74,7 +128,7 @@ export const AgeRewardEditLayout = ({
                   
                   return (
                     <Table.Tr key={age}>
-                      <Table.Td width="50%">{getGradeName(age)}</Table.Td>
+                      <Table.Td width="50%">{getDisplayName(age, displayMode)}</Table.Td>
                       <Table.Td width="50%">
                         <NumberInput
                           value={ageRewards[rewardIndex]?.amount || 0}
@@ -123,6 +177,43 @@ export const AgeRewardEditLayout = ({
           </Table.Tbody>
         </Table>
       </Box>
+
+      {/* 一括設定モーダル */}
+      <Modal
+        opened={batchModalOpened}
+        onClose={() => {
+          setBatchModalOpened(false)
+          setBatchAmount(0)
+        }}
+        title={`${selectedGroup?.name}の一括設定`}
+        centered
+      >
+        <Box className="space-y-4">
+          <NumberInput
+            label="金額（円/月）"
+            value={batchAmount}
+            onChange={(value) => setBatchAmount(Number(value) || 0)}
+            min={0}
+            placeholder="金額を入力してください"
+          />
+          <Group justify="flex-end" gap="xs">
+            <Button
+              variant="light"
+              onClick={() => {
+                setBatchModalOpened(false)
+                setBatchAmount(0)
+              }}
+            >
+              キャンセル
+            </Button>
+            <Button
+              onClick={() => selectedGroup && handleBatchSet(selectedGroup.ages)}
+            >
+              設定
+            </Button>
+          </Group>
+        </Box>
+      </Modal>
     </Box>
   )
 }

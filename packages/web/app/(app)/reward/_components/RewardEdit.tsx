@@ -74,10 +74,12 @@ export const RewardEdit = () => {
             variant="light" 
             color="blue"
             onClick={() => {
-              if (activeTab === "age") {
-                ageForm.setForm(ageForm.fetchedAgeReward)
-              } else {
-                levelForm.setForm(levelForm.fetchedLevelReward)
+              if (window.confirm("入力内容を破棄してもよろしいですか？")) {
+                if (activeTab === "age") {
+                  ageForm.setForm(ageForm.fetchedAgeReward)
+                } else {
+                  levelForm.setForm(levelForm.fetchedLevelReward)
+                }
               }
             }}
           >

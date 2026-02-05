@@ -10,9 +10,20 @@ export const GRADE_GROUPS = [
 /** 学年名を取得する */
 export const getGradeName = (age: number): string => {
   if (age <= 6) return `${age}歳`
-  if (age <= 12) return `${age - 6}年生(${age}歳)`
+  if (age <= 12) return `${age - 6}年生`
   if (age <= 15) return `${age - 12}年生`
   if (age <= 18) return `${age - 15}年生`
   if (age <= 22) return `${age - 18}年生`
   return `${age}歳`
+}
+
+/** 表示モード型 */
+export type DisplayMode = "age" | "grade"
+
+/** 表示名を取得する（年齢表示/学年表示を切り替え可能） */
+export const getDisplayName = (age: number, mode: DisplayMode): string => {
+  if (mode === "age") {
+    return `${age}歳`
+  }
+  return getGradeName(age)
 }

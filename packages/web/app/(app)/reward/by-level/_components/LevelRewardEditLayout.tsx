@@ -13,6 +13,11 @@ export const LevelRewardEditLayout = ({
 }) => {
   const levelRewards = form.watch("rewards")
 
+  /** 合計金額を計算する */
+  const calculateTotal = () => {
+    return levelRewards.reduce((sum, reward) => sum + reward.amount, 0)
+  }
+
   return (
     <Box>
       <Table striped withTableBorder withColumnBorders>
@@ -39,6 +44,13 @@ export const LevelRewardEditLayout = ({
               </Table.Td>
             </Table.Tr>
           ))}
+          {/* 合計行 */}
+          <Table.Tr>
+            <Table.Td fw={700}>合計</Table.Td>
+            <Table.Td className="text-right" fw={700}>
+              {calculateTotal().toLocaleString()}円
+            </Table.Td>
+          </Table.Tr>
         </Table.Tbody>
       </Table>
     </Box>
