@@ -1,25 +1,7 @@
-import { z } from "zod"
+// このファイルは後方互換性のために残されています
+// 新しいコードでは by-age/form.ts と by-level/form.ts を直接インポートしてください
 
-/** 年齢別報酬フォームスキーマ */
-export const AgeRewardFormSchema = z.object({
-  rewards: z.array(
-    z.object({
-      age: z.number().int().min(0).max(100),
-      amount: z.number().int().min(0)
-    })
-  )
-})
-
-export type AgeRewardFormType = z.infer<typeof AgeRewardFormSchema>
-
-/** レベル別報酬フォームスキーマ */
-export const LevelRewardFormSchema = z.object({
-  rewards: z.array(
-    z.object({
-      level: z.number().int().min(1).max(100),
-      amount: z.number().int().min(0)
-    })
-  )
-})
-
-export type LevelRewardFormType = z.infer<typeof LevelRewardFormSchema>
+export type { AgeRewardFormType } from "./by-age/form"
+export type { LevelRewardFormType } from "./by-level/form"
+export { AgeRewardFormSchema } from "./by-age/form"
+export { LevelRewardFormSchema } from "./by-level/form"

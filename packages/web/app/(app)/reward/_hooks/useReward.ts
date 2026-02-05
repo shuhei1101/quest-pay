@@ -1,3 +1,6 @@
+// このファイルは後方互換性のために残されています
+// 新しいコードでは by-age/_hooks/useAgeRewardForm.ts と by-level/_hooks/useLevelRewardForm.ts を直接インポートしてください
+
 import { useQuery } from "@tanstack/react-query"
 import { getFamilyAgeRewardTable } from "@/app/api/reward/by-age/table/client"
 import { getFamilyLevelRewardTable } from "@/app/api/reward/by-level/table/client"
