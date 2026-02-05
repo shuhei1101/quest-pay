@@ -1,5 +1,5 @@
 "use client"
-import { Box, Table } from "@mantine/core"
+import { Box, Table, Text } from "@mantine/core"
 
 /** ランク報酬閲覧レイアウト */
 export const LevelRewardViewLayout = ({

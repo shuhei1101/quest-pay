@@ -10,10 +10,10 @@ export const GRADE_GROUPS = [
 /** 学年名を取得する */
 export const getGradeName = (age: number): string => {
   if (age <= 6) return `${age}歳`
-  if (age <= 12) return `${age - 6}年生`
-  if (age <= 15) return `${age - 12}年生`
-  if (age <= 18) return `${age - 15}年生`
-  if (age <= 22) return `${age - 18}年生`
+  if (age <= 12) return `小学${age - 6}年生`
+  if (age <= 15) return `中学${age - 12}年生`
+  if (age <= 18) return `高校${age - 15}年生`
+  if (age <= 22) return `大学${age - 18}年生`
   return `${age}歳`
 }
 
