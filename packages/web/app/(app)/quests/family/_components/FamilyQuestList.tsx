@@ -1,6 +1,6 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useMemo, memo } from "react"
 import { useFamilyQuests } from "../_hooks/useFamilyQuests"
 import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"
 import { useDisclosure } from "@mantine/hooks"
@@ -13,7 +13,7 @@ import type { QuestSort } from "@/drizzle/schema"
 import { FAMILY_QUEST_VIEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 
 /** 家族クエストリストコンポーネント */
-export const FamilyQuestList = () => {
+const FamilyQuestListComponent = () => {
   const router = useRouter()
 
   /** フィルターポップアップ制御状態 */
@@ -43,7 +43,7 @@ export const FamilyQuestList = () => {
 
   /** ページャ状態 */
   const [page, setPage] = useState<number>(1)
-  const pageSize = 100
+  const pageSize = 30
 
   /** クエストカテゴリ */
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
@@ -143,6 +143,26 @@ export const FamilyQuestList = () => {
     setPage(1)
   }, [])
 
+  /** フィルターポップアップコンポーネント */
+  const filterPopup = useMemo(() => (
+    <FamilyQuestFilterPopup
+      close={closeFilter}
+      handleSearch={handleFilterSearch}
+      currentFilter={questFilter}
+      opened={filterOpened}
+    />
+  ), [closeFilter, handleFilterSearch, questFilter, filterOpened])
+
+  /** ソートポップアップコンポーネント */
+  const sortPopup = useMemo(() => (
+    <FamilyQuestSortPopup
+      close={closeSort}
+      handleSearch={handleSortSearch}
+      opened={sortOpened}
+      currentSort={sort}
+    />
+  ), [closeSort, handleSortSearch, sortOpened, sort])
+
   return (
     <QuestListLayout<FamilyQuest, FamilyQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -159,22 +179,11 @@ export const FamilyQuestList = () => {
       onFilterOpen={openFilter}
       onSortOpen={openSort}
       onCategoryChange={handleCategoryChange}
-      filterPopup={
-        <FamilyQuestFilterPopup
-          close={closeFilter}
-          handleSearch={handleFilterSearch}
-          currentFilter={questFilter}
-          opened={filterOpened}
-        />
-      }
-      sortPopup={
-        <FamilyQuestSortPopup
-          close={closeSort}
-          handleSearch={handleSortSearch}
-          opened={sortOpened}
-          currentSort={sort}
-        />
-      }
+      filterPopup={filterPopup}
+      sortPopup={sortPopup}
     />
   )
 }
+
+/** メモ化された家族クエストリストコンポーネント */
+export const FamilyQuestList = memo(FamilyQuestListComponent)

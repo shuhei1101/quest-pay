@@ -67,20 +67,6 @@ export function FamilyQuestsScreen() {
     },
   ]
 
-    const GuestScreen = () => (
-    <div className="w-full h-[80vh] flex flex-col items-center justify-center">
-      <Text className="text-lg mb-4">ログインが必要です。</Text>
-      <Button
-        onClick={() => router.push(`${LOGIN_URL}`)}
-      >
-        <>
-          <Text>ログイン</Text>
-          <IconLogout style={{ width: '70%', height: '70%' }} stroke={1.5} />
-        </>
-      </Button>
-    </div>
-  )
-
   return (
     <FloatingLayout
       bottomRight={

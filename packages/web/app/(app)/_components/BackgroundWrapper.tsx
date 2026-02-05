@@ -33,9 +33,10 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
           height: "100vh",
           position: "relative",
           overflow: "hidden",
+          backgroundColor: isSystemDark ? "#1a1b1e" : "#faf8f3",
         }}
       >
-        <Image
+        {/* <Image
           src={isSystemDark ? "/images/bg-dark.png" : "/images/bg-light.png"}
           alt="bg"
           style={{
@@ -46,7 +47,8 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
             objectFit: "cover",
             zIndex: 0,
           }}
-        />
+        /> */}
+
         <Box
           style={{
             position: "relative",

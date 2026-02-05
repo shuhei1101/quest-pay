@@ -8,7 +8,7 @@ import { themes, ThemeKey } from '@/app/(core)/_theme/themes'
 /** テーマ切り替えボタンを取得する */
 export const ThemeToggleButton = ({
   variant = "subtle",
-  size = 24,
+  size = 26,
   iconStroke = 1.5
 }: {
   variant?: "subtle" | "filled" | "light" | "outline" | "default" | "transparent"

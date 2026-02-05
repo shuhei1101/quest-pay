@@ -1,6 +1,6 @@
 "use client"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useMemo, memo } from "react"
 import { usePublicQuests } from "./_hooks/usePublicQuests"
 import { useQuestCategories } from "@/app/(app)/quests/category/_hook/useQuestCategories"
 import { useDisclosure } from "@mantine/hooks"
@@ -14,7 +14,7 @@ import { FAMILY_QUESTS_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 /** 公開クエストリストコンポーネント */
-export const PublicQuestList = () => {
+const PublicQuestListComponent = () => {
   const router = useRouter()
 
   // ログインユーザ情報を取得する
@@ -47,7 +47,7 @@ export const PublicQuestList = () => {
 
   /** ページャ状態 */
   const [page, setPage] = useState<number>(1)
-  const pageSize = 100
+  const pageSize = 30
 
   /** クエストカテゴリ */
   const { questCategories, questCategoryById, isLoading: categoryLoading } = useQuestCategories()
@@ -152,6 +152,26 @@ export const PublicQuestList = () => {
     setPage(1)
   }, [])
 
+  /** フィルターポップアップコンポーネント */
+  const filterPopup = useMemo(() => (
+    <PublicQuestFilterPopup
+      close={closeFilter}
+      handleSearch={handleFilterSearch}
+      currentFilter={questFilter}
+      opened={filterOpened}
+    />
+  ), [closeFilter, handleFilterSearch, questFilter, filterOpened])
+
+  /** ソートポップアップコンポーネント */
+  const sortPopup = useMemo(() => (
+    <PublicQuestSortPopup
+      close={closeSort}
+      handleSearch={handleSortSearch}
+      opened={sortOpened}
+      currentSort={sort}
+    />
+  ), [closeSort, handleSortSearch, sortOpened, sort])
+
   return (
     <QuestListLayout<PublicQuest, PublicQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -168,22 +188,11 @@ export const PublicQuestList = () => {
       onFilterOpen={openFilter}
       onSortOpen={openSort}
       onCategoryChange={handleCategoryChange}
-      filterPopup={
-        <PublicQuestFilterPopup
-          close={closeFilter}
-          handleSearch={handleFilterSearch}
-          currentFilter={questFilter}
-          opened={filterOpened}
-        />
-      }
-      sortPopup={
-        <PublicQuestSortPopup
-          close={closeSort}
-          handleSearch={handleSortSearch}
-          opened={sortOpened}
-          currentSort={sort}
-        />
-      }
+      filterPopup={filterPopup}
+      sortPopup={sortPopup}
     />
   )
 }
+
+/** メモ化された公開クエストリストコンポーネント */
+export const PublicQuestList = memo(PublicQuestListComponent)
