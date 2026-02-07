@@ -1,5 +1,5 @@
 "use client"
-import { ReactNode, useState, useCallback } from "react"
+import { ReactNode } from "react"
 import { QuestCategorySelect } from "@/drizzle/schema"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"

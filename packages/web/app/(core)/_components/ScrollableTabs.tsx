@@ -1,6 +1,6 @@
 "use client"
 import { Tabs } from "@mantine/core"
-import { ReactNode, useRef, useEffect } from "react"
+import { ReactNode, useRef, useEffect, useMemo } from "react"
 import { useSwipeable } from "react-swipeable"
 
 /** スクロール可能なタブアイテムの型 */
@@ -37,7 +37,7 @@ export const ScrollableTabs = ({ value, onChange, items, children, enableSwipe =
   const SCROLL_MARGIN = 16
 
   /** タブリスト（スワイプ用） */
-  const tabList = items.map((item) => item.value)
+  const tabList = useMemo(() => items.map((item) => item.value), [items])
 
   /** 左右スワイプ時のハンドル */
   const swipeHandlers = useSwipeable({
@@ -105,12 +105,14 @@ export const ScrollableTabs = ({ value, onChange, items, children, enableSwipe =
     }
   }, [])
 
-  /** スワイプハンドラを親コンポーネントに提供する */
+  /** スワイプハンドラを親コンポーネントに提供する（初回のみ） */
   useEffect(() => {
     if (getSwipeHandlers && enableSwipe) {
       getSwipeHandlers(swipeHandlers)
     }
-  }, [getSwipeHandlers, enableSwipe, swipeHandlers])
+    // swipeHandlersを依存配列に含めると毎回実行されるため、意図的に除外
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getSwipeHandlers, enableSwipe])
 
   return (
     <div style={{ height: "100%" }}>
