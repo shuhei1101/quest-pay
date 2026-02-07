@@ -1,6 +1,7 @@
 "use client"
 import { Tabs } from "@mantine/core"
 import { ReactNode, useRef, useEffect } from "react"
+import { useSwipeable } from "react-swipeable"
 
 /** スクロール可能なタブアイテムの型 */
 export type ScrollableTabItem = {
@@ -15,7 +16,7 @@ export type ScrollableTabItem = {
 }
 
 /** 横スクロール可能なタブコンポーネント */
-export const ScrollableTabs = ({ value, onChange, items, children }: {
+export const ScrollableTabs = ({ value, onChange, items, children, enableSwipe = false, getSwipeHandlers }: {
   /** 現在選択されているタブの値 */
   value: string | null
   /** タブ変更時のハンドラ */
@@ -24,12 +25,42 @@ export const ScrollableTabs = ({ value, onChange, items, children }: {
   items: ScrollableTabItem[]
   /** タブパネルの内容 */
   children: ReactNode
+  /** スワイプ操作を有効にするか */
+  enableSwipe?: boolean
+  /** スワイプハンドラを取得するコールバック（子コンポーネントでスワイプ範囲を指定する場合に使用） */
+  getSwipeHandlers?: (handlers: ReturnType<typeof useSwipeable>) => void
 }) => {
   /** タブリストコンテナの参照 */
   const tabListRef = useRef<HTMLDivElement>(null)
 
   /** スクロール時の余白（ピクセル） */
   const SCROLL_MARGIN = 16
+
+  /** タブリスト（スワイプ用） */
+  const tabList = items.map((item) => item.value)
+
+  /** 左右スワイプ時のハンドル */
+  const swipeHandlers = useSwipeable({
+    onSwiped: (event) => {
+      if (!enableSwipe || !value) return
+      
+      const idx = tabList.indexOf(value)
+      
+      // インデックスが見つからない場合は何もしない
+      if (idx === -1) return
+
+      if (event.dir === "Left") {
+        // 次のタブへ
+        const next = tabList[idx + 1]
+        if (next) onChange(next)
+      } else if (event.dir === "Right") {
+        // 前のタブへ
+        const prev = tabList[idx - 1]
+        if (prev) onChange(prev)
+      }
+    },
+    trackMouse: true
+  })
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */
   useEffect(() => {
@@ -73,6 +104,13 @@ export const ScrollableTabs = ({ value, onChange, items, children }: {
       container.removeEventListener('wheel', handleWheel)
     }
   }, [])
+
+  /** スワイプハンドラを親コンポーネントに提供する */
+  useEffect(() => {
+    if (getSwipeHandlers && enableSwipe) {
+      getSwipeHandlers(swipeHandlers)
+    }
+  }, [getSwipeHandlers, enableSwipe, swipeHandlers])
 
   return (
     <div style={{ height: "100%" }}>

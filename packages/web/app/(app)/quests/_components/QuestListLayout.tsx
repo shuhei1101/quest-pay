@@ -9,6 +9,7 @@ import { QuestCategorySelect, QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
 import { devLog } from "@/app/(core)/util"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
+import { useSwipeable } from "react-swipeable"
 
 type QuestItem = {
   quest: QuestSelect
@@ -75,6 +76,14 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
     ...questCategories.map(c => c.name),
     TAB_OTHERS
   ], [questCategories])
+
+  /** スワイプハンドラの状態 */
+  const [swipeHandlers, setSwipeHandlers] = useState<ReturnType<typeof useSwipeable> | null>(null)
+
+  /** スワイプハンドラを取得する */
+  const handleGetSwipeHandlers = useCallback((handlers: ReturnType<typeof useSwipeable>) => {
+    setSwipeHandlers(handlers)
+  }, [])
 
   /** タブ変更時のハンドル */
   const handleTabChange = useCallback((value: string | null) => {
@@ -172,6 +181,8 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
         tabValue={tabValue}
         onTabChange={handleTabChange}
         categories={questCategories}
+        enableSwipe={true}
+        getSwipeHandlers={handleGetSwipeHandlers}
       >
         <div className="m-3" />
 
@@ -198,10 +209,7 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 renderQuest={renderQuestCard}
                 sentinelRef={sentinelRef}
                 onScrollBottom={handleScrollBottom}
-                tabValue={tabValue}
-                questCategoryById={questCategoryById}
-                onTabChange={handleTabChange}
-                tabList={tabList}
+                swipeHandlers={swipeHandlers || undefined}
               />
               {/* 追加ページローディング表示 */}
               {isLoading && displayQuests.length > 0 && (
@@ -228,10 +236,7 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                   renderQuest={renderQuestCard}
                   sentinelRef={sentinelRef}
                   onScrollBottom={handleScrollBottom}
-                  tabValue={tabValue}
-                  questCategoryById={questCategoryById}
-                  onTabChange={handleTabChange}
-                  tabList={tabList}
+                  swipeHandlers={swipeHandlers || undefined}
                 />
                 {/* 追加ページローディング表示 */}
                 {isLoading && displayQuests.length > 0 && (
@@ -258,10 +263,7 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 renderQuest={renderQuestCard}
                 sentinelRef={sentinelRef}
                 onScrollBottom={handleScrollBottom}
-                tabValue={tabValue}
-                questCategoryById={questCategoryById}
-                onTabChange={handleTabChange}
-                tabList={tabList}
+                swipeHandlers={swipeHandlers || undefined}
               />
               {/* 追加ページローディング表示 */}
               {isLoading && displayQuests.length > 0 && (
