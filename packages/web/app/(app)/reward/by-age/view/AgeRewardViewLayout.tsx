@@ -75,9 +75,9 @@ export const AgeRewardViewLayout = ({
               <Table.Td width="60%" className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
                 <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
               </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
-          </Table>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table>
         </Box>
       </Box>
     </Box>
