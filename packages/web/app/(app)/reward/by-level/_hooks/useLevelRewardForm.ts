@@ -30,7 +30,6 @@ export const useLevelRewardForm = () => {
   // レベル別報酬テーブルを取得する
   const { data, error, isLoading } = useQuery({
     queryKey: ["levelRewardTable"],
-    retry: false,
     queryFn: async () => {
       const { levelRewardTable } = await getFamilyLevelRewardTable()
       

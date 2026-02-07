@@ -30,7 +30,6 @@ export const useAgeRewardForm = () => {
   // 年齢別報酬テーブルを取得する
   const { data, error, isLoading } = useQuery({
     queryKey: ["ageRewardTable"],
-    retry: false,
     queryFn: async () => {
       const { ageRewardTable } = await getFamilyAgeRewardTable()
       
