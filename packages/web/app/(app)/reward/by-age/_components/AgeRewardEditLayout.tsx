@@ -1,5 +1,5 @@
 "use client"
-import { Box, Text, Table, Button, Group, NumberInput, ActionIcon, Modal, Slider, RangeSlider } from "@mantine/core"
+import { Box, Text, Table, Button, Group, NumberInput, ActionIcon, Modal, Select } from "@mantine/core"
 import { GRADE_GROUPS, getGradeName, getDisplayName, DisplayMode } from "../../util/utils"
 import { UseFormReturn } from "react-hook-form"
 import { AgeRewardFormType } from "../form"
@@ -17,6 +17,9 @@ export const AgeRewardEditLayout = ({
   const ageRewards = form.watch("rewards")
   const [displayMode, setDisplayMode] = useState<DisplayMode>("grade")
   const [ageRange, setAgeRange] = useState<[number, number]>([5, 22])
+  const [ageRangeModalOpened, setAgeRangeModalOpened] = useState(false)
+  const [ageFrom, setAgeFrom] = useState(5)
+  const [ageTo, setAgeTo] = useState(22)
   const [batchModalOpened, setBatchModalOpened] = useState(false)
   const [batchAmount, setBatchAmount] = useState<number>(0)
   const [selectedGroup, setSelectedGroup] = useState<{name: string, ages: number[]} | null>(null)
@@ -56,7 +59,7 @@ export const AgeRewardEditLayout = ({
   }
 
   return (
-    <Box className="space-y-6">
+    <Box className="space-y-6" style={{ overflow: "hidden", width: "100%" }}>
       {/* 表示切り替えと年齢範囲設定のコントロール */}
       <Group justify="flex-end" gap="xs">
         {/* 表示モード切り替えボタン */}
@@ -73,28 +76,66 @@ export const AgeRewardEditLayout = ({
           size="compact-sm"
           variant="light"
           leftSection={<IconFilter size={16} />}
+          onClick={() => {
+            setAgeFrom(ageRange[0])
+            setAgeTo(ageRange[1])
+            setAgeRangeModalOpened(true)
+          }}
         >
           {ageRange[0]}歳〜{ageRange[1]}歳
         </Button>
       </Group>
 
-      {/* 年齢範囲スライダー */}
-      <Box>
-        <Text size="sm" mb="xs" c="dimmed">年齢範囲を設定</Text>
-        <RangeSlider
-          min={5}
-          max={22}
-          value={ageRange}
-          onChange={setAgeRange}
-          marks={[
-            { value: 5, label: '5歳' },
-            { value: 10, label: '10歳' },
-            { value: 15, label: '15歳' },
-            { value: 20, label: '20歳' },
-            { value: 22, label: '22歳' },
-          ]}
-        />
-      </Box>
+      {/* 年齢範囲設定モーダル */}
+      <Modal
+        opened={ageRangeModalOpened}
+        onClose={() => setAgeRangeModalOpened(false)}
+        title="年齢範囲を設定"
+        centered
+      >
+        <Box className="space-y-4">
+          <Group grow>
+            <Select
+              label="From"
+              data={Array.from({ length: 18 }, (_, i) => ({
+                value: String(i + 5),
+                label: `${i + 5}歳`
+              }))}
+              value={String(ageFrom)}
+              onChange={(value) => setAgeFrom(Number(value) || 5)}
+            />
+            <Select
+              label="To"
+              data={Array.from({ length: 18 }, (_, i) => ({
+                value: String(i + 5),
+                label: `${i + 5}歳`
+              }))}
+              value={String(ageTo)}
+              onChange={(value) => setAgeTo(Number(value) || 22)}
+            />
+          </Group>
+          <Group justify="flex-end" gap="sm">
+            <Button
+              variant="default"
+              onClick={() => setAgeRangeModalOpened(false)}
+            >
+              キャンセル
+            </Button>
+            <Button
+              onClick={() => {
+                if (ageFrom > ageTo) {
+                  alert("From年齢はTo年齢以下にしてください")
+                  return
+                }
+                setAgeRange([ageFrom, ageTo])
+                setAgeRangeModalOpened(false)
+              }}
+            >
+              OK
+            </Button>
+          </Group>
+        </Box>
+      </Modal>
 
       {getFilteredGroups().map((group) => {
         const groupTotal = calculateGroupTotal(group.ages)
@@ -121,65 +162,61 @@ export const AgeRewardEditLayout = ({
             </Group>
             
             {/* テーブル */}
-            <Box style={{ overflow: "auto" }}>
-              <Table striped withTableBorder withColumnBorders style={{ tableLayout: "auto", width: "100%" }}>
-                <Table.Tbody>
-                  {group.ages.map((age) => {
-                    const rewardIndex = ageRewards.findIndex(r => r.age === age)
-                    
-                    return (
-                      <Table.Tr key={age}>
-                        <Table.Td style={{ whiteSpace: "nowrap" }}>{getDisplayName(age, displayMode)}</Table.Td>
-                        <Table.Td style={{ width: "1%", whiteSpace: "nowrap" }}>
-                          <NumberInput
-                            value={ageRewards[rewardIndex]?.amount || 0}
-                            onChange={(value) => {
-                              const newRewards = [...ageRewards]
-                              newRewards[rewardIndex] = {
-                                ...newRewards[rewardIndex],
-                                amount: Number(value) || 0
-                              }
-                              form.setValue("rewards", newRewards, { shouldDirty: true })
-                            }}
-                            min={0}
-                            suffix="円/月"
-                            hideControls
-                            styles={{ input: { textAlign: "right", minWidth: "120px" } }}
-                          />
-                        </Table.Td>
-                      </Table.Tr>
-                    )
-                  })}
-                  {/* 合計行 */}
-                  <Table.Tr>
-                    <Table.Td fw={700}>合計</Table.Td>
-                    <Table.Td className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
-                      {groupTotal.toLocaleString()}円/{years}年
-                    </Table.Td>
-                  </Table.Tr>
-                </Table.Tbody>
-              </Table>
-            </Box>
+            <Table striped withTableBorder withColumnBorders style={{ tableLayout: "fixed", width: "100%" }}>
+              <Table.Tbody>
+                {group.ages.map((age) => {
+                  const rewardIndex = ageRewards.findIndex(r => r.age === age)
+                  
+                  return (
+                    <Table.Tr key={age}>
+                      <Table.Td width="40%" style={{ whiteSpace: "nowrap" }}>{getDisplayName(age, displayMode)}</Table.Td>
+                      <Table.Td width="60%">
+                        <NumberInput
+                          value={ageRewards[rewardIndex]?.amount || 0}
+                          onChange={(value) => {
+                            const newRewards = [...ageRewards]
+                            newRewards[rewardIndex] = {
+                              ...newRewards[rewardIndex],
+                              amount: Number(value) || 0
+                            }
+                            form.setValue("rewards", newRewards, { shouldDirty: true })
+                          }}
+                          min={0}
+                          suffix="円/月"
+                          hideControls
+                          styles={{ input: { textAlign: "right" } }}
+                        />
+                      </Table.Td>
+                    </Table.Tr>
+                  )
+                })}
+                {/* 合計行 */}
+                <Table.Tr>
+                  <Table.Td width="40%" fw={700}>合計</Table.Td>
+                  <Table.Td width="60%" className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
+                    {groupTotal.toLocaleString()}円/{years}年
+                  </Table.Td>
+                </Table.Tr>
+              </Table.Tbody>
+            </Table>
           </Box>
         )
       })}
 
       {/* 全体合計 */}
       <Box className="border-t-2 border-gray-300 pt-4">
-        <Box style={{ overflow: "auto" }}>
-          <Table style={{ tableLayout: "auto", width: "100%" }}>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td fw={700}>
-                  <Text size="lg" fw={700}>合計</Text>
-                </Table.Td>
-                <Table.Td className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
-                  <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
-          </Table>
-        </Box>
+        <Table style={{ tableLayout: "fixed", width: "100%" }}>
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Td width="40%" fw={700}>
+                <Text size="lg" fw={700}>合計</Text>
+              </Table.Td>
+              <Table.Td width="60%" className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
+                <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
+              </Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table>
       </Box>
 
       {/* 一括設定モーダル */}

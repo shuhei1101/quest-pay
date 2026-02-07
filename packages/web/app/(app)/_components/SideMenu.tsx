@@ -2,7 +2,7 @@
 
 import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL, LOGIN_URL, REWARD_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout, IconMenu2, IconX, IconPinnedOff } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout, IconMenu2, IconX, IconPinnedOff, IconCoin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
@@ -161,9 +161,9 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         {isParent && (
           <NavLink
             className='side-nav'
-            href={`${REWARD_URL}`}
+            href={`${REWARD_URL}/view`}
             label="お小遣い設定"
-            leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
+            leftSection={<IconCoin color={menuColors.settings} size={18} stroke={1.2} />}
           />
         )}
       </NavLink>
