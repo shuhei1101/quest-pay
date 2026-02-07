@@ -4,7 +4,7 @@ import { useWindow } from "@/app/(core)/useConstants"
 import { ReactNode, useRef, useEffect } from "react"
 import { QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
-import { useSwipeable } from "react-swipeable"
+import { SwipeableHandlers } from "react-swipeable"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
 type QuestItem = {
@@ -22,16 +22,8 @@ type QuestGridProps<T extends QuestItem> = {
   onScrollBottom?: () => void
   /** パネルの高さ */
   panelHeight?: string
-  /** 現在のタブ値（フィルタリング用） */
-  tabValue?: string | null
-  /** クエストカテゴリ辞書 */
-  questCategoryById?: QuestCategoryById
-  /** タブ変更時のハンドル（スワイプ用） */
-  onTabChange?: (value: string | null) => void
-  /** 全タブリスト（スワイプ用） */
-  tabList?: string[]
-  /** スワイプ操作を有効にするか */
-  enableSwipe?: boolean
+  /** スワイプハンドラ（ScrollableTabsから受け取る） */
+  swipeHandlers?: SwipeableHandlers
 }
 
 /** クエストグリッドコンポーネント */
@@ -41,11 +33,7 @@ export const QuestGrid = <T extends QuestItem>({
   sentinelRef,
   onScrollBottom,
   panelHeight = "calc(100vh - 200px)",
-  tabValue,
-  questCategoryById,
-  onTabChange,
-  tabList,
-  enableSwipe = true
+  swipeHandlers
 }: QuestGridProps<T>) => {
   /** 画面定数 */
   const { isMobile, isTablet, isDesktop } = useWindow()
@@ -97,111 +85,16 @@ export const QuestGrid = <T extends QuestItem>({
     return () => clearTimeout(timeoutId)
   }, [quests.length, onScrollBottom])
 
-  /** スクロールイベントを監視する */
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!container || !onScrollBottom) return
-
-    const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = container
-      // 下端から100px以内に到達したらコールバックを実行する
-      if (scrollHeight - scrollTop - clientHeight < 100) {
-        onScrollBottom()
-      }
-    }
-
-    container.addEventListener("scroll", handleScroll)
-    return () => container.removeEventListener("scroll", handleScroll)
-  }, [onScrollBottom])
-
-  /** コンテンツの高さを監視し、スクロールバーが表示されない場合は自動的に次のページを取得する */
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!container || !onScrollBottom) return
-
-    // コンテンツの高さがコンテナの高さより小さい場合、次のページを取得する
-    const checkContentHeight = () => {
-      const { scrollHeight, clientHeight } = container
-      if (scrollHeight <= clientHeight) {
-        // スクロールバーが表示されていない（コンテンツが少ない）
-        onScrollBottom()
-      }
-    }
-
-    // 少し遅延させてから実行（レンダリング完了後）
-    const timeoutId = setTimeout(checkContentHeight, 100)
-    return () => clearTimeout(timeoutId)
-  }, [quests.length, onScrollBottom])
-
-  /** スクロールイベントを監視する */
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!container || !onScrollBottom) return
-
-    const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = container
-      // 下端から100px以内に到達したらコールバックを実行する
-      if (scrollHeight - scrollTop - clientHeight < 100) {
-        onScrollBottom()
-      }
-    }
-
-    container.addEventListener("scroll", handleScroll)
-    return () => container.removeEventListener("scroll", handleScroll)
-  }, [onScrollBottom])
-
-  /** コンテンツの高さを監視し、スクロールバーが表示されない場合は自動的に次のページを取得する */
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!container || !onScrollBottom) return
-
-    // コンテンツの高さがコンテナの高さより小さい場合、次のページを取得する
-    const checkContentHeight = () => {
-      const { scrollHeight, clientHeight } = container
-      if (scrollHeight <= clientHeight) {
-        // スクロールバーが表示されていない（コンテンツが少ない）
-        onScrollBottom()
-      }
-    }
-
-    // 少し遅延させてから実行（レンダリング完了後）
-    const timeoutId = setTimeout(checkContentHeight, 100)
-    return () => clearTimeout(timeoutId)
-  }, [quests.length, onScrollBottom])
-
-  /** 左右スワイプ時のハンドル */
-  const handlers = useSwipeable({
-    onSwiped: (event) => {
-      if (!enableSwipe || !onTabChange || !tabList || !tabValue) return
-      
-      const idx = tabList.indexOf(tabValue)
-      
-      // インデックスが見つからない場合は何もしない
-      if (idx === -1) return
-
-      if (event.dir === "Left") {
-        // 次のタブへ
-        const next = tabList[idx + 1]
-        if (next) onTabChange(next)
-      } else if (event.dir === "Right") {
-        // 前のタブへ
-        const prev = tabList[idx - 1]
-        if (prev) onTabChange(prev)
-      }
-    },
-    trackMouse: true
-  })
-
   return (
     <div
-      {...handlers}
+      {...(swipeHandlers || {})}
       ref={(node) => {
         // swipeable handlersのrefとscrollContainerRefの両方をセットする
-        if (handlers.ref) {
-          if (typeof handlers.ref === 'function') {
-            handlers.ref(node)
+        if (swipeHandlers?.ref) {
+          if (typeof swipeHandlers.ref === 'function') {
+            swipeHandlers.ref(node)
           } else {
-            (handlers.ref as any).current = node
+            (swipeHandlers.ref as any).current = node
           }
         }
         scrollContainerRef.current = node
