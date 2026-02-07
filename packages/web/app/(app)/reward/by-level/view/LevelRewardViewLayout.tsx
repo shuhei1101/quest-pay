@@ -7,9 +7,9 @@ export const LevelRewardViewLayout = ({
 }: {
   levelRewards: Array<{ level: number; amount: number }>
 }) => {
-  /** 合計金額を計算する */
+  /** 合計金額を計算する（年額） */
   const calculateTotal = () => {
-    return levelRewards.reduce((sum, reward) => sum + reward.amount, 0)
+    return levelRewards.reduce((sum, reward) => sum + reward.amount * 12, 0)
   }
 
   return (

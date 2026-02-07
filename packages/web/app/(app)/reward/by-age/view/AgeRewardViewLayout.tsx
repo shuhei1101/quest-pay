@@ -8,16 +8,16 @@ export const AgeRewardViewLayout = ({
 }: {
   ageRewards: Array<{ age: number; amount: number }>
 }) => {
-  /** 年齢別の合計金額を計算する */
+  /** 年齢別の合計金額を計算する（年額） */
   const calculateAgeTotal = () => {
-    return ageRewards.reduce((sum, reward) => sum + reward.amount, 0)
+    return ageRewards.reduce((sum, reward) => sum + reward.amount * 12, 0)
   }
 
-  /** 学年区分ごとの合計金額を計算する */
+  /** 学年区分ごとの合計金額を計算する（年額） */
   const calculateGroupTotal = (ages: number[]) => {
     return ages.reduce((sum, age) => {
       const reward = ageRewards.find(r => r.age === age)
-      return sum + (reward?.amount || 0)
+      return sum + (reward?.amount || 0) * 12
     }, 0)
   }
 
