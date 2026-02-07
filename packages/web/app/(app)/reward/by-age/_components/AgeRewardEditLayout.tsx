@@ -121,61 +121,65 @@ export const AgeRewardEditLayout = ({
             </Group>
             
             {/* テーブル */}
-            <Table striped withTableBorder withColumnBorders>
-              <Table.Tbody>
-                {group.ages.map((age) => {
-                  const rewardIndex = ageRewards.findIndex(r => r.age === age)
-                  
-                  return (
-                    <Table.Tr key={age}>
-                      <Table.Td width="50%">{getDisplayName(age, displayMode)}</Table.Td>
-                      <Table.Td width="50%">
-                        <NumberInput
-                          value={ageRewards[rewardIndex]?.amount || 0}
-                          onChange={(value) => {
-                            const newRewards = [...ageRewards]
-                            newRewards[rewardIndex] = {
-                              ...newRewards[rewardIndex],
-                              amount: Number(value) || 0
-                            }
-                            form.setValue("rewards", newRewards, { shouldDirty: true })
-                          }}
-                          min={0}
-                          suffix="円/月"
-                          hideControls
-                          styles={{ input: { textAlign: "right" } }}
-                        />
-                      </Table.Td>
-                    </Table.Tr>
-                  )
-                })}
-                {/* 合計行 */}
-                <Table.Tr>
-                  <Table.Td fw={700}>合計</Table.Td>
-                  <Table.Td className="text-right" fw={700}>
-                    {groupTotal.toLocaleString()}円/{years}年
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
+            <Box style={{ overflow: "auto" }}>
+              <Table striped withTableBorder withColumnBorders style={{ tableLayout: "auto", width: "100%" }}>
+                <Table.Tbody>
+                  {group.ages.map((age) => {
+                    const rewardIndex = ageRewards.findIndex(r => r.age === age)
+                    
+                    return (
+                      <Table.Tr key={age}>
+                        <Table.Td style={{ whiteSpace: "nowrap" }}>{getDisplayName(age, displayMode)}</Table.Td>
+                        <Table.Td style={{ width: "1%", whiteSpace: "nowrap" }}>
+                          <NumberInput
+                            value={ageRewards[rewardIndex]?.amount || 0}
+                            onChange={(value) => {
+                              const newRewards = [...ageRewards]
+                              newRewards[rewardIndex] = {
+                                ...newRewards[rewardIndex],
+                                amount: Number(value) || 0
+                              }
+                              form.setValue("rewards", newRewards, { shouldDirty: true })
+                            }}
+                            min={0}
+                            suffix="円/月"
+                            hideControls
+                            styles={{ input: { textAlign: "right", minWidth: "120px" } }}
+                          />
+                        </Table.Td>
+                      </Table.Tr>
+                    )
+                  })}
+                  {/* 合計行 */}
+                  <Table.Tr>
+                    <Table.Td fw={700}>合計</Table.Td>
+                    <Table.Td className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
+                      {groupTotal.toLocaleString()}円/{years}年
+                    </Table.Td>
+                  </Table.Tr>
+                </Table.Tbody>
+              </Table>
+            </Box>
           </Box>
         )
       })}
 
       {/* 全体合計 */}
       <Box className="border-t-2 border-gray-300 pt-4">
-        <Table>
-          <Table.Tbody>
-            <Table.Tr>
-              <Table.Td width="50%" fw={700}>
-                <Text size="lg" fw={700}>合計</Text>
-              </Table.Td>
-              <Table.Td width="50%" className="text-right" fw={700}>
-                <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
-              </Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
+        <Box style={{ overflow: "auto" }}>
+          <Table style={{ tableLayout: "auto", width: "100%" }}>
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td fw={700}>
+                  <Text size="lg" fw={700}>合計</Text>
+                </Table.Td>
+                <Table.Td className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
+                  <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
+                </Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+        </Box>
       </Box>
 
       {/* 一括設定モーダル */}

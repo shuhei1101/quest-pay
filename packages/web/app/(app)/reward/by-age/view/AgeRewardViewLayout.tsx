@@ -38,46 +38,50 @@ export const AgeRewardViewLayout = ({
             <Text size="lg" fw={700} mb="xs">{group.name}</Text>
             
             {/* テーブル */}
-            <Table striped withTableBorder withColumnBorders>
-              <Table.Tbody>
-                {group.ages.map((age) => {
-                  const reward = ageRewards.find(r => r.age === age)
-                  const amount = reward?.amount || 0
-                  
-                  return (
-                    <Table.Tr key={age}>
-                      <Table.Td width="50%">{getGradeName(age)}</Table.Td>
-                      <Table.Td width="50%" className="text-right">{amount.toLocaleString()}円/月</Table.Td>
-                    </Table.Tr>
-                  )
-                })}
-                {/* 合計行 */}
-                <Table.Tr>
-                  <Table.Td fw={700}>合計</Table.Td>
-                  <Table.Td className="text-right" fw={700}>
-                    {groupTotal.toLocaleString()}円/{years}年
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
+            <Box style={{ overflow: "auto" }}>
+              <Table striped withTableBorder withColumnBorders style={{ tableLayout: "auto", width: "100%" }}>
+                <Table.Tbody>
+                  {group.ages.map((age) => {
+                    const reward = ageRewards.find(r => r.age === age)
+                    const amount = reward?.amount || 0
+                    
+                    return (
+                      <Table.Tr key={age}>
+                        <Table.Td style={{ whiteSpace: "nowrap" }}>{getGradeName(age)}</Table.Td>
+                        <Table.Td className="text-right" style={{ whiteSpace: "nowrap" }}>{amount.toLocaleString()}円/月</Table.Td>
+                      </Table.Tr>
+                    )
+                  })}
+                  {/* 合計行 */}
+                  <Table.Tr>
+                    <Table.Td fw={700}>合計</Table.Td>
+                    <Table.Td className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
+                      {groupTotal.toLocaleString()}円/{years}年
+                    </Table.Td>
+                  </Table.Tr>
+                </Table.Tbody>
+              </Table>
+            </Box>
           </Box>
         )
       })}
 
       {/* 全体合計 */}
       <Box className="border-t-2 border-gray-300 pt-4">
-        <Table>
-          <Table.Tbody>
-            <Table.Tr>
-              <Table.Td width="50%" fw={700}>
-                <Text size="lg" fw={700}>合計</Text>
-              </Table.Td>
-              <Table.Td width="50%" className="text-right" fw={700}>
-                <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
-              </Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
+        <Box style={{ overflow: "auto" }}>
+          <Table style={{ tableLayout: "auto", width: "100%" }}>
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td fw={700}>
+                  <Text size="lg" fw={700}>合計</Text>
+                </Table.Td>
+                <Table.Td className="text-right" fw={700} style={{ whiteSpace: "nowrap" }}>
+                  <Text size="lg" fw={700}>{calculateAgeTotal().toLocaleString()}円/{ageRewards.length}年</Text>
+                </Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+        </Box>
       </Box>
     </Box>
   )
