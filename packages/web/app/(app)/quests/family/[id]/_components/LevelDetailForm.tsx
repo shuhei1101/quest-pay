@@ -67,7 +67,7 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
           <NumberInput 
             label={
               <span>
-                報酬額 <RequiredMark />
+                クリア報酬額 <RequiredMark />
               </span>
             }
             description="クリア時に獲得できるお小遣い額"
@@ -81,7 +81,7 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
 
         <Group grow>
           <NumberInput 
-            label="獲得経験値 (子供)" 
+            label="クリア獲得経験値 (子供)" 
             description="クエストクリア時に子供が獲得する経験値"
             value={detail.childExp}
             onChange={(value) => updateDetail("childExp", typeof value === "number" ? value : 0)}
