@@ -176,3 +176,9 @@ export const REWARD_API_URL = `/api${REWARD_URL}`
 export const FAMILY_AGE_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-age/table`
 // レベル別報酬テーブル
 export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-level/table`
+
+// タイムライン
+export const TIMELINES_URL = `/timelines`
+export const TIMELINES_API_URL = `/api${TIMELINES_URL}`
+export const FAMILY_TIMELINES_API_URL = `${TIMELINES_API_URL}/family`
+export const PUBLIC_TIMELINES_API_URL = `${TIMELINES_API_URL}/public`
