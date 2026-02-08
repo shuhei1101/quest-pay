@@ -78,7 +78,6 @@ export const AgeRewardViewLayout = ({
             </Table.Tr>
           </Table.Tbody>
         </Table>
-        </Box>
       </Box>
     </Box>
   )
