@@ -183,6 +183,13 @@
       "when": 1769693182220,
       "tag": "0025_lying_excalibur",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1770552667072,
+      "tag": "0026_omniscient_whirlwind",
+      "breakpoints": true
     }
   ]
 }
