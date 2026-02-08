@@ -11,18 +11,7 @@ export const fetchPublicTimelines = async ({db, limit = 50}: {
 }) => {
   try {
     const timelineList = await db
-      .select({
-        id: publicTimelines.id,
-        familyId: publicTimelines.familyId,
-        type: publicTimelines.type,
-        message: publicTimelines.message,
-        publicQuestId: publicTimelines.publicQuestId,
-        createdAt: publicTimelines.createdAt,
-        updatedAt: publicTimelines.updatedAt,
-        familyOnlineName: families.onlineName,
-        familyIconId: families.iconId,
-        familyIconColor: families.iconColor,
-      })
+      .select()
       .from(publicTimelines)
       .leftJoin(families, eq(publicTimelines.familyId, families.id))
       .orderBy(desc(publicTimelines.createdAt))

@@ -10,7 +10,8 @@ import { fetchFamilyQuest } from "../family/query"
 import { fetchPublicQuest } from "./query"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "../../users/query"
-import { insertPublicTimeline } from "../../timelines/db"
+import { insertPublicTimeline } from "../../timeline/db"
+import { PUBLIC_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 
 /** 家族クエストから公開クエストを登録する */
 export const registerPublicQuestByFamilyQuest = async ({
@@ -174,7 +175,7 @@ export const activatePublicQuest = async ({db, publicQuest}: {
           familyId: currentPublicQuest.base.familyId,
           type: "quest_published",
           message: `新たなクエスト「${currentPublicQuest.quest.name}」を公開しました。`,
-          publicQuestId: publicQuest.id,
+          url: `${PUBLIC_QUEST_VIEW_URL(currentPublicQuest.base.id)}`
         }
       })
     })

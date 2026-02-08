@@ -508,24 +508,20 @@ export const commentUpvotes = pgTable("comment_upvotes", {
 
 /** タイムライン共通フィールド */
 export const timelineCommonFields = {
-  /** 対象テーブル名 */
-  targetTable: text("target_table").notNull().default(""),
-  /** 対象テーブルのレコードID */
-  targetId: uuid("target_id").notNull(),
   /** 表示メッセージ */
   message: text("message").notNull().default(""),
   /** URL */
-  url: text("url").notNull().default(""),
+  url: text("url"), // nullの場合は、表示のみのタイムライン
 }
 
 /** 家族タイムラインテーブル */
-export const familyTimeline = pgTable("family_timeline", {
+export const familyTimelines = pgTable("family_timeline", {
   /** ID */
   id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
   /** 家族ID */
   familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
   /** アクションタイプ */
-  actionType: familyTimelineActionType("action_type").notNull(),
+  type: familyTimelineActionType("type").notNull(),
   /** 対象ユーザのプロフィールID */
   profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
   /** タイムライン共通フィールド */
@@ -533,25 +529,25 @@ export const familyTimeline = pgTable("family_timeline", {
   /** タイムスタンプ */
   ...timestamps,
 })
-export type FamilyTimelineSelect = typeof familyTimeline.$inferSelect
-export type FamilyTimelineInsert = Omit<typeof familyTimeline.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type FamilyTimelineSelect = typeof familyTimelines.$inferSelect
+export type FamilyTimelineInsert = Omit<typeof familyTimelines.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type FamilyTimelineUpdate = Partial<FamilyTimelineInsert>
 
 /** 公開タイムラインテーブル */
-export const publicTimeline = pgTable("public_timeline", {
+export const publicTimelines = pgTable("public_timeline", {
   /** ID */
   id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
   /** 家族ID */
   familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
   /** アクションタイプ */
-  actionType: publicTimelineActionType("action_type").notNull(),
+  type: publicTimelineActionType("type").notNull(),
   /** タイムライン共通フィールド */
   ...timelineCommonFields,
   /** タイムスタンプ */
   ...timestamps,
 })
-export type PublicTimelineSelect = typeof publicTimeline.$inferSelect
-export type PublicTimelineInsert = Omit<typeof publicTimeline.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type PublicTimelineSelect = typeof publicTimelines.$inferSelect
+export type PublicTimelineInsert = Omit<typeof publicTimelines.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type PublicTimelineUpdate = Partial<PublicTimelineInsert>
 
 /** お小遣いテーブルタイプ */
@@ -713,41 +709,3 @@ export const templateLevelRewardTables = pgTable("template_level_reward_tables",
 })
 export type TemplateLevelRewardTableSelect = typeof templateLevelRewardTables.$inferSelect
 export type TemplateLevelRewardTableInsert = Omit<typeof templateLevelRewardTables.$inferInsert, "id" | "createdAt" | "updatedAt">
-
-/** 家族タイムラインテーブル */
-export const familyTimelines = pgTable("family_timelines", {
-  /** ID */
-  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
-  /** 家族ID */
-  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
-  /** プロフィールID（アクションを起こしたユーザ） */
-  profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
-  /** タイムラインタイプ */
-  type: timelineType("type").notNull(),
-  /** メッセージ */
-  message: text("message").notNull().default(""),
-  /** 関連クエストID（オプション） */
-  questId: uuid("quest_id").references(() => quests.id, { onDelete: "set null" }),
-  /** タイムスタンプ */
-  ...timestamps,
-})
-export type FamilyTimelineSelect = typeof familyTimelines.$inferSelect
-export type FamilyTimelineInsert = Omit<typeof familyTimelines.$inferInsert, "id" | "createdAt" | "updatedAt">
-
-/** 公開タイムラインテーブル */
-export const publicTimelines = pgTable("public_timelines", {
-  /** ID */
-  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
-  /** 家族ID */
-  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
-  /** タイムラインタイプ */
-  type: timelineType("type").notNull(),
-  /** メッセージ */
-  message: text("message").notNull().default(""),
-  /** 関連公開クエストID（オプション） */
-  publicQuestId: uuid("public_quest_id").references(() => publicQuests.id, { onDelete: "set null" }),
-  /** タイムスタンプ */
-  ...timestamps,
-})
-export type PublicTimelineSelect = typeof publicTimelines.$inferSelect
-export type PublicTimelineInsert = Omit<typeof publicTimelines.$inferInsert, "id" | "createdAt" | "updatedAt">

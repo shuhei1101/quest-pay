@@ -178,7 +178,7 @@ export const FAMILY_AGE_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-age/table`
 export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-level/table`
 
 // タイムライン
-export const TIMELINES_URL = `/timelines`
-export const TIMELINES_API_URL = `/api${TIMELINES_URL}`
-export const FAMILY_TIMELINES_API_URL = `${TIMELINES_API_URL}/family`
-export const PUBLIC_TIMELINES_API_URL = `${TIMELINES_API_URL}/public`
+export const TIMELINE_URL = `/timeline`
+export const TIMELINE_API_URL = `/api${TIMELINE_URL}`
+export const FAMILY_TIMELINE_API_URL = `${TIMELINE_API_URL}/family`
+export const PUBLIC_TIMELINE_API_URL = `${TIMELINE_API_URL}/public`

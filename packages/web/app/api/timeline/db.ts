@@ -1,6 +1,6 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
-import { FamilyTimelineInsert, familyTimelines, PublicTimelineInsert, publicTimelines } from "@/drizzle/schema"
+import { familyTimelines, FamilyTimelineInsert, PublicTimelineInsert, publicTimelines } from "@/drizzle/schema"
 import { Db } from "@/index"
 
 /** 家族タイムラインを挿入する */

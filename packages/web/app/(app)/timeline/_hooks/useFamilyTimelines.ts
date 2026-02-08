@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getFamilyTimelines } from "@/app/api/timelines/family/client"
+import { getFamilyTimelines } from "@/app/api/timeline/family/client"
 
 /** 家族タイムラインを取得する */
 export const useFamilyTimelines = () => {

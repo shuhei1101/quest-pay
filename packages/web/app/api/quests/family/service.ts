@@ -13,10 +13,10 @@ import { fetchUserInfoByUserId } from "../../users/query"
 import { fetchFamilyParents } from "../../parents/query"
 import { insertNotification } from "../../notifications/db"
 import { fetchChild } from "../../children/query"
-import { CHILD_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { CHILD_QUEST_VIEW_URL, FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 import { fetchChildQuest } from "./[id]/child/query"
 import { updateChild } from "../../children/db"
-import { insertFamilyTimeline } from "../../timelines/db"
+import { insertFamilyTimeline } from "../../timeline/db"
 
 /** 家族クエストを登録する */
 export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest, questChildren, questTags}: {
@@ -63,9 +63,9 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
         record: {
           familyId: familyQuest.familyId,
           profileId: userInfo.profiles.id,
-          type: "quest_registered",
-          message: `「${quests.name}」クエストを登録しました。`,
-          questId: questId,
+          type: "quest_created",
+          message: `「${ quests.name }」クエストを登録しました。`,
+          url: `${ FAMILY_QUEST_VIEW_URL( familyQuestId ) }`,
         }
       })
 
@@ -540,7 +540,7 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
               profileId: child.profiles.id,
               type: "quest_completed",
               message: timelineMessage,
-              questId: questChild.quest.id,
+              url: `${CHILD_QUEST_VIEW_URL(currentQuestChild.familyQuestId, currentQuestChild.childId)}`,
             }
           })
         } else if (notificationType === "quest_level_up") {
@@ -552,7 +552,7 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
               profileId: child.profiles.id,
               type: "quest_level_up",
               message: timelineMessage,
-              questId: questChild.quest.id,
+              url: `${CHILD_QUEST_VIEW_URL(currentQuestChild.familyQuestId, currentQuestChild.childId)}`,
             }
           })
         } else {
@@ -565,7 +565,7 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
               profileId: child.profiles.id,
               type: "quest_completed",
               message: timelineMessage,
-              questId: questChild.quest.id,
+              url: `${CHILD_QUEST_VIEW_URL(currentQuestChild.familyQuestId, currentQuestChild.childId)}`,
             }
           })
         }

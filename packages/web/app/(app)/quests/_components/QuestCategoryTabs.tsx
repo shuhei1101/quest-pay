@@ -44,9 +44,9 @@ export const QuestCategoryTabs = ({ tabValue, onTabChange, categories, children 
 
   return (
     <ScrollableTabs
-      value={tabValue}
+      activeTab={tabValue}
       onChange={onTabChange}
-      items={tabItems}
+      tabs={tabItems}
     >
       {children}
     </ScrollableTabs>

@@ -12,19 +12,7 @@ export const fetchFamilyTimelines = async ({db, familyId, limit = 50}: {
 }) => {
   try {
     const timelineList = await db
-      .select({
-        id: familyTimelines.id,
-        familyId: familyTimelines.familyId,
-        profileId: familyTimelines.profileId,
-        type: familyTimelines.type,
-        message: familyTimelines.message,
-        questId: familyTimelines.questId,
-        createdAt: familyTimelines.createdAt,
-        updatedAt: familyTimelines.updatedAt,
-        profileName: profiles.name,
-        profileIconId: profiles.iconId,
-        profileIconColor: profiles.iconColor,
-      })
+      .select()
       .from(familyTimelines)
       .leftJoin(profiles, eq(familyTimelines.profileId, profiles.id))
       .where(eq(familyTimelines.familyId, familyId))

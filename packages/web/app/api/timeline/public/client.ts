@@ -1,13 +1,13 @@
-import { PUBLIC_TIMELINES_API_URL } from "@/app/(core)/endpoints"
+import { PUBLIC_TIMELINE_API_URL } from "@/app/(core)/endpoints"
 import { devLog } from "@/app/(core)/util"
 import { AppError } from "@/app/(core)/error/appError"
 import type { GetPublicTimelinesResponse } from "./route"
 
 /** 公開タイムラインを取得する */
 export const getPublicTimelines = async () => {
-  devLog("getPublicTimelines.API呼び出し: ", {URL: PUBLIC_TIMELINES_API_URL})
+  devLog("getPublicTimelines.API呼び出し: ", {URL: PUBLIC_TIMELINE_API_URL})
   // APIを実行する
-  const res = await fetch(`${PUBLIC_TIMELINES_API_URL}`, {
+  const res = await fetch(`${PUBLIC_TIMELINE_API_URL}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   })
@@ -18,7 +18,7 @@ export const getPublicTimelines = async () => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getPublicTimelines.取得データ: ", `${PUBLIC_TIMELINES_API_URL}`)
+  devLog("getPublicTimelines.取得データ: ", `${PUBLIC_TIMELINE_API_URL}`)
 
   const data = await res.json()
 

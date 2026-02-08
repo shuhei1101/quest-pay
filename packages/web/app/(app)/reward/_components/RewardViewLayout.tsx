@@ -41,9 +41,9 @@ export const RewardViewLayout = ({
 
       {/* タブ切り替え */}
       <ScrollableTabs
-        value={activeTab}
+        activeTab={activeTab}
         onChange={setActiveTab}
-        items={[
+        tabs={[
           { value: "age", label: "お小遣い" },
           { value: "level", label: "ランク報酬" }
         ]}

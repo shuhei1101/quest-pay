@@ -117,9 +117,9 @@ export const PublicQuestViewLayout = ({
       >
         {/* タブ切り替え */}
         <ScrollableTabs
-          value={activeTab}
+          activeTab={activeTab}
           onChange={setActiveTab}
-          items={[
+          tabs={[
             { value: "condition", label: "クエスト条件" },
             { value: "detail", label: "依頼情報" },
             { value: "other", label: "その他" },

@@ -73,9 +73,9 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
   return (
     <Modal opened={opened} onClose={close} title="アイコン選択">
       <ScrollableTabs
-        value={activeTab}
+        activeTab={activeTab}
         onChange={setActiveTab}
-        items={tabItems}
+        tabs={tabItems}
       >
         {/* カテゴリごとのアイコン一覧 */}
         {iconCategories.map((category) => 

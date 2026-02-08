@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getPublicTimelines } from "@/app/api/timelines/public/client"
+import { getPublicTimelines } from "@/app/api/timeline/public/client"
 
 /** 公開タイムラインを取得する */
 export const usePublicTimelines = () => {

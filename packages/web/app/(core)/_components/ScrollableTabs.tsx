@@ -15,13 +15,13 @@ export type ScrollableTabItem = {
 }
 
 /** 横スクロール可能なタブコンポーネント */
-export const ScrollableTabs = ({ value, onChange, items, children }: {
+export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   /** 現在選択されているタブの値 */
-  value: string | null
+  activeTab: string | null
   /** タブ変更時のハンドラ */
   onChange: (value: string | null) => void
   /** タブアイテムのリスト */
-  items: ScrollableTabItem[]
+  tabs: ScrollableTabItem[]
   /** タブパネルの内容 */
   children: ReactNode
 }) => {
@@ -33,10 +33,10 @@ export const ScrollableTabs = ({ value, onChange, items, children }: {
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */
   useEffect(() => {
-    if (!tabListRef.current || !value) return
+    if (!tabListRef.current || !activeTab) return
 
     const container = tabListRef.current
-    const selectedTabElement = container.querySelector(`[data-value="${value}"]`) as HTMLElement
+    const selectedTabElement = container.querySelector(`[data-value="${activeTab}"]`) as HTMLElement
 
     if (selectedTabElement) {
       const containerRect = container.getBoundingClientRect()
@@ -51,7 +51,7 @@ export const ScrollableTabs = ({ value, onChange, items, children }: {
         container.scrollLeft += tabRect.right - containerRect.right + SCROLL_MARGIN
       }
     }
-  }, [value])
+  }, [activeTab])
 
   /** マウスホイールでの横スクロールを有効化する */
   useEffect(() => {
@@ -77,7 +77,7 @@ export const ScrollableTabs = ({ value, onChange, items, children }: {
   return (
     <div style={{ height: "100%", flex: 1, minHeight: 0, overflow: "hidden" }}>
       <Tabs 
-        value={value} 
+        value={activeTab} 
         onChange={onChange}
         className="flex-1 min-h-0"
         styles={{
@@ -88,7 +88,7 @@ export const ScrollableTabs = ({ value, onChange, items, children }: {
         {/* タブリスト */}
         <Tabs.List>
           <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-            {items.map((item) => (
+            {tabs.map((item) => (
               <Tabs.Tab
                 key={item.value}
                 value={item.value}

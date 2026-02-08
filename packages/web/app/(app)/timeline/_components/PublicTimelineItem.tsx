@@ -1,5 +1,6 @@
 import { Card, Text, Group, Avatar } from "@mantine/core"
 import { IconHome2 } from "@tabler/icons-react"
+import { useRouter } from "next/navigation"
 import { getRelativeTime } from "../_utils/timeUtils"
 
 type PublicTimelineItemProps = {
@@ -7,12 +8,29 @@ type PublicTimelineItemProps = {
   familyIconColor?: string | null
   message: string
   createdAt: string
+  url?: string | null
 }
 
 /** 公開タイムラインアイテムコンポーネント */
-export const PublicTimelineItem = ({familyOnlineName, familyIconColor, message, createdAt}: PublicTimelineItemProps) => {
+export const PublicTimelineItem = ({familyOnlineName, familyIconColor, message, createdAt, url}: PublicTimelineItemProps) => {
+  const router = useRouter()
+
+  /** クリック時の処理 */
+  const handleClick = () => {
+    if (url) {
+      router.push(url)
+    }
+  }
+
   return (
-    <Card shadow="sm" padding="md" radius="md" withBorder>
+    <Card 
+      shadow="sm" 
+      padding="md" 
+      radius="md" 
+      withBorder
+      style={{ cursor: url ? "pointer" : "default" }}
+      onClick={handleClick}
+    >
       {/* タイムラインアイテムのコンテナ */}
       <Group>
         {/* アイコン表示 */}

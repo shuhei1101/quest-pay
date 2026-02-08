@@ -8,8 +8,11 @@ import { useFamilyTimelines } from "./_hooks/useFamilyTimelines"
 import { usePublicTimelines } from "./_hooks/usePublicTimelines"
 import { TimelineItem } from "./_components/TimelineItem"
 import { PublicTimelineItem } from "./_components/PublicTimelineItem"
+import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 
 export const TimelinesScreen = () => {
+  const {isChild} = useLoginUserInfo()
+
   const [activeTab, setActiveTab] = useState<string>("family")
 
   /** 家族タイムライン取得 */
@@ -18,7 +21,7 @@ export const TimelinesScreen = () => {
   /** 公開タイムライン取得 */
   const { data: publicTimelines, isLoading: isPublicLoading } = usePublicTimelines()
 
-  /** タブの定義 */
+  /** タブの定義（子供ユーザーの場合は家族タブのみ） */
   const tabs = [
     {
       value: "family",
@@ -26,12 +29,12 @@ export const TimelinesScreen = () => {
       icon: <IconHome2 size={18} />,
       color: "rgb(74, 222, 128)",
     },
-    {
+    ...(!isChild ? [{
       value: "public",
       label: "公開",
       icon: <IconWorld size={18} />,
       color: "rgb(96 165 250)",
-    },
+    }] : []),
   ]
 
   return (
@@ -45,9 +48,8 @@ export const TimelinesScreen = () => {
       <ScrollableTabs
         tabs={tabs}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
-
+        onChange={(value) => value && setActiveTab(value)}
+      >
       {/* タイムラインコンテンツ */}
       <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
         {activeTab === "family" && (
@@ -62,11 +64,12 @@ export const TimelinesScreen = () => {
                 {familyTimelines && familyTimelines.length > 0 ? (
                   familyTimelines.map((timeline) => (
                     <TimelineItem
-                      key={timeline.id}
-                      profileName={timeline.profileName}
-                      profileIconColor={timeline.profileIconColor}
-                      message={timeline.message}
-                      createdAt={timeline.createdAt}
+                      key={timeline.family_timeline.id}
+                      profileName={timeline.profiles?.name}
+                      profileIconColor={timeline.profiles?.iconColor}
+                      message={timeline.family_timeline.message}
+                      createdAt={timeline.family_timeline.createdAt}
+                      url={timeline.family_timeline.url}
                     />
                   ))
                 ) : (
@@ -91,11 +94,12 @@ export const TimelinesScreen = () => {
                 {publicTimelines && publicTimelines.length > 0 ? (
                   publicTimelines.map((timeline) => (
                     <PublicTimelineItem
-                      key={timeline.id}
-                      familyOnlineName={timeline.familyOnlineName}
-                      familyIconColor={timeline.familyIconColor}
-                      message={timeline.message}
-                      createdAt={timeline.createdAt}
+                      key={timeline.public_timeline.id}
+                      familyOnlineName={timeline.families?.onlineName}
+                      familyIconColor={timeline.families?.iconColor}
+                      message={timeline.public_timeline.message}
+                      createdAt={timeline.public_timeline.createdAt}
+                      url={timeline.public_timeline.url}
                     />
                   ))
                 ) : (
@@ -108,6 +112,7 @@ export const TimelinesScreen = () => {
           </div>
         )}
       </div>
+      </ScrollableTabs>
     </div>
   )
 }
