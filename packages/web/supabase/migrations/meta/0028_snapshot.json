@@ -1,6 +1,6 @@
 {
-  "id": "dc27b5c0-d830-417b-a8c1-bd2f72c49b78",
-  "prevId": "2d94aa0d-ab70-4ccd-8798-3dcba3e66c9a",
+  "id": "d30e7b01-e1b2-49cd-8897-9714a6c5135d",
+  "prevId": "62e8dcb1-c7e3-462f-b6ed-3adde02ff3c8",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -722,8 +722,14 @@
         },
         "action_type": {
           "name": "action_type",
-          "type": "timeline_action_type",
+          "type": "family_timeline_action_type",
           "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profile_id": {
+          "name": "profile_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -740,14 +746,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "profile_id": {
-          "name": "profile_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
         "message": {
           "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "url": {
+          "name": "url",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -1609,7 +1616,7 @@
         },
         "action_type": {
           "name": "action_type",
-          "type": "timeline_action_type",
+          "type": "public_timeline_action_type",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -1629,6 +1636,13 @@
         },
         "message": {
           "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "url": {
+          "name": "url",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -2538,6 +2552,24 @@
         "downvote"
       ]
     },
+    "public.family_timeline_action_type": {
+      "name": "family_timeline_action_type",
+      "schema": "public",
+      "values": [
+        "quest_created",
+        "quest_completed",
+        "quest_cleared",
+        "quest_level_up",
+        "child_joined",
+        "parent_joined",
+        "reward_received",
+        "savings_updated",
+        "savings_milestone_reached",
+        "quest_milestone_reached",
+        "comment_posted",
+        "other"
+      ]
+    },
     "public.level_reward_table_type": {
       "name": "level_reward_table_type",
       "schema": "public",
@@ -2561,6 +2593,19 @@
         "other"
       ]
     },
+    "public.public_timeline_action_type": {
+      "name": "public_timeline_action_type",
+      "schema": "public",
+      "values": [
+        "quest_published",
+        "likes_milestone_reached",
+        "posts_milestone_reached",
+        "comments_milestone_reached",
+        "comment_posted",
+        "like_received",
+        "other"
+      ]
+    },
     "public.quest_type": {
       "name": "quest_type",
       "schema": "public",
@@ -2568,20 +2613,6 @@
         "template",
         "public",
         "family"
-      ]
-    },
-    "public.timeline_action_type": {
-      "name": "timeline_action_type",
-      "schema": "public",
-      "values": [
-        "quest_created",
-        "quest_completed",
-        "quest_cleared",
-        "quest_level_up",
-        "child_joined",
-        "parent_joined",
-        "reward_received",
-        "savings_updated"
       ]
     },
     "public.user_type": {
@@ -2593,9 +2624,7 @@
       ]
     }
   },
-  "schemas": {
-    "auth": "auth"
-  },
+  "schemas": {},
   "sequences": {},
   "roles": {},
   "policies": {},

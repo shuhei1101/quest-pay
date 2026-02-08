@@ -45,13 +45,40 @@ export const childQuestStatus = pgEnum("child_quest_status", [
 
 /** 通知タイプ */
 export const notificationType = pgEnum("notification_type", [
-  "family_quest_review",
-  "quest_report_rejected",
-  "quest_report_approved",
-  "quest_cleared",
-  "quest_level_up",
-  "quest_completed",
-  "other",
+  "family_quest_review",        // 家族クエスト承認依頼
+  "quest_report_rejected",      // クエスト報告却下
+  "quest_report_approved",      // クエスト報告承認
+  "quest_cleared",              // クエストクリア
+  "quest_level_up",             // クエストレベルアップ
+  "quest_completed",            // クエスト完了
+  "other",                      // その他
+])
+
+/** 家族タイムラインアクションタイプ */
+export const familyTimelineActionType = pgEnum("family_timeline_action_type", [
+  "quest_created",              // クエスト作成
+  "quest_completed",            // クエスト完了
+  "quest_cleared",              // クエストクリア
+  "quest_level_up",             // クエストレベルアップ
+  "child_joined",               // 子供が参加
+  "parent_joined",              // 親が参加
+  "reward_received",            // 報酬受け取り
+  "savings_updated",            // 貯金額更新
+  "savings_milestone_reached",  // 貯金額マイルストーン達成（100円、500円、1000円、5000円...）
+  "quest_milestone_reached",    // クエスト達成マイルストーン（10回、50回、100回、500回...）
+  "comment_posted",             // コメント投稿
+  "other",                      // その他
+])
+
+/** 公開タイムラインアクションタイプ */
+export const publicTimelineActionType = pgEnum("public_timeline_action_type", [
+  "quest_published",            // クエスト公開
+  "likes_milestone_reached",    // いいね数マイルストーン達成（初回、10、50、100、500、1000...）
+  "posts_milestone_reached",    // 投稿数マイルストーン達成（初回、10、50、100、500、1000...）
+  "comments_milestone_reached", // コメント数マイルストーン達成
+  "comment_posted",             // コメント投稿
+  "like_received",              // いいね受け取り
+  "other",                      // その他
 ])
 
 /** タイムラインタイプ */
@@ -479,6 +506,53 @@ export const commentUpvotes = pgTable("comment_upvotes", {
   sql`PRIMARY KEY (${table.commentId}, ${table.profileId})`,
 ])
 
+/** タイムライン共通フィールド */
+export const timelineCommonFields = {
+  /** 対象テーブル名 */
+  targetTable: text("target_table").notNull().default(""),
+  /** 対象テーブルのレコードID */
+  targetId: uuid("target_id").notNull(),
+  /** 表示メッセージ */
+  message: text("message").notNull().default(""),
+  /** URL */
+  url: text("url").notNull().default(""),
+}
+
+/** 家族タイムラインテーブル */
+export const familyTimeline = pgTable("family_timeline", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
+  /** アクションタイプ */
+  actionType: familyTimelineActionType("action_type").notNull(),
+  /** 対象ユーザのプロフィールID */
+  profileId: uuid("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  /** タイムライン共通フィールド */
+  ...timelineCommonFields,
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type FamilyTimelineSelect = typeof familyTimeline.$inferSelect
+export type FamilyTimelineInsert = Omit<typeof familyTimeline.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type FamilyTimelineUpdate = Partial<FamilyTimelineInsert>
+
+/** 公開タイムラインテーブル */
+export const publicTimeline = pgTable("public_timeline", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 家族ID */
+  familyId: uuid("family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
+  /** アクションタイプ */
+  actionType: publicTimelineActionType("action_type").notNull(),
+  /** タイムライン共通フィールド */
+  ...timelineCommonFields,
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type PublicTimelineSelect = typeof publicTimeline.$inferSelect
+export type PublicTimelineInsert = Omit<typeof publicTimeline.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type PublicTimelineUpdate = Partial<PublicTimelineInsert>
 
 /** お小遣いテーブルタイプ */
 export const ageRewardTableType = pgEnum("age_reward_table_type", [

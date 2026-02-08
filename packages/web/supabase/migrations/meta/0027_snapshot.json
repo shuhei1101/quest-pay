@@ -1,6 +1,6 @@
 {
-  "id": "dc27b5c0-d830-417b-a8c1-bd2f72c49b78",
-  "prevId": "2d94aa0d-ab70-4ccd-8798-3dcba3e66c9a",
+  "id": "62e8dcb1-c7e3-462f-b6ed-3adde02ff3c8",
+  "prevId": "dc27b5c0-d830-417b-a8c1-bd2f72c49b78",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -722,7 +722,7 @@
         },
         "action_type": {
           "name": "action_type",
-          "type": "timeline_action_type",
+          "type": "family_timeline_action_type",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -1609,7 +1609,7 @@
         },
         "action_type": {
           "name": "action_type",
-          "type": "timeline_action_type",
+          "type": "public_timeline_action_type",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -2538,6 +2538,23 @@
         "downvote"
       ]
     },
+    "public.family_timeline_action_type": {
+      "name": "family_timeline_action_type",
+      "schema": "public",
+      "values": [
+        "other",
+        "quest_created",
+        "quest_completed",
+        "quest_cleared",
+        "quest_level_up",
+        "child_joined",
+        "parent_joined",
+        "reward_received",
+        "savings_updated",
+        "comment_posted",
+        "like_received"
+      ]
+    },
     "public.level_reward_table_type": {
       "name": "level_reward_table_type",
       "schema": "public",
@@ -2561,6 +2578,17 @@
         "other"
       ]
     },
+    "public.public_timeline_action_type": {
+      "name": "public_timeline_action_type",
+      "schema": "public",
+      "values": [
+        "other",
+        "quest_published",
+        "likes_milestone_reached",
+        "posts_milestone_reached",
+        "comments_milestone_reached"
+      ]
+    },
     "public.quest_type": {
       "name": "quest_type",
       "schema": "public",
@@ -2574,14 +2602,7 @@
       "name": "timeline_action_type",
       "schema": "public",
       "values": [
-        "quest_created",
-        "quest_completed",
-        "quest_cleared",
-        "quest_level_up",
-        "child_joined",
-        "parent_joined",
-        "reward_received",
-        "savings_updated"
+        "other"
       ]
     },
     "public.user_type": {
@@ -2593,9 +2614,7 @@
       ]
     }
   },
-  "schemas": {
-    "auth": "auth"
-  },
+  "schemas": {},
   "sequences": {},
   "roles": {},
   "policies": {},
