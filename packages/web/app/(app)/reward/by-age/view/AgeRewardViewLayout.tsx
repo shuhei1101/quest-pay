@@ -22,7 +22,7 @@ export const AgeRewardViewLayout = ({
   }
 
   return (
-    <Box className="space-y-6" style={{ overflow: "hidden", width: "100%" }}>
+    <Box className="space-y-6" style={{ width: "100%" }}>
       {/* 説明文 */}
       <Text size="sm" c="dimmed">
         年齢ごとに毎月のお小遣い金額を設定できます。お子様の年齢に応じて、定額で支給される報酬額を確認できます。学校の学年に合わせて、成長とともに金額を調整しましょう。
