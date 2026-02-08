@@ -11,7 +11,7 @@ export const RewardView = () => {
   const isLoading = isAgeLoading || isLevelLoading
 
   // データが取得できるまで待つ
-  if (!ageData || !levelData) {
+  if (!ageData || !levelData || !ageData.ageRewardTable || !levelData.levelRewardTable) {
     return <RewardViewLayout ageRewards={[]} levelRewards={[]} isLoading={true} />
   }
 

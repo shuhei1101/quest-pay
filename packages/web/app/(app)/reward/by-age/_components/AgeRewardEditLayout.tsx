@@ -96,19 +96,19 @@ export const AgeRewardEditLayout = ({
         <Box className="space-y-4">
           <Group grow>
             <Select
-              label="From"
-              data={Array.from({ length: 18 }, (_, i) => ({
-                value: String(i + 5),
-                label: `${i + 5}歳`
+              label="開始年齢"
+              data={Array.from({ length: 100 }, (_, i) => ({
+                value: String(i + 1),
+                label: `${i + 1}歳`
               }))}
               value={String(ageFrom)}
               onChange={(value) => setAgeFrom(Number(value) || 5)}
             />
             <Select
-              label="To"
-              data={Array.from({ length: 18 }, (_, i) => ({
-                value: String(i + 5),
-                label: `${i + 5}歳`
+              label="終了年齢"
+              data={Array.from({ length: 100 }, (_, i) => ({
+                value: String(i + 1),
+                label: `${i + 1}歳`
               }))}
               value={String(ageTo)}
               onChange={(value) => setAgeTo(Number(value) || 22)}
@@ -124,7 +124,7 @@ export const AgeRewardEditLayout = ({
             <Button
               onClick={() => {
                 if (ageFrom > ageTo) {
-                  alert("From年齢はTo年齢以下にしてください")
+                  alert("開始年齢は終了年齢以下にしてください")
                   return
                 }
                 setAgeRange([ageFrom, ageTo])

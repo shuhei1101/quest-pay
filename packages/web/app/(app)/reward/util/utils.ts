@@ -4,7 +4,8 @@ export const GRADE_GROUPS = [
   { name: "小学生", ages: [7, 8, 9, 10, 11, 12] },
   { name: "中学生", ages: [13, 14, 15] },
   { name: "高校生", ages: [16, 17, 18] },
-  { name: "大学生", ages: [19, 20, 21, 22] }
+  { name: "大学生", ages: [19, 20, 21, 22] },
+  { name: "大学生以降", ages: Array.from({ length: 78 }, (_, i) => i + 23) }
 ]
 
 /** 学年名を取得する */

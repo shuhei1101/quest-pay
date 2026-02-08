@@ -9,7 +9,9 @@ import { getFamilyLevelRewardTable } from "@/app/api/reward/by-level/table/clien
 export const useAgeRewardTable = () => {
   return useQuery({
     queryKey: ["ageRewardTable"],
-    queryFn: () => getFamilyAgeRewardTable()
+    queryFn: () => getFamilyAgeRewardTable(),
+    staleTime: 0,
+    refetchOnMount: "always",
   })
 }
 
@@ -17,6 +19,8 @@ export const useAgeRewardTable = () => {
 export const useLevelRewardTable = () => {
   return useQuery({
     queryKey: ["levelRewardTable"],
-    queryFn: () => getFamilyLevelRewardTable()
+    queryFn: () => getFamilyLevelRewardTable(),
+    staleTime: 0,
+    refetchOnMount: "always",
   })
 }

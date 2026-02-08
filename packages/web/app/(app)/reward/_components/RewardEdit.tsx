@@ -29,8 +29,8 @@ export const RewardEdit = () => {
   // お小遣い更新処理
   const ageUpdateMutation = useMutation({
     mutationFn: async (data: AgeRewardFormType) => await putFamilyAgeRewardTable(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ageRewardTable"] })
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["ageRewardTable"] })
       toast.success("定額報酬を更新しました")
       router.push(REWARD_VIEW_URL)
     },
@@ -42,8 +42,8 @@ export const RewardEdit = () => {
   // ランク報酬更新処理
   const levelUpdateMutation = useMutation({
     mutationFn: async (data: LevelRewardFormType) => await putFamilyLevelRewardTable(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["levelRewardTable"] })
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["levelRewardTable"] })
       toast.success("ランク報酬を更新しました")
       router.push(REWARD_VIEW_URL)
     },
