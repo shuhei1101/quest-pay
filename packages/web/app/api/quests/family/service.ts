@@ -529,7 +529,7 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
 
       // 家族タイムラインを登録する（達成、レベルアップ、完了時のみ）
       if (isCompletionAchieved) {
-        let timelineType: "quest_completed" | "quest_level_up" | "quest_cleared" = "quest_cleared"
+        let timelineType: "quest_completed" | "quest_level_up" = "quest_completed"
         let timelineMessage = ""
         
         if (notificationType === "quest_completed") {
@@ -539,6 +539,8 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
           timelineType = "quest_level_up"
           timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」をレベル${nextLevel}に上げました！`
         } else {
+          // quest_clearedの場合もquest_completedとして記録する
+          timelineType = "quest_completed"
           timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」を達成しました。`
         }
 
