@@ -529,31 +529,46 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
 
       // 家族タイムラインを登録する（達成、レベルアップ、完了時のみ）
       if (isCompletionAchieved) {
-        let timelineType: "quest_completed" | "quest_level_up" = "quest_completed"
         let timelineMessage = ""
         
         if (notificationType === "quest_completed") {
-          timelineType = "quest_completed"
           timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」を完全クリアしました！`
+          await insertFamilyTimeline({
+            db: tx,
+            record: {
+              familyId: child.profiles.familyId,
+              profileId: child.profiles.id,
+              type: "quest_completed",
+              message: timelineMessage,
+              questId: questChild.quest.id,
+            }
+          })
         } else if (notificationType === "quest_level_up") {
-          timelineType = "quest_level_up"
           timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」をレベル${nextLevel}に上げました！`
+          await insertFamilyTimeline({
+            db: tx,
+            record: {
+              familyId: child.profiles.familyId,
+              profileId: child.profiles.id,
+              type: "quest_level_up",
+              message: timelineMessage,
+              questId: questChild.quest.id,
+            }
+          })
         } else {
           // quest_clearedの場合もquest_completedとして記録する
-          timelineType = "quest_completed"
           timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」を達成しました。`
+          await insertFamilyTimeline({
+            db: tx,
+            record: {
+              familyId: child.profiles.familyId,
+              profileId: child.profiles.id,
+              type: "quest_completed",
+              message: timelineMessage,
+              questId: questChild.quest.id,
+            }
+          })
         }
-
-        await insertFamilyTimeline({
-          db: tx,
-          record: {
-            familyId: child.profiles.familyId,
-            profileId: child.profiles.id,
-            type: timelineType,
-            message: timelineMessage,
-            questId: questChild.quest.id,
-          }
-        })
       }
     })
   } catch (error) {

@@ -7,11 +7,10 @@ type TimelineItemProps = {
   profileIconColor?: string | null
   message: string
   createdAt: string
-  type: string
 }
 
 /** タイムラインアイテムコンポーネント */
-export const TimelineItem = ({profileName, profileIconColor, message, createdAt, type}: TimelineItemProps) => {
+export const TimelineItem = ({profileName, profileIconColor, message, createdAt}: TimelineItemProps) => {
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder>
       {/* タイムラインアイテムのコンテナ */}

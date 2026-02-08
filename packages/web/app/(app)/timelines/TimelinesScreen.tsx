@@ -67,7 +67,6 @@ export const TimelinesScreen = () => {
                       profileIconColor={timeline.profileIconColor}
                       message={timeline.message}
                       createdAt={timeline.createdAt}
-                      type={timeline.type}
                     />
                   ))
                 ) : (
@@ -97,7 +96,6 @@ export const TimelinesScreen = () => {
                       familyIconColor={timeline.familyIconColor}
                       message={timeline.message}
                       createdAt={timeline.createdAt}
-                      type={timeline.type}
                     />
                   ))
                 ) : (

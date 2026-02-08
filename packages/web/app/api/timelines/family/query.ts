@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm"
 import { Db } from "@/index"
-import { familyTimelines, FamilyTimelineSelect, profiles, families } from "@/drizzle/schema"
+import { familyTimelines, profiles } from "@/drizzle/schema"
 import { devLog } from "@/app/(core)/util"
 import { DatabaseError } from "@/app/(core)/error/appError"
 

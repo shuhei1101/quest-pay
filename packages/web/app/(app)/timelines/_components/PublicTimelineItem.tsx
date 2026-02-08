@@ -7,11 +7,10 @@ type PublicTimelineItemProps = {
   familyIconColor?: string | null
   message: string
   createdAt: string
-  type: string
 }
 
 /** 公開タイムラインアイテムコンポーネント */
-export const PublicTimelineItem = ({familyOnlineName, familyIconColor, message, createdAt, type}: PublicTimelineItemProps) => {
+export const PublicTimelineItem = ({familyOnlineName, familyIconColor, message, createdAt}: PublicTimelineItemProps) => {
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder>
       {/* タイムラインアイテムのコンテナ */}
