@@ -183,6 +183,27 @@
       "when": 1769693182220,
       "tag": "0025_lying_excalibur",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1770550841572,
+      "tag": "0026_striped_shadow_king",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1770551488446,
+      "tag": "0027_zippy_thundra",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1770552270979,
+      "tag": "0028_unusual_junta",
+      "breakpoints": true
     }
   ]
 }
