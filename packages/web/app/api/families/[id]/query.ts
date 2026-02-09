@@ -41,7 +41,7 @@ export const fetchFamilyProfile = async ({db, familyId}: {
     const likeCountResult = await db
       .select({ count: count() })
       .from(templateQuests)
-      .leftJoin(publicQuests, eq(templateQuests.publicQuestId, publicQuests.id))
+      .innerJoin(publicQuests, eq(templateQuests.publicQuestId, publicQuests.id))
       .where(eq(publicQuests.familyId, familyId))
     
     const likeCount = likeCountResult[0]?.count || 0

@@ -16,12 +16,15 @@ export const FamilyViewScreen = ({id}: {id: string}) => {
     router.back()
   }
 
+  // 家族情報を取得する
+  const family = profile?.family.families
+
   return (
     <FamilyViewLayout
-      familyName={profile?.family.families?.onlineName || profile?.family.families?.localName || ""}
-      familyHandle={profile?.family.families?.displayId || ""}
-      introduction={profile?.family.families?.introduction || ""}
-      iconColor={profile?.family.families?.iconColor || ""}
+      familyName={family?.onlineName || family?.localName || ""}
+      familyHandle={family?.displayId || ""}
+      introduction={family?.introduction || ""}
+      iconColor={family?.iconColor || ""}
       publicQuestCount={Number(profile?.publicQuestCount) || 0}
       likeCount={Number(profile?.likeCount) || 0}
       timelines={profile?.timelines || []}
