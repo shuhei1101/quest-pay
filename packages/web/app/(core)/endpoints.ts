@@ -109,7 +109,10 @@ export const GUEST_QUESTS_URL = `${QUESTS_URL}/guest`
 // 家族
 export const FAMILIES_URL = `/families`
 export const FAMILY_NEW_URL = `${FAMILIES_URL}/new`
+export const FAMILY_URL = (familyId: string) => `${FAMILIES_URL}/${familyId}`
+export const FAMILY_VIEW_URL = (familyId: string) => `${FAMILY_URL(familyId)}/view`
 export const FAMILY_API_URL = `/api${FAMILIES_URL}`
+export const FAMILY_PROFILE_API_URL = (familyId: string) => `${FAMILY_API_URL}/${familyId}`
 export const FAMILY_INVITE_API_URL = `${FAMILY_API_URL}/invite`
 // 家族メンバー
 export const FAMILY_MEMBERS_URL = `${FAMILIES_URL}/members`
