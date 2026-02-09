@@ -22,7 +22,6 @@ export const FamilyViewScreen = ({id}: {id: string}) => {
       familyHandle={profile?.family.families?.displayId || ""}
       introduction={profile?.family.families?.introduction || ""}
       iconColor={profile?.family.families?.iconColor || ""}
-      iconName={profile?.family.icons?.name}
       publicQuestCount={Number(profile?.publicQuestCount) || 0}
       likeCount={Number(profile?.likeCount) || 0}
       timelines={profile?.timelines || []}

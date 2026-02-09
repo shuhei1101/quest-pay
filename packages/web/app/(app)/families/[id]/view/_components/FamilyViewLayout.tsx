@@ -14,8 +14,6 @@ type FamilyViewLayoutProps = {
   familyHandle: string
   /** 紹介文 */
   introduction: string
-  /** アイコン名 */
-  iconName?: string
   /** アイコンカラー */
   iconColor?: string
   /** 公開クエスト数 */
@@ -38,7 +36,6 @@ export const FamilyViewLayout = ({
   familyName,
   familyHandle,
   introduction,
-  iconName,
   iconColor,
   publicQuestCount,
   likeCount,
