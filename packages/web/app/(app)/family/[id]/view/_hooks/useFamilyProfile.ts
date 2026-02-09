@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchFamilyDetail } from "@/app/api/families/[id]/client"
 import { postFollow, deleteFollow, fetchFollowStatus } from "@/app/api/families/[id]/follow/client"
-import { fetchFamilyTimelines } from "@/app/api/timeline/family/client"
+import { fetchFamilyTimelines } from "@/app/api/timeline/family/[id]/client"
 
 /** 家族詳細情報を取得する */
 export const useFamilyDetail = ({familyId}: {familyId: string}) => {
@@ -65,7 +65,7 @@ export const useFamilyTimeline = ({familyId}: {familyId: string}) => {
   })
 
   return {
-    timelines: data || [],
+    timelines: data?.timelines || [],
     isLoading,
   }
 }

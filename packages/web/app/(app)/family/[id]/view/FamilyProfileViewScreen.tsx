@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { FamilyProfileViewLayout } from "./_components/FamilyProfileViewLayout"
 import { FamilyProfileViewFooter } from "./_components/FamilyProfileViewFooter"
 import { useFamilyDetail, useFollowStatus, useFollowToggle, useFamilyTimeline } from "./_hooks/useFamilyProfile"
-import { format } from "date-fns"
+import { formatTime } from "@/app/(core)/util"
 
 /** 家族プロフィール画面 */
 export const FamilyProfileViewScreen = ({ id }: { id: string }) => {
@@ -32,10 +32,13 @@ export const FamilyProfileViewScreen = ({ id }: { id: string }) => {
   }
 
   /** タイムラインデータを整形する */
-  const formattedTimelines = timelines.map((timeline) => ({
-    message: timeline.message,
-    time: timeline.createdAt ? format(new Date(timeline.createdAt), "HH:mm") : "",
-  }))
+  const formattedTimelines = timelines.map((timeline) => {
+    const timelineData = timeline.family_timeline
+    return {
+      message: timelineData?.message || "",
+      time: timelineData?.createdAt ? formatTime(timelineData.createdAt) : "",
+    }
+  })
 
   return (
     <FamilyProfileViewLayout
