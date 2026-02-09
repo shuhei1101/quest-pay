@@ -1,5 +1,5 @@
 import { authGuard } from "@/app/(core)/_auth/authGuard"
-import { QUESTS_URL } from "@/app/(core)/endpoints"
+import { QUESTS_URL, TIMELINE_URL } from "@/app/(core)/endpoints"
 import { redirect } from "next/navigation"
 
 export default async function Page() {
@@ -11,7 +11,7 @@ export default async function Page() {
     redirect(QUESTS_URL)
   } else {
     // 親ユーザの場合、家族クエスト画面に遷移する
-    redirect(QUESTS_URL)
+    redirect(TIMELINE_URL)
   }
 
 }

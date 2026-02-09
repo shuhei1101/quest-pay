@@ -1,6 +1,6 @@
 {
-  "id": "dc27b5c0-d830-417b-a8c1-bd2f72c49b78",
-  "prevId": "2d94aa0d-ab70-4ccd-8798-3dcba3e66c9a",
+  "id": "daa6fc03-6120-47cd-b4f1-7f524fb270ca",
+  "prevId": "69b6fa18-d86c-4b64-ae75-a501affc0bf8",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -720,23 +720,10 @@
           "primaryKey": false,
           "notNull": true
         },
-        "action_type": {
-          "name": "action_type",
-          "type": "timeline_action_type",
+        "type": {
+          "name": "type",
+          "type": "family_timeline_action_type",
           "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_table": {
-          "name": "target_table",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "target_id": {
-          "name": "target_id",
-          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -752,6 +739,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "''"
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -1607,23 +1600,10 @@
           "primaryKey": false,
           "notNull": true
         },
-        "action_type": {
-          "name": "action_type",
-          "type": "timeline_action_type",
+        "type": {
+          "name": "type",
+          "type": "public_timeline_action_type",
           "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_table": {
-          "name": "target_table",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "target_id": {
-          "name": "target_id",
-          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -1633,6 +1613,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "''"
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -2538,6 +2524,24 @@
         "downvote"
       ]
     },
+    "public.family_timeline_action_type": {
+      "name": "family_timeline_action_type",
+      "schema": "public",
+      "values": [
+        "quest_created",
+        "quest_completed",
+        "quest_cleared",
+        "quest_level_up",
+        "child_joined",
+        "parent_joined",
+        "reward_received",
+        "savings_updated",
+        "savings_milestone_reached",
+        "quest_milestone_reached",
+        "comment_posted",
+        "other"
+      ]
+    },
     "public.level_reward_table_type": {
       "name": "level_reward_table_type",
       "schema": "public",
@@ -2561,6 +2565,19 @@
         "other"
       ]
     },
+    "public.public_timeline_action_type": {
+      "name": "public_timeline_action_type",
+      "schema": "public",
+      "values": [
+        "quest_published",
+        "likes_milestone_reached",
+        "posts_milestone_reached",
+        "comments_milestone_reached",
+        "comment_posted",
+        "like_received",
+        "other"
+      ]
+    },
     "public.quest_type": {
       "name": "quest_type",
       "schema": "public",
@@ -2570,18 +2587,19 @@
         "family"
       ]
     },
-    "public.timeline_action_type": {
-      "name": "timeline_action_type",
+    "public.timeline_type": {
+      "name": "timeline_type",
       "schema": "public",
       "values": [
-        "quest_created",
+        "quest_registered",
+        "quest_received",
         "quest_completed",
-        "quest_cleared",
         "quest_level_up",
-        "child_joined",
-        "parent_joined",
-        "reward_received",
-        "savings_updated"
+        "penalty_received",
+        "quest_published",
+        "quest_like_milestone",
+        "child_birthday",
+        "other"
       ]
     },
     "public.user_type": {
@@ -2593,9 +2611,7 @@
       ]
     }
   },
-  "schemas": {
-    "auth": "auth"
-  },
+  "schemas": {},
   "sequences": {},
   "roles": {},
   "policies": {},

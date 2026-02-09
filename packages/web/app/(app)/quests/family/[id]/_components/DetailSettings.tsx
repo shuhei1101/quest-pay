@@ -141,9 +141,9 @@ export const DetailSettings = ({
             {/* レベルタブ（スクロール可能領域） */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <ScrollableTabs
-                value={activeLevel}
+                activeTab={activeLevel}
                 onChange={setActiveLevel}
-                items={tabItems}
+                tabs={tabItems}
               >
                 {/* タブパネルコンテンツはここでは表示しない（下で別途表示） */}
                 <></>

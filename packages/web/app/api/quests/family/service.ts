@@ -13,9 +13,10 @@ import { fetchUserInfoByUserId } from "../../users/query"
 import { fetchFamilyParents } from "../../parents/query"
 import { insertNotification } from "../../notifications/db"
 import { fetchChild } from "../../children/query"
-import { CHILD_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
+import { CHILD_QUEST_VIEW_URL, FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 import { fetchChildQuest } from "./[id]/child/query"
 import { updateChild } from "../../children/db"
+import { insertFamilyTimeline } from "../../timeline/db"
 
 /** 家族クエストを登録する */
 export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest, questChildren, questTags}: {
@@ -49,6 +50,24 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
       
       // タグを挿入する
       if (questTags.length > 0) await insertQuestTags({db: tx, records: questTags, questId})
+
+      // 認証コンテキストを取得する
+      const { userId } = await getAuthContext()
+      // プロフィール情報を取得する
+      const userInfo = await fetchUserInfoByUserId({userId, db: tx})
+      if (!userInfo?.profiles?.id) throw new ServerError("プロフィールIDの取得に失敗しました。")
+
+      // 家族タイムラインを登録する
+      await insertFamilyTimeline({
+        db: tx,
+        record: {
+          familyId: familyQuest.familyId,
+          profileId: userInfo.profiles.id,
+          type: "quest_created",
+          message: `「${ quests.name }」クエストを登録しました。`,
+          url: `${ FAMILY_QUEST_VIEW_URL( familyQuestId ) }`,
+        }
+      })
 
       return questId
     })
@@ -507,6 +526,50 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
           url: `${CHILD_QUEST_VIEW_URL(questChild.base.id, currentQuestChild.childId)}`,
         },
       })
+
+      // 家族タイムラインを登録する（達成、レベルアップ、完了時のみ）
+      if (isCompletionAchieved) {
+        let timelineMessage = ""
+        
+        if (notificationType === "quest_completed") {
+          timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」を完全クリアしました！`
+          await insertFamilyTimeline({
+            db: tx,
+            record: {
+              familyId: child.profiles.familyId,
+              profileId: child.profiles.id,
+              type: "quest_completed",
+              message: timelineMessage,
+              url: `${CHILD_QUEST_VIEW_URL(currentQuestChild.familyQuestId, currentQuestChild.childId)}`,
+            }
+          })
+        } else if (notificationType === "quest_level_up") {
+          timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」をレベル${nextLevel}に上げました！`
+          await insertFamilyTimeline({
+            db: tx,
+            record: {
+              familyId: child.profiles.familyId,
+              profileId: child.profiles.id,
+              type: "quest_level_up",
+              message: timelineMessage,
+              url: `${CHILD_QUEST_VIEW_URL(currentQuestChild.familyQuestId, currentQuestChild.childId)}`,
+            }
+          })
+        } else {
+          // quest_clearedの場合もquest_completedとして記録する
+          timelineMessage = `${child.profiles.name}が「${questChild.quest.name}」を達成しました。`
+          await insertFamilyTimeline({
+            db: tx,
+            record: {
+              familyId: child.profiles.familyId,
+              profileId: child.profiles.id,
+              type: "quest_completed",
+              message: timelineMessage,
+              url: `${CHILD_QUEST_VIEW_URL(currentQuestChild.familyQuestId, currentQuestChild.childId)}`,
+            }
+          })
+        }
+      }
     })
   } catch (error) {
     devLog("approveReport error:", error)

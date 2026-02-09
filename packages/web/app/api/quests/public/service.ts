@@ -10,6 +10,8 @@ import { fetchFamilyQuest } from "../family/query"
 import { fetchPublicQuest } from "./query"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "../../users/query"
+import { insertPublicTimeline } from "../../timeline/db"
+import { PUBLIC_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 
 /** 家族クエストから公開クエストを登録する */
 export const registerPublicQuestByFamilyQuest = async ({
@@ -153,6 +155,10 @@ export const activatePublicQuest = async ({db, publicQuest}: {
   try {
     return await db.transaction(async (tx) => {
 
+      // 公開クエストを取得する
+      const currentPublicQuest = await fetchPublicQuest({ db: tx, id: publicQuest.id })
+      if (!currentPublicQuest) throw new DatabaseError("公開クエストの取得に失敗しました。")
+
       // 公開クエストを更新する
       await updatePublicQuest({db: tx,
         record: {
@@ -160,6 +166,17 @@ export const activatePublicQuest = async ({db, publicQuest}: {
         },
         id: publicQuest.id, 
         updatedAt: publicQuest.updatedAt
+      })
+
+      // 公開タイムラインを登録する
+      await insertPublicTimeline({
+        db: tx,
+        record: {
+          familyId: currentPublicQuest.base.familyId,
+          type: "quest_published",
+          message: `新たなクエスト「${currentPublicQuest.quest.name}」を公開しました。`,
+          url: `${PUBLIC_QUEST_VIEW_URL(currentPublicQuest.base.id)}`
+        }
       })
     })
   } catch (error) {
