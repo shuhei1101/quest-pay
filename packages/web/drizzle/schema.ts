@@ -709,3 +709,17 @@ export const templateLevelRewardTables = pgTable("template_level_reward_tables",
 })
 export type TemplateLevelRewardTableSelect = typeof templateLevelRewardTables.$inferSelect
 export type TemplateLevelRewardTableInsert = Omit<typeof templateLevelRewardTables.$inferInsert, "id" | "createdAt" | "updatedAt">
+
+/** フォローテーブル */
+export const follows = pgTable("follows", {
+  /** フォロー元の家族ID */
+  followerFamilyId: uuid("follower_family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
+  /** フォロー先の家族ID */
+  followFamilyId: uuid("follow_family_id").notNull().references(() => families.id, { onDelete: "cascade" }),
+  /** タイムスタンプ */
+  ...timestamps,
+}, (table) => [
+  sql`PRIMARY KEY (${table.followerFamilyId}, ${table.followFamilyId})`,
+])
+export type FollowSelect = typeof follows.$inferSelect
+export type FollowInsert = Omit<typeof follows.$inferInsert, "createdAt" | "updatedAt">
