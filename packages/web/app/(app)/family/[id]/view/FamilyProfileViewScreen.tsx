@@ -1,0 +1,57 @@
+"use client"
+
+import { useRouter } from "next/navigation"
+import { FamilyProfileViewLayout } from "./_components/FamilyProfileViewLayout"
+import { FamilyProfileViewFooter } from "./_components/FamilyProfileViewFooter"
+import { useFamilyDetail, useFollowStatus, useFollowToggle, useFamilyTimeline } from "./_hooks/useFamilyProfile"
+import { format } from "date-fns"
+
+/** 家族プロフィール画面 */
+export const FamilyProfileViewScreen = ({ id }: { id: string }) => {
+  const router = useRouter()
+
+  /** 家族詳細情報を取得する */
+  const { familyDetail, isLoading: isFamilyLoading } = useFamilyDetail({ familyId: id })
+
+  /** フォロー状態を取得する */
+  const { isFollowing, isLoading: isFollowLoading } = useFollowStatus({ familyId: id })
+
+  /** フォロー切り替えを行う */
+  const { follow, unfollow, isLoading: isFollowToggleLoading } = useFollowToggle({ familyId: id })
+
+  /** 家族タイムラインを取得する */
+  const { timelines, isLoading: isTimelineLoading } = useFamilyTimeline({ familyId: id })
+
+  /** フォローボタン押下時のハンドラ */
+  const handleFollowClick = () => {
+    if (isFollowing) {
+      unfollow()
+    } else {
+      follow()
+    }
+  }
+
+  /** タイムラインデータを整形する */
+  const formattedTimelines = timelines.map((timeline) => ({
+    message: timeline.message,
+    time: timeline.createdAt ? format(new Date(timeline.createdAt), "HH:mm") : "",
+  }))
+
+  return (
+    <FamilyProfileViewLayout
+      familyName={familyDetail?.family?.onlineName ?? null}
+      displayId={familyDetail?.family?.displayId ?? ""}
+      iconColor={familyDetail?.family?.iconColor ?? "#000000"}
+      introduction={familyDetail?.family?.introduction ?? ""}
+      followerCount={familyDetail?.followCount?.followerCount ?? 0}
+      followingCount={familyDetail?.followCount?.followingCount ?? 0}
+      publicQuestCount={familyDetail?.stats?.publicQuestCount ?? 0}
+      likeCount={familyDetail?.stats?.likeCount ?? 0}
+      timelines={formattedTimelines}
+      isLoading={isFamilyLoading || isFollowLoading || isTimelineLoading || isFollowToggleLoading}
+      isFollowing={isFollowing}
+      onFollowClick={handleFollowClick}
+      footer={<FamilyProfileViewFooter onBack={() => router.back()} />}
+    />
+  )
+}
