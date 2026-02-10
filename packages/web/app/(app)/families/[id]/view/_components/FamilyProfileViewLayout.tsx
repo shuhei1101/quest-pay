@@ -90,7 +90,7 @@ export const FamilyProfileViewLayout = ({
         <Paper className="p-4 mb-4" withBorder>
           <Group align="flex-start">
             {/* アイコン */}
-            <Box className="flex-shrink-0">
+            <Box className="shrink-0">
               <RenderIcon 
                 iconName={iconName}
                 iconSize={iconSize ?? 80}
