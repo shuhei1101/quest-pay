@@ -15,8 +15,10 @@ export const fetchRewardHistories = async ({ db, childId, yearMonth }: {
 
     if (yearMonth) {
       const [year, month] = yearMonth.split('-')
-      const startDate = `${year}-${month}-01`
-      const endDate = new Date(parseInt(year), parseInt(month), 0).toISOString().split('T')[0]
+      const startDate = `${year}-${month.padStart(2, '0')}-01`
+      const nextMonth = parseInt(month) === 12 ? 1 : parseInt(month) + 1
+      const nextYear = parseInt(month) === 12 ? parseInt(year) + 1 : parseInt(year)
+      const endDate = new Date(nextYear, nextMonth - 1, 0).toISOString().split('T')[0]
 
       whereConditions.push(
         gte(rewardHistories.rewardedAt, startDate),
@@ -52,6 +54,7 @@ export const fetchRewardHistoryMonthlyStats = async ({ db, childId }: {
         totalExp: sql<number>`SUM(${rewardHistories.exp})::int`,
         count: sql<number>`COUNT(*)::int`,
         isPaid: sql<boolean>`BOOL_AND(${rewardHistories.isPaid})`,
+        paidAt: sql<string | null>`MAX(${rewardHistories.paidAt})`,
       })
       .from(rewardHistories)
       .where(eq(rewardHistories.childId, childId))
