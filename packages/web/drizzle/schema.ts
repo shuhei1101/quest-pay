@@ -54,6 +54,14 @@ export const notificationType = pgEnum("notification_type", [
   "other",                      // その他
 ])
 
+/** 報酬タイプ */
+export const rewardType = pgEnum("reward_type", [
+  "quest",                // クエスト報酬
+  "age_monthly",          // お小遣い（年齢別定期報酬）
+  "level_monthly",        // レベル別定期報酬（rewardByLevels）
+  "other",                // その他
+])
+
 /** 家族タイムラインアクションタイプ */
 export const familyTimelineActionType = pgEnum("family_timeline_action_type", [
   "quest_created",              // クエスト作成
@@ -432,6 +440,37 @@ export const notifications = pgTable("notifications", {
 export type NotificationSelect = typeof notifications.$inferSelect
 export type NotificationInsert = Omit<typeof notifications.$inferInsert, "id" | "createdAt" | "updatedAt">
 export type NotificationUpdate = Partial<NotificationInsert>
+
+/** 報酬履歴テーブル */
+export const rewardHistories = pgTable("reward_histories", {
+  /** ID */
+  id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+  /** 子供ID */
+  childId: uuid("child_id").notNull().references(() => children.id, { onDelete: "cascade" }),
+  /** 報酬タイプ */
+  type: rewardType("type").notNull(),
+  /** タイトル（〇〇クエスト達成など） */
+  title: text("title").notNull().default(""),
+  /** 報酬額 */
+  amount: integer("amount").notNull(),
+  /** 経験値 */
+  exp: integer("exp").notNull().default(0),
+  /** 報酬付与日時 */
+  rewardedAt: timestamp("rewarded_at", { withTimezone: true, mode: "string" }).notNull().defaultNow(),
+  /** 支払い予定日（年齢別報酬などで使用） */
+  scheduledPaymentDate: date("scheduled_payment_date"),
+  /** 支払い済みフラグ */
+  isPaid: boolean("is_paid").notNull().default(false),
+  /** 支払い日時 */
+  paidAt: timestamp("paid_at", { withTimezone: true, mode: "string" }),
+  /** 関連URL */
+  url: text("url"),
+  /** タイムスタンプ */
+  ...timestamps,
+})
+export type RewardHistorySelect = typeof rewardHistories.$inferSelect
+export type RewardHistoryInsert = Omit<typeof rewardHistories.$inferInsert, "id" | "createdAt" | "updatedAt">
+export type RewardHistoryUpdate = Partial<RewardHistoryInsert>
 
 /** コメント共通カラム */
 const commentCommonColumns = {

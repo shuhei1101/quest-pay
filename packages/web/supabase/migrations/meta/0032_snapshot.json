@@ -1,6 +1,6 @@
 {
-  "id": "41c763d7-f174-478e-a583-9f7afad3647e",
-  "prevId": "daa6fc03-6120-47cd-b4f1-7f524fb270ca",
+  "id": "26d9fc32-b6ae-491c-8d83-4ae1abc0e01d",
+  "prevId": "41c763d7-f174-478e-a583-9f7afad3647e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -2772,8 +2772,8 @@
       "values": [
         "quest",
         "age_monthly",
-        "level_up",
-        "manual_adjustment"
+        "level_monthly",
+        "other"
       ]
     },
     "public.timeline_type": {
