@@ -35,7 +35,7 @@ export async function POST(
       throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
     }
 
-    if (userInfo.profiles.userType === 'parent') {
+    if (userInfo.profiles.type === 'parent') {
       throw new ServerError("子供ユーザのみが支払い完了を実行できます。")
     }
 

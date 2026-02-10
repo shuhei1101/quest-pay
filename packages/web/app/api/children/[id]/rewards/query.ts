@@ -11,26 +11,24 @@ export const fetchRewardHistories = async ({ db, childId, yearMonth }: {
   yearMonth?: string
 }) => {
   try {
-    let query = db
-      .select()
-      .from(rewardHistories)
-      .where(eq(rewardHistories.childId, childId))
+    let whereConditions = [eq(rewardHistories.childId, childId)]
 
     if (yearMonth) {
       const [year, month] = yearMonth.split('-')
       const startDate = `${year}-${month}-01`
       const endDate = new Date(parseInt(year), parseInt(month), 0).toISOString().split('T')[0]
 
-      query = query.where(
-        and(
-          eq(rewardHistories.childId, childId),
-          gte(rewardHistories.rewardedAt, startDate),
-          lte(rewardHistories.rewardedAt, endDate + 'T23:59:59.999Z')
-        )
+      whereConditions.push(
+        gte(rewardHistories.rewardedAt, startDate),
+        lte(rewardHistories.rewardedAt, endDate + 'T23:59:59.999Z')
       )
     }
 
-    const data = await query.orderBy(rewardHistories.rewardedAt)
+    const data = await db
+      .select()
+      .from(rewardHistories)
+      .where(and(...whereConditions))
+      .orderBy(rewardHistories.rewardedAt)
 
     devLog("fetchRewardHistories.取得データ: ", data, "app/api/children/[id]/rewards/query.ts")
 
