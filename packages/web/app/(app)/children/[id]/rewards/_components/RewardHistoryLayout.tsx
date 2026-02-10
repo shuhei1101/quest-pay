@@ -17,6 +17,8 @@ type RewardHistoryItem = {
   exp: number
   rewardedAt: string
   type: string
+  isPaid: boolean
+  paidAt: string | null
 }
 
 /** 月別統計 */
@@ -26,6 +28,7 @@ type MonthlyStatItem = {
   totalExp: number
   count: number
   isPaid: boolean
+  paidAt?: string | null
 }
 
 /** お小遣い管理画面レイアウトのプロパティ */
@@ -124,9 +127,9 @@ export const RewardHistoryLayout = ({
         <Text size="36px" fw={700} mb={8}>
           {selectedType === "reward" ? `${totalAmount}円` : `${totalExp}EXP`}
         </Text>
-        {isPaid && (
+        {isPaid && currentMonthStat?.paidAt && (
           <Text size="sm" mb={8}>
-            支払い済み: {dayjs(currentMonthStat?.isPaid ? "済" : "未").format('YYYY/M/D')}
+            支払い済み: {dayjs(currentMonthStat.paidAt).format('YYYY/M/D')}
           </Text>
         )}
         {isParent && !isPaid && (

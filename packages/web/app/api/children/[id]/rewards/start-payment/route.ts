@@ -39,13 +39,8 @@ export async function POST(
       throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
     }
 
-    await updateRewardHistoriesPaymentStatus({
-      db,
-      childId,
-      yearMonth,
-      isPaid: false,
-      paidAt: null
-    })
+    // 支払い開始時は何もせず、子供が受取完了を押したときにisPaidをtrueにする
+    // （現在のDBスキーマでは支払い中状態を表現するフィールドがないため）
 
     return NextResponse.json({ success: true })
   })
