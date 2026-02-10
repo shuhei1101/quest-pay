@@ -57,9 +57,9 @@ export const notificationType = pgEnum("notification_type", [
 /** 報酬タイプ */
 export const rewardType = pgEnum("reward_type", [
   "quest",                // クエスト報酬
-  "age_monthly",          // 年齢別定期報酬（月次）
-  "level_up",             // レベルアップ報酬
-  "manual_adjustment",    // 手動調整
+  "age_monthly",          // お小遣い（年齢別定期報酬）
+  "level_monthly",        // レベル別定期報酬（rewardByLevels）
+  "other",                // その他
 ])
 
 /** 家族タイムラインアクションタイプ */
