@@ -1,7 +1,7 @@
 import { devLog, generateInviteCode } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
-import { families, publicQuests, templateQuests } from "@/drizzle/schema"
+import { families, publicQuests, templateQuests, icons } from "@/drizzle/schema"
 import { and, eq, sql } from "drizzle-orm"
 
 /** 家族を取得する */
@@ -11,10 +11,11 @@ export const fetchFamily = async ({ db, familyId }: {
 }) => {
   try {
 
-    // データを取得する
+    // データを取得する（アイコン情報を含む）
     const rows = await db
       .select()
       .from(families)
+      .leftJoin(icons, eq(families.iconId, icons.id))
       .where(eq(families.id, familyId))
       .limit(1)
 

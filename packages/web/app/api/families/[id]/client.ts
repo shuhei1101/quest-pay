@@ -6,11 +6,16 @@ type FamilyDetail = {
   family: {
     id: string
     displayId: string
+    localName: string
     onlineName: string | null
     introduction: string
     iconId: number
     iconColor: string
   }
+  icon: {
+    name: string
+    size: number | null
+  } | null
   stats: {
     publicQuestCount: number
     likeCount: number

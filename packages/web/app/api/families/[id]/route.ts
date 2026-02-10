@@ -18,8 +18,8 @@ export async function GET(
     await getAuthContext()
 
     // 家族情報を取得する
-    const family = await fetchFamily({ db, familyId })
-    if (!family) {
+    const familyData = await fetchFamily({ db, familyId })
+    if (!familyData?.families) {
       throw new AppError("NOT_FOUND", 404, "家族が見つかりません。")
     }
 
@@ -31,13 +31,18 @@ export async function GET(
 
     return NextResponse.json({
       family: {
-        id: family.id,
-        displayId: family.displayId,
-        onlineName: family.onlineName,
-        introduction: family.introduction,
-        iconId: family.iconId,
-        iconColor: family.iconColor,
+        id: familyData.families.id,
+        displayId: familyData.families.displayId,
+        localName: familyData.families.localName,
+        onlineName: familyData.families.onlineName,
+        introduction: familyData.families.introduction,
+        iconId: familyData.families.iconId,
+        iconColor: familyData.families.iconColor,
       },
+      icon: familyData.icons ? {
+        name: familyData.icons.name,
+        size: familyData.icons.size,
+      } : null,
       stats,
       followCount,
     })

@@ -1,9 +1,9 @@
 "use client"
 
-import { Box, Paper, LoadingOverlay, Avatar, Text, Button, Group, Stack, Divider } from "@mantine/core"
+import { Box, Paper, LoadingOverlay, Text, Button, Group, Stack, Divider } from "@mantine/core"
 import { ReactNode } from "react"
 import { useWindow } from "@/app/(core)/useConstants"
-import { IconUserCircle } from "@tabler/icons-react"
+import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 
 /** タイムラインアイテムのプロパティ */
 type TimelineItemProps = {
@@ -25,6 +25,10 @@ type FamilyProfileViewLayoutProps = {
   familyName: string | null
   /** 表示ID */
   displayId: string
+  /** アイコン名 */
+  iconName?: string
+  /** アイコンサイズ */
+  iconSize?: number | null
   /** アイコンカラー */
   iconColor: string
   /** 紹介文 */
@@ -41,10 +45,14 @@ type FamilyProfileViewLayoutProps = {
   timelines: TimelineItemProps[]
   /** ローディング状態 */
   isLoading: boolean
+  /** 自分の家族かどうか */
+  isOwnFamily: boolean
   /** フォロー中かどうか */
   isFollowing: boolean
   /** フォローボタン押下時のハンドラ */
   onFollowClick: () => void
+  /** 編集ボタン押下時のハンドラ */
+  onEdit?: () => void
   /** フッター要素 */
   footer?: ReactNode
 }
@@ -53,6 +61,8 @@ type FamilyProfileViewLayoutProps = {
 export const FamilyProfileViewLayout = ({
   familyName,
   displayId,
+  iconName,
+  iconSize,
   iconColor,
   introduction,
   followerCount,
@@ -61,8 +71,10 @@ export const FamilyProfileViewLayout = ({
   likeCount,
   timelines,
   isLoading,
+  isOwnFamily,
   isFollowing,
   onFollowClick,
+  onEdit,
   footer,
 }: FamilyProfileViewLayoutProps) => {
   const { isDark } = useWindow()
@@ -76,16 +88,15 @@ export const FamilyProfileViewLayout = ({
       <Box className="flex-1 overflow-y-auto p-4">
         {/* プロフィールヘッダー */}
         <Paper className="p-4 mb-4" withBorder>
-          <Group>
+          <Group align="flex-start">
             {/* アイコン */}
-            <Avatar
-              size={80}
-              radius="xl"
-              color={iconColor}
-              className="flex-shrink-0"
-            >
-              <IconUserCircle size={60} />
-            </Avatar>
+            <Box className="flex-shrink-0">
+              <RenderIcon 
+                iconName={iconName}
+                iconSize={iconSize ?? 80}
+                iconColor={iconColor}
+              />
+            </Box>
 
             {/* 家族情報 */}
             <Stack gap="xs" className="flex-1">
@@ -99,15 +110,27 @@ export const FamilyProfileViewLayout = ({
                 </Text>
               </div>
 
-              {/* フォローボタン */}
-              <Button
-                size="sm"
-                variant={isFollowing ? "outline" : "filled"}
-                onClick={onFollowClick}
-                className="w-32"
-              >
-                {isFollowing ? "フォロー中" : "フォロー"}
-              </Button>
+              {/* フォローボタンまたは編集ボタン */}
+              {!isOwnFamily && (
+                <Button
+                  size="xs"
+                  variant={isFollowing ? "outline" : "filled"}
+                  onClick={onFollowClick}
+                  className="w-24"
+                >
+                  {isFollowing ? "フォロー中" : "フォロー"}
+                </Button>
+              )}
+              {isOwnFamily && onEdit && (
+                <Button
+                  size="xs"
+                  variant="light"
+                  onClick={onEdit}
+                  className="w-24"
+                >
+                  編集
+                </Button>
+              )}
             </Stack>
           </Group>
 
@@ -123,7 +146,7 @@ export const FamilyProfileViewLayout = ({
             {/* フォロー数 */}
             <Stack gap={4} align="center">
               <Text size="lg" fw={700}>
-                {followingCount}人
+                {followingCount}
               </Text>
               <Text size="xs" c="dimmed">
                 フォロー
@@ -133,7 +156,7 @@ export const FamilyProfileViewLayout = ({
             {/* フォロワー数 */}
             <Stack gap={4} align="center">
               <Text size="lg" fw={700}>
-                {followerCount}人
+                {followerCount}
               </Text>
               <Text size="xs" c="dimmed">
                 フォロワー
