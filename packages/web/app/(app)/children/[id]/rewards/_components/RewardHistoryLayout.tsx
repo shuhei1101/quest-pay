@@ -103,7 +103,7 @@ export const RewardHistoryLayout = ({
         >
           {monthlyStats.map(stat => (
             <Tabs.Panel key={stat.yearMonth} value={stat.yearMonth}>
-              {/* ダミー */}
+              <div />
             </Tabs.Panel>
           ))}
         </ScrollableTabs>

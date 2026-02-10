@@ -28,7 +28,7 @@ export async function POST(
     const userInfo = await fetchUserInfoByUserId({ userId, db })
     if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
 
-    if (userInfo.profiles.userType !== 'parent') {
+    if (userInfo.profiles.type !== 'parent') {
       throw new ServerError("親ユーザのみが支払いを開始できます。")
     }
 
