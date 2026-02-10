@@ -218,6 +218,13 @@
       "when": 1770638979639,
       "tag": "0030_uneven_nightshade",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1770700755351,
+      "tag": "0031_even_talon",
+      "breakpoints": true
     }
   ]
 }

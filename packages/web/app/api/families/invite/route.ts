@@ -33,7 +33,7 @@ export async function POST(
       // メールアドレスに家族招待コードを送信する
       await sendFamilyInviteCode({
         email: data.form.email,
-        familyInviteCode: family.inviteCode
+        familyInviteCode: family.families.inviteCode,
       })
 
       return NextResponse.json({})

@@ -109,8 +109,15 @@ export const GUEST_QUESTS_URL = `${QUESTS_URL}/guest`
 // 家族
 export const FAMILIES_URL = `/families`
 export const FAMILY_NEW_URL = `${FAMILIES_URL}/new`
+export const FAMILY_URL = (familyId: string) => `${FAMILIES_URL}/${familyId}`
+export const FAMILY_VIEW_URL = (familyId: string) => `${FAMILY_URL(familyId)}/view`
 export const FAMILY_API_URL = `/api${FAMILIES_URL}`
+export const FAMILY_DETAIL_API_URL = (familyId: string) => `${FAMILY_API_URL}/${familyId}`
 export const FAMILY_INVITE_API_URL = `${FAMILY_API_URL}/invite`
+// フォロー関連
+export const FAMILY_FOLLOW_API_URL = (familyId: string) => `${FAMILY_DETAIL_API_URL(familyId)}/follow`
+export const FAMILY_FOLLOW_STATUS_API_URL = (familyId: string) => `${FAMILY_FOLLOW_API_URL(familyId)}/status`
+export const FAMILY_FOLLOW_COUNT_API_URL = (familyId: string) => `${FAMILY_FOLLOW_API_URL(familyId)}/count`
 // 家族メンバー
 export const FAMILY_MEMBERS_URL = `${FAMILIES_URL}/members`
 // 家族メンバー（親）
@@ -181,4 +188,5 @@ export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-level/tab
 export const TIMELINE_URL = `/timeline`
 export const TIMELINE_API_URL = `/api${TIMELINE_URL}`
 export const FAMILY_TIMELINE_API_URL = `${TIMELINE_API_URL}/family`
+export const FAMILY_TIMELINE_BY_ID_API_URL = (familyId: string) => `${FAMILY_TIMELINE_API_URL}/${familyId}`
 export const PUBLIC_TIMELINE_API_URL = `${TIMELINE_API_URL}/public`

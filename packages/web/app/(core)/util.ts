@@ -170,6 +170,20 @@ export const formatDate = (dateString: string | null | undefined): string => {
   return `${year}/${month}/${day}`
 }
 
+/** 時刻を HH:MM 形式でフォーマットする */
+export const formatTime = (dateString: string | null | undefined): string => {
+  if (!dateString) return ""
+  
+  const date = new Date(dateString)
+  // 無効な日付をチェックする
+  if (isNaN(date.getTime())) return ""
+  
+  const hours = String(date.getHours()).padStart(2, "0")
+  const minutes = String(date.getMinutes()).padStart(2, "0")
+  
+  return `${hours}:${minutes}`
+}
+
 
 /** URLにクエリパラメータを付与する */
 export const addQueryParam = (url: string, key: string, value: string) => {
