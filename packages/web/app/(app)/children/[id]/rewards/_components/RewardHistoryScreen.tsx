@@ -22,11 +22,16 @@ export const RewardHistoryScreen = ({
 }) => {
   const router = useRouter()
 
+  /** 選択された年月 */
   const [selectedYearMonth, setSelectedYearMonth] = useState<string>("")
+  /** 選択されたタイプ（報酬履歴 or 経験値履歴） */
   const [selectedType, setSelectedType] = useState<"reward" | "exp">("reward")
 
+  /** 報酬履歴と経験値履歴を取得する */
   const { histories, monthlyStats, isLoading } = useRewardHistory({ childId, yearMonth: selectedYearMonth })
+  /** 支払い開始処理 */
   const { startPayment, isStarting } = useStartPayment({ childId })
+  /** 支払い完了処理 */
   const { completePayment, isCompleting } = useCompletePayment({ childId })
 
   useEffect(() => {
@@ -35,11 +40,13 @@ export const RewardHistoryScreen = ({
     }
   }, [monthlyStats, selectedYearMonth])
 
+  /** 支払い開始ボタンがクリックされたときの処理 */
   const handlePaymentClick = () => {
     if (!selectedYearMonth) return
     startPayment({ yearMonth: selectedYearMonth })
   }
 
+  /** 支払い完了ボタンがクリックされたときの処理 */
   const handleCompleteClick = () => {
     if (!selectedYearMonth) return
     completePayment({ yearMonth: selectedYearMonth })
