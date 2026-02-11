@@ -94,12 +94,12 @@ const ChildQuestListComponent = () => {
 
   /** クエストカードレンダリング用の関数 */
   const renderChildQuestCard = useCallback((quest: ChildQuest, index: number) => (
-    <ChildQuestCardLayout
-      key={index}
-      childQuest={quest}
-      onClick={(id) => router.push(CHILD_QUEST_VIEW_URL(id, userInfo?.children?.id || ""))}
-    />
-  ), [router])
+      <ChildQuestCardLayout
+        key={index}
+        childQuest={quest}
+        onClick={(id) => router.push(CHILD_QUEST_VIEW_URL(id, userInfo?.children?.id || ""))}
+      />
+    ), [router, userInfo])
 
   /** フィルター検索時のハンドル */
   const handleFilterSearch = useCallback((filter: ChildQuestFilterType) => {

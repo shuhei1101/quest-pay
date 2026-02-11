@@ -61,6 +61,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
           selectedLevel={selectedLevel}
           onLevelChange={setSelectedLevel}
           onBack={() => router.back()}
+          onEdit={openEditModal}
         />
       }
     />
