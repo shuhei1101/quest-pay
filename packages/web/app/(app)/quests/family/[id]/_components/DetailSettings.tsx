@@ -190,7 +190,8 @@ export const DetailSettings = ({
           {visibleLevels.map((level) => (
             <Tabs.Panel key={level} value={level.toString()} p="md">
               <LevelDetailForm 
-                level={level} 
+                level={level}
+                maxLevel={maxLevel}
                 onSave={() => onSave(level.toString())}
                 register={register}
                 errors={errors}

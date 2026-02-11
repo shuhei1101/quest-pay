@@ -6,8 +6,9 @@ import { RequiredMark } from "@/app/(core)/_components/RequiredMark"
 import { BaseQuestFormType } from "../../../form"
 
 /** レベル詳細フォームコンポーネント */
-export const LevelDetailForm = ({ level, onSave, register, errors, setValue, watch }: { 
+export const LevelDetailForm = ({ level, maxLevel, onSave, register, errors, setValue, watch }: { 
   level: number
+  maxLevel: number
   onSave: () => void
   register: UseFormRegister<BaseQuestFormType>
   errors: FieldErrors<BaseQuestFormType>
@@ -20,6 +21,9 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
   if (detailIndex === -1) return null
 
   const detail = watch().details[detailIndex]
+  
+  /** 次レベルが存在するかどうかを判定する */
+  const hasNextLevel = level < maxLevel
 
   /** detailの値を更新する */
   const updateDetail = (field: keyof BaseQuestFormType["details"][number], value: unknown) => {
@@ -92,11 +96,12 @@ export const LevelDetailForm = ({ level, onSave, register, errors, setValue, wat
         </Group>
         <NumberInput 
           label="次レベルまでに必要なクエストクリア回数" 
-          description="クエストクリア時にクエストが獲得する経験値"
+          description={hasNextLevel ? "クエストクリア時にクエストが獲得する経験値" : "最大レベルのため設定不要"}
           value={detail.requiredCompletionCount}
           onChange={(value) => updateDetail("requiredCompletionCount", typeof value === "number" ? value : 1)}
           min={1} 
           suffix="回"
+          disabled={!hasNextLevel}
           error={errors.details?.[detailIndex]?.requiredCompletionCount?.message}
         />
       </div>
