@@ -149,8 +149,8 @@ export const CHILD_JOIN_API_URL = `${CHILDREN_API_URL}/join`
 // 報酬履歴
 export const CHILD_REWARDS_URL = (childId: string) => `${CHILD_URL(childId)}/rewards`
 export const CHILD_REWARDS_API_URL = (childId: string) => `${CHILD_API_URL(childId)}/rewards`
-export const CHILD_REWARDS_START_PAYMENT_API_URL = (childId: string) => `${CHILD_REWARDS_API_URL(childId)}/start-payment`
-export const CHILD_REWARDS_COMPLETE_PAYMENT_API_URL = (childId: string) => `${CHILD_REWARDS_API_URL(childId)}/complete-payment`
+export const CHILD_REWARDS_START_PAYMENT_API_URL = (childId: string) => `${CHILD_REWARDS_API_URL(childId)}/pay/start`
+export const CHILD_REWARDS_COMPLETE_PAYMENT_API_URL = (childId: string) => `${CHILD_REWARDS_API_URL(childId)}/pay/complete`
 
 // 子供クエスト
 export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
