@@ -98,7 +98,7 @@ export const LevelDetailForm = ({ level, maxLevel, onSave, register, errors, set
           label="次レベルまでに必要なクエストクリア回数" 
           description={hasNextLevel ? "このレベルを何回クリアしたら次のレベルにアップするか" : "最大レベルのため設定不要"}
           value={detail.requiredClearCount ?? undefined}
-          onChange={(value) => updateDetail("requiredClearCount", hasNextLevel && typeof value === "number" ? value : null)}
+          onChange={(value) => updateDetail("requiredClearCount", !hasNextLevel ? null : (typeof value === "number" ? value : 1))}
           min={1} 
           suffix="回"
           disabled={!hasNextLevel}
