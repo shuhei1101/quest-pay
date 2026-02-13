@@ -324,7 +324,7 @@ export const questDetails = pgTable("quest_details", {
   /** 獲得経験値 */
   childExp: integer("child_exp").notNull().default(0),
   /** 次レベルに必要なクリア回数 */
-  requiredClearCount: integer("required_clear_count").notNull().default(1),
+  requiredClearCount: integer("required_clear_count"),
   /** タイムスタンプ */
   ...timestamps,
 }, (table) => [

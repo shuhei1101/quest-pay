@@ -7,7 +7,7 @@ export const QuestDetailScheme = z.object({
   requiredCompletionCount: z.number().min(1, { error: "目標回数は1以上で入力してください。" }),
   reward: z.number().min(0, { error: "報酬額は0以上で入力してください。" }),
   childExp: z.number().min(0, { error: "獲得経験値は0以上で入力してください。" }),
-  requiredClearCount: z.number().min(0, { error: "必要クリア回数は0以上で入力してください。" }),
+  requiredClearCount: z.number().min(0, { error: "必要クリア回数は0以上で入力してください。" }).nullable(),
 })
 
 /** クエストフォームベーススキーマ（共通部分） */
@@ -78,7 +78,7 @@ export const addAgeMonthRefinements = <T extends z.ZodObject<z.ZodRawShape>>(sch
 export const isDefaultDetail = (detail: BaseQuestFormType["details"][number]): boolean => {
   return (
     detail.successCondition === "" &&
-    detail.requiredClearCount === 1 &&
+    (detail.requiredClearCount === 1 || detail.requiredClearCount === null) &&
     detail.reward === 0 &&
     detail.childExp === 0 &&
     detail.requiredCompletionCount === 1

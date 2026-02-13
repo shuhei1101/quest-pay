@@ -96,13 +96,13 @@ export const LevelDetailForm = ({ level, maxLevel, onSave, register, errors, set
         </Group>
         <NumberInput 
           label="次レベルまでに必要なクエストクリア回数" 
-          description={hasNextLevel ? "クエストクリア時にクエストが獲得する経験値" : "最大レベルのため設定不要"}
-          value={detail.requiredCompletionCount}
-          onChange={(value) => updateDetail("requiredCompletionCount", typeof value === "number" ? value : 1)}
+          description={hasNextLevel ? "このレベルを何回クリアしたら次のレベルにアップするか" : "最大レベルのため設定不要"}
+          value={detail.requiredClearCount ?? undefined}
+          onChange={(value) => updateDetail("requiredClearCount", hasNextLevel && typeof value === "number" ? value : null)}
           min={1} 
           suffix="回"
           disabled={!hasNextLevel}
-          error={errors.details?.[detailIndex]?.requiredCompletionCount?.message}
+          error={errors.details?.[detailIndex]?.requiredClearCount?.message}
         />
       </div>
     </Paper>

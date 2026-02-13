@@ -430,7 +430,8 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
       const nextCompletionCount = currentQuestChild.currentCompletionCount + 1
       const isCompletionAchieved = nextCompletionCount >= currentDetail.requiredCompletionCount
       const nextClearCount = currentQuestChild.currentClearCount + (isCompletionAchieved ? 1 : 0)
-      const isClearAchieved = nextClearCount >= currentDetail.requiredClearCount
+      // requiredClearCountがnullの場合はレベルアップしない（最大レベル）
+      const isClearAchieved = currentDetail.requiredClearCount !== null && nextClearCount >= currentDetail.requiredClearCount
       const nextLevel = currentLevel + 1
       const isLevelUpPossible = nextLevel <= 5
 

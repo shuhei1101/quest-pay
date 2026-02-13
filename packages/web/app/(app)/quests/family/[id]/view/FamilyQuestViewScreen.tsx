@@ -54,7 +54,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
       ageTo={familyQuest?.quest?.ageTo}
       monthFrom={familyQuest?.quest?.monthFrom}
       monthTo={familyQuest?.quest?.monthTo}
-      requiredClearCount={selectedDetail?.requiredClearCount || 0}
+      requiredClearCount={selectedDetail?.requiredClearCount ?? null}
       footer={
         <ParentQuestViewFooter 
           availableLevels={availableLevels}

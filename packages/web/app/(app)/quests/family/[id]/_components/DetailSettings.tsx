@@ -38,10 +38,11 @@ export const DetailSettings = ({
       
       // 新しいレベルのdetailを追加する
       const currentDetails = watch().details
+      const willBeMaxLevel = nextLevel >= 5
       setValue("details", [...currentDetails, {
         level: nextLevel,
         successCondition: "",
-        requiredClearCount: 1,
+        requiredClearCount: willBeMaxLevel ? null : 1,
         reward: 0,
         childExp: 0,
         requiredCompletionCount: 1,

@@ -53,7 +53,7 @@ type PublicQuestViewLayoutProps = {
   /** 月To */
   monthTo?: number | null
   /** 必要クリア回数 */
-  requiredClearCount: number
+  requiredClearCount: number | null
   /** コメント数 */
   commentCount?: number
   /** 公開クエストID */

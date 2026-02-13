@@ -91,7 +91,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
       ageTo={publicQuest?.quest?.ageTo}
       monthFrom={publicQuest?.quest?.monthFrom}
       monthTo={publicQuest?.quest?.monthTo}
-      requiredClearCount={selectedDetail?.requiredClearCount || 0}
+      requiredClearCount={selectedDetail?.requiredClearCount ?? null}
       commentCount={commentCount}
       publicQuestId={id}
       footer={

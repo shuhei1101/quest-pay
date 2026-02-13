@@ -95,7 +95,7 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
       ageTo={templateQuest?.quest?.ageTo}
       monthFrom={templateQuest?.quest?.monthFrom}
       monthTo={templateQuest?.quest?.monthTo}
-      requiredClearCount={selectedDetail?.requiredClearCount || 0}
+      requiredClearCount={selectedDetail?.requiredClearCount ?? null}
       footer={
         <TemplateQuestViewFooter 
           availableLevels={ availableLevels }
