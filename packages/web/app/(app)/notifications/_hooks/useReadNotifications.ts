@@ -13,23 +13,42 @@ export const useReadNotifications = () => {
   
   /** 既読処理 */
   const mutation = useMutation({
-    mutationFn: ({notificationIds, updatedAt}: {notificationIds: string[], updatedAt: string}) => readNotifications({
+    mutationFn: ({
+      notificationIds, 
+      updatedAt,
+      showSuccessMessage
+    }: {
+      notificationIds: string[]
+      updatedAt: string
+      showSuccessMessage?: boolean
+    }) => readNotifications({
       request: {
         notificationIds,
         updatedAt
       }
     }),
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       // 通知をリフレッシュする
       queryClient.invalidateQueries({ queryKey: ["notifications"] })
-      toast.success("全ての通知を既読にしました")
+      // 全て既読の場合のみトースト通知を表示する
+      if (variables.showSuccessMessage) {
+        toast.success("全ての通知を既読にしました")
+      }
     },
     onError: (error) => handleAppError(error, router)
   })
 
   /** 既読ハンドル */
-  const handleReadNotifications = ({notificationIds, updatedAt}: {notificationIds: string[], updatedAt: string}) => {
-    mutation.mutate({notificationIds, updatedAt})
+  const handleReadNotifications = ({
+    notificationIds, 
+    updatedAt,
+    showSuccessMessage = false
+  }: {
+    notificationIds: string[]
+    updatedAt: string
+    showSuccessMessage?: boolean
+  }) => {
+    mutation.mutate({notificationIds, updatedAt, showSuccessMessage})
   }
 
   return {

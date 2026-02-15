@@ -42,10 +42,10 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
       // 家族クエストを挿入する
       const { id: familyQuestId } = await insertFamilyQuest({db: tx, record: familyQuest, questId })
 
-      // クエスト対象の子供を挿入する（初期状態はnot_started）
+      // クエスト対象の子供を挿入する（初期状態はin_progress）
       if (questChildren.length > 0) await insertQuestChildren({db: tx, records: questChildren.map(child => ({
         ...child,
-        status: "not_started"
+        status: "in_progress"
       })), familyQuestId})
       
       // タグを挿入する

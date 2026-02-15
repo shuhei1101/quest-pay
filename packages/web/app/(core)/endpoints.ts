@@ -148,7 +148,7 @@ export const CHILD_JOIN_API_URL = `${CHILDREN_API_URL}/join`
 
 // 子供クエスト
 export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
-export const CHILD_QUEST_VIEW_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_VIEW_URL(familyQuestId)}/child/${childId}`
+export const CHILD_QUEST_VIEW_URL = (familyQuestId: string, childId?: string) => `${FAMILY_QUEST_VIEW_URL(familyQuestId)}/child/${childId || null}`
 export const CHILD_QUESTS_API_URL = (childId: string) => `${CHILD_API_URL(childId)}/quests`
 export const CHILD_QUEST_API_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/child/${childId}`
 
