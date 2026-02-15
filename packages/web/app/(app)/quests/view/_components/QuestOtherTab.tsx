@@ -17,7 +17,7 @@ export const QuestOtherTab = ({
   ageTo?: number | null
   monthFrom?: number | null
   monthTo?: number | null
-  requiredClearCount: number
+  requiredClearCount: number | null
   
   tags: string[]
   type?: "parent" | "child" | "online"
@@ -68,7 +68,7 @@ export const QuestOtherTab = ({
           <IconTrophy size={20} />
           <Text fw={500}>レベルUPに必要なクリア回数</Text>
         </Group>
-        <Text ta="right">{requiredClearCount}回</Text>
+        <Text ta="right">{requiredClearCount !== null ? `${requiredClearCount}回` : "上限なし"}</Text>
       </Box>
 
 

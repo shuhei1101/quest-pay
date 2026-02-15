@@ -6,6 +6,7 @@ import { useNotifications } from "../_hooks/useNotifications"
 import { useRouter } from "next/navigation"
 import { NotificationSelect } from "@/drizzle/schema"
 import { useReadNotifications } from "../_hooks/useReadNotifications"
+import { useEffect } from "react"
 
 /** 通知モーダル */
 export const NotificationModal = ({
@@ -16,8 +17,17 @@ export const NotificationModal = ({
   onClose: () => void
 }) => {
   const router = useRouter()
-  const { notifications, isLoading } = useNotifications()
+
+  /** 通知一覧 */
+  const { notifications, isLoading, refetch } = useNotifications()
   const { handleReadNotifications, isLoading: isReadingAll } = useReadNotifications()
+
+  /** モーダルが開いたら通知を再取得する */
+  useEffect(() => {
+    if (isOpen) {
+      refetch()
+    }
+  }, [isOpen, refetch])
 
   /** 日時をフォーマットする */
   const formatDate = (dateString?: string | null) => {
@@ -53,7 +63,8 @@ export const NotificationModal = ({
     
     handleReadNotifications({
       notificationIds: unreadNotifications.map(n => n.id),
-      updatedAt
+      updatedAt,
+      showSuccessMessage: true
     })
   }
 

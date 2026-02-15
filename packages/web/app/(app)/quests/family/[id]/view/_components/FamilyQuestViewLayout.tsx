@@ -52,7 +52,7 @@ type FamilyQuestViewLayoutProps = {
   /** 月To */
   monthTo?: number | null
   /** 必要クリア回数 */
-  requiredClearCount: number
+  requiredClearCount: number | null
   /** フッター要素 */
   footer: ReactNode
 }

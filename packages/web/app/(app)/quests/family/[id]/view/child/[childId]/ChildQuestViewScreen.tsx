@@ -57,7 +57,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         ageTo={childQuest?.quest?.ageTo}
         monthFrom={childQuest?.quest?.monthFrom}
         monthTo={childQuest?.quest?.monthTo}
-        requiredClearCount={currentDetail?.requiredClearCount || 0}
+        requiredClearCount={currentDetail?.requiredClearCount ?? null}
         footer={
           isParent ? (
             /* 親ユーザの場合 */

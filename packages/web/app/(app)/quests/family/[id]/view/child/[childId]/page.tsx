@@ -4,10 +4,12 @@ import { authGuard } from "@/app/(core)/_auth/authGuard"
 import { QUESTS_URL } from "@/app/(core)/endpoints"
 
 export default async function Page({ params }: { params: { 
-  id: string, 
-  childId: string 
+  id: string,
+  childId: string
 } }) {
   const { id, childId } = await params
+
+  if (childId === "null") throw new Error("子供IDが無効です。")
 
   // ゲストは不可
   const _ = await authGuard({ guestNG: true, redirectUrl: QUESTS_URL })

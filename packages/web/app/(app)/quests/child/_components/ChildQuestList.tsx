@@ -97,9 +97,9 @@ const ChildQuestListComponent = () => {
     <ChildQuestCardLayout
       key={index}
       childQuest={quest}
-      onClick={(id) => router.push(CHILD_QUEST_VIEW_URL(id, userInfo?.children?.id || ""))}
+      onClick={(id) => router.push(CHILD_QUEST_VIEW_URL(id, userInfo?.children?.id))}
     />
-  ), [router])
+  ), [router, userInfo])
 
   /** フィルター検索時のハンドル */
   const handleFilterSearch = useCallback((filter: ChildQuestFilterType) => {
