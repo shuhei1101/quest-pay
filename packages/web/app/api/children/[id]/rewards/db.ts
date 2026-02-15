@@ -1,6 +1,24 @@
-import { rewardHistories } from "@/drizzle/schema"
+import { rewardHistories, RewardHistoryInsert } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { and, eq, gte, lte, sql } from "drizzle-orm"
+
+/** 報酬履歴を挿入する */
+export const insertRewardHistory = async ({
+  db,
+  record
+}: {
+  db: Db
+  record: RewardHistoryInsert
+}) => {
+  const [newRecord] = await db
+    .insert(rewardHistories)
+    .values(record)
+    .returning({ id: rewardHistories.id })
+
+  return {
+    id: newRecord.id
+  }
+}
 
 /** 指定月の報酬履歴の支払い状態を更新する */
 export const updateRewardHistoriesPaymentStatus = async ({

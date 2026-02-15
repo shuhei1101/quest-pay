@@ -17,6 +17,8 @@ import { CHILD_QUEST_VIEW_URL, FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoi
 import { fetchChildQuest } from "./[id]/child/query"
 import { updateChild } from "../../children/db"
 import { insertFamilyTimeline } from "../../timeline/db"
+import { insertRewardHistory } from "../../children/[id]/rewards/db"
+
 
 /** 家族クエストを登録する */
 export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest, questChildren, questTags}: {
@@ -478,6 +480,19 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
               // TODO: 子供レベルの計算（保留）
             },
           })
+
+          // 報酬履歴を記録する
+          await insertRewardHistory({
+            db: tx,
+            record: {
+              childId: currentQuestChild.childId,
+              type: "quest",
+              title: `「${questChild.quest.name}」${notificationType === "quest_level_up" ? `レベル${nextLevel}達成` : "完全クリア"}`,
+              amount: currentDetail.reward,
+              exp: currentDetail.childExp,
+              url: `${CHILD_QUEST_VIEW_URL(questChild.base.id, currentQuestChild.childId)}`,
+            },
+          })
         } else {
           // クリアしたが次のレベルまではいかない
           questChildUpdate = {
@@ -497,6 +512,19 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
               currentSavings: (child.children.currentSavings || 0) + currentDetail.reward,
               totalExp: (child.children.totalExp || 0) + currentDetail.childExp,
               // TODO: 子供レベルの計算（保留）
+            },
+          })
+
+          // 報酬履歴を記録する
+          await insertRewardHistory({
+            db: tx,
+            record: {
+              childId: currentQuestChild.childId,
+              type: "quest",
+              title: `「${questChild.quest.name}」クリア`,
+              amount: currentDetail.reward,
+              exp: currentDetail.childExp,
+              url: `${CHILD_QUEST_VIEW_URL(questChild.base.id, currentQuestChild.childId)}`,
             },
           })
         }
