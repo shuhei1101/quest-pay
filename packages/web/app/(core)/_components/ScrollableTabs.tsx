@@ -31,6 +31,15 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   /** スクロール時の余白（ピクセル） */
   const SCROLL_MARGIN = 16
 
+  /** スティッキータブリストのスタイル */
+  const stickyTabListStyle = {
+    position: "sticky" as const,
+    top: 0,
+    zIndex: 100,
+    backgroundColor: "var(--mantine-color-body)",
+    paddingBottom: 8
+  }
+
   /** タブ変更時に選択されたタブを画面内にスクロールする */
   useEffect(() => {
     if (!tabListRef.current || !activeTab) return
@@ -86,7 +95,7 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
         }}
       >
         {/* タブリスト（スティッキー対応） */}
-        <div style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "var(--mantine-color-body)", paddingBottom: 8 }}>
+        <div style={stickyTabListStyle}>
           <Tabs.List>
             <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
               {tabs.map((item) => (

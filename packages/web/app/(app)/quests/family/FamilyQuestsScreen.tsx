@@ -2,9 +2,9 @@
 
 import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button, Loader, Center } from "@mantine/core"
-import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
+import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld, IconUsers, IconMenu2 } from "@tabler/icons-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
+import { FAMILY_QUEST_NEW_URL, LOGIN_URL, HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
@@ -26,7 +26,7 @@ export function FamilyQuestsScreen() {
   const searchParams = useSearchParams()
 
   /** ログインユーザ情報 */
-  const { isGuest } = useLoginUserInfo()
+  const { isGuest, isParent } = useLoginUserInfo()
 
   /** クエリパラメータからタブ値を取得する */
   const getTabFromParams = () => {
@@ -49,21 +49,22 @@ export function FamilyQuestsScreen() {
     setTabValue(newTab)
   }, [searchParams])
   
+  /** FloatingActionButtonのアイテム（BottomBarの代替 + 新規作成） */
   const actionItems: FloatingActionItem[] = [
     { 
       icon: <IconHome2 />,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
+      onClick: () => router.push(HOME_URL)
     },
     { 
       icon: <IconClipboard />,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
+      onClick: () => router.push(QUESTS_URL)
     },
+    ...(isParent ? [{ 
+      icon: <IconUsers />,
+      onClick: () => router.push(FAMILY_MEMBERS_URL)
+    }] : []),
     { 
-      icon: <IconLogout />,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
-    },
-    { 
-      icon: <IconAdjustments />,
+      icon: <IconEdit />,
       onClick: () => router.push(FAMILY_QUEST_NEW_URL)
     },
   ]
