@@ -37,7 +37,7 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
     top: 0,
     zIndex: 100,
     backgroundColor: "var(--mantine-color-body)",
-    paddingBottom: 8
+    paddingBottom: SCROLL_MARGIN / 2
   }
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */

@@ -78,7 +78,7 @@ export const FloatingActionButton = ({
   subButtonSize = 50,
   disablePositioning = false,
 }: {
-  /** 展開するアクションアイテムの配列（最大4つまで対応） */
+  /** 展開するアクションアイテムの配列 */
   items: FloatingActionItem[]
   /** 開閉状態（外部制御する場合のみ指定） */
   open?: boolean

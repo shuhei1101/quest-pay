@@ -49,7 +49,7 @@ export function FamilyQuestsScreen() {
     setTabValue(newTab)
   }, [searchParams])
   
-  /** FloatingActionButtonのアイテム（BottomBarの代替 + 新規作成） */
+  /** FloatingActionButtonのアクションアイテム */
   const actionItems: FloatingActionItem[] = [
     { 
       icon: <IconHome2 />,
