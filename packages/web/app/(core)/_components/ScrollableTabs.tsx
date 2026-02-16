@@ -84,14 +84,13 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   }, [])
 
   return (
-    <div style={{ height: "100%", flex: 1, minHeight: 0, overflow: "hidden" }}>
+    <div style={{ width: "100%" }}>
       <Tabs 
         value={activeTab} 
         onChange={onChange}
-        className="flex-1 min-h-0"
         styles={{
-          root: { display: "flex", flexDirection: "column", height: "100%" },
-          panel: { flex: 1, minHeight: 0, overflow: "auto", paddingRight: 16, paddingBottom: 16 },
+          root: { display: "flex", flexDirection: "column" },
+          panel: { paddingRight: 16, paddingBottom: 16 },
         }}
       >
         {/* タブリスト（スティッキー対応） */}

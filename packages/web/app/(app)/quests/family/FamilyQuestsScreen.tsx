@@ -7,8 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL, HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
-import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
-import { FloatingLayout } from "@/app/(core)/_components/FloatingLayout"
+import { NavigationFAB, NavigationItem } from "@/app/(core)/_components/NavigationFAB"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
 import { useTabAutoScroll, useTabHorizontalScroll } from "@/app/(core)/_hooks/useTabScrollControl"
@@ -49,40 +48,39 @@ export function FamilyQuestsScreen() {
     setTabValue(newTab)
   }, [searchParams])
   
-  /** FloatingActionButtonのアクションアイテム */
-  const actionItems: FloatingActionItem[] = [
+  /** ナビゲーションアイテム */
+  const navigationItems: NavigationItem[] = [
     { 
-      icon: <IconHome2 />,
+      icon: <IconHome2 size={20} />,
+      label: "ホーム",
       onClick: () => router.push(HOME_URL)
     },
     { 
-      icon: <IconClipboard />,
+      icon: <IconClipboard size={20} />,
+      label: "クエスト",
       onClick: () => router.push(QUESTS_URL)
     },
     ...(isParent ? [{ 
-      icon: <IconUsers />,
+      icon: <IconUsers size={20} />,
+      label: "メンバー",
       onClick: () => router.push(FAMILY_MEMBERS_URL)
     }] : []),
     { 
-      icon: <IconEdit />,
+      icon: <IconEdit size={20} />,
+      label: "新規作成",
       onClick: () => router.push(FAMILY_QUEST_NEW_URL)
     },
   ]
 
+  /** 現在のタブに基づいてナビゲーションの選択インデックスを決定する */
+  const getActiveNavigationIndex = () => {
+    // クエスト画面にいるので、クエストアイテムを選択
+    return 1
+  }
+
   return (
-    <FloatingLayout
-      bottomLeft={
-        <FloatingActionButton
-          items={actionItems}
-          pattern="right"
-          spacing={70}
-          mainButtonColor="pink"
-          subButtonColor="pink"
-          disablePositioning={true}
-        />
-      }
-    >
-      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column' }} color={
+    <>
+      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', paddingBottom: '100px' }} color={
         tabValue == 'public' ? "rgb(96 165 250)" :
         tabValue == 'family' ? "rgb(74, 222, 128)" :
         tabValue == 'penalty' ? "rgb(252, 132, 132)" :
@@ -145,6 +143,14 @@ export function FamilyQuestsScreen() {
         </Paper>
       </div>
       </Tabs>
-    </FloatingLayout>
+
+      {/* GitHub mobile風のナビゲーションFAB */}
+      <NavigationFAB
+        items={navigationItems}
+        activeIndex={getActiveNavigationIndex()}
+        mainButtonColor="blue"
+        subButtonColor="blue"
+      />
+    </>
   )
 }
