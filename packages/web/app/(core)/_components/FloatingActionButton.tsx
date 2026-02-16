@@ -69,8 +69,10 @@ export const FloatingActionButton = ({
   mainIcon = <IconPlus style={{ width: "70%", height: "70%" }} />,
   rightMobile = "20px",
   rightDesktop = "40px",
-  bottomMobile = "80px",
+  bottomMobile = "40px",
   bottomDesktop = "40px",
+  leftMobile,
+  leftDesktop,
   closeOnOutsideClick = true,
   mainButtonSize = 60,
   subButtonSize = 50,
@@ -100,6 +102,10 @@ export const FloatingActionButton = ({
   bottomMobile?: string
   /** 下からの距離(デスクトップ時) */
   bottomDesktop?: string
+  /** 左からの距離(モバイル時) */
+  leftMobile?: string
+  /** 左からの距離(デスクトップ時) */
+  leftDesktop?: string
   /** 外側クリックで閉じるか */
   closeOnOutsideClick?: boolean
   /** メインボタンのサイズ */
@@ -161,7 +167,11 @@ export const FloatingActionButton = ({
       } : {
         position: "fixed",
         zIndex: 3000,
-        right: isMobile ? rightMobile : rightDesktop,
+        ...(leftMobile || leftDesktop ? {
+          left: isMobile ? leftMobile : leftDesktop,
+        } : {
+          right: isMobile ? rightMobile : rightDesktop,
+        }),
         bottom: isMobile ? bottomMobile : bottomDesktop,
       }}
     >

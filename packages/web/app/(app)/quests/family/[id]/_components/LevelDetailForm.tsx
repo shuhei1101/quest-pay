@@ -62,7 +62,7 @@ export const LevelDetailForm = ({ level, maxLevel, onSave, register, errors, set
               </span>
             }
             description="成功条件を何回達成したらクリアか"
-            value={detail.requiredClearCount}
+            value={detail.requiredClearCount ?? undefined}
             onChange={(value) => updateDetail("requiredClearCount", typeof value === "number" ? value : 1)}
             min={1} 
             suffix="回" 
