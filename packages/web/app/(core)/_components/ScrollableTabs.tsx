@@ -85,22 +85,24 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
           panel: { flex: 1, minHeight: 0, overflow: "auto", paddingRight: 16, paddingBottom: 16 },
         }}
       >
-        {/* タブリスト */}
-        <Tabs.List>
-          <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-            {tabs.map((item) => (
-              <Tabs.Tab
-                key={item.value}
-                value={item.value}
-                data-value={item.value}
-                leftSection={item.leftSection}
-                rightSection={item.rightSection}
-              >
-                {item.label}
-              </Tabs.Tab>
-            ))}
-          </div>
-        </Tabs.List>
+        {/* タブリスト（スティッキー対応） */}
+        <div style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "var(--mantine-color-body)", paddingBottom: 8 }}>
+          <Tabs.List>
+            <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+              {tabs.map((item) => (
+                <Tabs.Tab
+                  key={item.value}
+                  value={item.value}
+                  data-value={item.value}
+                  leftSection={item.leftSection}
+                  rightSection={item.rightSection}
+                >
+                  {item.label}
+                </Tabs.Tab>
+              ))}
+            </div>
+          </Tabs.List>
+        </div>
         
         {/* タブパネルコンテンツ */}
         {children}

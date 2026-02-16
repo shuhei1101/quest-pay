@@ -10,7 +10,7 @@ export default async function AppLayout({ children }: {
 
   return (
     <AppShellContent>
-      <div style={{ height: 'var(--content-height)', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
       {children}
       </div>
     </AppShellContent>

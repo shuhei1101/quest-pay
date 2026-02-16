@@ -6,7 +6,6 @@ import { Suspense } from 'react'
 import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from './BackgroundWrapper'
 import { SideMenu } from './SideMenu'
-import { BottomBar } from './BottomBar'
 import { AccessErrorHandler } from '../../(core)/_components/AccessErrorHandler'
 
 /** AppShellコンテンツを取得する */
@@ -16,10 +15,8 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
   /** ブレークポイント */
   const { isMobile, isDark } = useWindow()
 
-  /** コンテンツ領域の高さ（パディング2rem + モバイル時フッター70px） */
-  const contentHeight = isMobile
-    ? 'calc(100dvh - 2rem - 70px)'
-    : 'calc(100dvh - 2rem)'
+  /** コンテンツ領域の高さ（パディング2rem） */
+  const contentHeight = 'calc(100dvh - 2rem)'
 
   return (
     <BackgroundWrapper>
@@ -36,7 +33,6 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
             desktop: false,
           },
         }}
-        footer={isMobile ? { height: 70, offset: true } : undefined}
         padding="md"
         __vars={{
           '--content-height': contentHeight,
@@ -51,13 +47,6 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
         <AppShell.Main>
           {children}
         </AppShell.Main>
-
-        {/* モバイル用フッター */}
-        {isMobile && (
-          <AppShell.Footer>
-            <BottomBar isDark={isDark} onToggleMenu={toggle} />
-          </AppShell.Footer>
-        )}
       </AppShell>
     </BackgroundWrapper>
   )

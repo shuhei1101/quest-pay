@@ -51,40 +51,43 @@ export function FamilyQuestsScreen() {
   
   const actionItems: FloatingActionItem[] = [
     { 
-      icon: <IconAdjustments />, // 左
-      x: -75, y: 10,
+      icon: <IconHome2 />,
       onClick: () => router.push(FAMILY_QUEST_NEW_URL)
     },
     { 
-      icon: <IconTrash />, // 左上
-      x: -55, y: -55,
+      icon: <IconClipboard />,
       onClick: () => router.push(FAMILY_QUEST_NEW_URL)
     },
     { 
-      icon: <IconEdit />, // 上
-      x: 10, y: -75,
+      icon: <IconLogout />,
+      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
+    },
+    { 
+      icon: <IconAdjustments />,
       onClick: () => router.push(FAMILY_QUEST_NEW_URL)
     },
   ]
 
   return (
     <FloatingLayout
-      bottomRight={
+      bottomLeft={
         <FloatingActionButton
           items={actionItems}
+          pattern="right"
+          spacing={70}
           mainButtonColor="pink"
           subButtonColor="pink"
           disablePositioning={true}
         />
       }
     >
-      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }} color={
+      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column' }} color={
         tabValue == 'public' ? "rgb(96 165 250)" :
         tabValue == 'family' ? "rgb(74, 222, 128)" :
         tabValue == 'penalty' ? "rgb(252, 132, 132)" :
         tabValue == 'template' ? "rgb(250 204 21)" : "blue"
       }  >
-        <div className="flex flex-col gap-4" style={{ flex: 1, overflow: 'hidden' }}>
+        <div className="flex flex-col gap-4">
           {/* タブリスト */}
           <Paper p="xs" withBorder >
             <Tabs.List>
@@ -106,7 +109,7 @@ export function FamilyQuestsScreen() {
           </Paper>
 
           {/* タブパネル */}
-          <Paper p="xs" withBorder style={{ flex: 1 }}>
+          <Paper p="xs" withBorder>
 
             <Tabs.Panel value="public">
               <Suspense fallback={
