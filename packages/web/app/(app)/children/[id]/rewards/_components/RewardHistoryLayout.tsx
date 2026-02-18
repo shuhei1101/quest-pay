@@ -122,10 +122,10 @@ export const RewardHistoryLayout = ({
         }}
       >
         <Text size="sm" fw={700} mb={8}>
-          {selectedType === "reward" ? "報酬金" : "獲得経験値"}
+          {"報酬金"}
         </Text>
         <Text size="36px" fw={700} mb={8}>
-          {selectedType === "reward" ? `${totalAmount}円` : `${totalExp}EXP`}
+          {`${totalAmount}円`}
         </Text>
         {isPaid && currentMonthStat?.paidAt && (
           <Text size="sm" mb={8}>
