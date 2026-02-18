@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { updateRewardHistoriesPaymentStatus } from "../db"
-import { fetchChild } from "../../../query"
-import { fetchUserInfoByUserId } from "../../../../users/query"
 import z from "zod"
+import { fetchUserInfoByUserId } from "@/app/api/users/query"
+import { fetchChild } from "@/app/api/children/query"
 
 /** 支払い開始リクエスト */
 const StartPaymentRequest = z.object({
