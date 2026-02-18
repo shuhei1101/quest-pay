@@ -62,7 +62,7 @@ export const LevelDetailForm = ({ level, maxLevel, onSave, register, errors, set
               </span>
             }
             description="成功条件を何回達成したらクリアか"
-            value={detail.requiredClearCount}
+            value={detail.requiredClearCount ?? undefined}
             onChange={(value) => updateDetail("requiredClearCount", typeof value === "number" ? value : 1)}
             min={1} 
             suffix="回" 
@@ -97,8 +97,8 @@ export const LevelDetailForm = ({ level, maxLevel, onSave, register, errors, set
         <NumberInput 
           label="次レベルまでに必要なクエストクリア回数" 
           description={hasNextLevel ? "このレベルを何回クリアしたら次のレベルにアップするか" : "最大レベルのため設定不要"}
-          value={detail.requiredClearCount ?? undefined}
-          onChange={(value) => updateDetail("requiredClearCount", !hasNextLevel ? null : (typeof value === "number" ? value : 1))}
+          value={detail.requiredClearCount === null ? undefined : detail.requiredClearCount}
+          onChange={(value) => updateDetail("requiredClearCount", !hasNextLevel ? undefined : (typeof value === "number" ? value : 1))}
           min={1} 
           suffix="回"
           disabled={!hasNextLevel}
