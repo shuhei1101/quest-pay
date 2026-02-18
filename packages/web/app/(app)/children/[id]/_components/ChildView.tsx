@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import { useChild } from "../_hook/useChild"
 import { useRouter } from "next/navigation"
-import { FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
+import { CHILD_REWARDS_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
 import { useDisclosure } from "@mantine/hooks"
 import { InviteCodePopup } from "@/app/(core)/_components/InviteCodePopup"
 import { ChildViewLayout } from "./ChildViewLayout"
@@ -70,7 +70,7 @@ export const ChildView = ( params: {
           onCompletedQuestClick={() => console.log("達成クエストクリック")}
           onTotalRewardClick={() => console.log("合計報酬額クリック")}
           onFixedRewardClick={() => console.log("定額報酬クリック")}
-          onSavingsClick={() => console.log("貯金クリック")}
+          onSavingsClick={() => router.push(CHILD_REWARDS_URL(id))}
           onMonthlyRewardClick={() => console.log("今月の報酬クリック")}
         />
       </Box>
