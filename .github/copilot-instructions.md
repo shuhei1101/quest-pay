@@ -9,8 +9,10 @@
 2. **architecture-guide**: アーキテクチャパターン（フロント/API設計、モジュール構成、フロー図）
 3. **code-review**: コードレビューチェックリスト（規約違反の検出、よくある間違いパターン）
 4. **database-operations**: データベース操作（Drizzle ORM、低レベルクエリ、排他制御）
+5. **code-explainer**: コード解説（既存コードの目的・構造・処理フローの詳細解説）
+6. **code-improver**: コード改善提案（複数の改善案を優先度・難易度付きで提示）
 
-**使用方法**: コード作成時は`coding-standards`と`architecture-guide`、レビュー時は`code-review`、DB操作時は`database-operations`を参照してください。
+**使用方法**: コード作成時は`coding-standards`と`architecture-guide`、レビュー時は`code-review`、DB操作時は`database-operations`、コード理解時は`code-explainer`、改善検討時は`code-improver`を参照してください。
 
 ## アプリ概要
 - アプリ名: `お小遣いクエストボード`
