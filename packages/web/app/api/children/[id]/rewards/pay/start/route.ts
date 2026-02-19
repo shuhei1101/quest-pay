@@ -1,0 +1,46 @@
+import { NextRequest, NextResponse } from "next/server"
+import { getAuthContext } from "@/app/(core)/_auth/withAuth"
+import { ServerError } from "@/app/(core)/error/appError"
+import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
+import z from "zod"
+import { fetchUserInfoByUserId } from "@/app/api/users/query"
+import { fetchChild } from "@/app/api/children/query"
+
+/** 支払い開始リクエスト */
+const StartPaymentRequest = z.object({
+  yearMonth: z.string()
+})
+
+/** 支払いを開始する */
+export async function POST(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  return withRouteErrorHandling(async () => {
+    const { db, userId } = await getAuthContext()
+    const params = await context.params
+    const childId = params.id
+
+    const body = await req.json()
+    const { yearMonth } = StartPaymentRequest.parse(body)
+
+    const userInfo = await fetchUserInfoByUserId({ userId, db })
+    if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
+
+    if (userInfo.profiles.type !== 'parent') {
+      throw new ServerError("親ユーザのみが支払いを開始できます。")
+    }
+
+    const child = await fetchChild({ db, childId })
+    if (!child) throw new ServerError("子供情報の取得に失敗しました。")
+
+    if (userInfo.profiles.familyId !== child.profiles?.familyId) {
+      throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
+    }
+
+    // 支払い開始時は何もせず、子供が受取完了を押したときにisPaidをtrueにする
+    // （現在のDBスキーマでは支払い中状態を表現するフィールドがないため）
+
+    return NextResponse.json({ success: true })
+  })
+}
