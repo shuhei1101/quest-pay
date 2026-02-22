@@ -1,6 +1,7 @@
 "use client"
 import { Tabs } from "@mantine/core"
 import { ReactNode, useRef, useEffect } from "react"
+import { useSystemTheme } from "../useSystemTheme"
 
 /** スクロール可能なタブアイテムの型 */
 export type ScrollableTabItem = {
@@ -28,6 +29,9 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   /** タブリストコンテナの参照 */
   const tabListRef = useRef<HTMLDivElement>(null)
 
+  /** システムカラースキーム */
+  const { isDark } = useSystemTheme()
+
   /** スクロール時の余白（ピクセル） */
   const SCROLL_MARGIN = 16
 
@@ -37,7 +41,11 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
     top: 0,
     zIndex: 100,
     backgroundColor: "var(--mantine-color-body)",
-    paddingBottom: SCROLL_MARGIN / 2
+    paddingBottom: SCROLL_MARGIN / 2,
+    border: isDark ? "1px solid #373A40" : "1px solid #dee2e6",
+    borderRadius: "8px",
+    padding: "8px",
+    marginBottom: "12px"
   }
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */

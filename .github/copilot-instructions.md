@@ -9,13 +9,45 @@
 2. **architecture-guide**: アーキテクチャパターン（フロント/API設計、モジュール構成、フロー図）
 3. **database-operations**: データベース操作（Drizzle ORM、低レベルクエリ、排他制御）
 4. **speak**: タスク完了時の音声通知（MCPのyomiageツールを使用）
+5. **screen-agent-builder**: 画面ごとのカスタムエージェント作成方法（repo-architect専用）
 
 **使用方法**: コード作成時は`coding-standards`と`architecture-guide`、DB操作時は`database-operations`を自動的に参照します。タスク完了時は`speak`スキルに従って音声通知を実行します。
 
 ### 利用可能なカスタムエージェント（対話型）
-1. **Code Reviewer**: コードレビューを対話的に実施。規約違反を検出し、改善提案を行う
-2. **Code Explainer**: 既存コードを段階的に解説。目的・構造・処理フローを理解できる
-3. **Code Improver**: 複数の改善案を優先度・難易度付きで提案。対話的にリファクタリングを支援
+
+#### 開発支援エージェント
+1. **code-reviewer**: コードレビューを対話的に実施。規約違反を検出し、改善提案を行う
+2. **code-explainer**: 既存コードを段階的に解説。目的・構造・処理フローを理解できる
+3. **code-developer**: 複数の改善案を優先度・難易度付きで提案。対話的にリファクタリングを支援
+4. **repo-architect**: スキルとカスタムエージェントの作成・管理を担当
+
+#### 画面専門エージェント
+各画面に特化したエージェント。機能改修、機能説明、スキルアップデートを担当。
+
+**クエスト関連:**
+5. **family-quest-agent**: 家族クエスト画面（一覧・編集・閲覧・API）
+6. **public-quest-agent**: 公開クエスト画面（一覧・閲覧・いいね・コメント）
+7. **template-quest-agent**: テンプレートクエスト画面（一覧・閲覧）
+8. **child-quest-agent**: 子供クエスト画面（受注したクエスト管理）
+9. **quest-list-layout-agent**: クエスト一覧レイアウトコンポーネント
+10. **quest-edit-layout-agent**: クエスト編集レイアウトコンポーネント
+11. **comment-agent**: コメント画面（投稿・評価・報告・ピン留め）
+
+**その他の画面:**
+12. **home-agent**: ホーム画面
+13. **timeline-agent**: タイムライン画面（家族・公開）
+14. **family-agent**: 家族管理画面（家族情報・メンバー管理・フォロー）
+15. **child-management-agent**: 子供管理画面（子供情報・報酬履歴）
+16. **reward-agent**: 報酬設定画面（年齢別・レベル別報酬テーブル）
+17. **notification-agent**: 通知画面
+
+**共通機能:**
+18. **app-shell-agent**: AppShellContent（サイドメニュー・フッター）
+19. **common-components-agent**: 共通コンポーネント（再利用可能なコンポーネント群）
+
+**システム構成:**
+20. **endpoints-agent**: パス定義管理（endpoints.ts）
+21. **schema-agent**: DBスキーマ管理（schema.ts）
 
 **使用方法**: チャット入力欄で「`@`」から始めてエージェント名を選択し、対話的に作業を進めます。
 
@@ -99,10 +131,6 @@
 
 MCPの`yomiage`ツールを使用してタスク完了を音声で通知します：
 
-```
-# タスク完了メッセージを音声で通知
-mcp_yomiage_speak(text="タスクが完了しました")
-```
 
 **例:**
 - ファイル作成後: `mcp_yomiage_speak(text="ファイルを作成しました")`
@@ -118,7 +146,7 @@ mcp_yomiage_speak(text="タスクが完了しました")
 ```
 # 春日部つむぎで通知
 mcp_yomiage_speak(
-  text="完了しました",
+  text="{完了タスクの概要をここに記述}",
   speaker="tsumugi"
 )
 ```

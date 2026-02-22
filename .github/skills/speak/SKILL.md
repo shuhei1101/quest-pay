@@ -32,7 +32,7 @@ When a task is completed, immediately invoke the MCP yomiage tool with a brief s
 ```
 # After completing a task successfully
 mcp_yomiage_speak(
-  text="タスクが完了しました"
+  text="{完了したタスクの概要を記載する}"
 )
 ```
 

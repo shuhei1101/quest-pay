@@ -9,12 +9,22 @@ import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from './BackgroundWrapper'
 import { SideMenu } from './SideMenu'
 import { AccessErrorHandler } from '../../(core)/_components/AccessErrorHandler'
-import { NavigationFAB, NavigationItem } from '../../(core)/_components/NavigationFAB'
+import { FloatingActionButton, FloatingActionItem } from '../../(core)/_components/FloatingActionButton'
+import { FABProvider, useFABContext } from '../../(core)/_components/FABContext'
 import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUEST_NEW_URL } from '../../(core)/endpoints'
 import { useLoginUserInfo } from '../../(auth)/login/_hooks/useLoginUserInfo'
 
 /** AppShellコンテンツを取得する */
 export const AppShellContent = ({children}: {children: React.ReactNode}) => {
+  return (
+    <FABProvider>
+      <AppShellContentInner>{children}</AppShellContentInner>
+    </FABProvider>
+  )
+}
+
+/** AppShellコンテンツの内部実装 */
+const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
   /** メニューの表示状態 */
   const [opened, { toggle, close }] = useDisclosure()
   /** ブレークポイント */
@@ -25,12 +35,11 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
   const pathname = usePathname()
   /** ログインユーザ情報 */
   const { isParent } = useLoginUserInfo()
-
-  /** コンテンツ領域の高さ（パディング2rem） */
-  const contentHeight = 'calc(100dvh - 2rem)'
+  /** FABの開閉状態管理 */
+  const { openFab, closeFab, isOpen } = useFABContext()
 
   /** ナビゲーションアイテム */
-  const navigationItems: NavigationItem[] = [
+  const navigationItems: FloatingActionItem[] = [
     {
       icon: <IconHome2 size={20} />,
       label: "ホーム",
@@ -46,16 +55,10 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
       label: "メンバー",
       onClick: () => router.push(FAMILY_MEMBERS_URL),
     }] : []),
-    {
-      icon: <IconEdit size={20} />,
-      label: "新規作成",
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL),
-    },
   ]
 
   /** 現在のパスに基づいてナビゲーションの選択インデックスを決定する */
   const getActiveNavigationIndex = () => {
-    if (pathname.startsWith(FAMILY_QUEST_NEW_URL)) return isParent ? 3 : 2
     if (isParent && pathname.startsWith(FAMILY_MEMBERS_URL)) return 2
     if (pathname.startsWith(QUESTS_URL)) return 1
     return 0
@@ -77,9 +80,6 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
           },
         }}
         padding="md"
-        __vars={{
-          '--content-height': contentHeight,
-        }}
       >
         {/* サイドメニュー */}
         <AppShell.Navbar>
@@ -87,18 +87,24 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
         </AppShell.Navbar>
 
         {/* メインコンテンツ */}
-        <AppShell.Main>
+        <AppShell.Main style={{
+          overflow: 'auto',
+        }}>
           {children}
         </AppShell.Main>
       </AppShell>
 
-      {/* GitHub mobile風のナビゲーションFAB */}
-      <NavigationFAB
-        items={navigationItems}
-        activeIndex={getActiveNavigationIndex()}
-        mainButtonColor="blue"
-        subButtonColor="blue"
-      />
+      {/* GitHub mobile風のナビゲーションFAB（モバイル時のみ表示） */}
+      {isMobile && (
+        <FloatingActionButton
+          items={navigationItems}
+          position="bottom-left"
+          activeIndex={getActiveNavigationIndex()}
+          open={isOpen("navigation-fab")}
+          onToggle={(open) => open ? openFab("navigation-fab") : closeFab("navigation-fab")}
+          defaultOpen={false}
+        />
+      )}
     </BackgroundWrapper>
   )
 }

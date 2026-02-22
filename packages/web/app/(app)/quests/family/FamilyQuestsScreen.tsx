@@ -2,10 +2,11 @@
 
 import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button, Loader, Center } from "@mantine/core"
-import { IconClipboard, IconClipboardOff, IconHome2, IconWorld } from "@tabler/icons-react"
+import { IconClipboard, IconClipboardOff, IconHome2, IconWorld, IconPlus } from "@tabler/icons-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { LOGIN_URL } from "@/app/(core)/endpoints"
+import { LOGIN_URL, FAMILY_QUEST_NEW_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
+import { FloatingActionButton } from "@/app/(core)/_components/FloatingActionButton"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
@@ -48,6 +49,7 @@ export function FamilyQuestsScreen() {
   }, [searchParams])
   
   return (
+    <>
       <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', paddingBottom: '100px' }} color={
         tabValue == 'public' ? "rgb(96 165 250)" :
         tabValue == 'family' ? "rgb(74, 222, 128)" :
@@ -112,5 +114,18 @@ export function FamilyQuestsScreen() {
       </div>
       </Tabs>
 
+      {/* 新規作成FAB */}
+      <FloatingActionButton
+        items={[
+          {
+            icon: <IconPlus size={20} />,
+            onClick: () => router.push(FAMILY_QUEST_NEW_URL),
+          },
+        ]}
+        position="bottom-right"
+        pattern="radial-up"
+        mainIcon={<IconPlus size={20} />}
+      />
+    </>
   )
 }

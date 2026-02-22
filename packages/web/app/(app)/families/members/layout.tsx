@@ -29,8 +29,7 @@ export default function FamilyMembersLayout({ children }: {
   /** フローティングアクションアイテム */
   const actionItems: FloatingActionItem[] = [
     { 
-      icon: <IconAdjustments />, // 上
-      x: 10, y: -75,
+      icon: <IconAdjustments size={20} />,
       onClick: () => router.push(FAMILIES_MEMBERS_CHILD_NEW_URL)
     },
   ]
@@ -67,8 +66,8 @@ export default function FamilyMembersLayout({ children }: {
       </div>
       <FloatingActionButton
         items={actionItems}
-        mainButtonColor="pink"
-        subButtonColor="pink"
+        position="bottom-right"
+        pattern="radial-up"
       />
     </>
   )
