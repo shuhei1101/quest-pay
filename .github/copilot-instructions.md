@@ -38,16 +38,17 @@
 13. **timeline-agent**: タイムライン画面（家族・公開）
 14. **family-agent**: 家族管理画面（家族情報・メンバー管理・フォロー）
 15. **child-management-agent**: 子供管理画面（子供情報・報酬履歴）
-16. **reward-agent**: 報酬設定画面（年齢別・レベル別報酬テーブル）
-17. **notification-agent**: 通知画面
+16. **family-member-child-agent**: 家族メンバー子供編集画面（子供編集・閲覧・招待コード）
+17. **reward-agent**: 報酬設定画面（年齢別・レベル別報酬テーブル）
+18. **notification-agent**: 通知画面
 
 **共通機能:**
-18. **app-shell-agent**: AppShellContent（サイドメニュー・フッター）
-19. **common-components-agent**: 共通コンポーネント（再利用可能なコンポーネント群）
+19. **app-shell-agent**: AppShellContent（サイドメニュー・フッター）
+20. **common-components-agent**: 共通コンポーネント（再利用可能なコンポーネント群）
 
 **システム構成:**
-20. **endpoints-agent**: パス定義管理（endpoints.ts）
-21. **schema-agent**: DBスキーマ管理（schema.ts）
+21. **endpoints-agent**: パス定義管理（endpoints.ts）
+22. **schema-agent**: DBスキーマ管理（schema.ts）
 
 **使用方法**: チャット入力欄で「`@`」から始めてエージェント名を選択し、対話的に作業を進めます。
 

@@ -33,6 +33,11 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
           height: "100vh",
           position: "relative",
           backgroundColor: isSystemDark ? "#1a1b1e" : "#faf8f3",
+          // iOSのセーフエリア対応
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
         }}
       >
         {/* <Image

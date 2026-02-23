@@ -87,11 +87,7 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
         </AppShell.Navbar>
 
         {/* メインコンテンツ */}
-        <AppShell.Main style={{
-          overflow: 'auto',
-          height: '100vh',
-          maxHeight: '100vh',
-        }}>
+        <AppShell.Main>
           {children}
         </AppShell.Main>
       </AppShell>
