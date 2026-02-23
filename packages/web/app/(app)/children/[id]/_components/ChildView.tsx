@@ -66,12 +66,7 @@ export const ChildView = ( params: {
         <ChildViewLayout
           child={child}
           questStats={questStats}
-          onRankClick={() => console.log("ランククリック")}
-          onCompletedQuestClick={() => console.log("達成クエストクリック")}
-          onTotalRewardClick={() => console.log("合計報酬額クリック")}
-          onFixedRewardClick={() => console.log("定額報酬クリック")}
           onSavingsClick={() => router.push(CHILD_REWARDS_URL(id))}
-          onMonthlyRewardClick={() => console.log("今月の報酬クリック")}
         />
       </Box>
 

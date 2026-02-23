@@ -1,7 +1,7 @@
 "use client"
 
-import { Box, Card, Group, Stack, Text, SimpleGrid } from "@mantine/core"
-import { IconCake, IconCalendar, IconSchool } from "@tabler/icons-react"
+import { Box, Card, Group, Stack, Text, SimpleGrid, RingProgress, Center, ThemeIcon, Progress, Divider } from "@mantine/core"
+import { IconCake, IconCalendar, IconSchool, IconTrophy, IconChecklist, IconCoin, IconWallet, IconStar } from "@tabler/icons-react"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { Child } from "@/app/api/children/query"
 import { calculateAge, formatDate } from "@/app/(core)/util"
@@ -55,63 +55,15 @@ const calculateGrade = (birthday: string | null | undefined): string | null => {
   return null
 }
 
-/** 統計カード */
-const StatCard = ({ 
-  label, 
-  value, 
-  color, 
-  onClick 
-}: { 
-  label: string
-  value: string | number
-  color: string
-  onClick?: () => void
-}) => {
-  return (
-    <Card
-      shadow="sm"
-      padding="xs"
-      radius="md"
-      withBorder
-      onClick={onClick}
-      className={onClick ? "cursor-pointer" : ""}
-      style={{
-        backgroundColor: color,
-        minWidth: "100px",
-        textAlign: "center",
-      }}
-    >
-      <Stack gap="xs">
-        <Text size="sm" fw={500} c="white" style={{ opacity: 0.9 }}>
-          {label}
-        </Text>
-        <Text size="xl" fw={700} c="white">
-          {value}
-        </Text>
-      </Stack>
-    </Card>
-  )
-}
-
 /** 子供閲覧画面レイアウト */
 export const ChildViewLayout = ({
   child,
   questStats,
-  onRankClick,
-  onCompletedQuestClick,
-  onTotalRewardClick,
-  onFixedRewardClick,
   onSavingsClick,
-  onMonthlyRewardClick,
 }: {
   child: Child | undefined
   questStats?: { inProgressCount: number; completedCount: number }
-  onRankClick?: () => void
-  onCompletedQuestClick?: () => void
-  onTotalRewardClick?: () => void
-  onFixedRewardClick?: () => void
   onSavingsClick?: () => void
-  onMonthlyRewardClick?: () => void
 }) => {
   // 年齢を計算する
   const age = calculateAge(child?.profiles?.birthday)
@@ -121,6 +73,34 @@ export const ChildViewLayout = ({
   
   // 誕生日をフォーマットする
   const formattedBirthday = formatDate(child?.profiles?.birthday)
+  
+  // 現在のレベルと経験値を取得
+  const currentLevel = child?.children?.currentLevel ?? 1
+  const totalExp = child?.children?.totalExp ?? 0
+  
+  // レベルごとの必要経験値を計算（レベル * 100）
+  const getExpForLevel = (level: number): number => {
+    return level * 100
+  }
+  
+  // 現在のレベルの開始時の累積経験値を計算
+  const getStartExpForLevel = (level: number): number => {
+    let exp = 0
+    for (let i = 1; i < level; i++) {
+      exp += getExpForLevel(i)
+    }
+    return exp
+  }
+  
+  // 現在のレベルでの経験値
+  const startExpForCurrentLevel = getStartExpForLevel(currentLevel)
+  const currentExp = totalExp - startExpForCurrentLevel
+  
+  // 次のレベルまでに必要な経験値
+  const nextLevelExp = getExpForLevel(currentLevel)
+  
+  // 経験値のパーセンテージを計算
+  const expPercentage = nextLevelExp > 0 ? (currentExp / nextLevelExp) * 100 : 0
   
   // 合計報酬額を計算する（TODO: 実際のAPIデータに置き換える）
   const totalReward = 10000
@@ -135,108 +115,169 @@ export const ChildViewLayout = ({
   return (
     <Box>
       {/* プロフィールカード */}
-      <Card shadow="sm" padding="lg" radius="md" withBorder mb="md" style={{ backgroundColor: "#E0F2F7" }}>
-        <Stack gap="md">
-          {/* アイコンと名前 */}
-          <Group gap="md" align="center">
-            <Box
-              style={{
-                width: 60,
-                height: 60,
-                borderRadius: "50%",
-                backgroundColor: "#B3E5FC",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <RenderIcon iconName={child?.icons?.name} iconColor={child?.profiles?.iconColor} size={40} />
-            </Box>
-            <div>
-              <Text size="xl" fw={700}>
-                {child?.profiles?.name ?? ""}くん
-              </Text>
-            </div>
-          </Group>
+      <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+        <Group gap="lg" align="center">
+          <Box
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+            }}
+          >
+            <RenderIcon iconName={child?.icons?.name} iconColor="#FFFFFF" size={50} />
+          </Box>
           
-          {/* プロフィール情報 */}
-          <Stack gap="xs">
-            {/* 年齢 */}
-            <Group gap="xs">
-              <IconCake size={18} />
-              <Text size="sm">年齢：{age !== null ? `${age}歳` : ""}</Text>
-            </Group>
-            {/* 誕生日 */}
-            <Group gap="xs">
-              <IconCalendar size={18} />
-              <Text size="sm">誕生日：{formattedBirthday || ""}</Text>
-            </Group>
-            {/* 学年 */}
-            <Group gap="xs">
-              <IconSchool size={18} />
-              <Text size="sm">学年：{grade || ""}</Text>
+          <Stack gap="xs" style={{ flex: 1 }}>
+            <Text size="2rem" fw={700}>{child?.profiles?.name ?? ""}くん</Text>
+            <Group gap="lg">
+              <Group gap="xs">
+                <IconCake size={20} color="#666" />
+                <Text size="sm" c="dimmed">{age !== null ? `${age}歳` : ""}</Text>
+              </Group>
+              <Group gap="xs">
+                <IconCalendar size={20} color="#666" />
+                <Text size="sm" c="dimmed">{formattedBirthday || ""}</Text>
+              </Group>
+              <Group gap="xs">
+                <IconSchool size={20} color="#666" />
+                <Text size="sm" c="dimmed">{grade || ""}</Text>
+              </Group>
             </Group>
           </Stack>
-          
-          {/* 統計カード群（GRID レイアウト） */}
-          <SimpleGrid cols={3} spacing="md">
-            <StatCard 
-              label="ランク" 
-              value={child?.children?.currentLevel ?? 1} 
-              color="#9C27B0"
-              onClick={onRankClick}
-            />
-            <StatCard 
-              label="達成クエスト" 
-              value={questStats?.completedCount ?? 0} 
-              color="#F44336"
-              onClick={onCompletedQuestClick}
-            />
-            <StatCard 
-              label="合計報酬額" 
-              value={`${totalReward}円`} 
-              color="#FF9800"
-              onClick={onTotalRewardClick}
-            />
-            <StatCard 
-              label="定額報酬" 
-              value={`${fixedReward}円/月`} 
-              color="#00BCD4"
-              onClick={onFixedRewardClick}
-            />
-            <StatCard 
-              label="貯金" 
-              value={`${child?.children?.currentSavings ?? 0}円`} 
-              color="#4CAF50"
-              onClick={onSavingsClick}
-            />
-          </SimpleGrid>
-        </Stack>
+        </Group>
       </Card>
-      
-      {/* 今月の報酬カード */}
-      <Card 
-        shadow="sm" 
-        padding="lg" 
-        radius="md" 
-        withBorder 
-        mb="md"
-        onClick={onMonthlyRewardClick}
-        className={onMonthlyRewardClick ? "cursor-pointer" : ""}
-        style={{ backgroundColor: "#FFC107" }}
-      >
-        <Stack gap="xs">
-          <Group gap="xs" align="center">
-            <Text size="sm" fw={500} c="white">
-              ◇ 今月の報酬金
-            </Text>
-          </Group>
-          <Text size="3rem" fw={700} c="white" ta="center">
-            {monthlyReward}円
-          </Text>
-          <Text size="sm" c="white" ta="right">
-            支払い日：{monthlyRewardDate}
-          </Text>
+
+      {/* レベルと経験値カード */}
+      <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+        <Text size="lg" fw={600} mb="md">レベル・経験値</Text>
+        <Group gap="xl" align="center">
+          {/* 円グラフ */}
+          <Box>
+            <RingProgress
+              size={160}
+              thickness={16}
+              roundCaps
+              sections={[
+                { value: expPercentage, color: '#667eea' }
+              ]}
+              label={
+                <Center>
+                  <Stack gap={0} align="center">
+                    <Group gap="xs">
+                      <IconStar size={24} color="#667eea" />
+                      <Text size="xl" fw={700} c="#667eea">Lv.{child?.children?.currentLevel ?? 1}</Text>
+                    </Group>
+                    <Text size="xs" c="dimmed" mt="xs">
+                      {expPercentage.toFixed(1)}%
+                    </Text>
+                  </Stack>
+                </Center>
+              }
+            />
+          </Box>
+          
+          {/* 経験値情報 */}
+          <Stack gap="md" style={{ flex: 1 }}>
+            <Box>
+              <Text size="sm" c="dimmed" mb="xs">現在の経験値</Text>
+              <Group gap="xs">
+                <Text size="2rem" fw={700} c="#667eea">{currentExp}</Text>
+                <Text size="sm" c="dimmed">EXP</Text>
+              </Group>
+            </Box>
+            
+            <Divider />
+            
+            <Box>
+              <Text size="sm" c="dimmed" mb="xs">次のレベルまで</Text>
+              <Group gap="xs">
+                <Text size="xl" fw={700} c="#999">
+                  {nextLevelExp - currentExp}
+                </Text>
+                <Text size="sm" c="dimmed">EXP</Text>
+              </Group>
+            </Box>
+            
+            <Box>
+              <Group justify="space-between" mb="xs">
+                <Text size="xs" c="dimmed">進捗</Text>
+                <Text size="xs" fw={600}>{expPercentage.toFixed(1)}%</Text>
+              </Group>
+              <Progress value={expPercentage} color="#667eea" size="md" radius="xl" />
+            </Box>
+          </Stack>
+        </Group>
+      </Card>
+
+      {/* クエスト統計カード */}
+      <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+        <Text size="lg" fw={600} mb="md">クエスト実績</Text>
+        <SimpleGrid cols={3} spacing="md">
+          <Box style={{ textAlign: "center" }}>
+            <ThemeIcon size={50} radius="xl" variant="light" color="violet" mb="xs">
+              <IconTrophy size={28} />
+            </ThemeIcon>
+            <Text size="xs" c="dimmed">ランク</Text>
+            <Text size="xl" fw={700}>{child?.children?.currentLevel ?? 1}</Text>
+          </Box>
+          <Box style={{ textAlign: "center" }}>
+            <ThemeIcon size={50} radius="xl" variant="light" color="red" mb="xs">
+              <IconChecklist size={28} />
+            </ThemeIcon>
+            <Text size="xs" c="dimmed">達成クエスト</Text>
+            <Text size="xl" fw={700}>{questStats?.completedCount ?? 0}</Text>
+          </Box>
+          <Box style={{ textAlign: "center" }}>
+            <ThemeIcon size={50} radius="xl" variant="light" color="blue" mb="xs">
+              <IconChecklist size={28} />
+            </ThemeIcon>
+            <Text size="xs" c="dimmed">進行中</Text>
+            <Text size="xl" fw={700}>{questStats?.inProgressCount ?? 0}</Text>
+          </Box>
+        </SimpleGrid>
+      </Card>
+
+      {/* お金の統計カード */}
+      <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+        <Text size="lg" fw={600} mb="md">お金の管理</Text>
+        <Stack gap="md">
+          <Card padding="md" radius="md" withBorder style={{ backgroundColor: "#FFF9C4" }}>
+            <Group justify="space-between" mb="xs">
+              <Group gap="xs">
+                <IconWallet size={24} color="#F57C00" />
+                <Text fw={600}>今月の報酬</Text>
+              </Group>
+              <Text size="xs" c="dimmed">支払い日: {monthlyRewardDate}</Text>
+            </Group>
+            <Text size="2.5rem" fw={700} c="#F57C00">{monthlyReward.toLocaleString()}円</Text>
+          </Card>
+          
+          <SimpleGrid cols={3} spacing="md">
+            <Card padding="sm" radius="md" withBorder style={{ backgroundColor: "#E1F5FE" }}>
+              <Text size="xs" c="dimmed" mb="xs">合計報酬額</Text>
+              <Text size="lg" fw={700} c="#0277BD">{totalReward.toLocaleString()}円</Text>
+            </Card>
+            <Card padding="sm" radius="md" withBorder style={{ backgroundColor: "#F3E5F5" }}>
+              <Text size="xs" c="dimmed" mb="xs">定額報酬</Text>
+              <Text size="lg" fw={700} c="#6A1B9A">{fixedReward.toLocaleString()}円/月</Text>
+            </Card>
+            <Card 
+              padding="sm" 
+              radius="md" 
+              withBorder 
+              style={{ backgroundColor: "#E8F5E9", cursor: onSavingsClick ? "pointer" : "default" }}
+              onClick={onSavingsClick}
+              className={onSavingsClick ? "hover:shadow-md transition-shadow" : ""}
+            >
+              <Text size="xs" c="dimmed" mb="xs">現在の貯金</Text>
+              <Text size="lg" fw={700} c="#2E7D32">{(child?.children?.currentSavings ?? 0).toLocaleString()}円</Text>
+            </Card>
+          </SimpleGrid>
         </Stack>
       </Card>
     </Box>
