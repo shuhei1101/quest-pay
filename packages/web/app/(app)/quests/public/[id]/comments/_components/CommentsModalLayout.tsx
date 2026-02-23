@@ -36,7 +36,7 @@ export const CommentsModalLayout = ({
       size="lg"
       padding={0}
       title={
-        <Group justify="space-between" w="100%" pr="xs">
+        <Group justify="space-between" w="100%" px="md" py="xs">
           <Text fw={600} size="lg">
             コメント
           </Text>
@@ -53,15 +53,20 @@ export const CommentsModalLayout = ({
         </Group>
       }
       styles={{
+        header: {
+          padding: "1rem 1rem 0.75rem 1rem",
+        },
         content: {
           height: "85vh",
           overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
         },
         inner: {
           overflow: "hidden",
         },
         body: {
-          height: "100%",
+          flex: 1,
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
