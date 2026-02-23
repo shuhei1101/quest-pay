@@ -2,16 +2,19 @@ import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
 import { Db } from "@/index"
 import { updateLevelReward } from "./db"
+import type { levelRewardTableType } from "@/drizzle/schema"
 
 /** 家族のレベル別報酬を一括更新する */
 export const updateFamilyLevelRewards = async ({
   db,
   levelRewardTableId,
-  rewards
+  rewards,
+  type = "family"
 }: {
   db: Db
   levelRewardTableId: string
   rewards: Array<{ level: number; amount: number }>
+  type?: typeof levelRewardTableType.enumValues[number]
 }) => {
   try {
     return await db.transaction(async (tx) => {
@@ -21,7 +24,8 @@ export const updateFamilyLevelRewards = async ({
           db: tx,
           levelRewardTableId,
           level: reward.level,
-          amount: reward.amount
+          amount: reward.amount,
+          type
         })
       }
     })

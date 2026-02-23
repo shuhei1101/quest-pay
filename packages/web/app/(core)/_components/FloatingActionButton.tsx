@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState, useCallback, ReactNode } from "react"
 import { ActionIcon, MantineColor } from "@mantine/core"
-import { IconDots, IconChevronRight, IconChevronLeft } from "@tabler/icons-react"
+import { IconDots, IconChevronRight, IconChevronLeft, IconChevronUp, IconChevronDown, IconApps, IconMenu } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useWindow } from "../useConstants"
 import { useTheme } from "../_theme/useTheme"
@@ -123,8 +123,10 @@ export const FloatingActionButton = ({
     top: position === "top-left" || position === "top-right" ? (isMobile ? "20px" : "40px") : undefined,
   }
 
-  /** slideパターン時の展開方向（左配置なら右へ、右配置なら左へ） */
-  const slideDirection = position === "bottom-left" || position === "top-left" ? "right" : "left"
+  /** slideパターン時の展開方向（左配置なら右へ、右配置なら左へ、モバイル時は上） */
+  const slideDirection = isMobile 
+    ? "up" 
+    : (position === "bottom-left" || position === "top-left" ? "right" : "left")
 
   /** 内部で管理する開閉状態 */
   const [internalOpen, setInternalOpen] = useState(defaultOpen)
@@ -168,11 +170,13 @@ export const FloatingActionButton = ({
   const displayMainIcon = (() => {
     if (items.length === 1) return items[0].icon
     if (actualOpen && items.length > 1) {
-      // 開いているときは、左配置なら<、右配置なら>
+      // 開いているときは、閉じる方向を示す
+      if (slideDirection === "up") return <IconChevronDown size={24} />
       return isLeftPositioned ? <IconChevronLeft size={24} /> : <IconChevronRight size={24} />
     }
     if (isSlidePattern) {
-      // 閉じているときは、左配置なら>、右配置なら<（開く方向を示す）
+      // 閉じているときは、開く方向を示す
+      if (slideDirection === "up") return <IconChevronUp size={24} />
       return isLeftPositioned ? <IconChevronRight size={24} /> : <IconChevronLeft size={24} />
     }
     return mainIcon
@@ -204,6 +208,78 @@ export const FloatingActionButton = ({
               gap: FAB_SPACING.mainToItemsGap,
             }}
           >
+            {/* 上方向展開の場合: メインボタンを含む相対配置の親要素内で子アイテムを絶対配置 */}
+            {slideDirection === "up" ? (
+              <div
+                style={{
+                  position: "relative",
+                  width: FAB_SPACING.mainButtonSize,
+                  height: FAB_SPACING.mainButtonSize,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <AnimatePresence>
+                  {actualOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      style={{
+                        position: "absolute",
+                        bottom: FAB_SPACING.mainButtonSize + FAB_SPACING.mainToItemsGap,
+                        left: "50%",
+                        display: "flex",
+                        flexDirection: "column-reverse",
+                        alignItems: "center",
+                        gap: FAB_SPACING.itemsGap,
+                        paddingBottom: FAB_SPACING.itemsContainerPadding,
+                      }}
+                    >
+                      {items.map((item, index) => {
+                        return (
+                          <FABChildItem
+                            key={index}
+                            icon={item.icon}
+                            label={item.label}
+                            onClick={() => handleItemClick(item)}
+                            color={item.color || themeColors.buttonColors.primary}
+                            variant={themeColors.fab.variant}
+                            opacity={activeIndex !== undefined && index === activeIndex ? themeColors.fab.opacity.active : themeColors.fab.opacity.inactive}
+                            border={activeIndex !== undefined && index === activeIndex 
+                              ? `${themeColors.fab.border.activeWidth} solid ${themeColors.borderColors.focus}` 
+                              : `${themeColors.fab.border.inactiveWidth} solid transparent`}
+                            additionalStyle={{
+                              transform: "translateX(-50%)",
+                            }}
+                          />
+                        )
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* メインボタン */}
+                <ActionIcon
+                  radius="xl"
+                  variant={themeColors.fab.variant}
+                  color={themeColors.buttonColors.primary}
+                  onClick={() => handleToggle(!actualOpen)}
+                  style={{
+                    width: FAB_SPACING.mainButtonSize,
+                    height: FAB_SPACING.mainButtonSize,
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
+                    border: `${themeColors.fab.border.activeWidth} solid ${themeColors.borderColors.focus}`,
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {displayMainIcon}
+                </ActionIcon>
+              </div>
+            ) : null}
+
             {/* 左横展開の場合: 子アイテム → メインボタン */}
             {slideDirection === "left" && (
               <AnimatePresence>
@@ -244,32 +320,34 @@ export const FloatingActionButton = ({
               </AnimatePresence>
             )}
 
-            {/* メインボタン */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                height: FAB_SPACING.mainButtonSize,
-              }}
-            >
-              <ActionIcon
-                radius="xl"
-                variant={themeColors.fab.variant}
-                color={themeColors.buttonColors.primary}
-                onClick={() => handleToggle(!actualOpen)}
+            {/* メインボタン（左右展開の場合のみ） */}
+            {slideDirection !== "up" && (
+              <div
                 style={{
-                  width: FAB_SPACING.mainButtonSize,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                   height: FAB_SPACING.mainButtonSize,
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
-                  border: `${themeColors.fab.border.activeWidth} solid ${themeColors.borderColors.focus}`,
-                  boxSizing: "border-box",
                 }}
               >
-                {displayMainIcon}
-              </ActionIcon>
-            </div>
+                <ActionIcon
+                  radius="xl"
+                  variant={themeColors.fab.variant}
+                  color={themeColors.buttonColors.primary}
+                  onClick={() => handleToggle(!actualOpen)}
+                  style={{
+                    width: FAB_SPACING.mainButtonSize,
+                    height: FAB_SPACING.mainButtonSize,
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
+                    border: `${themeColors.fab.border.activeWidth} solid ${themeColors.borderColors.focus}`,
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {displayMainIcon}
+                </ActionIcon>
+              </div>
+            )}
 
             {/* 右横展開の場合: メインボタン → 子アイテム */}
             {slideDirection === "right" && (
@@ -316,6 +394,29 @@ export const FloatingActionButton = ({
             {actualOpen && items.length > 1 &&
               items.map((item, i) => {
                 const position = itemPositions[i]
+                
+                // パターンに応じた基準位置を設定
+                const basePosition = (() => {
+                  if (actualPattern === "radial-up" || actualPattern === "radial-down") {
+                    return { top: 0, left: "50%" }
+                  }
+                  if (actualPattern === "radial-left" || actualPattern === "radial-right") {
+                    return { top: "50%", left: 0 }
+                  }
+                  return { top: 0, left: 0 }
+                })()
+                
+                // パターンに応じた中央配置用のスタイル
+                const centeringStyle = (() => {
+                  if (actualPattern === "radial-up" || actualPattern === "radial-down") {
+                    return { transform: "translateX(-50%)" }
+                  }
+                  if (actualPattern === "radial-left" || actualPattern === "radial-right") {
+                    return { transform: "translateY(-50%)" }
+                  }
+                  return {}
+                })()
+                
                 return (
                   <motion.div
                     key={i}
@@ -325,8 +426,7 @@ export const FloatingActionButton = ({
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     style={{ 
                       position: "absolute",
-                      top: 0,
-                      left: 0,
+                      ...basePosition,
                     }}
                   >
                     <FABChildItem
@@ -336,6 +436,7 @@ export const FloatingActionButton = ({
                       color={item.color || themeColors.buttonColors.primary}
                       variant={themeColors.fab.variant}
                       boxShadow="0 6px 16px rgba(0,0,0,0.18)"
+                      additionalStyle={centeringStyle}
                     />
                   </motion.div>
                 )

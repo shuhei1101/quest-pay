@@ -52,6 +52,9 @@ export const FABChildItem = ({
   /** 追加のスタイル */
   additionalStyle?: CSSProperties
 }) => {
+  // additionalStyleにmarginTopが含まれていない場合のみデフォルトのmarginTopを適用
+  const shouldApplyMarginTop = !additionalStyle?.transform
+
   return (
     <div
       style={{
@@ -72,7 +75,7 @@ export const FABChildItem = ({
         style={{
           width: FAB_SPACING.subButtonSize,
           height: FAB_SPACING.subButtonSize,
-          marginTop: (FAB_SPACING.mainButtonSize - FAB_SPACING.subButtonSize) / 2,
+          marginTop: shouldApplyMarginTop ? (FAB_SPACING.mainButtonSize - FAB_SPACING.subButtonSize) / 2 : 0,
           cursor,
           opacity,
           border,

@@ -1,7 +1,7 @@
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { Parent } from "@/app/api/parents/query"
-import { Badge, Card, Group, Text, Stack } from "@mantine/core"
-import { calculateAge, formatDate } from "@/app/(core)/util"
+import { Avatar, Box, Group, Text, Stack } from "@mantine/core"
+import { calculateAge } from "@/app/(core)/util"
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 export const ParentCardLayout = ({parent, onClick, isSelected}: {
@@ -15,27 +15,33 @@ export const ParentCardLayout = ({parent, onClick, isSelected}: {
   const age = calculateAge(parent.profiles?.birthday)
   
   return (
-    <Card shadow="sm" padding="md" radius="md" withBorder
+    <Box
+      px="xs"
+      py="sm"
       onClick={() => onClick(parent.parents.id)}
-      className={`cursor-pointer quest-card ${isSelected ? 'rainbow-border' : ''}`}
+      className="cursor-pointer hover:bg-gray-50 transition-colors rounded"
       style={{
-        backgroundColor: colors.cardStyles.background,
-        borderColor: colors.cardStyles.border,
+        backgroundColor: isSelected ? "#F0F4FF" : "transparent",
+        borderLeft: isSelected ? "3px solid #667eea" : "3px solid transparent"
       }}
     >
-      {/* アイコンとプロフィール名 */}
-      <Group mb="xs" align="center">
-        <RenderIcon iconName={parent.icons?.name} iconColor={parent.profiles?.iconColor} size={40}/>
-        <Text size="lg" fw={600} c={colors.textColors.primary}>{parent.profiles?.name}</Text>
+      <Group gap="sm" wrap="nowrap">
+        <Avatar
+          size={32}
+          radius="xl"
+          style={{
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+          }}
+        >
+          <RenderIcon iconName={parent.icons?.name} iconColor="#FFFFFF" size={20} />
+        </Avatar>
+        <Stack gap={0} style={{ flex: 1, minWidth: 0 }}>
+          <Text size="sm" fw={500} truncate c={colors.textColors.primary}>{parent.profiles?.name}</Text>
+          {age !== null && (
+            <Text size="xs" c="dimmed">{age}歳</Text>
+          )}
+        </Stack>
       </Group>
-      
-      {/* 年齢と登録日 */}
-      <Stack gap="xs">
-        {age !== null && (
-          <Text size="sm" c={colors.textColors.secondary}>年齢: {age}歳</Text>
-        )}
-        <Text size="sm" c={colors.textColors.secondary}>登録日: {formatDate(parent.parents.createdAt)}</Text>
-      </Stack>
-    </Card>
+    </Box>
   )
 }

@@ -4,7 +4,7 @@ import { AppShell } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Suspense } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { IconHome2, IconClipboard, IconUsers, IconEdit } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconEdit, IconApps } from '@tabler/icons-react'
 import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from './BackgroundWrapper'
 import { SideMenu } from './SideMenu'
@@ -101,6 +101,7 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
           open={isOpen("navigation-fab")}
           onToggle={(open) => open ? openFab("navigation-fab") : closeFab("navigation-fab")}
           defaultOpen={false}
+          mainIcon={<IconApps size={24} />}
         />
       )}
     </BackgroundWrapper>

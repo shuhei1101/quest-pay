@@ -1,21 +1,23 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
-import { rewardByLevels } from "@/drizzle/schema"
+import { rewardByLevels, type levelRewardTableType } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq, and } from "drizzle-orm"
 
 /** レベル別報酬のデフォルトデータを作成する */
 export const insertDefaultLevelRewards = async ({
   db,
-  levelRewardTableId
+  levelRewardTableId,
+  type = "family"
 }: {
   db: Db
   levelRewardTableId: string
+  type?: typeof levelRewardTableType.enumValues[number]
 }) => {
   try {
     // デフォルトのレベル別報酬を作成する（レベル1～12まで、月額0円）
     const defaultRewards = Array.from({ length: 12 }, (_, i) => ({
-      type: "family" as const,
+      type,
       levelRewardTableId,
       level: i + 1,
       amount: 0
@@ -33,12 +35,14 @@ export const updateLevelReward = async ({
   db,
   levelRewardTableId,
   level,
-  amount
+  amount,
+  type = "family"
 }: {
   db: Db
   levelRewardTableId: string
   level: number
   amount: number
+  type?: typeof levelRewardTableType.enumValues[number]
 }) => {
   try {
     await db
@@ -46,7 +50,7 @@ export const updateLevelReward = async ({
       .set({ amount })
       .where(
         and(
-          eq(rewardByLevels.type, "family"),
+          eq(rewardByLevels.type, type),
           eq(rewardByLevels.levelRewardTableId, levelRewardTableId),
           eq(rewardByLevels.level, level)
         )

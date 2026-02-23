@@ -1,4 +1,4 @@
-import { CHILD_REWARDS_API_URL, CHILD_REWARDS_COMPLETE_PAYMENT_API_URL, CHILD_REWARDS_START_PAYMENT_API_URL } from "@/app/(core)/endpoints"
+import { CHILD_REWARDS_HISTORIES_API_URL, CHILD_REWARDS_COMPLETE_PAYMENT_API_URL, CHILD_REWARDS_START_PAYMENT_API_URL } from "@/app/(core)/endpoints"
 import { GetRewardHistoriesResponse } from "./route"
 
 /** 報酬履歴を取得する */
@@ -9,7 +9,7 @@ export const getRewardHistories = async ({
   childId: string
   yearMonth?: string
 }): Promise<GetRewardHistoriesResponse> => {
-  const url = new URL(CHILD_REWARDS_API_URL(childId), window.location.origin)
+  const url = new URL(CHILD_REWARDS_HISTORIES_API_URL(childId), window.location.origin)
   if (yearMonth) url.searchParams.set('yearMonth', yearMonth)
 
   const response = await fetch(url.toString())

@@ -146,11 +146,15 @@ export const CHILDREN_API_URL = `/api${CHILDREN_URL}`
 export const CHILD_API_URL = (childId: string) => `${CHILDREN_API_URL}/${childId}`
 export const CHILD_JOIN_API_URL = `${CHILDREN_API_URL}/join`
 
-// 報酬履歴
+// 子供報酬
 export const CHILD_REWARDS_URL = (childId: string) => `${CHILD_URL(childId)}/rewards`
 export const CHILD_REWARDS_API_URL = (childId: string) => `${CHILD_API_URL(childId)}/rewards`
 export const CHILD_REWARDS_START_PAYMENT_API_URL = (childId: string) => `${CHILD_REWARDS_API_URL(childId)}/pay/start`
 export const CHILD_REWARDS_COMPLETE_PAYMENT_API_URL = (childId: string) => `${CHILD_REWARDS_API_URL(childId)}/pay/complete`
+
+// 子供の報酬履歴
+export const CHILD_REWARDS_HISTORIES_URL = (childId: string) => `${CHILD_REWARDS_URL(childId)}/histories`
+export const CHILD_REWARDS_HISTORIES_API_URL = (childId: string) => `${CHILD_REWARDS_API_URL(childId)}/histories`
 
 // 子供クエスト
 export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
@@ -189,6 +193,15 @@ export const REWARD_API_URL = `/api${REWARD_URL}`
 export const FAMILY_AGE_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-age/table`
 // レベル別報酬テーブル
 export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-level/table`
+
+// 子供個別の報酬設定
+export const CHILD_REWARD_URL = (childId: string) => `${CHILD_URL(childId)}/reward`
+export const CHILD_REWARD_VIEW_URL = (childId: string) => `${CHILD_REWARD_URL(childId)}/view`
+export const CHILD_REWARD_API_URL = (childId: string) => `${CHILD_API_URL(childId)}/reward`
+// 子供の年齢別報酬テーブル
+export const CHILD_AGE_REWARD_TABLE_API_URL = (childId: string) => `${CHILD_REWARD_API_URL(childId)}/by-age/table`
+// 子供のレベル別報酬テーブル
+export const CHILD_LEVEL_REWARD_TABLE_API_URL = (childId: string) => `${CHILD_REWARD_API_URL(childId)}/by-level/table`
 
 // タイムライン
 export const TIMELINE_URL = `/timeline`

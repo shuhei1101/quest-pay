@@ -4,9 +4,9 @@ import { useWindow } from "@/app/(core)/useConstants"
 import { FamilyMemberList } from "./_components/FamilyMemberList"
 import { useEffect, useState } from "react"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
-import { IconAdjustments } from "@tabler/icons-react"
+import { IconPlus, IconMenu, IconEdit } from "@tabler/icons-react"
 import { useRouter, usePathname } from "next/navigation"
-import { FAMILIES_MEMBERS_CHILD_NEW_URL } from "@/app/(core)/endpoints"
+import { FAMILIES_MEMBERS_CHILD_NEW_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
 
 export default function FamilyMembersLayout({ children }: {
   children: React.ReactNode
@@ -26,13 +26,25 @@ export default function FamilyMembersLayout({ children }: {
   /** 現在選択中のID */
   const selectedId = getSelectedIdFromPath()
 
+  /** 子供編集画面かどうか */
+  const isChildViewPage = pathname.match(/\/families\/members\/child\/([^\/]+)\/view/)
+  const childIdForEdit = isChildViewPage?.[1]
+
   /** フローティングアクションアイテム */
   const actionItems: FloatingActionItem[] = [
     { 
-      icon: <IconAdjustments size={20} />,
+      icon: <IconPlus size={20} />,
       onClick: () => router.push(FAMILIES_MEMBERS_CHILD_NEW_URL)
     },
   ]
+
+  // 子供閲覧画面の場合、編集ボタンを追加
+  if (childIdForEdit) {
+    actionItems.unshift({
+      icon: <IconEdit size={20} />,
+      onClick: () => router.push(FAMILIES_MEMBERS_CHILD_EDIT_URL(childIdForEdit))
+    })
+  }
 
   // SSRレンダリング時の処理
   const [mounted, setMounted] = useState(false)
@@ -48,19 +60,29 @@ export default function FamilyMembersLayout({ children }: {
       return <FamilyMemberList selectedId={null} />
     }
     // 選択されている場合、子コンテンツを表示する
-    return <>{children}</>
+    return (
+      <>
+        {children}
+        <FloatingActionButton
+          items={actionItems}
+          position="bottom-right"
+          pattern="radial-up"
+          mainIcon={<IconMenu size={24} />}
+        />
+      </>
+    )
   }
   
   // スマホ以外の場合、2ペインで表示する
   return (
     <>
-      <div className="flex h-full">
+      <div className="flex h-full" style={{ gap: "1rem" }}>
         {/* 一覧画面 */}
-        <aside className="w-1/3 border-r">
+        <aside className="w-1/3" style={{ borderRight: "1px solid #e0e0e0", paddingRight: "1rem", overflowY: "auto" }}>
           <FamilyMemberList selectedId={selectedId} />
         </aside>
         {/* メインコンテンツ */}
-        <main className="flex-1">
+        <main className="flex-1" style={{ paddingLeft: "1rem", overflowY: "auto" }}>
           {children}
         </main>
       </div>
@@ -68,6 +90,7 @@ export default function FamilyMembersLayout({ children }: {
         items={actionItems}
         position="bottom-right"
         pattern="radial-up"
+        mainIcon={<IconMenu size={24} />}
       />
     </>
   )

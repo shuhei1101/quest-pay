@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import { useChild } from "../_hook/useChild"
 import { useRouter } from "next/navigation"
-import { CHILD_REWARDS_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
+import { CHILD_REWARDS_HISTORIES_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
 import { useDisclosure } from "@mantine/hooks"
 import { InviteCodePopup } from "@/app/(core)/_components/InviteCodePopup"
 import { ChildViewLayout } from "./ChildViewLayout"
@@ -43,30 +43,23 @@ export const ChildView = ( params: {
         <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
         
         {/* トップバー */}
-        <div className="flex items-center gap-3 justify-end mb-4">
-          {/* 招待コードボタン（user_idが存在しない場合のみ表示） */}
-          {!child?.profiles?.userId && (
+        {!child?.profiles?.userId && (
+          <div className="flex items-center gap-3 justify-end mb-4">
+            {/* 招待コードボタン（user_idが存在しない場合のみ表示） */}
             <Button 
               variant="outline"
               onClick={openInviteCode}
             >
               招待コード表示
             </Button>
-          )}
-          {/* 編集ボタン */}
-          <Button 
-            variant="gradient"
-            onClick={() => router.push(FAMILIES_MEMBERS_CHILD_EDIT_URL(id))}
-          >
-            編集
-          </Button>
-        </div>
+          </div>
+        )}
         
         {/* 子供閲覧レイアウト */}
         <ChildViewLayout
           child={child}
           questStats={questStats}
-          onSavingsClick={() => router.push(CHILD_REWARDS_URL(id))}
+          onSavingsClick={() => router.push(CHILD_REWARDS_HISTORIES_URL(id))}
         />
       </Box>
 

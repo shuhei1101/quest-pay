@@ -2,7 +2,7 @@
 
 import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button, Loader, Center } from "@mantine/core"
-import { IconClipboard, IconClipboardOff, IconHome2, IconWorld, IconPlus } from "@tabler/icons-react"
+import { IconClipboard, IconClipboardOff, IconHome2, IconWorld, IconPlus, IconMenu } from "@tabler/icons-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { LOGIN_URL, FAMILY_QUEST_NEW_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
@@ -124,7 +124,7 @@ export function FamilyQuestsScreen() {
         ]}
         position="bottom-right"
         pattern="radial-up"
-        mainIcon={<IconPlus size={20} />}
+        mainIcon={<IconMenu size={24} />}
       />
     </div>
   )

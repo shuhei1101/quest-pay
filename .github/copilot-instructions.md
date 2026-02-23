@@ -42,13 +42,16 @@
 17. **reward-agent**: 報酬設定画面（年齢別・レベル別報酬テーブル）
 18. **notification-agent**: 通知画面
 
+**認証画面:**
+19. **login-agent**: ログイン画面（認証・タイプ選択・セッション管理）
+
 **共通機能:**
-19. **app-shell-agent**: AppShellContent（サイドメニュー・フッター）
-20. **common-components-agent**: 共通コンポーネント（再利用可能なコンポーネント群）
+20. **app-shell-agent**: AppShellContent（サイドメニュー・フッター）
+21. **common-components-agent**: 共通コンポーネント（再利用可能なコンポーネント群）
 
 **システム構成:**
-21. **endpoints-agent**: パス定義管理（endpoints.ts）
-22. **schema-agent**: DBスキーマ管理（schema.ts）
+22. **endpoints-agent**: パス定義管理（endpoints.ts）
+23. **schema-agent**: DBスキーマ管理（schema.ts）
 
 **使用方法**: チャット入力欄で「`@`」から始めてエージェント名を選択し、対話的に作業を進めます。
 

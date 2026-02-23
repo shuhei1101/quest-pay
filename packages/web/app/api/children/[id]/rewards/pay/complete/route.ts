@@ -5,7 +5,7 @@ import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import z from "zod"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { fetchChild } from "@/app/api/children/query"
-import { updateRewardHistoriesPaymentStatus } from "../../db"
+import { updateRewardHistoriesPaymentStatus } from "../../histories/db"
 
 /** 支払い完了リクエスト */
 const CompletePaymentRequest = z.object({

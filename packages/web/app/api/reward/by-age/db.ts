@@ -1,21 +1,23 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
 import { devLog } from "@/app/(core)/util"
-import { rewardByAges } from "@/drizzle/schema"
+import { rewardByAges, type ageRewardTableType } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq, and } from "drizzle-orm"
 
 /** 年齢別報酬のデフォルトデータを作成する */
 export const insertDefaultAgeRewards = async ({
   db,
-  ageRewardTableId
+  ageRewardTableId,
+  type = "family"
 }: {
   db: Db
   ageRewardTableId: string
+  type?: typeof ageRewardTableType.enumValues[number]
 }) => {
   try {
     // デフォルトの年齢別報酬を作成する（5歳～22歳まで、月額0円）
     const defaultRewards = Array.from({ length: 18 }, (_, i) => ({
-      type: "family" as const,
+      type,
       ageRewardTableId,
       age: i + 5,
       amount: 0
@@ -33,12 +35,14 @@ export const updateAgeReward = async ({
   db,
   ageRewardTableId,
   age,
-  amount
+  amount,
+  type = "family"
 }: {
   db: Db
   ageRewardTableId: string
   age: number
   amount: number
+  type?: typeof ageRewardTableType.enumValues[number]
 }) => {
   try {
     await db
@@ -46,7 +50,7 @@ export const updateAgeReward = async ({
       .set({ amount })
       .where(
         and(
-          eq(rewardByAges.type, "family"),
+          eq(rewardByAges.type, type),
           eq(rewardByAges.ageRewardTableId, ageRewardTableId),
           eq(rewardByAges.age, age)
         )

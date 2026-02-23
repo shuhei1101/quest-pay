@@ -17,7 +17,7 @@ import { QuestEditModal } from "../../../_components/QuestEditModal"
 import { PublicQuestEdit } from "../PublicQuestEdit"
 import { FloatingActionButton } from "@/app/(core)/_components/FloatingActionButton"
 import { useFABContext } from "@/app/(core)/_components/FABContext"
-import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage } from "@tabler/icons-react"
+import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage, IconMenu } from "@tabler/icons-react"
 import { Indicator, Paper, Stack, Text } from "@mantine/core"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
@@ -187,8 +187,7 @@ export const PublicQuestView = ({id}: {id: string}) => {
         ]}
         position="bottom-right"
         open={isOpen("public-quest-fab")}
-        onToggle={(open) => open ? openFab("public-quest-fab") : closeFab("public-quest-fab")}
-      />
+        onToggle={(open) => open ? openFab("public-quest-fab") : closeFab("public-quest-fab")}        mainIcon={<IconMenu size={24} />}      />
 
       {/* レベル選択メニュー（レベル選択ボタンをクリックしたときに表示） */}
       {availableLevels.length > 1 && levelMenuOpened && (

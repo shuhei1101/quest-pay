@@ -3,8 +3,8 @@ import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchRewardHistories, fetchRewardHistoryMonthlyStats } from "./query"
-import { fetchChild } from "../../query"
-import { fetchUserInfoByUserId } from "../../../users/query"
+import { fetchChild } from "../../../query"
+import { fetchUserInfoByUserId } from "../../../../users/query"
 
 /** 報酬履歴を取得する */
 export type GetRewardHistoriesResponse = {
