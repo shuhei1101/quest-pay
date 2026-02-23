@@ -1,7 +1,6 @@
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { Child } from "@/app/api/children/query"
 import { Avatar, Badge, Box, Group, Text, Stack } from "@mantine/core"
-import { calculateAge } from "@/app/(core)/util"
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 export const ChildCardLayout = ({child, questStats, onClick, isSelected}: {
@@ -12,9 +11,6 @@ export const ChildCardLayout = ({child, questStats, onClick, isSelected}: {
 }) => {
   /** テーマ情報 */
   const { colors } = useTheme()
-
-  const age = calculateAge(child.profiles?.birthday)
-  const currentSavings = child.children?.currentSavings ?? 0
   
   const handleClick = () => {
     if (child.children?.id) {
@@ -48,11 +44,6 @@ export const ChildCardLayout = ({child, questStats, onClick, isSelected}: {
             <Text size="sm" fw={500} truncate style={{ flex: 1 }} c={colors.textColors.primary}>{child.profiles?.name}</Text>
             <Badge size="xs" color="violet" variant="light">Lv.{child.children?.currentLevel ?? 1}</Badge>
           </Group>
-          <Text size="xs" c="dimmed">
-            {age !== null ? `${age}歳` : ''}
-            {age !== null && currentSavings > 0 ? ' • ' : ''}
-            {currentSavings > 0 ? `¥${currentSavings.toLocaleString()}` : ''}
-          </Text>
         </Stack>
       </Group>
     </Box>

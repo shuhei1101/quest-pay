@@ -1,7 +1,6 @@
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { Parent } from "@/app/api/parents/query"
 import { Avatar, Box, Group, Text, Stack } from "@mantine/core"
-import { calculateAge } from "@/app/(core)/util"
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 export const ParentCardLayout = ({parent, onClick, isSelected}: {
@@ -11,8 +10,6 @@ export const ParentCardLayout = ({parent, onClick, isSelected}: {
 }) => {
   /** テーマ情報 */
   const { colors } = useTheme()
-
-  const age = calculateAge(parent.profiles?.birthday)
   
   return (
     <Box
@@ -37,9 +34,6 @@ export const ParentCardLayout = ({parent, onClick, isSelected}: {
         </Avatar>
         <Stack gap={0} style={{ flex: 1, minWidth: 0 }}>
           <Text size="sm" fw={500} truncate c={colors.textColors.primary}>{parent.profiles?.name}</Text>
-          {age !== null && (
-            <Text size="xs" c="dimmed">{age}歳</Text>
-          )}
         </Stack>
       </Group>
     </Box>
