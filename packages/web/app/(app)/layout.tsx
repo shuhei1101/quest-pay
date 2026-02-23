@@ -10,9 +10,7 @@ export default async function AppLayout({ children }: {
 
   return (
     <AppShellContent>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
       {children}
-      </div>
     </AppShellContent>
   )
 }

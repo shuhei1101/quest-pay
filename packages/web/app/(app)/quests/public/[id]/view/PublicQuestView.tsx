@@ -17,10 +17,11 @@ import { QuestEditModal } from "../../../_components/QuestEditModal"
 import { PublicQuestEdit } from "../PublicQuestEdit"
 import { FloatingActionButton } from "@/app/(core)/_components/FloatingActionButton"
 import { useFABContext } from "@/app/(core)/_components/FABContext"
-import { IconArrowLeft, IconHeart, IconHeartFilled } from "@tabler/icons-react"
+import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage } from "@tabler/icons-react"
 import { Indicator, Paper, Stack, Text } from "@mantine/core"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
+import { PublicQuestComments } from "../comments/PublicQuestComments"
 
 /** 公開クエスト閲覧画面 */
 export const PublicQuestView = ({id}: {id: string}) => {
@@ -44,6 +45,8 @@ export const PublicQuestView = ({id}: {id: string}) => {
   const hasEditPermission = publicQuest?.base.familyId === userInfo?.profiles?.familyId
   /** 編集モーダル制御状態 */
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false)
+  /** コメントモーダル制御状態 */
+  const [commentModalOpened, { open: openCommentModal, close: closeCommentModal }] = useDisclosure(false)
 
   /** 選択中のレベルの詳細を取得する */
   const selectedDetail = publicQuest?.details?.find(d => d.level === selectedLevel) || publicQuest?.details?.[0]
@@ -131,8 +134,6 @@ export const PublicQuestView = ({id}: {id: string}) => {
         monthFrom={publicQuest?.quest?.monthFrom}
         monthTo={publicQuest?.quest?.monthTo}
         requiredClearCount={selectedDetail?.requiredClearCount ?? null}
-        commentCount={commentCount}
-        publicQuestId={id}
       />
 
       {/* FAB */}
@@ -156,6 +157,15 @@ export const PublicQuestView = ({id}: {id: string}) => {
             label: "いいね",
             onClick: likeToggleHandle,
             color: isLike ? "red" : "gray",
+          },
+          {
+            icon: (
+              <Indicator label={commentCount || 0} size={18} color="blue" offset={4}>
+                <IconMessage size={20} />
+              </Indicator>
+            ),
+            label: "コメント",
+            onClick: openCommentModal,
           },
           {
             icon: <RenderIcon iconName={publicQuest?.familyIcon?.name} iconSize={20} />,
@@ -246,6 +256,13 @@ export const PublicQuestView = ({id}: {id: string}) => {
           <PublicQuestEdit id={id} />
         </QuestEditModal>
       )}
+
+      {/* コメントモーダル */}
+      <PublicQuestComments
+        id={id}
+        opened={commentModalOpened}
+        onClose={closeCommentModal}
+      />
     </>
   )
 }

@@ -32,7 +32,6 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
           width: "100vw",
           height: "100vh",
           position: "relative",
-          overflow: "hidden",
           backgroundColor: isSystemDark ? "#1a1b1e" : "#faf8f3",
         }}
       >
@@ -55,8 +54,6 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
             zIndex: 1,
             width: "100%",
             height: "100%",
-            display: "flex",
-            flexDirection: "column",
           }}
         >
           {children}

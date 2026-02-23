@@ -1,6 +1,5 @@
 "use client"
 
-import { Box, Textarea, Button, Group } from "@mantine/core"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useWindow } from "@/app/(core)/useConstants"
@@ -16,15 +15,29 @@ import { usePublicQuest } from "../view/_hooks/usePublicQuest"
 import { useIsLike } from "../view/_hooks/useIsLike"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { CommentsLayout } from "./_components/CommentsLayout"
+import { CommentsModalLayout } from "./_components/CommentsModalLayout"
+
+type SortType = "newest" | "likes"
+
+type PublicQuestCommentsProps = {
+  /** 公開クエストID */
+  id: string
+  /** モーダルの開閉状態 */
+  opened: boolean
+  /** モーダルを閉じる関数 */
+  onClose: () => void
+}
 
 /** 公開クエストコメント画面 */
-export const PublicQuestComments = ({ id }: { id: string }) => {
+export const PublicQuestComments = ({ id, opened, onClose }: PublicQuestCommentsProps) => {
   const router = useRouter()
   const { isDark } = useWindow()
   const { userInfo } = useLoginUserInfo()
 
   /** コメント内容 */
   const [comment, setComment] = useState("")
+  /** ソート方法 */
+  const [sortType, setSortType] = useState<SortType>("newest")
 
   /** コメント一覧 */
   const { comments, refetch } = usePublicQuestComments({ publicQuestId: id })
@@ -166,13 +179,13 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
   }
 
   return (
-    <div
-      className="flex flex-col p-4 h-full min-h-0"
-      style={{
-        backgroundColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(120, 53, 15, 0.2)",
-      }}
+    <CommentsModalLayout
+      isDark={isDark}
+      opened={opened}
+      onClose={onClose}
+      sortType={sortType}
+      onSortChange={setSortType}
     >
-      {/* コメント一覧 */}
       <CommentsLayout
         comments={comments}
         isDark={isDark}
@@ -187,30 +200,11 @@ export const PublicQuestComments = ({ id }: { id: string }) => {
         onDelete={handleDeleteClick}
         onPin={handlePinClick}
         onPublisherLike={handlePublisherLikeClick}
-        onRefetch={refetch}
+        comment={comment}
+        onCommentChange={setComment}
+        onSubmit={handleSubmit}
+        isPostingComment={isPostingComment}
       />
-
-      {/* コメント入力欄 */}
-      <Box mt="md">
-        <Group align="" gap="md">
-          <Textarea
-            placeholder="コメントを入力してください"
-            value={comment}
-            onChange={(e) => setComment(e.currentTarget.value)}
-            minRows={1}
-            maxRows={4}
-            className="flex-1"
-          />
-          <Button
-            size="md"
-            radius="xl"
-            onClick={handleSubmit}
-            disabled={!comment.trim() || isLoading}
-          >
-            投稿
-          </Button>
-        </Group>
-      </Box>
-    </div>
+    </CommentsModalLayout>
   )
 }

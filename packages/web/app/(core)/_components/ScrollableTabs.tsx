@@ -96,10 +96,6 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
       <Tabs 
         value={activeTab} 
         onChange={onChange}
-        styles={{
-          root: { display: "flex", flexDirection: "column" },
-          panel: { paddingRight: 16, paddingBottom: 16 },
-        }}
       >
         {/* タブリスト（スティッキー対応） */}
         <div style={stickyTabListStyle}>

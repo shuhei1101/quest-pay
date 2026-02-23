@@ -1,125 +1,317 @@
 ---
 name: public-quest-view
-description: 公開クエスト閲覧画面の構造知識を提供するスキル。表示内容、いいね・コメント機能を含む。
+description: 公開クエスト閲覧画面の構造知識を提供するスキル。表示内容、いいね・コメントモーダル機能を含む。
 ---
 
 # 公開クエスト閲覧 スキル
 
 ## 概要
 
-公開クエスト閲覧画面は、特定の公開クエストの詳細情報を表示する画面。いいね、コメント、共有機能を提供。
+公開クエスト閲覧画面は、特定の公開クエストの詳細情報を表示する画面。いいね、コメント（モーダル）、レベル選択機能を提供。
 
 ## ファイル構成
 
 ### メインファイル
-- `app/(app)/quests/public/[id]/view/page.tsx`: 公開クエスト詳細ページ
-- `app/(app)/quests/public/[id]/view/PublicQuestViewScreen.tsx`: 閲覧画面実装
+- `app/(app)/quests/public/[id]/view/page.tsx`: 公開クエスト詳細ページ（リダイレクト）
+- `app/(app)/quests/public/[id]/view/PublicQuestView.tsx`: 閲覧画面実装（FAB管理）
+- `app/(app)/quests/public/[id]/view/_components/PublicQuestViewLayout.tsx`: クエスト表示レイアウト
 
-### 関連コンポーネント
-- `app/(app)/quests/public/_components/PublicQuestDetail.tsx`: クエスト詳細表示
-- `app/(app)/quests/public/_components/LikeButton.tsx`: いいねボタン
-- `app/(app)/quests/public/_components/CommentSection.tsx`: コメントセクション
+### コメント関連ファイル
+- `app/(app)/quests/public/[id]/comments/PublicQuestComments.tsx`: コメントモーダル実装（ビジネスロジック）
+- `app/(app)/quests/public/[id]/comments/_components/CommentsModalLayout.tsx`: コメントモーダルレイアウト
+- `app/(app)/quests/public/[id]/comments/_components/CommentsLayout.tsx`: コメント一覧 + 入力欄レイアウト
+- `app/(app)/quests/public/[id]/comments/_components/CommentItemLayout.tsx`: 個別コメントアイテム
 
 ### フック
-- `app/(app)/quests/public/_hooks/usePublicQuest.ts`: 公開クエストデータ取得フック
-- `app/(app)/quests/public/_hooks/useLike.ts`: いいね操作フック
+- `app/(app)/quests/public/[id]/view/_hooks/usePublicQuest.ts`: 公開クエストデータ取得
+- `app/(app)/quests/public/[id]/view/_hooks/useLikeQuest.ts`: いいね操作
+- `app/(app)/quests/public/[id]/view/_hooks/useCancelQuestLike.ts`: いいね解除
+- `app/(app)/quests/public/[id]/view/_hooks/useLikeCount.ts`: いいね数取得
+- `app/(app)/quests/public/[id]/view/_hooks/useIsLike.ts`: いいね状態確認
+- `app/(app)/quests/public/[id]/comments/_hooks/useCommentsCount.ts`: コメント数取得
+- `app/(app)/quests/public/[id]/comments/_hooks/usePublicQuestComments.ts`: コメント一覧取得
+- `app/(app)/quests/public/[id]/comments/_hooks/usePostComment.ts`: コメント投稿
+- `app/(app)/quests/public/[id]/comments/_hooks/useUpvoteComment.ts`: 高評価
+- `app/(app)/quests/public/[id]/comments/_hooks/useDownvoteComment.ts`: 低評価
+- `app/(app)/quests/public/[id]/comments/_hooks/useReportComment.ts`: コメント報告
+- `app/(app)/quests/public/[id]/comments/_hooks/useDeleteComment.ts`: コメント削除
+- `app/(app)/quests/public/[id]/comments/_hooks/usePinComment.ts`: ピン留め
+- `app/(app)/quests/public/[id]/comments/_hooks/usePublisherLike.ts`: 公開者いいね
 
 ## 主要コンポーネント
 
-### PublicQuestViewScreen
-**責務:** 公開クエストの詳細表示といいね・コメント管理
+### PublicQuestView
+**責務:** FAB管理、モーダル開閉状態管理、レベル選択
 
 **主要機能:**
-- クエスト詳細情報表示
-- いいね・いいね解除
-- コメント一覧表示
-- 不適切コンテンツの報告
+- FloatingActionButton（FAB）の制御
+  - 戻るボタン
+  - いいねボタン（バッジ付きいいね数）
+  - **コメントボタン（バッジ付きコメント数）** ← モーダル起動
+  - 家族ボタン
+  - レベルボタン（複数レベルがある場合のみ）
+- レベル選択メニュー（ポップアップ）
+- いいね・いいね解除処理
+- **コメントモーダルの開閉制御**
+- 編集モーダル（公開者のみ）
+
+**Props:**
+```typescript
+{
+  id: string  // 公開クエストID
+}
+```
+
+**State:**
+- `selectedLevel`: 選択中のレベル
+- `levelMenuOpened`: レベル選択メニューの開閉状態
+- `editModalOpened`: 編集モーダルの開閉状態
+- **`commentModalOpened`**: コメントモーダルの開閉状態
+
+### PublicQuestViewLayout
+**責務:** クエスト詳細情報の表示（タブ切り替え）
+
+**主要機能:**
+- クエスト詳細3タブ表示
+  - クエスト条件タブ
+  - 依頼情報タブ
+  - その他タブ
+- ヘッダー表示（名前、アイコン）
+- ローディング表示
+
+**Props:**
+```typescript
+{
+  questName: string
+  headerColor?: { light: string, dark: string }
+  backgroundColor: { light: string, dark: string }
+  iconName?: string
+  iconSize?: number
+  iconColor?: string
+  isLoading: boolean
+  level: number
+  category: string
+  successCondition: string
+  reward: number
+  exp: number
+  requiredCompletionCount: number
+  client: string
+  requestDetail: string
+  tags: string[]
+  ageFrom?: number | null
+  ageTo?: number | null
+  monthFrom?: number | null
+  monthTo?: number | null
+  requiredClearCount: number | null
+}
+```
+
+**注意:**
+- **コメントタブは削除済み**（モーダル化による）
+- `commentCount`, `publicQuestId` propsは不要
+
+### PublicQuestComments
+**責務:** コメントモーダルのビジネスロジック
+
+**主要機能:**
+- コメント一覧データ取得
+- コメント投稿
+- 高評価・低評価
+- 報告・削除
+- ピン留め
+- 公開者いいね
+- ソート方法管理（newest/likes）
+- CommentsModalLayoutでラップして表示
+
+**Props:**
+```typescript
+{
+  id: string           // 公開クエストID
+  opened: boolean      // モーダルの開閉状態
+  onClose: () => void  // モーダルを閉じる関数
+}
+```
+
+**内部State:**
+- `comment`: コメント入力内容
+- `sortType`: ソート方法（"newest" | "likes"）
+
+**構成:**
+```tsx
+<CommentsModalLayout
+  isDark={isDark}
+  opened={opened}
+  onClose={onClose}
+  sortType={sortType}
+  onSortChange={setSortType}
+>
+  <CommentsLayout
+    comments={comments}
+    // ... その他のprops
+    comment={comment}
+    onCommentChange={setComment}
+    onSubmit={handleSubmit}
+    isPostingComment={isPostingComment}
+  />
+</CommentsModalLayout>
+```
+
+### CommentsModalLayout
+**責務:** モーダルのプレゼンテーション層
+
+**主要機能:**
+- Modalコンポーネントのラップ
+- タイトルバーにソート選択を配置
+- 高さ85vh、オーバーフロー制御
+- 背景色設定
+
+**Props:**
+```typescript
+{
+  isDark: boolean
+  opened: boolean
+  onClose: () => void
+  sortType: "newest" | "likes"
+  onSortChange: (value: "newest" | "likes") => void
+  children: ReactNode
+}
+```
+
+**スタイリング:**
+- `Modal.content`: height 85vh, overflow hidden
+- `Modal.body`: height 100%, overflow hidden, flex column, padding 0
+- 内部Box: background color, flex column
+
+### CommentsLayout
+**責務:** コメント一覧と入力欄のレイアウト
+
+**主要機能:**
+- コメント一覧表示（スクロール可能）
+- コメント入力欄（下部固定）
+- ピン留めコメントを最上位に表示
+- ローディングオーバーレイ
+
+**Props:**
+```typescript
+{
+  comments: CommentItem[] | undefined
+  isDark: boolean
+  isLoading: boolean
+  isQuestCreator: (familyId: string) => boolean
+  hasLiked: (familyId: string) => boolean
+  isPublisherFamily: boolean
+  isCurrentUser: (profileId: string) => boolean
+  onUpvote: (commentId: string) => void
+  onDownvote: (commentId: string) => void
+  onReport: (commentId: string) => void
+  onDelete: (commentId: string) => void
+  onPin: (commentId: string, isPinned: boolean) => void
+  onPublisherLike: (commentId: string, isLiked: boolean) => void
+  comment: string
+  onCommentChange: (value: string) => void
+  onSubmit: () => void
+  isPostingComment: boolean
+}
+```
+
+**レイアウト構造:**
+```
+外側Box (height 100%, flex column)
+  ├── スクロールエリア (flex 1, overflow auto, padding 1rem)
+  │   └── コメント一覧 (Stack)
+  └── 入力エリア (flexShrink 0, borderTop, padding 1rem)
+      └── Textarea + Button (Group)
+```
 
 ## 処理フロー
 
 ### 初期表示フロー
-1. PublicQuestViewScreen がマウント
-2. usePublicQuest フックでクエスト詳細を取得
-3. いいね数、コメント数を取得
-4. クエスト詳細を表示
+1. PublicQuestView がマウント
+2. usePublicQuest でクエスト詳細を取得
+3. useLikeCount でいいね数を取得
+4. useIsLike でいいね状態を取得
+5. useCommentsCount でコメント数を取得
+6. PublicQuestViewLayout でクエスト詳細を表示
+7. FAB を開く（openFab("public-quest-fab")）
+
+### コメント表示フロー
+1. ユーザーがFABのコメントボタンをクリック
+2. `openCommentModal()` が実行される
+3. `commentModalOpened` が `true` になる
+4. PublicQuestComments コンポーネントがレンダリング
+5. CommentsModalLayout が Modal を表示（85vh）
+6. CommentsLayout がコメント一覧 + 入力欄を表示
+
+### コメント投稿フロー
+1. ユーザーがコメントを入力
+2. 投稿ボタンをクリック
+3. handleSubmit が実行される
+4. usePostComment でコメントを投稿
+5. 成功時、コメント内容をクリア
+6. refetch() でコメント一覧を再取得
+
+### いいね操作フロー
+1. ユーザーがFABのいいねボタンをクリック
+2. `likeToggleHandle()` が実行される
+3. `isLike` 状態に応じて:
+   - いいね済み → useCancelQuestLike で解除
+   - 未いいね → useLikeQuest でいいね
+4. いいね数とアイコンが自動更新
+
+### レベル選択フロー
+1. ユーザーがFABのレベルボタンをクリック（複数レベルがある場合のみ）
+2. FABを閉じる（closeFab）
+3. レベル選択メニューを開く（setLevelMenuOpened(true)）
+4. ユーザーがレベルを選択
+5. `handleLevelChange(level)` が実行される
+6. 選択レベルの詳細が表示される
+
+## コンポーネント階層
+
+```
+PublicQuestView
+  ├── PublicQuestViewLayout (クエスト詳細表示)
+  ├── FloatingActionButton (FAB)
+  │   ├── 戻るボタン
+  │   ├── いいねボタン（バッジ: いいね数）
+  │   ├── コメントボタン（バッジ: コメント数） ← openCommentModal
+  │   ├── 家族ボタン
+  │   └── レベルボタン（条件付き）
+  ├── レベル選択メニュー（Paper）
+  ├── QuestEditModal（公開者のみ）
+  └── PublicQuestComments（モーダル）
+        └── CommentsModalLayout
+              ├── Modal（title: "コメント" + ソート選択）
+              └── CommentsLayout
+                    ├── スクロールエリア（コメント一覧）
+                    └── 入力エリア（Textarea + Button）
+```
 
 ## 注意点
 
+### コメント機能
+- **コメントはモーダルで表示**（タブから分離）
+- モーダル高さ85vh、スクロールはコメント一覧のみ
+- 入力欄は下部に固定
+- ソート機能はモーダルタイトルバーに配置
+
+### FAB
+- FABは常時表示
+- コメント数バッジは動的に更新
+- いいね数バッジは動的に更新
+- レベルボタンは複数レベルがある場合のみ表示
+
+### レベル機能
+- 複数レベルがある場合、レベル選択可能
+- 選択レベルに応じてクエスト詳細が変わる
+- レベル選択メニューはFABの上に表示（fixed position）
+
+### 認証
 - 閲覧は認証なしで可能
 - いいね・コメントは認証必須
-- 不適切コンテンツの報告機能あり
+- 編集は公開者のみ可能
 
-## Structuring This Skill
-
-[TODO: Choose the structure that best fits this skill's purpose. Common patterns:
-
-**1. Workflow-Based** (best for sequential processes)
-- Works well when there are clear step-by-step procedures
-- Example: DOCX skill with "Workflow Decision Tree" → "Reading" → "Creating" → "Editing"
-- Structure: ## Overview → ## Workflow Decision Tree → ## Step 1 → ## Step 2...
-
-**2. Task-Based** (best for tool collections)
-- Works well when the skill offers different operations/capabilities
-- Example: PDF skill with "Quick Start" → "Merge PDFs" → "Split PDFs" → "Extract Text"
-- Structure: ## Overview → ## Quick Start → ## Task Category 1 → ## Task Category 2...
-
-**3. Reference/Guidelines** (best for standards or specifications)
-- Works well for brand guidelines, coding standards, or requirements
-- Example: Brand styling with "Brand Guidelines" → "Colors" → "Typography" → "Features"
-- Structure: ## Overview → ## Guidelines → ## Specifications → ## Usage...
-
-**4. Capabilities-Based** (best for integrated systems)
-- Works well when the skill provides multiple interrelated features
-- Example: Product Management with "Core Capabilities" → numbered capability list
-- Structure: ## Overview → ## Core Capabilities → ### 1. Feature → ### 2. Feature...
-
-Patterns can be mixed and matched as needed. Most skills combine patterns (e.g., start with task-based, add workflow for complex operations).
-
-Delete this entire "Structuring This Skill" section when done - it's just guidance.]
-
-## [TODO: Replace with the first main section based on chosen structure]
-
-[TODO: Add content here. See examples in existing skills:
-- Code samples for technical skills
-- Decision trees for complex workflows
-- Concrete examples with realistic user requests
-- References to scripts/templates/references as needed]
-
-## Resources
-
-This skill includes example resource directories that demonstrate how to organize different types of bundled resources:
-
-### scripts/
-Executable code (Python/Bash/etc.) that can be run directly to perform specific operations.
-
-**Examples from other skills:**
-- PDF skill: `fill_fillable_fields.py`, `extract_form_field_info.py` - utilities for PDF manipulation
-- DOCX skill: `document.py`, `utilities.py` - Python modules for document processing
-
-**Appropriate for:** Python scripts, shell scripts, or any executable code that performs automation, data processing, or specific operations.
-
-**Note:** Scripts may be executed without loading into context, but can still be read by Claude for patching or environment adjustments.
-
-### references/
-Documentation and reference material intended to be loaded into context to inform Claude's process and thinking.
-
-**Examples from other skills:**
-- Product management: `communication.md`, `context_building.md` - detailed workflow guides
-- BigQuery: API reference documentation and query examples
-- Finance: Schema documentation, company policies
-
-**Appropriate for:** In-depth documentation, API references, database schemas, comprehensive guides, or any detailed information that Claude should reference while working.
-
-### assets/
-Files not intended to be loaded into context, but rather used within the output Claude produces.
-
-**Examples from other skills:**
-- Brand styling: PowerPoint template files (.pptx), logo files
-- Frontend builder: HTML/React boilerplate project directories
-- Typography: Font files (.ttf, .woff2)
-
-**Appropriate for:** Templates, boilerplate code, document templates, images, icons, fonts, or any files meant to be copied or used in the final output.
-
----
-
-**Any unneeded directories can be deleted.** Not every skill requires all three types of resources.
+### スクロール制御
+- PublicQuestViewLayout: 全体スクロール可能
+- CommentsModalLayout: overflow hidden
+- CommentsLayout: コメント一覧のみスクロール、入力欄は固定

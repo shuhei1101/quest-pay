@@ -49,13 +49,13 @@ export function FamilyQuestsScreen() {
   }, [searchParams])
   
   return (
-    <>
-      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', paddingBottom: '100px' }} color={
+    <div className="pb-24">
+      <Tabs variant="pills" value={tabValue} onChange={setTabValue} color={
         tabValue == 'public' ? "rgb(96 165 250)" :
         tabValue == 'family' ? "rgb(74, 222, 128)" :
         tabValue == 'penalty' ? "rgb(252, 132, 132)" :
         tabValue == 'template' ? "rgb(250 204 21)" : "blue"
-      }  >
+      }>
         <div className="flex flex-col gap-4">
           {/* タブリスト */}
           <Paper p="xs" withBorder >
@@ -126,6 +126,6 @@ export function FamilyQuestsScreen() {
         pattern="radial-up"
         mainIcon={<IconPlus size={20} />}
       />
-    </>
+    </div>
   )
 }

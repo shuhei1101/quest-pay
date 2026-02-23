@@ -1,7 +1,6 @@
 "use client"
 
-import { Box, LoadingOverlay, Stack, Text, Group, Select } from "@mantine/core"
-import { useState, useEffect } from "react"
+import { Box, LoadingOverlay, Stack, Text, Textarea, Button, Group } from "@mantine/core"
 import { CommentItemLayout } from "./CommentItemLayout"
 
 type CommentItem = {
@@ -39,10 +38,15 @@ type CommentsLayoutProps = {
   onDelete: (commentId: string) => void
   onPin: (commentId: string, isPinned: boolean) => void
   onPublisherLike: (commentId: string, isLiked: boolean) => void
-  onRefetch: () => void
+  /** コメント内容 */
+  comment: string
+  /** コメント内容変更時のハンドル */
+  onCommentChange: (value: string) => void
+  /** コメント投稿時のハンドル */
+  onSubmit: () => void
+  /** コメント投稿中かどうか */
+  isPostingComment: boolean
 }
-
-type SortType = "newest" | "likes"
 
 /** コメント一覧レイアウト */
 export const CommentsLayout = ({
@@ -59,97 +63,89 @@ export const CommentsLayout = ({
   onDelete,
   onPin,
   onPublisherLike,
-  onRefetch,
+  comment,
+  onCommentChange,
+  onSubmit,
+  isPostingComment,
 }: CommentsLayoutProps) => {
-  /** ソート方法 */
-  const [sortType, setSortType] = useState<SortType>("newest")
-
-  /** ソート変更時にサーバーから再取得する */
-  useEffect(() => {
-    onRefetch()
-  }, [sortType])
-
-  /** ソート済みのコメント一覧を取得する（ピン留めコメントを最上位に固定） */
-  const sortedComments = (() => {
-    if (!comments || comments.length === 0) return []
-
-    // コメントをコピーしてソート
-    const sorted = [...comments]
-
-    // ピン留めされたコメントを最上位に固定
-    sorted.sort((a, b) => {
-      // ピン留めされたコメントを優先
-      if (a.isPinned && !b.isPinned) return -1
-      if (!a.isPinned && b.isPinned) return 1
-
-      // ピン留めされていない場合はソート方法に従う
-      if (sortType === "newest") {
-        // 新着順（作成日時の降順）
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      } else if (sortType === "likes") {
-        // いいね順（高評価数 - 低評価数の降順）
-        const aScore = a.upvoteCount - a.downvoteCount
-        const bScore = b.upvoteCount - b.downvoteCount
-        return bScore - aScore
-      }
-
-      return 0
-    })
-
-    return sorted
-  })()
+  /** ソート済みのコメント一覧（ピン留めコメントを最上位に固定） */
+  const sortedComments = comments || []
 
   return (
     <Box
-      className="flex-1 min-h-0"
       style={{
-        overflow: "auto",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <Box pos="relative" className="h-full">
-        {/* ロード中のオーバーレイ */}
-        <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+      {/* スクロールエリア */}
+      <Box
+        style={{
+          flex: 1,
+          overflow: "auto",
+          padding: "1rem",
+        }}
+      >
+        <Box pos="relative">
+          {/* ロード中のオーバーレイ */}
+          <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
-        {/* ソート選択 */}
-        <Group justify="flex-end" mb="sm">
-          <Select
-            size="xs"
-            value={sortType}
-            onChange={(value) => setSortType(value as SortType)}
-            data={[
-              { value: "newest", label: "新着順" },
-              { value: "likes", label: "いいね順" },
-            ]}
-            w={120}
+          {/* コメント一覧 */}
+          <Stack gap="md">
+            {sortedComments && sortedComments.length > 0 ? (
+              sortedComments.map((commentItem) => (
+                <CommentItemLayout
+                  key={commentItem.id}
+                  commentItem={commentItem}
+                  isDark={isDark}
+                  isQuestCreator={isQuestCreator(commentItem.profile.familyId)}
+                  hasLiked={hasLiked(commentItem.profile.familyId)}
+                  isPublisherFamily={isPublisherFamily}
+                  isCurrentUser={isCurrentUser(commentItem.profileId)}
+                  onUpvote={() => onUpvote(commentItem.id)}
+                  onDownvote={() => onDownvote(commentItem.id)}
+                  onReport={() => onReport(commentItem.id)}
+                  onDelete={() => onDelete(commentItem.id)}
+                  onPin={() => onPin(commentItem.id, commentItem.isPinned)}
+                  onPublisherLike={() => onPublisherLike(commentItem.id, commentItem.isLikedByPublisher)}
+                />
+              ))
+            ) : (
+              <Text c="dimmed" ta="center" py="xl">
+                まだコメントがありません
+              </Text>
+            )}
+          </Stack>
+        </Box>
+      </Box>
+
+      {/* コメント入力欄 */}
+      <Box
+        style={{
+          flexShrink: 0,
+          borderTop: `1px solid ${isDark ? "#373A40" : "#dee2e6"}`,
+          padding: "1rem",
+        }}
+      >
+        <Group gap="md" align="flex-start">
+          <Textarea
+            placeholder="コメントを入力してください"
+            value={comment}
+            onChange={(e) => onCommentChange(e.currentTarget.value)}
+            minRows={1}
+            maxRows={4}
+            style={{ flex: 1 }}
           />
+          <Button
+            size="md"
+            radius="xl"
+            onClick={onSubmit}
+            disabled={!comment.trim() || isPostingComment}
+          >
+            投稿
+          </Button>
         </Group>
-
-        {/* コメント一覧 */}
-        <Stack gap="md">
-          {sortedComments && sortedComments.length > 0 ? (
-            sortedComments.map((commentItem) => (
-              <CommentItemLayout
-                key={commentItem.id}
-                commentItem={commentItem}
-                isDark={isDark}
-                isQuestCreator={isQuestCreator(commentItem.profile.familyId)}
-                hasLiked={hasLiked(commentItem.profile.familyId)}
-                isPublisherFamily={isPublisherFamily}
-                isCurrentUser={isCurrentUser(commentItem.profileId)}
-                onUpvote={() => onUpvote(commentItem.id)}
-                onDownvote={() => onDownvote(commentItem.id)}
-                onReport={() => onReport(commentItem.id)}
-                onDelete={() => onDelete(commentItem.id)}
-                onPin={() => onPin(commentItem.id, commentItem.isPinned)}
-                onPublisherLike={() => onPublisherLike(commentItem.id, commentItem.isLikedByPublisher)}
-              />
-            ))
-          ) : (
-            <Text c="dimmed" ta="center" py="xl">
-              まだコメントがありません
-            </Text>
-          )}
-        </Stack>
       </Box>
     </Box>
   )
