@@ -69,6 +69,25 @@ export type ColorConfig = {
     /** フォーカス時の枠線 */
     focusBorder: string
   }
+  /** FAB（フローティングアクションボタン）の設定 */
+  fab: {
+    /** ボタンのvariant */
+    variant: "light" | "filled"
+    /** 透明度設定 */
+    opacity: {
+      /** 選択中 */
+      active: number
+      /** 非選択 */
+      inactive: number
+    }
+    /** 枠線設定 */
+    border: {
+      /** 選択中の枠線幅 */
+      activeWidth: string
+      /** 非選択の枠線幅 */
+      inactiveWidth: string
+    }
+  }
 }
 
 /** アプリで使用するカラーテーマの設定 */

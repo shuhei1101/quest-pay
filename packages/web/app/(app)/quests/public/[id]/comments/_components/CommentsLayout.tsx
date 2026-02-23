@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Paper, LoadingOverlay, Stack, Text, Group, Select } from "@mantine/core"
+import { Box, LoadingOverlay, Stack, Text, Group, Select } from "@mantine/core"
 import { useState, useEffect } from "react"
 import { CommentItemLayout } from "./CommentItemLayout"
 
@@ -100,13 +100,9 @@ export const CommentsLayout = ({
   })()
 
   return (
-    <Paper
+    <Box
       className="flex-1 min-h-0"
-      p="md"
-      radius="md"
       style={{
-        backgroundColor: isDark ? "#544c4c" : "#fffef5",
-        boxShadow: "4px 4px 8px rgba(0,0,0,0.15)",
         overflow: "auto",
       }}
     >
@@ -115,7 +111,7 @@ export const CommentsLayout = ({
         <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
         {/* ソート選択 */}
-        <Group justify="flex-end" mb="md">
+        <Group justify="flex-end" mb="sm">
           <Select
             size="xs"
             value={sortType}
@@ -155,6 +151,6 @@ export const CommentsLayout = ({
           )}
         </Stack>
       </Box>
-    </Paper>
+    </Box>
   )
 }

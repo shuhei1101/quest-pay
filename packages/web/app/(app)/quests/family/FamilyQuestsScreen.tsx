@@ -2,13 +2,12 @@
 
 import { useState, Suspense, useEffect } from "react"
 import { Tabs, Paper, Text, Button, Loader, Center } from "@mantine/core"
-import { IconAdjustments, IconClipboard, IconClipboardOff, IconEdit, IconHome2, IconLogout, IconTrash, IconWorld } from "@tabler/icons-react"
+import { IconClipboard, IconClipboardOff, IconHome2, IconWorld, IconPlus } from "@tabler/icons-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
+import { LOGIN_URL, FAMILY_QUEST_NEW_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
+import { FloatingActionButton } from "@/app/(core)/_components/FloatingActionButton"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
-import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
-import { FloatingLayout } from "@/app/(core)/_components/FloatingLayout"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
 import { useTabAutoScroll, useTabHorizontalScroll } from "@/app/(core)/_hooks/useTabScrollControl"
@@ -49,42 +48,15 @@ export function FamilyQuestsScreen() {
     setTabValue(newTab)
   }, [searchParams])
   
-  const actionItems: FloatingActionItem[] = [
-    { 
-      icon: <IconAdjustments />, // 左
-      x: -75, y: 10,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
-    },
-    { 
-      icon: <IconTrash />, // 左上
-      x: -55, y: -55,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
-    },
-    { 
-      icon: <IconEdit />, // 上
-      x: 10, y: -75,
-      onClick: () => router.push(FAMILY_QUEST_NEW_URL)
-    },
-  ]
-
   return (
-    <FloatingLayout
-      bottomRight={
-        <FloatingActionButton
-          items={actionItems}
-          mainButtonColor="pink"
-          subButtonColor="pink"
-          disablePositioning={true}
-        />
-      }
-    >
-      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }} color={
+    <>
+      <Tabs variant="pills" value={tabValue} onChange={setTabValue} style={{ display: 'flex', flexDirection: 'column', paddingBottom: '100px' }} color={
         tabValue == 'public' ? "rgb(96 165 250)" :
         tabValue == 'family' ? "rgb(74, 222, 128)" :
         tabValue == 'penalty' ? "rgb(252, 132, 132)" :
         tabValue == 'template' ? "rgb(250 204 21)" : "blue"
       }  >
-        <div className="flex flex-col gap-4" style={{ flex: 1, overflow: 'hidden' }}>
+        <div className="flex flex-col gap-4">
           {/* タブリスト */}
           <Paper p="xs" withBorder >
             <Tabs.List>
@@ -106,7 +78,7 @@ export function FamilyQuestsScreen() {
           </Paper>
 
           {/* タブパネル */}
-          <Paper p="xs" withBorder style={{ flex: 1 }}>
+          <Paper p="xs" withBorder>
 
             <Tabs.Panel value="public">
               <Suspense fallback={
@@ -141,6 +113,19 @@ export function FamilyQuestsScreen() {
         </Paper>
       </div>
       </Tabs>
-    </FloatingLayout>
+
+      {/* 新規作成FAB */}
+      <FloatingActionButton
+        items={[
+          {
+            icon: <IconPlus size={20} />,
+            onClick: () => router.push(FAMILY_QUEST_NEW_URL),
+          },
+        ]}
+        position="bottom-right"
+        pattern="radial-up"
+        mainIcon={<IconPlus size={20} />}
+      />
+    </>
   )
 }

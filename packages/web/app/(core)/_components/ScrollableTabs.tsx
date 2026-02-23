@@ -1,6 +1,7 @@
 "use client"
 import { Tabs } from "@mantine/core"
 import { ReactNode, useRef, useEffect } from "react"
+import { useSystemTheme } from "../useSystemTheme"
 
 /** スクロール可能なタブアイテムの型 */
 export type ScrollableTabItem = {
@@ -28,8 +29,24 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   /** タブリストコンテナの参照 */
   const tabListRef = useRef<HTMLDivElement>(null)
 
+  /** システムカラースキーム */
+  const { isDark } = useSystemTheme()
+
   /** スクロール時の余白（ピクセル） */
   const SCROLL_MARGIN = 16
+
+  /** スティッキータブリストのスタイル */
+  const stickyTabListStyle = {
+    position: "sticky" as const,
+    top: 0,
+    zIndex: 100,
+    backgroundColor: "var(--mantine-color-body)",
+    paddingBottom: SCROLL_MARGIN / 2,
+    border: isDark ? "1px solid #373A40" : "1px solid #dee2e6",
+    borderRadius: "8px",
+    padding: "8px",
+    marginBottom: "12px"
+  }
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */
   useEffect(() => {
@@ -75,32 +92,33 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   }, [])
 
   return (
-    <div style={{ height: "100%", flex: 1, minHeight: 0, overflow: "hidden" }}>
+    <div style={{ width: "100%" }}>
       <Tabs 
         value={activeTab} 
         onChange={onChange}
-        className="flex-1 min-h-0"
         styles={{
-          root: { display: "flex", flexDirection: "column", height: "100%" },
-          panel: { flex: 1, minHeight: 0, overflow: "auto", paddingRight: 16, paddingBottom: 16 },
+          root: { display: "flex", flexDirection: "column" },
+          panel: { paddingRight: 16, paddingBottom: 16 },
         }}
       >
-        {/* タブリスト */}
-        <Tabs.List>
-          <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-            {tabs.map((item) => (
-              <Tabs.Tab
-                key={item.value}
-                value={item.value}
-                data-value={item.value}
-                leftSection={item.leftSection}
-                rightSection={item.rightSection}
-              >
-                {item.label}
-              </Tabs.Tab>
-            ))}
-          </div>
-        </Tabs.List>
+        {/* タブリスト（スティッキー対応） */}
+        <div style={stickyTabListStyle}>
+          <Tabs.List>
+            <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
+              {tabs.map((item) => (
+                <Tabs.Tab
+                  key={item.value}
+                  value={item.value}
+                  data-value={item.value}
+                  leftSection={item.leftSection}
+                  rightSection={item.rightSection}
+                >
+                  {item.label}
+                </Tabs.Tab>
+              ))}
+            </div>
+          </Tabs.List>
+        </div>
         
         {/* タブパネルコンテンツ */}
         {children}

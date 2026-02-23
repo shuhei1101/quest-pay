@@ -1,8 +1,128 @@
 import { AppThemeConfig } from "./themeConfig"
 
-/** デフォルトテーマ（現行のピンク基調） */
+/** デフォルトテーマ（ブルー基調） */
 export const defaultTheme: AppThemeConfig = {
   name: "デフォルト",
+  primaryColor: "blue",
+  light: {
+    buttonColors: {
+      default: "gray",
+      primary: "blue",
+      secondary: "cyan",
+      danger: "red",
+      success: "green",
+    },
+    textColors: {
+      primary: "#1e293b",
+      secondary: "#64748b",
+      disabled: "#cbd5e1",
+    },
+    backgroundColors: {
+      default: "#ffffff",
+      card: "#f5f5f5",
+      hover: "#e8e8e8",
+    },
+    borderColors: {
+      default: "#d1d5db",
+      focus: "#3b82f6",
+    },
+    cardStyles: {
+      background: "#ffffff",
+      border: "#d1d5db",
+      hoverShadow: "0 4px 6px rgba(59, 130, 246, 0.1)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#ffffff",
+      border: "#d1d5db",
+      focusBorder: "#3b82f6",
+    },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
+    },
+  },
+  dark: {
+    buttonColors: {
+      default: "gray",
+      primary: "blue",
+      secondary: "cyan",
+      danger: "red",
+      success: "green",
+    },
+    textColors: {
+      primary: "#f1f5f9",
+      secondary: "#cbd5e1",
+      disabled: "#64748b",
+    },
+    backgroundColors: {
+      default: "#1a1a1a",
+      card: "#2d2d2d",
+      hover: "#3d3d3d",
+    },
+    borderColors: {
+      default: "#4b5563",
+      focus: "#3b82f6",
+    },
+    cardStyles: {
+      background: "#2d2d2d",
+      border: "#4b5563",
+      hoverShadow: "0 4px 6px rgba(59, 130, 246, 0.2)",
+    },
+    badgeColors: {
+      info: "blue",
+      warning: "yellow",
+      error: "red",
+      success: "green",
+    },
+    inputColors: {
+      background: "#1a1a1a",
+      border: "#4b5563",
+      focusBorder: "#3b82f6",
+    },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
+    },
+  },
+  colors: {
+    blue: [
+      "#e0f2fe",
+      "#bae6fd",
+      "#7dd3fc",
+      "#38bdf8",
+      "#0ea5e9",
+      "#0284c7",
+      "#0369a1",
+      "#075985",
+      "#0c4a6e",
+      "#082f49",
+    ],
+  },
+}
+
+/** ブルーテーマ（ピンク基調） */
+export const blueTheme: AppThemeConfig = {
+  name: "ブルー",
   primaryColor: "pink",
   light: {
     buttonColors: {
@@ -41,6 +161,17 @@ export const defaultTheme: AppThemeConfig = {
       background: "#ffffff",
       border: "#e5e7eb",
       focusBorder: "#ec4899",
+    },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
     },
   },
   dark: {
@@ -81,6 +212,17 @@ export const defaultTheme: AppThemeConfig = {
       border: "#4b5563",
       focusBorder: "#ec4899",
     },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
+    },
   },
   colors: {
     pink: [
@@ -94,104 +236,6 @@ export const defaultTheme: AppThemeConfig = {
       "#d6336c",
       "#c2255c",
       "#a61e4d",
-    ],
-  },
-}
-
-/** ブルーテーマ */
-export const blueTheme: AppThemeConfig = {
-  name: "ブルー",
-  primaryColor: "blue",
-  light: {
-    buttonColors: {
-      default: "gray",
-      primary: "blue",
-      secondary: "cyan",
-      danger: "red",
-      success: "green",
-    },
-    textColors: {
-      primary: "#1e293b",
-      secondary: "#64748b",
-      disabled: "#cbd5e1",
-    },
-    backgroundColors: {
-      default: "#ffffff",
-      card: "#f8fafc",
-      hover: "#f1f5f9",
-    },
-    borderColors: {
-      default: "#e2e8f0",
-      focus: "#3b82f6",
-    },
-    cardStyles: {
-      background: "#ffffff",
-      border: "#e2e8f0",
-      hoverShadow: "0 4px 6px rgba(59, 130, 246, 0.1)",
-    },
-    badgeColors: {
-      info: "blue",
-      warning: "yellow",
-      error: "red",
-      success: "green",
-    },
-    inputColors: {
-      background: "#ffffff",
-      border: "#e2e8f0",
-      focusBorder: "#3b82f6",
-    },
-  },
-  dark: {
-    buttonColors: {
-      default: "gray",
-      primary: "blue",
-      secondary: "cyan",
-      danger: "red",
-      success: "green",
-    },
-    textColors: {
-      primary: "#f1f5f9",
-      secondary: "#cbd5e1",
-      disabled: "#64748b",
-    },
-    backgroundColors: {
-      default: "#0f172a",
-      card: "#1e293b",
-      hover: "#334155",
-    },
-    borderColors: {
-      default: "#475569",
-      focus: "#3b82f6",
-    },
-    cardStyles: {
-      background: "#1e293b",
-      border: "#475569",
-      hoverShadow: "0 4px 6px rgba(59, 130, 246, 0.2)",
-    },
-    badgeColors: {
-      info: "blue",
-      warning: "yellow",
-      error: "red",
-      success: "green",
-    },
-    inputColors: {
-      background: "#0f172a",
-      border: "#475569",
-      focusBorder: "#3b82f6",
-    },
-  },
-  colors: {
-    blue: [
-      "#e0f2fe",
-      "#bae6fd",
-      "#7dd3fc",
-      "#38bdf8",
-      "#0ea5e9",
-      "#0284c7",
-      "#0369a1",
-      "#075985",
-      "#0c4a6e",
-      "#082f49",
     ],
   },
 }
@@ -238,6 +282,17 @@ export const greenTheme: AppThemeConfig = {
       border: "#bbf7d0",
       focusBorder: "#22c55e",
     },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
+    },
   },
   dark: {
     buttonColors: {
@@ -276,6 +331,17 @@ export const greenTheme: AppThemeConfig = {
       background: "#0a1f14",
       border: "#15803d",
       focusBorder: "#22c55e",
+    },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
     },
   },
   colors: {
@@ -336,6 +402,17 @@ export const purpleTheme: AppThemeConfig = {
       border: "#e9d5ff",
       focusBorder: "#a855f7",
     },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
+    },
   },
   dark: {
     buttonColors: {
@@ -374,6 +451,17 @@ export const purpleTheme: AppThemeConfig = {
       background: "#1a0a2e",
       border: "#7e22ce",
       focusBorder: "#a855f7",
+    },
+    fab: {
+      variant: "light",
+      opacity: {
+        active: 1,
+        inactive: 0.6,
+      },
+      border: {
+        activeWidth: "2px",
+        inactiveWidth: "0px",
+      },
     },
   },
   colors: {

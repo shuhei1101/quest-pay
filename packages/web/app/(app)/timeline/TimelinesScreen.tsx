@@ -38,7 +38,7 @@ export const TimelinesScreen = () => {
   ]
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '100px' }}>
       {/* ヘッダータイトル */}
       <Paper p="md" withBorder shadow="sm" mb="md">
         <Text size="xl" fw={700}>タイムライン</Text>
@@ -51,7 +51,7 @@ export const TimelinesScreen = () => {
         onChange={(value) => value && setActiveTab(value)}
       >
       {/* タイムラインコンテンツ */}
-      <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
+      <div style={{ padding: '16px' }}>
         {activeTab === "family" && (
           <div>
             {/* 家族タイムライン */}
@@ -114,5 +114,6 @@ export const TimelinesScreen = () => {
       </div>
       </ScrollableTabs>
     </div>
+
   )
 }

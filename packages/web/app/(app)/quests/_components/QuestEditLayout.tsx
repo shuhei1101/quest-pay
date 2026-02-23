@@ -3,6 +3,7 @@
 import { Box, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
 import { useState, ReactNode } from "react"
 import { IconAlertCircle } from "@tabler/icons-react"
+import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
 
 /** クエスト編集レイアウトのタブ設定 */
 type TabConfig = {
@@ -30,6 +31,10 @@ type QuestEditLayoutProps<TForm extends Record<string, unknown>> = {
   editActions: ReactNode[]
   /** 新規作成モード時のアクションボタン */
   createActions: ReactNode[]
+  /** 編集モード時のFABアクション */
+  fabEditActions?: FloatingActionItem[]
+  /** 新規作成モード時のFABアクション */
+  fabCreateActions?: FloatingActionItem[]
   /** フローティングポップアップコンポーネント */
   popups?: ReactNode
 }
@@ -42,6 +47,8 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
   tabs,
   editActions,
   createActions,
+  fabEditActions = [],
+  fabCreateActions = [],
   popups,
 }: QuestEditLayoutProps<TForm>) => {
   /** アクティブタブ状態 */
@@ -49,6 +56,9 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 
   /** 表示するアクションボタンを取得する */
   const actionButtons = questId ? editActions : createActions
+  
+  /** 表示するFABアクションを取得する */
+  const fabActions = questId ? fabEditActions : fabCreateActions
 
   return (
     <>
@@ -101,6 +111,15 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 
       {/* フローティングポップアップ */}
       {popups}
+
+      {/* FAB */}
+      {fabActions.length > 0 && (
+        <FloatingActionButton
+          items={fabActions}
+          position="bottom-right"
+          pattern="radial-up"
+        />
+      )}
     </>
   )
 }
