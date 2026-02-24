@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { LOGIN_URL, FAMILY_QUEST_NEW_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FloatingActionButton } from "@/app/(core)/_components/FloatingActionButton"
+import { useWindow } from "@/app/(core)/useConstants"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
@@ -26,6 +27,9 @@ export function FamilyQuestsScreen() {
 
   /** ログインユーザ情報 */
   const { isGuest } = useLoginUserInfo()
+  
+  /** モバイル判定 */
+  const { isMobile } = useWindow()
 
   /** クエリパラメータからタブ値を取得する */
   const getTabFromParams = () => {
@@ -123,7 +127,7 @@ export function FamilyQuestsScreen() {
           },
         ]}
         position="bottom-right"
-        pattern="radial-up"
+        pattern={isMobile ? "radial-up" : "radial-left"}
         mainIcon={<IconMenu size={24} />}
       />
     </div>

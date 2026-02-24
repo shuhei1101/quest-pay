@@ -81,7 +81,7 @@ export const FloatingActionButton = ({
   spacing = 70,
   mainIcon = <IconDots size={24} />,
   disablePositioning = false,
-  defaultOpen = true,
+  defaultOpen = false,
 }: {
   /** 展開するアクションアイテムの配列 */
   items: FloatingActionItem[]

@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
-import { getRewardHistories, startPayment, completePayment } from "@/app/api/children/[id]/rewards/histories/client"
+import { getRewardHistories, startPayment, completePayment } from "@/app/api/children/[id]/reward/histories/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 

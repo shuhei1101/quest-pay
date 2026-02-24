@@ -1,7 +1,7 @@
 import { CHILD_LEVEL_REWARD_TABLE_API_URL } from "@/app/(core)/endpoints"
 import { devLog } from "@/app/(core)/util"
 import { AppError } from "@/app/(core)/error/appError"
-import type { GetChildLevelRewardTableResponse, PutChildLevelRewardTableRequest } from "./route"
+import { GetChildLevelRewardTableResponse, PutChildLevelRewardTableRequest } from "./route"
 
 /** 子供のレベル別報酬テーブルを取得する */
 export const getChildLevelRewardTable = async (childId: string) => {

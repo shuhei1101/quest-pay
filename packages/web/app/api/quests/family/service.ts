@@ -17,7 +17,7 @@ import { CHILD_QUEST_VIEW_URL, FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoi
 import { fetchChildQuest } from "./[id]/child/query"
 import { updateChild } from "../../children/db"
 import { insertFamilyTimeline } from "../../timeline/db"
-import { insertRewardHistory } from "../../children/[id]/rewards/histories/db"
+import { insertRewardHistory } from "../../children/[id]/reward/histories/db"
 
 
 /** 家族クエストを登録する */

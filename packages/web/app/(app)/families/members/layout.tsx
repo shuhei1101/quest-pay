@@ -66,7 +66,7 @@ export default function FamilyMembersLayout({ children }: {
         <FloatingActionButton
           items={actionItems}
           position="bottom-right"
-          pattern="radial-up"
+          pattern={isMobile ? "radial-up" : "radial-left"}
           mainIcon={<IconMenu size={24} />}
         />
       </>
@@ -89,7 +89,7 @@ export default function FamilyMembersLayout({ children }: {
       <FloatingActionButton
         items={actionItems}
         position="bottom-right"
-        pattern="radial-up"
+        pattern={isMobile ? "radial-up" : "radial-left"}
         mainIcon={<IconMenu size={24} />}
       />
     </>

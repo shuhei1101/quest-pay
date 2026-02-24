@@ -4,6 +4,7 @@ import { Box, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
 import { useState, ReactNode } from "react"
 import { IconAlertCircle, IconMenu } from "@tabler/icons-react"
 import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
+import { useWindow } from "@/app/(core)/useConstants"
 
 /** クエスト編集レイアウトのタブ設定 */
 type TabConfig = {
@@ -53,6 +54,9 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 }: QuestEditLayoutProps<TForm>) => {
   /** アクティブタブ状態 */
   const [activeTab, setActiveTab] = useState<string | null>(tabs[0]?.value ?? "basic")
+  
+  /** モバイル判定 */
+  const { isMobile } = useWindow()
 
   /** 表示するアクションボタンを取得する */
   const actionButtons = questId ? editActions : createActions
@@ -117,7 +121,7 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
         <FloatingActionButton
           items={fabActions}
           position="bottom-right"
-          pattern="radial-up"
+          pattern={isMobile ? "radial-up" : "radial-left"}
           mainIcon={<IconMenu size={24} />}
         />
       )}
