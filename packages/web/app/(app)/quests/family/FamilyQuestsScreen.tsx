@@ -6,7 +6,7 @@ import { IconClipboard, IconClipboardOff, IconHome2, IconWorld, IconPlus, IconMe
 import { useRouter, useSearchParams } from "next/navigation"
 import { LOGIN_URL, FAMILY_QUEST_NEW_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
-import { FloatingActionButton } from "@/app/(core)/_components/FloatingActionButton"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useWindow } from "@/app/(core)/useConstants"
 import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { PublicQuestList } from "../public/PublicQuestList"
@@ -119,16 +119,14 @@ export function FamilyQuestsScreen() {
       </Tabs>
 
       {/* 新規作成FAB */}
-      <FloatingActionButton
+      <SubMenuFAB
         items={[
           {
             icon: <IconPlus size={20} />,
             onClick: () => router.push(FAMILY_QUEST_NEW_URL),
           },
         ]}
-        position="bottom-right"
         pattern={isMobile ? "radial-up" : "radial-left"}
-        mainIcon={<IconMenu size={24} />}
       />
     </div>
   )

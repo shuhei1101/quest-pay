@@ -38,7 +38,7 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   /** スティッキータブリストのスタイル */
   const stickyTabListStyle = {
     position: "sticky" as const,
-    top: 0,
+    top: 16,
     zIndex: 100,
     backgroundColor: "var(--mantine-color-body)",
     paddingBottom: SCROLL_MARGIN / 2,

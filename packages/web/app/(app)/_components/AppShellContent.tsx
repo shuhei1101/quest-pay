@@ -4,12 +4,13 @@ import { AppShell } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Suspense } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { IconHome2, IconClipboard, IconUsers, IconEdit, IconApps } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers } from '@tabler/icons-react'
 import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from './BackgroundWrapper'
 import { SideMenu } from './SideMenu'
 import { AccessErrorHandler } from '../../(core)/_components/AccessErrorHandler'
-import { FloatingActionButton, FloatingActionItem } from '../../(core)/_components/FloatingActionButton'
+import { FloatingActionItem } from '../../(core)/_components/FloatingActionButton'
+import { NavigationFAB } from '../../(core)/_components/NavigationFAB'
 import { FABProvider, useFABContext } from '../../(core)/_components/FABContext'
 import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUEST_NEW_URL } from '../../(core)/endpoints'
 import { useLoginUserInfo } from '../../(auth)/login/_hooks/useLoginUserInfo'
@@ -87,21 +88,21 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
         </AppShell.Navbar>
 
         {/* メインコンテンツ */}
-        <AppShell.Main>
+        <AppShell.Main style={{
+          paddingBottom: '100px', // FAB用の下部余白
+        }}>
           {children}
         </AppShell.Main>
       </AppShell>
 
       {/* GitHub mobile風のナビゲーションFAB（モバイル時のみ表示） */}
       {isMobile && (
-        <FloatingActionButton
+        <NavigationFAB
           items={navigationItems}
-          position="bottom-left"
           activeIndex={getActiveNavigationIndex()}
           open={isOpen("navigation-fab")}
           onToggle={(open) => open ? openFab("navigation-fab") : closeFab("navigation-fab")}
           defaultOpen={false}
-          mainIcon={<IconApps size={24} />}
         />
       )}
     </BackgroundWrapper>

@@ -4,7 +4,8 @@ import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { REWARD_VIEW_URL } from "@/app/(core)/endpoints"
-import { IconDeviceFloppy, IconRotate } from "@tabler/icons-react"
+import { IconDeviceFloppy, IconRotate, IconEye } from "@tabler/icons-react"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useAgeRewardForm } from "../by-age/_hooks/useAgeRewardForm"
 import { useLevelRewardForm } from "../by-level/_hooks/useLevelRewardForm"
 import { AgeRewardEditLayout } from "../by-age/_components/AgeRewardEditLayout"
@@ -67,37 +68,6 @@ export const RewardEdit = () => {
       {/* ヘッダー */}
       <Group justify="space-between" mb="md">
         <Text size="xl" fw={700}>定額報酬の編集</Text>
-        {/* アクションボタン */}
-        <Group>
-          <ActionIcon 
-            size="lg" 
-            variant="light" 
-            color="blue"
-            onClick={() => {
-              if (window.confirm("入力内容を破棄してもよろしいですか？")) {
-                if (activeTab === "age") {
-                  ageForm.setForm(ageForm.fetchedAgeReward)
-                } else {
-                  levelForm.setForm(levelForm.fetchedLevelReward)
-                }
-              }
-            }}
-          >
-            <IconRotate size={18} />
-          </ActionIcon>
-          <Button 
-            leftSection={<IconDeviceFloppy size={16} />}
-            onClick={() => {
-              if (activeTab === "age") {
-                ageForm.handleSubmit((data) => ageUpdateMutation.mutate(data))()
-              } else {
-                levelForm.handleSubmit((data) => levelUpdateMutation.mutate(data))()
-              }
-            }}
-          >
-            保存
-          </Button>
-        </Group>
       </Group>
 
       {/* タブ切り替え */}
@@ -126,22 +96,43 @@ export const RewardEdit = () => {
         </Tabs.Panel>
       </ScrollableTabs>
 
-      {/* フローティング保存ボタン（モバイル用） */}
-      <Box className="md:hidden fixed bottom-4 right-4 z-50">
-        <Button 
-          size="lg"
-          leftSection={<IconDeviceFloppy size={20} />}
-          onClick={() => {
-            if (activeTab === "age") {
-              ageForm.handleSubmit((data) => ageUpdateMutation.mutate(data))()
-            } else {
-              levelForm.handleSubmit((data) => levelUpdateMutation.mutate(data))()
-            }
-          }}
-        >
-          保存
-        </Button>
-      </Box>
+      {/* 定額報酬設定FAB */}
+      <SubMenuFAB
+        items={[
+          {
+            icon: <IconDeviceFloppy size={20} />,
+            label: "保存",
+            onClick: () => {
+              if (activeTab === "age") {
+                ageForm.handleSubmit((data) => ageUpdateMutation.mutate(data))()
+              } else {
+                levelForm.handleSubmit((data) => levelUpdateMutation.mutate(data))()
+              }
+            },
+            color: "blue"
+          },
+          {
+            icon: <IconRotate size={20} />,
+            label: "破棄",
+            onClick: () => {
+              if (window.confirm("入力内容を破棄してもよろしいですか？")) {
+                if (activeTab === "age") {
+                  ageForm.setForm(ageForm.fetchedAgeReward)
+                } else {
+                  levelForm.setForm(levelForm.fetchedLevelReward)
+                }
+              }
+            },
+            color: "orange"
+          },
+          {
+            icon: <IconEye size={20} />,
+            label: "閲覧",
+            onClick: () => router.push(REWARD_VIEW_URL),
+            color: "violet"
+          }
+        ]}
+      />
     </Box>
   )
 }

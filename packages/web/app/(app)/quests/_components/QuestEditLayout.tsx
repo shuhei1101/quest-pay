@@ -3,7 +3,8 @@
 import { Box, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
 import { useState, ReactNode } from "react"
 import { IconAlertCircle, IconMenu } from "@tabler/icons-react"
-import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
+import { FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useWindow } from "@/app/(core)/useConstants"
 
 /** クエスト編集レイアウトのタブ設定 */
@@ -118,11 +119,9 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 
       {/* FAB */}
       {fabActions.length > 0 && (
-        <FloatingActionButton
+        <SubMenuFAB
           items={fabActions}
-          position="bottom-right"
           pattern={isMobile ? "radial-up" : "radial-left"}
-          mainIcon={<IconMenu size={24} />}
         />
       )}
     </>

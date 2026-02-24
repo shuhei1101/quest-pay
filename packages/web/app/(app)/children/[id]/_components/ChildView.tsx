@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import { useChild } from "../_hook/useChild"
 import { useRouter } from "next/navigation"
-import { CHILD_REWARDS_HISTORIES_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
+import { CHILD_REWARDS_HISTORIES_URL, CHILD_REWARD_VIEW_URL, CHILD_REWARD_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
 import { useDisclosure } from "@mantine/hooks"
 import { InviteCodePopup } from "@/app/(core)/_components/InviteCodePopup"
 import { ChildViewLayout } from "./ChildViewLayout"
@@ -60,6 +60,8 @@ export const ChildView = ( params: {
           child={child}
           questStats={questStats}
           onSavingsClick={() => router.push(CHILD_REWARDS_HISTORIES_URL(id))}
+          onFixedRewardClick={() => router.push(CHILD_REWARD_VIEW_URL(id))}
+          onFixedRewardEditClick={() => router.push(CHILD_REWARD_URL(id))}
         />
       </Box>
 

@@ -46,7 +46,7 @@ export const defaultTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",
@@ -96,7 +96,7 @@ export const defaultTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",
@@ -166,7 +166,7 @@ export const blueTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",
@@ -216,7 +216,7 @@ export const blueTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",
@@ -286,7 +286,7 @@ export const greenTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",
@@ -336,7 +336,7 @@ export const greenTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",
@@ -406,7 +406,7 @@ export const purpleTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",
@@ -456,7 +456,7 @@ export const purpleTheme: AppThemeConfig = {
       variant: "light",
       opacity: {
         active: 1,
-        inactive: 0.85,
+        inactive: 1,
       },
       border: {
         activeWidth: "2px",

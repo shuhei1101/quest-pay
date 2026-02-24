@@ -15,7 +15,7 @@ import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { useDisclosure } from "@mantine/hooks"
 import { QuestEditModal } from "../../../_components/QuestEditModal"
 import { PublicQuestEdit } from "../PublicQuestEdit"
-import { FloatingActionButton } from "@/app/(core)/_components/FloatingActionButton"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useFABContext } from "@/app/(core)/_components/FABContext"
 import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage, IconMenu } from "@tabler/icons-react"
 import { Indicator, Paper, Stack, Text } from "@mantine/core"
@@ -102,11 +102,6 @@ export const PublicQuestView = ({id}: {id: string}) => {
     }
   }, [levelMenuOpened])
 
-  /** マウント時にFABを開く */
-  useEffect(() => {
-    openFab("public-quest-fab")
-  }, [])
-
   return (
     <>
       <PublicQuestViewLayout
@@ -137,13 +132,8 @@ export const PublicQuestView = ({id}: {id: string}) => {
       />
 
       {/* FAB */}
-      <FloatingActionButton
+      <SubMenuFAB
         items={[
-          {
-            icon: <IconArrowLeft size={20} />,
-            label: "戻る",
-            onClick: () => router.back(),
-          },
           {
             icon: (
               <Indicator label={likeCount || 0} size={18} color="red" offset={4}>
@@ -185,9 +175,9 @@ export const PublicQuestView = ({id}: {id: string}) => {
             },
           }] : []),
         ]}
-        position="bottom-right"
         open={isOpen("public-quest-fab")}
-        onToggle={(open) => open ? openFab("public-quest-fab") : closeFab("public-quest-fab")}        mainIcon={<IconMenu size={24} />}      />
+        onToggle={(open) => open ? openFab("public-quest-fab") : closeFab("public-quest-fab")}
+      />
 
       {/* レベル選択メニュー（レベル選択ボタンをクリックしたときに表示） */}
       {availableLevels.length > 1 && levelMenuOpened && (

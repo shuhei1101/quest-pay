@@ -1,8 +1,9 @@
 "use client"
 
 import { Box, Card, Group, Stack, Text, SimpleGrid, RingProgress, Center, ThemeIcon, Progress, Divider } from "@mantine/core"
-import { IconCake, IconCalendar, IconSchool, IconTrophy, IconChecklist, IconCoin, IconWallet, IconStar } from "@tabler/icons-react"
+import { IconCake, IconCalendar, IconSchool, IconTrophy, IconChecklist, IconCoin, IconWallet, IconStar, IconEdit } from "@tabler/icons-react"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { Child } from "@/app/api/children/query"
 import { calculateAge, formatDate } from "@/app/(core)/util"
 import dayjs from 'dayjs'
@@ -60,10 +61,14 @@ export const ChildViewLayout = ({
   child,
   questStats,
   onSavingsClick,
+  onFixedRewardClick,
+  onFixedRewardEditClick,
 }: {
   child: Child | undefined
   questStats?: { inProgressCount: number; completedCount: number }
   onSavingsClick?: () => void
+  onFixedRewardClick?: () => void
+  onFixedRewardEditClick?: () => void
 }) => {
   // 年齢を計算する
   const age = calculateAge(child?.profiles?.birthday)
@@ -262,7 +267,14 @@ export const ChildViewLayout = ({
               <Text size="xs" c="dimmed" mb="xs">合計報酬額</Text>
               <Text size="lg" fw={700} c="#0277BD">{totalReward.toLocaleString()}円</Text>
             </Card>
-            <Card padding="sm" radius="md" withBorder style={{ backgroundColor: "#F3E5F5" }}>
+            <Card 
+              padding="sm" 
+              radius="md" 
+              withBorder 
+              style={{ backgroundColor: "#F3E5F5", cursor: onFixedRewardClick ? "pointer" : "default" }}
+              onClick={onFixedRewardClick}
+              className={onFixedRewardClick ? "hover:shadow-md transition-shadow" : ""}
+            >
               <Text size="xs" c="dimmed" mb="xs">定額報酬</Text>
               <Text size="lg" fw={700} c="#6A1B9A">{fixedReward.toLocaleString()}円/月</Text>
             </Card>
@@ -280,6 +292,20 @@ export const ChildViewLayout = ({
           </SimpleGrid>
         </Stack>
       </Card>
+
+      {/* 定額報酬設定FAB */}
+      {onFixedRewardEditClick && (
+        <SubMenuFAB
+          items={[
+            {
+              icon: <IconEdit size={20} />,
+              label: "編集",
+              onClick: onFixedRewardEditClick,
+              color: "violet"
+            }
+          ]}
+        />
+      )}
     </Box>
   )
 }

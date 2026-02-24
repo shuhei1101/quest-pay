@@ -3,8 +3,9 @@
 import { useWindow } from "@/app/(core)/useConstants"
 import { FamilyMemberList } from "./_components/FamilyMemberList"
 import { useEffect, useState } from "react"
-import { FloatingActionButton, FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
-import { IconPlus, IconMenu, IconEdit } from "@tabler/icons-react"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
+import { FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
+import { IconPlus, IconEdit } from "@tabler/icons-react"
 import { useRouter, usePathname } from "next/navigation"
 import { FAMILIES_MEMBERS_CHILD_NEW_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
 
@@ -63,11 +64,9 @@ export default function FamilyMembersLayout({ children }: {
     return (
       <>
         {children}
-        <FloatingActionButton
+        <SubMenuFAB
           items={actionItems}
-          position="bottom-right"
-          pattern={isMobile ? "radial-up" : "radial-left"}
-          mainIcon={<IconMenu size={24} />}
+          showBackButton={false}
         />
       </>
     )
@@ -86,11 +85,9 @@ export default function FamilyMembersLayout({ children }: {
           {children}
         </main>
       </div>
-      <FloatingActionButton
+      <SubMenuFAB
         items={actionItems}
-        position="bottom-right"
-        pattern={isMobile ? "radial-up" : "radial-left"}
-        mainIcon={<IconMenu size={24} />}
+        showBackButton={false}
       />
     </>
   )

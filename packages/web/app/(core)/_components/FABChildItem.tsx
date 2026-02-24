@@ -7,15 +7,15 @@ export const FAB_SPACING = {
   /** アイコンとラベルの間のギャップ */
   iconLabelGap: 2,
   /** 子アイテム間のギャップ */
-  itemsGap: 12,
+  itemsGap: 8,
   /** メインボタンと子アイテムコンテナの間のギャップ */
   mainToItemsGap: 8,
   /** 子アイテムコンテナの左右パディング */
-  itemsContainerPadding: 16,
+  itemsContainerPadding: 8,
   /** メインボタンのサイズ */
-  mainButtonSize: 60,
+  mainButtonSize: 56,
   /** サブボタンのサイズ */
-  subButtonSize: 48,
+  subButtonSize: 44,
 } as const
 
 /** FABの子アイテム（アイコン+ラベル）を表示する */
@@ -81,6 +81,8 @@ export const FABChildItem = ({
           border,
           boxShadow,
           boxSizing: "border-box",
+          backdropFilter: "blur(1px)",
+          WebkitBackdropFilter: "blur(1px)",
         }}
       >
         {icon}
@@ -90,8 +92,8 @@ export const FABChildItem = ({
           style={{
             fontSize: "10px",
             fontWeight: "bold",
-            color: "white",
-            textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+            color: "#1a1a1a",
+            textShadow: "0 1px 2px rgba(255,255,255,0.8)",
             whiteSpace: "nowrap",
           }}
         >

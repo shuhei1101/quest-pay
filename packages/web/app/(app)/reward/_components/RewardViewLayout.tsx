@@ -12,11 +12,13 @@ import { LevelRewardViewLayout } from "../by-level/view/LevelRewardViewLayout"
 export const RewardViewLayout = ({
   ageRewards,
   levelRewards,
-  isLoading
+  isLoading,
+  hideEditButton = false
 }: {
   ageRewards: Array<{ age: number; amount: number }>
   levelRewards: Array<{ level: number; amount: number }>
   isLoading: boolean
+  hideEditButton?: boolean
 }) => {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<string | null>("age")
@@ -30,13 +32,15 @@ export const RewardViewLayout = ({
       <Group justify="space-between" mb="md">
         <Text size="xl" fw={700}>定額報酬</Text>
         {/* 編集ボタン */}
-        <Button 
-          leftSection={<IconEdit size={16} />} 
-          onClick={() => router.push(REWARD_URL)}
-          variant="light"
-        >
-          編集
-        </Button>
+        {!hideEditButton && (
+          <Button 
+            leftSection={<IconEdit size={16} />} 
+            onClick={() => router.push(REWARD_URL)}
+            variant="light"
+          >
+            編集
+          </Button>
+        )}
       </Group>
 
       {/* タブ切り替え */}
