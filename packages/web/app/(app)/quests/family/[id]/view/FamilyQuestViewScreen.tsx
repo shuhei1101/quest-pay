@@ -2,16 +2,21 @@
 
 import { useState } from "react"
 import { FamilyQuestViewLayout } from "./_components/FamilyQuestViewLayout"
-import { ParentQuestViewFooter } from "./_components/ParentQuestViewFooter"
 import { useFamilyQuest } from "./_hooks/useFamilyQuest"
 import { useRouter } from "next/navigation"
 import { useDisclosure } from "@mantine/hooks"
 import { QuestEditModal } from "../../../_components/QuestEditModal"
 import { FamilyQuestEdit } from "../FamilyQuestEdit"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
+import { IconEdit, IconArrowLeft } from "@tabler/icons-react"
+import { useWindow } from "@/app/(core)/useConstants"
+import { Group } from "@mantine/core"
+import { LevelSelectMenu } from "../../../_components/LevelSelectMenu"
 
 /** 家族クエスト閲覧画面 */
 export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   const router = useRouter()
+  const { isMobile } = useWindow()
   
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
@@ -56,13 +61,13 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
       monthTo={familyQuest?.quest?.monthTo}
       requiredClearCount={selectedDetail?.requiredClearCount ?? null}
       footer={
-        <ParentQuestViewFooter 
-          availableLevels={availableLevels}
-          selectedLevel={selectedLevel}
-          onLevelChange={setSelectedLevel}
-          onBack={() => router.back()}
-          onEdit={openEditModal}
-        />
+        <Group justify="center" mt="xl" gap="md">
+          <LevelSelectMenu 
+            availableLevels={availableLevels}
+            selectedLevel={selectedLevel}
+            onLevelChange={setSelectedLevel}
+          />
+        </Group>
       }
     />
       {/* 編集モーダル */}
@@ -72,6 +77,18 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
       >
         <FamilyQuestEdit id={id} />
       </QuestEditModal>
+
+      {/* FAB */}
+      <SubMenuFAB
+        items={[
+          {
+            icon: <IconEdit size={20} />,
+            label: "編集",
+            onClick: openEditModal,
+          },
+        ]}
+        pattern={isMobile ? "radial-up" : "radial-left"}
+      />
     </>
   )
 }

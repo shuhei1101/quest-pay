@@ -88,7 +88,7 @@ export const FamilyQuestViewLayout = ({
   const [activeTab, setActiveTab] = useState<string | null>("condition")
 
   return (
-    <Box pos="relative" className="flex flex-col p-4 h-full" style={{ backgroundColor: isDark ? backgroundColor.dark : backgroundColor.light }}>
+    <Box pos="relative" className="flex flex-col p-4 h-full overflow-x-hidden" style={{ backgroundColor: isDark ? backgroundColor.dark : backgroundColor.light }}>
       {/* ロード中のオーバーレイ */}
       <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       
@@ -100,7 +100,7 @@ export const FamilyQuestViewLayout = ({
 
       {/* クエスト内容カード */}
       <Paper
-        className="flex-1 min-h-0"
+        className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto"
         p="md" 
         radius="md" 
         style={{ 

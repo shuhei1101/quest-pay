@@ -31,27 +31,28 @@
 8. **child-quest-agent**: 子供クエスト画面（受注したクエスト管理）
 9. **quest-list-layout-agent**: クエスト一覧レイアウトコンポーネント
 10. **quest-edit-layout-agent**: クエスト編集レイアウトコンポーネント
-11. **comment-agent**: コメント画面（投稿・評価・報告・ピン留め）
+11. **quest-view-agent**: クエスト閲覧画面（家族・公開・テンプレート・子供のView画面を横断管理）
+12. **comment-agent**: コメント画面（投稿・評価・報告・ピン留め）
 
 **その他の画面:**
-12. **home-agent**: ホーム画面
-13. **timeline-agent**: タイムライン画面（家族・公開）
-14. **family-agent**: 家族管理画面（家族情報・メンバー管理・フォロー）
-15. **child-management-agent**: 子供管理画面（子供情報・報酬履歴）
-16. **family-member-child-agent**: 家族メンバー子供編集画面（子供編集・閲覧・招待コード）
-17. **reward-agent**: 報酬設定画面（年齢別・レベル別報酬テーブル）
-18. **notification-agent**: 通知画面
+13. **home-agent**: ホーム画面
+14. **timeline-agent**: タイムライン画面（家族・公開）
+15. **family-agent**: 家族管理画面（家族情報・メンバー管理・フォロー）
+16. **child-management-agent**: 子供管理画面（子供情報・報酬履歴）
+17. **family-member-child-agent**: 家族メンバー子供編集画面（子供編集・閲覧・招待コード）
+18. **reward-agent**: 報酬設定画面（年齢別・レベル別報酬テーブル）
+19. **notification-agent**: 通知画面
 
 **認証画面:**
-19. **login-agent**: ログイン画面（認証・タイプ選択・セッション管理）
+20. **login-agent**: ログイン画面（認証・タイプ選択・セッション管理）
 
 **共通機能:**
-20. **app-shell-agent**: AppShellContent（サイドメニュー・フッター）
-21. **common-components-agent**: 共通コンポーネント（再利用可能なコンポーネント群）
+21. **app-shell-agent**: AppShellContent（サイドメニュー・フッター）
+22. **common-components-agent**: 共通コンポーネント（再利用可能なコンポーネント群）
 
 **システム構成:**
-22. **endpoints-agent**: パス定義管理（endpoints.ts）
-23. **schema-agent**: DBスキーマ管理（schema.ts）
+23. **endpoints-agent**: パス定義管理（endpoints.ts）
+24. **schema-agent**: DBスキーマ管理（schema.ts）
 
 **使用方法**: チャット入力欄で「`@`」から始めてエージェント名を選択し、対話的に作業を進めます。
 

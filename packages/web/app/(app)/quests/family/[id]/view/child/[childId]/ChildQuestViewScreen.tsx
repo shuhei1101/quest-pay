@@ -1,8 +1,6 @@
 "use client"
 
 import { ChildQuestViewLayout } from "./_components/ChildQuestViewLayout"
-import { ChildQuestViewFooter } from "./_components/ChildQuestViewFooter"
-import { ParentChildQuestViewFooter } from "./_components/ParentChildQuestViewFooter"
 import { ReviewRequestModal } from "./_components/ReviewRequestModal"
 import { CancelReviewModal } from "./_components/CancelReviewModal"
 import { ReportReviewModal } from "./_components/ReportReviewModal"
@@ -16,11 +14,15 @@ import { useDeleteChildQuest } from "./_hooks/useDeleteChildQuest"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 import { Fragment } from "react"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
+import { IconEdit, IconRefresh, IconCheck, IconX, IconEye } from "@tabler/icons-react"
+import { useWindow } from "@/app/(core)/useConstants"
 
 /** 子供クエスト閲覧画面 */
 export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string}) => {
   const router = useRouter()
   const {isParent, isChild} = useLoginUserInfo()
+  const { isMobile } = useWindow()
 
   /** ハンドル（子供用） */
   const {handleReviewRequest, executeReviewRequest, closeModal, isModalOpen, isLoading} = useReviewRequest()
@@ -36,6 +38,54 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
 
   /** 選択中のレベルの詳細を取得する */
   const currentDetail = childQuest?.details?.find(d => d.level === childQuest.children[0].level) || childQuest?.details?.[0]
+
+  /** 親用のFABアイテム */
+  const parentFabItems = [
+    ...(childQuest?.children[0].status === "pending_review" ? [{
+      icon: <IconEye size={20} />,
+      label: "報告確認",
+      onClick: () => handleApproveReport({
+        familyQuestId: id,
+        childId,
+        updatedAt: childQuest?.base.updatedAt || '',
+      }),
+      color: "blue" as const,
+    }] : []),
+    {
+      icon: <IconEdit size={20} />,
+      label: "編集",
+      onClick: () => router.push(FAMILY_QUEST_VIEW_URL(id)),
+      color: "gray" as const,
+    },
+    {
+      icon: <IconRefresh size={20} />,
+      label: "リセット",
+      onClick: () => handleDelete({familyQuestId: id, childId}),
+      color: "red" as const,
+    },
+  ]
+
+  /** 子供用のFABアイテム */
+  const childFabItems = [
+    ...(childQuest?.children[0].status === "pending_review" ? [{
+      icon: <IconX size={20} />,
+      label: "取消",
+      onClick: () => handleCancelReview({
+        familyQuestId: id,
+        updatedAt: childQuest?.base.updatedAt,
+      }),
+      color: "red" as const,
+    }] : []),
+    {
+      icon: <IconCheck size={20} />,
+      label: "報告",
+      onClick: () => handleReviewRequest({
+        familyQuestId: id,
+        updatedAt: childQuest?.base.updatedAt,
+      }),
+      color: "blue" as const,
+    },
+  ]
 
   return (
     <Fragment>
@@ -58,36 +108,7 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         monthFrom={childQuest?.quest?.monthFrom}
         monthTo={childQuest?.quest?.monthTo}
         requiredClearCount={currentDetail?.requiredClearCount ?? null}
-        footer={
-          isParent ? (
-            /* 親ユーザの場合 */
-            <ParentChildQuestViewFooter
-              isPendingReview={childQuest?.children[0].status === "pending_review"}
-              onReviewReport={() => handleApproveReport({
-                familyQuestId: id,
-                childId,
-                updatedAt: childQuest?.base.updatedAt || '',
-              })}
-              onEdit={() => router.push(FAMILY_QUEST_VIEW_URL(id))}
-              onReset={() => handleDelete({familyQuestId: id, childId})}
-            />
-          ) : isChild ? (
-            /* 子供ユーザの場合 */
-            <ChildQuestViewFooter 
-              onBack={() => router.back()}
-              onReviewRequest={() => handleReviewRequest({
-                familyQuestId: id,
-                updatedAt: childQuest?.base.updatedAt,
-              })}
-              onCancelReview={() => handleCancelReview({
-                familyQuestId: id,
-                updatedAt: childQuest?.base.updatedAt,
-              })}
-              quest={childQuest}
-              currentDetail={currentDetail}
-            />
-          ) : null
-        }
+        footer={<></>}
       />
 
       {/* 完了報告モーダル（子供用） */}
@@ -115,6 +136,20 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         isLoading={isApproveLoading || isRejectLoading}
         requestMessage={childQuest?.children[0].requestMessage || undefined}
       />
+
+      {/* FAB */}
+      {isParent && (
+        <SubMenuFAB
+          items={parentFabItems}
+          pattern={isMobile ? "radial-up" : "radial-left"}
+        />
+      )}
+      {isChild && (
+        <SubMenuFAB
+          items={childFabItems}
+          pattern={isMobile ? "radial-up" : "radial-left"}
+        />
+      )}
     </Fragment>
   )
 }

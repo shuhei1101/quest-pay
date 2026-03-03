@@ -39,7 +39,7 @@ export const QuestOtherTab = ({
   }
 
   return (
-    <Stack gap="md">
+    <Stack gap="md" className="overflow-x-hidden overflow-y-auto">
       {/* 受注可能年齢 */}
       <Box>
         <Group gap="xs" mb={4}>

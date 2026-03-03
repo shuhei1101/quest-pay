@@ -42,7 +42,7 @@ export const QuestConditionTab = ({
   const { isMobile } = useWindow()
  
   return (
-    <Stack gap="md" className="overflow-y-auto">
+    <Stack gap="md" className="overflow-x-hidden overflow-y-auto">
       {/* 上部：アイコンとレベル・カテゴリ */}
       <Grid gutter="md">
         {/* 左側：クエストアイコン（1の割合） */}

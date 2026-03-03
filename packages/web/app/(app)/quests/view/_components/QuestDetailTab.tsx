@@ -13,7 +13,7 @@ export const QuestDetailTab = ({
 
 }) => {
   return (
-    <Stack gap="md" className="overflow-y-auto">
+    <Stack gap="md" className="overflow-x-hidden overflow-y-auto">
       {/* 依頼主 */}
       <Box>
         <Group gap="xs" mb={4}>

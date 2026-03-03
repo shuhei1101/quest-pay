@@ -4,14 +4,20 @@ import { useState } from "react"
 import { TemplateQuestViewLayout } from "./_components/TemplateQuestViewLayout"
 import { useTemplateQuest } from "./_hooks/useTemplateQuest"
 import { useRouter } from "next/navigation"
-import { TemplateQuestViewFooter } from "./_components/TemplateQuestViewFooter"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { FAMILY_QUEST_NEW_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
 import toast from "react-hot-toast"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
+import { IconFilePencil, IconFileSearch, IconTrash } from "@tabler/icons-react"
+import { useWindow } from "@/app/(core)/useConstants"
+import { Group, Indicator } from "@mantine/core"
+import { LevelSelectMenu } from "../../../_components/LevelSelectMenu"
+import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
 
 /** テンプレートクエスト閲覧画面 */
 export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   const router = useRouter()
+  const { isMobile } = useWindow()
   
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
@@ -71,44 +77,67 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   const commentCount = 0
 
   return (
-    <TemplateQuestViewLayout
-      questName={templateQuest?.quest?.name || ""}
-      headerColor={{ light: "yellow.3", dark: "yellow.8" }}
-      backgroundColor={{ 
-        light: "rgba(254, 243, 199, 0.5)", 
-        dark: "rgba(161, 98, 7, 0.2)" 
-      }}
-      iconColor={templateQuest?.quest?.iconColor}
-      iconName={templateQuest?.icon?.name}
-      iconSize={templateQuest?.icon?.size ?? 48}
-      isLoading={isLoading}
-      level={selectedDetail?.level || 1}
-      category={""}
-      successCondition={selectedDetail?.successCondition || ""}
-      reward={selectedDetail?.reward || 0}
-      exp={selectedDetail?.childExp || 0}
-      requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
-      client={templateQuest?.quest?.client || ""}
-      requestDetail={templateQuest?.quest?.requestDetail || ""}
-      tags={templateQuest?.tags?.map(tag => tag.name) || []}
-      ageFrom={templateQuest?.quest?.ageFrom}
-      ageTo={templateQuest?.quest?.ageTo}
-      monthFrom={templateQuest?.quest?.monthFrom}
-      monthTo={templateQuest?.quest?.monthTo}
-      requiredClearCount={selectedDetail?.requiredClearCount ?? null}
-      footer={
-        <TemplateQuestViewFooter 
-          availableLevels={ availableLevels }
-          selectedLevel={ selectedLevel }
-          onLevelChange={ setSelectedLevel }
-          onBack={ () => router.back() } 
-          familyIcon={ templateQuest?.familyIcon?.name }
-          onDelete={ onDelete }
-          onCreateFromTemplate={ onCreateFromTemplate }
-          onCheckSource={ onCheckSource }
-          hasSourceQuest={ !!templateQuest?.base.publicQuestId }
-        />
-      }
-    />
+    <>
+      <TemplateQuestViewLayout
+        questName={templateQuest?.quest?.name || ""}
+        headerColor={{ light: "yellow.3", dark: "yellow.8" }}
+        backgroundColor={{ 
+          light: "rgba(254, 243, 199, 0.5)", 
+          dark: "rgba(161, 98, 7, 0.2)" 
+        }}
+        iconColor={templateQuest?.quest?.iconColor}
+        iconName={templateQuest?.icon?.name}
+        iconSize={templateQuest?.icon?.size ?? 48}
+        isLoading={isLoading}
+        level={selectedDetail?.level || 1}
+        category={""}
+        successCondition={selectedDetail?.successCondition || ""}
+        reward={selectedDetail?.reward || 0}
+        exp={selectedDetail?.childExp || 0}
+        requiredCompletionCount={selectedDetail?.requiredCompletionCount || 0}
+        client={templateQuest?.quest?.client || ""}
+        requestDetail={templateQuest?.quest?.requestDetail || ""}
+        tags={templateQuest?.tags?.map(tag => tag.name) || []}
+        ageFrom={templateQuest?.quest?.ageFrom}
+        ageTo={templateQuest?.quest?.ageTo}
+        monthFrom={templateQuest?.quest?.monthFrom}
+        monthTo={templateQuest?.quest?.monthTo}
+        requiredClearCount={selectedDetail?.requiredClearCount ?? null}
+        footer={
+          <Group justify="center" mt="xl" gap="md">
+            <LevelSelectMenu 
+              availableLevels={availableLevels}
+              selectedLevel={selectedLevel}
+              onLevelChange={setSelectedLevel}
+            />
+          </Group>
+        }
+      />
+
+      {/* FAB */}
+      <SubMenuFAB
+        items={[
+          {
+            icon: <IconFilePencil size={20} />,
+            label: "作成",
+            onClick: onCreateFromTemplate,
+            color: "blue",
+          },
+          ...(templateQuest?.base.publicQuestId ? [{
+            icon: <IconFileSearch size={20} />,
+            label: "元のクエスト",
+            onClick: onCheckSource,
+            color: "gray",
+          }] : []),
+          {
+            icon: <IconTrash size={20} />,
+            label: "削除",
+            onClick: onDelete,
+            color: "red",
+          },
+        ]}
+        pattern={isMobile ? "radial-up" : "radial-left"}
+      />
+    </>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 import { ReactNode, CSSProperties } from "react"
 import { ActionIcon, MantineColor } from "@mantine/core"
+import { useWindow } from "../useConstants"
 
 /** FABのスペーシング定数 */
 export const FAB_SPACING = {
@@ -52,6 +53,8 @@ export const FABChildItem = ({
   /** 追加のスタイル */
   additionalStyle?: CSSProperties
 }) => {
+  const { isDark } = useWindow()
+  
   // additionalStyleにmarginTopが含まれていない場合のみデフォルトのmarginTopを適用
   const shouldApplyMarginTop = !additionalStyle?.transform
 
@@ -92,8 +95,10 @@ export const FABChildItem = ({
           style={{
             fontSize: "10px",
             fontWeight: "bold",
-            color: "#1a1a1a",
-            textShadow: "0 1px 2px rgba(255,255,255,0.8)",
+            color: isDark ? "#f0f0f0" : "#1a1a1a",
+            textShadow: isDark 
+              ? "0 1px 2px rgba(0,0,0,0.8)" 
+              : "0 1px 2px rgba(255,255,255,0.8)",
             whiteSpace: "nowrap",
           }}
         >

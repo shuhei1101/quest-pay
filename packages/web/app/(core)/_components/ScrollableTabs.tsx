@@ -35,19 +35,6 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   /** スクロール時の余白（ピクセル） */
   const SCROLL_MARGIN = 16
 
-  /** スティッキータブリストのスタイル */
-  const stickyTabListStyle = {
-    position: "sticky" as const,
-    top: 16,
-    zIndex: 100,
-    backgroundColor: "var(--mantine-color-body)",
-    paddingBottom: SCROLL_MARGIN / 2,
-    border: isDark ? "1px solid #373A40" : "1px solid #dee2e6",
-    borderRadius: "8px",
-    padding: "8px",
-    marginBottom: "12px"
-  }
-
   /** タブ変更時に選択されたタブを画面内にスクロールする */
   useEffect(() => {
     if (!tabListRef.current || !activeTab) return
@@ -92,33 +79,43 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   }, [])
 
   return (
-    <div style={{ width: "100%" }}>
-      <Tabs 
-        value={activeTab} 
-        onChange={onChange}
+    <Tabs 
+      value={activeTab} 
+      onChange={onChange}
+    >
+      {/* タブリスト（スティッキー対応） */}
+      <Tabs.List
+        style={{
+          position: "sticky",
+          top: 16,
+          zIndex: 100,
+          backgroundColor: "var(--mantine-color-body)",
+          border: isDark ? "1px solid #373A40" : "1px solid #dee2e6",
+          borderRadius: "8px",
+          padding: "8px",
+          marginBottom: "12px",
+        }}
       >
-        {/* タブリスト（スティッキー対応） */}
-        <div style={stickyTabListStyle}>
-          <Tabs.List>
-            <div ref={tabListRef} className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2">
-              {tabs.map((item) => (
-                <Tabs.Tab
-                  key={item.value}
-                  value={item.value}
-                  data-value={item.value}
-                  leftSection={item.leftSection}
-                  rightSection={item.rightSection}
-                >
-                  {item.label}
-                </Tabs.Tab>
-              ))}
-            </div>
-          </Tabs.List>
+        <div
+          ref={tabListRef}
+          className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2"
+        >
+          {tabs.map((item) => (
+            <Tabs.Tab
+              key={item.value}
+              value={item.value}
+              data-value={item.value}
+              leftSection={item.leftSection}
+              rightSection={item.rightSection}
+            >
+              {item.label}
+            </Tabs.Tab>
+          ))}
         </div>
-        
-        {/* タブパネルコンテンツ */}
-        {children}
-      </Tabs>
-    </div>
+      </Tabs.List>
+      
+      {/* タブパネルコンテンツ */}
+      {children}
+    </Tabs>
   )
 }
