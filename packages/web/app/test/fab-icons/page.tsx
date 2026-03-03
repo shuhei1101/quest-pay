@@ -235,9 +235,7 @@ export default function FABIconsMockPage() {
           <div style={{ position: 'absolute', bottom: 20, left: 20 }}>
             <FloatingActionButton
               items={navigationItems}
-              position="bottom-left"
               mainIcon={navigationIconCandidates[selectedNavIcon].icon}
-              disablePositioning={true}
               defaultOpen={false}
             />
           </div>
@@ -246,10 +244,8 @@ export default function FABIconsMockPage() {
           <div style={{ position: 'absolute', bottom: 20, right: 20 }}>
             <FloatingActionButton
               items={submenuItems}
-              position="bottom-right"
               pattern="radial-up"
               mainIcon={submenuIconCandidates[selectedSubmenuIcon].icon}
-              disablePositioning={true}
             />
           </div>
         </div>
