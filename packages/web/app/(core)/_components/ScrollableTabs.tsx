@@ -92,7 +92,7 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
           backgroundColor: "var(--mantine-color-body)",
           border: isDark ? "1px solid #373A40" : "1px solid #dee2e6",
           borderRadius: "8px",
-          padding: "8px",
+          padding: "2px",
           marginBottom: "12px",
         }}
       >

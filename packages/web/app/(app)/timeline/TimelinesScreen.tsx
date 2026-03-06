@@ -51,7 +51,7 @@ export const TimelinesScreen = () => {
         onChange={(value) => value && setActiveTab(value)}
       >
       {/* タイムラインコンテンツ */}
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: '8px' }}>
         {activeTab === "family" && (
           <div>
             {/* 家族タイムライン */}

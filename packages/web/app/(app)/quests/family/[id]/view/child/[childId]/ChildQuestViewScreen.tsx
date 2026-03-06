@@ -108,7 +108,6 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
         monthFrom={childQuest?.quest?.monthFrom}
         monthTo={childQuest?.quest?.monthTo}
         requiredClearCount={currentDetail?.requiredClearCount ?? null}
-        footer={<></>}
       />
 
       {/* 完了報告モーダル（子供用） */}
@@ -141,13 +140,11 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
       {isParent && (
         <SubMenuFAB
           items={parentFabItems}
-          pattern={isMobile ? "radial-up" : "radial-left"}
         />
       )}
       {isChild && (
         <SubMenuFAB
           items={childFabItems}
-          pattern={isMobile ? "radial-up" : "radial-left"}
         />
       )}
     </Fragment>

@@ -121,7 +121,6 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
       {fabActions.length > 0 && (
         <SubMenuFAB
           items={fabActions}
-          pattern={isMobile ? "radial-up" : "radial-left"}
         />
       )}
     </>

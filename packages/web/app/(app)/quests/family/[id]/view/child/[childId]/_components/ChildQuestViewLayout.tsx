@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Paper, Tabs, LoadingOverlay } from "@mantine/core"
-import { useState, ReactNode } from "react"
+import { useState } from "react"
 import { QuestViewHeader } from "../../../../../../view/_components/QuestViewHeader"
 import { QuestConditionTab } from "../../../../../../view/_components/QuestConditionTab"
 import { QuestDetailTab } from "../../../../../../view/_components/QuestDetailTab"
@@ -53,8 +53,6 @@ type ChildQuestViewLayoutProps = {
   monthTo?: number | null
   /** 必要クリア回数 */
   requiredClearCount: number | null
-  /** フッター要素 */
-  footer: ReactNode
 }
 
 /** 子供クエスト閲覧画面の共通レイアウト */
@@ -80,7 +78,6 @@ export const ChildQuestViewLayout = ({
   monthFrom,
   monthTo,
   requiredClearCount,
-  footer,
 }: ChildQuestViewLayoutProps) => {
   const {isDark} = useWindow()
   
@@ -154,9 +151,6 @@ export const ChildQuestViewLayout = ({
           </Tabs.Panel>
         </ScrollableTabs>
       </Paper>
-
-      {/* 下部アクションエリア */}
-      {footer}
     </Box>
   )
 }

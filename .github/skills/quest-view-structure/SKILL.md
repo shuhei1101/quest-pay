@@ -114,14 +114,21 @@ app/(app)/quests/family/[id]/view/
 **役割:** 家族クエスト閲覧のメイン画面
 
 **主要機能:**
-- レベル選択（複数レベルがある場合）
+- レベル選択（複数レベルがある場合）- SubMenuFABに統合
 - 選択レベルに応じた詳細表示
 - 編集モーダル呼び出し
 - 編集権限制御（親のみ）
+- SubMenuFABを使用したレベル選択メニュー表示
 
 **状態管理:**
 - `selectedLevel: number` - 選択中のレベル
 - `editModalOpened: boolean` - 編集モーダル開閉状態
+- `levelMenuOpened: boolean` - レベル選択メニュー開閉状態
+
+**FAB統合:**
+- SubMenuFABに編集ボタンとレベル選択ボタンを統合
+- レベル選択ボタン押下でPaperベースのメニューを表示
+- FABContextでFAB開閉状態を管理
 
 ### FamilyQuestViewLayout
 
@@ -131,7 +138,6 @@ app/(app)/quests/family/[id]/view/
 - クエスト基本情報（name, backgroundColor, icon情報）
 - 表示データ（level, category, successCondition, reward, exp, requiredCompletionCount）
 - 詳細情報（client, requestDetail, tags, age/month範囲）
-- `footer?: ReactNode` - フッターコンポーネント
 
 **構成:**
 - QuestViewHeader（ヘッダー）
@@ -139,14 +145,16 @@ app/(app)/quests/family/[id]/view/
   - 条件タブ（QuestConditionTab）
   - 依頼情報タブ（QuestDetailTab）
   - その他タブ（QuestOtherTab）
-- Footer（ParentQuestViewFooter）
 
-### ParentQuestViewFooter
+**注意:** レベル選択メニューとアクションボタンはFamilyQuestViewScreen側のSubMenuFABで管理されます。
 
-**役割:** 親用フッター（編集ボタンのみ）
+### ParentQuestViewFooter（非推奨）
 
-**Props:**
-- `onEdit: () => void` - 編集ボタン押下時のハンドラー
+**パス:** `app/(app)/quests/family/[id]/view/_components/ParentQuestViewFooter.tsx`
+
+**状態:** このコンポーネントは非推奨です。アクション機能はSubMenuFABに統合されました。
+
+**旧役割:** 親用フッター（編集ボタンのみ）
 
 ## 公開クエスト閲覧画面
 
@@ -216,26 +224,35 @@ app/(app)/quests/template/[id]/view/
 **役割:** テンプレートクエスト閲覧のメイン画面
 
 **主要機能:**
-- レベル選択（複数レベルがある場合）
+- レベル選択（複数レベルがある場合）- SubMenuFABに統合
 - 家族クエストとして採用機能
+- SubMenuFABを使用したレベル選択メニュー表示
 
 **状態管理:**
 - `selectedLevel: number` - 選択中のレベル
+- `levelMenuOpened: boolean` - レベル選択メニュー開閉状態
+
+**FAB統合:**
+- SubMenuFABに採用ボタン、元のクエストボタン、削除ボタン、レベル選択ボタンを統合
+- FABContextでFAB開閉状態を管理
 
 ### TemplateQuestViewLayout
 
 **役割:** テンプレートクエスト閲覧のレイアウト
 
-**Props:** FamilyQuestViewLayoutと同様
+**Props:** FamilyQuestViewLayoutと同様（footer propsなし）
 
-**特徴:** 黄色系の配色（デフォルト: rgba(255, 237, 213, 0.5) / rgba(255, 159, 0, 0.2)）
+**特徴:** 黄色系の配色（デフォルト: rgba(254, 243, 199, 0.5) / rgba(161, 98, 7, 0.2)）
 
-### TemplateQuestViewFooter
+**注意:** レベル選択メニューとアクションボタンはTemplateQuestViewScreen側のSubMenuFABで管理されます。
 
-**役割:** テンプレートクエスト用フッター（家族クエストとして採用ボタン）
+### TemplateQuestViewFooter（非推奨）
 
-**Props:**
-- `onAdopt: () => void` - 採用ボタン押下時のハンドラー
+**パス:** `app/(app)/quests/template/[id]/view/_components/TemplateQuestViewFooter.tsx`
+
+**状態:** このコンポーネントは非推奨です。アクション機能はSubMenuFABに統合されました。
+
+**旧役割:** テンプレートクエスト用フッター（家族クエストとして採用ボタン）
 
 ## 子供クエスト閲覧画面
 
@@ -283,9 +300,11 @@ app/(app)/quests/family/[id]/view/child/[childId]/
 
 **役割:** 子供クエスト閲覧のレイアウト
 
-**Props:** FamilyQuestViewLayoutと同様 + `footer?: ReactNode`
+**Props:** FamilyQuestViewLayoutと同様（footer propsなし）
 
 **特徴:** ブラウン系の配色（デフォルト: rgba(120, 53, 15, 0.2) / rgba(255, 255, 255, 0.2)）
+
+**注意:** アクションボタンはChildQuestViewScreen側のSubMenuFABで管理されます（レベル選択機能なし）。
 
 ### ParentChildQuestViewFooter
 
@@ -304,6 +323,7 @@ app/(app)/quests/family/[id]/view/child/[childId]/
 - API呼び出しは行わない
 - Propsで受け取ったデータを整形して表示
 - 共通コンポーネント（QuestViewHeader、タブ系）を組み合わせて構成
+- **footerはレイアウトから削除され、SubMenuFABに統合**
 
 ### 画面コンポーネント（Screen）の責務
 - データ取得（フック使用）
@@ -311,12 +331,16 @@ app/(app)/quests/family/[id]/view/child/[childId]/
 - イベントハンドラーの実装
 - レイアウトコンポーネントへのProps受け渡し
 - 権限制御ロジック
+- **SubMenuFABの管理とレベル選択メニューの制御**
 
 ### レベル選択機能
 - 複数レベルがある場合のみ有効化
 - `selectedLevel`状態で管理
 - `availableLevels = details.map(d => d.level).filter(非null)`で利用可能レベルを取得
 - `selectedDetail = details.find(d => d.level === selectedLevel) || details[0]`で選択中の詳細を取得
+- **SubMenuFABに統合され、Paperベースのメニューで選択UI提供**
+- **FABContextを使用してFABとメニューの開閉状態を管理**
+- **レベル選択メニューは画面右下に固定表示（z-index: 3001）**
 
 ### 配色パターン
 - 家族クエスト: ブラウン系 `rgba(120, 53, 15, 0.2)` / `rgba(255, 255, 255, 0.2)`

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { TemplateQuestViewLayout } from "./_components/TemplateQuestViewLayout"
 import { useTemplateQuest } from "./_hooks/useTemplateQuest"
 import { useRouter } from "next/navigation"
@@ -10,14 +10,20 @@ import toast from "react-hot-toast"
 import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { IconFilePencil, IconFileSearch, IconTrash } from "@tabler/icons-react"
 import { useWindow } from "@/app/(core)/useConstants"
-import { Group, Indicator } from "@mantine/core"
-import { LevelSelectMenu } from "../../../_components/LevelSelectMenu"
+import { Indicator, Paper, Stack, Text } from "@mantine/core"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
+import { useFABContext } from "@/app/(core)/_components/FABContext"
 
 /** テンプレートクエスト閲覧画面 */
 export const TemplateQuestViewScreen = ({id}: {id: string}) => {
   const router = useRouter()
-  const { isMobile } = useWindow()
+  const { isMobile, isDark } = useWindow()
+  /** FABの開閉状態管理 */
+  const { openFab, closeFab, isOpen } = useFABContext()
+  /** レベル選択メニューの開閉状態 */
+  const [levelMenuOpened, setLevelMenuOpened] = useState(false)
+  /** レベル選択メニューのref */
+  const levelMenuRef = useRef<HTMLDivElement>(null)
   
   /** 選択中のレベル */
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
@@ -29,6 +35,29 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
 
   /** 利用可能なレベル一覧を取得する */
   const availableLevels = templateQuest?.details?.map(d => d.level).filter((level): level is number => level !== null && level !== undefined) || []
+
+  /** レベル変更時のハンドル */
+  const handleLevelChange = (level: number) => {
+    setSelectedLevel(level)
+    setLevelMenuOpened(false)
+  }
+
+  /** レベル選択メニューの外側をクリックしたら閉じる */
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (levelMenuRef.current && !levelMenuRef.current.contains(event.target as Node)) {
+        setLevelMenuOpened(false)
+      }
+    }
+
+    if (levelMenuOpened) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [levelMenuOpened])
 
   /** クエスト削除ハンドル */
   const onDelete = () => {
@@ -73,9 +102,6 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
     }
   }
 
-  /** コメント数（TODO: 実装時にAPIから取得する） */
-  const commentCount = 0
-
   return (
     <>
       <TemplateQuestViewLayout
@@ -103,16 +129,64 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         monthFrom={templateQuest?.quest?.monthFrom}
         monthTo={templateQuest?.quest?.monthTo}
         requiredClearCount={selectedDetail?.requiredClearCount ?? null}
-        footer={
-          <Group justify="center" mt="xl" gap="md">
-            <LevelSelectMenu 
-              availableLevels={availableLevels}
-              selectedLevel={selectedLevel}
-              onLevelChange={setSelectedLevel}
-            />
-          </Group>
-        }
       />
+
+      {/* レベル選択メニュー（レベル選択ボタンをクリックしたときに表示） */}
+      {availableLevels.length > 1 && levelMenuOpened && (
+        <div 
+          ref={levelMenuRef}
+          style={{ 
+            position: "fixed", 
+            bottom: "90px", 
+            right: isMobile ? "20px" : "40px", 
+            zIndex: 3001 
+          }}
+        >
+          <Paper 
+            shadow="md" 
+            p="xs" 
+            radius="md" 
+            withBorder
+            style={{
+              backgroundColor: isDark ? "#2C2E33" : "#FFFFFF",
+            }}
+          >
+            <Stack gap="xs">
+              <Text size="xs" fw={600} c="dimmed" px="xs">
+                レベルを選択
+              </Text>
+              {availableLevels.map((level) => (
+                <Paper
+                  key={level}
+                  p="xs"
+                  radius="md"
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: level === selectedLevel 
+                      ? (isDark ? "rgba(255, 159, 0, 0.2)" : "rgba(255, 159, 0, 0.1)")
+                      : (isDark ? "transparent" : "transparent"),
+                    fontWeight: level === selectedLevel ? "bold" : undefined,
+                    transition: "background-color 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (level !== selectedLevel) {
+                      e.currentTarget.style.backgroundColor = isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)"
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (level !== selectedLevel) {
+                      e.currentTarget.style.backgroundColor = "transparent"
+                    }
+                  }}
+                  onClick={() => handleLevelChange(level)}
+                >
+                  <Text size="sm">レベル {level}</Text>
+                </Paper>
+              ))}
+            </Stack>
+          </Paper>
+        </div>
+      )}
 
       {/* FAB */}
       <SubMenuFAB
@@ -135,7 +209,21 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
             onClick: onDelete,
             color: "red",
           },
+          ...(availableLevels.length > 1 ? [{
+            icon: (
+              <Indicator label={selectedLevel} size={18} color="yellow" offset={4}>
+                <LevelIcon size={20} />
+              </Indicator>
+            ),
+            label: "レベル",
+            onClick: () => {
+              closeFab("template-quest-fab")
+              setLevelMenuOpened(true)
+            },
+          }] : []),
         ]}
+        open={isOpen("template-quest-fab")}
+        onToggle={(open) => open ? openFab("template-quest-fab") : closeFab("template-quest-fab")}
         pattern={isMobile ? "radial-up" : "radial-left"}
       />
     </>

@@ -2,7 +2,7 @@
 
 import { AppShell } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { IconHome2, IconClipboard, IconUsers } from '@tabler/icons-react'
 import { useWindow } from '../../(core)/useConstants'
@@ -12,6 +12,8 @@ import { AccessErrorHandler } from '../../(core)/_components/AccessErrorHandler'
 import { FloatingActionItem } from '../../(core)/_components/FloatingActionButton'
 import { NavigationFAB } from '../../(core)/_components/NavigationFAB'
 import { FABProvider, useFABContext } from '../../(core)/_components/FABContext'
+import { LoadingProvider } from '../../(core)/_components/LoadingContext'
+import { LoadingIndicator } from '../../(core)/_components/LoadingIndicator'
 import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUEST_NEW_URL } from '../../(core)/endpoints'
 import { useLoginUserInfo } from '../../(auth)/login/_hooks/useLoginUserInfo'
 
@@ -19,7 +21,9 @@ import { useLoginUserInfo } from '../../(auth)/login/_hooks/useLoginUserInfo'
 export const AppShellContent = ({children}: {children: React.ReactNode}) => {
   return (
     <FABProvider>
-      <AppShellContentInner>{children}</AppShellContentInner>
+      <LoadingProvider>
+        <AppShellContentInner>{children}</AppShellContentInner>
+      </LoadingProvider>
     </FABProvider>
   )
 }
@@ -38,6 +42,9 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
   const { isParent } = useLoginUserInfo()
   /** FABの開閉状態管理 */
   const { openFab, closeFab, isOpen } = useFABContext()
+  
+  /** 前回のスクロール位置を保存 */
+  const lastScrollY = useRef(0)
 
   /** ナビゲーションアイテム */
   const navigationItems: FloatingActionItem[] = [
@@ -65,8 +72,53 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
     return 0
   }
 
+  /** NavigationFABのトグル処理（SubMenuFABを閉じる機能を追加） */
+  const handleNavigationToggle = (open: boolean) => {
+    if (open) {
+      // NavigationFABを開く時はSubMenuFABを閉じる
+      closeFab("submenu-fab")
+      openFab("navigation-fab")
+    } else {
+      closeFab("navigation-fab")
+    }
+  }
+
+  /** 画面遷移時にNavigationFABを開き、SubMenuFABを閉じる */
+  useEffect(() => {
+    if (isMobile) {
+      openFab("navigation-fab")
+      closeFab("submenu-fab")
+    }
+  }, [pathname, isMobile, openFab, closeFab])
+
+  /** スクロール検知でFABを自動開閉 */
+  useEffect(() => {
+    if (!isMobile) return
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      // 一番上までスクロールされたらNavigationFABを展開
+      if (currentScrollY === 0) {
+        openFab("navigation-fab")
+      } 
+      // 下スクロールしたら両方のFABを閉じる
+      else if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+        closeFab("navigation-fab")
+        closeFab("submenu-fab")
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [isMobile, openFab, closeFab])
+
   return (
     <BackgroundWrapper>
+      {/* ローディングインジケーター（画面右上に表示） */}
+      <LoadingIndicator />
       {/* アクセスエラーハンドラー（useSearchParamsを使用するためSuspenseでラップ） */}
       <Suspense fallback={null}>
         <AccessErrorHandler />
@@ -101,7 +153,7 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
           items={navigationItems}
           activeIndex={getActiveNavigationIndex()}
           open={isOpen("navigation-fab")}
-          onToggle={(open) => open ? openFab("navigation-fab") : closeFab("navigation-fab")}
+          onToggle={handleNavigationToggle}
           defaultOpen={false}
         />
       )}

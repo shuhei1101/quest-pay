@@ -130,6 +130,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   const fabEditActions: FloatingActionItem[] = [
     {
       icon: <IconDeviceFloppy size={20} />,
+      label: "保存",
       onClick: () => onSubmit(),
     },
   ]
@@ -138,6 +139,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   const fabCreateActions: FloatingActionItem[] = [
     {
       icon: <IconDeviceFloppy size={20} />,
+      label: "保存",
       onClick: () => onSubmit(),
     },
   ]

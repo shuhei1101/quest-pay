@@ -123,10 +123,10 @@ export function FamilyQuestsScreen() {
         items={[
           {
             icon: <IconPlus size={20} />,
+            label: "追加",
             onClick: () => router.push(FAMILY_QUEST_NEW_URL),
           },
         ]}
-        pattern={isMobile ? "radial-up" : "radial-left"}
       />
     </div>
   )
