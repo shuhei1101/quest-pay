@@ -11,7 +11,8 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
 
   useEffect(() => {
     // 次画面で表示するメッセージを登録
-    appStorage.feedbackMessage.set({ message: error.message, type: "error" })
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    appStorage.feedbackMessage.set({ message: errorMessage, type: "error" })
     // ログイン画面にリダイレクトする
     redirect(LOGIN_URL)
   }, [error])
