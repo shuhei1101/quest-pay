@@ -127,7 +127,26 @@ export const AgeRewardEditLayout = ({
                   alert("開始年齢は終了年齢以下にしてください")
                   return
                 }
+                // 新しい年齢範囲を設定する
                 setAgeRange([ageFrom, ageTo])
+                
+                // 新しい範囲内の年齢でデータが存在しない場合は追加する
+                const currentRewards = form.getValues("rewards")
+                const existingAges = new Set(currentRewards.map(r => r.age))
+                const newRewards = [...currentRewards]
+                
+                for (let age = ageFrom; age <= ageTo; age++) {
+                  if (!existingAges.has(age)) {
+                    newRewards.push({ age, amount: 0 })
+                  }
+                }
+                
+                // 年齢順でソートする
+                newRewards.sort((a, b) => a.age - b.age)
+                
+                // フォームに反映する
+                form.setValue("rewards", newRewards, { shouldDirty: true })
+                
                 setAgeRangeModalOpened(false)
               }}
             >
@@ -146,19 +165,16 @@ export const AgeRewardEditLayout = ({
             {/* 学年区分見出しと一括設定ボタン */}
             <Group justify="space-between" mb="xs">
               <Text size="lg" fw={700}>{group.name}</Text>
-              <Group gap="xs">
-                <Text size="sm" c="dimmed">一括設定</Text>
-                <Button 
-                  size="compact-xs" 
-                  variant="light"
-                  onClick={() => {
-                    setSelectedGroup(group)
-                    setBatchModalOpened(true)
-                  }}
-                >
-                  設定
-                </Button>
-              </Group>
+              <Button 
+                size="compact-xs" 
+                variant="light"
+                onClick={() => {
+                  setSelectedGroup(group)
+                  setBatchModalOpened(true)
+                }}
+              >
+                一括設定
+              </Button>
             </Group>
             
             {/* テーブル */}
@@ -166,6 +182,11 @@ export const AgeRewardEditLayout = ({
               <Table.Tbody>
                 {group.ages.map((age) => {
                   const rewardIndex = ageRewards.findIndex(r => r.age === age)
+                  
+                  // データが存在しない場合はスキップ（通常は発生しないはず）
+                  if (rewardIndex === -1) {
+                    return null
+                  }
                   
                   return (
                     <Table.Tr key={age}>

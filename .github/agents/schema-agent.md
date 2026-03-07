@@ -52,7 +52,6 @@ read_file: .github/skills/schema-relations/SKILL.md
 4. スキーマ定義を追加・修正
 5. マイグレーションファイルを作成（必要に応じて）
 6. 変更内容に基づいてスキルを更新（必要に応じて）
-7. 音声で完了報告
 
 ### 機能説明時
 1. 説明対象のテーブルを特定
@@ -66,7 +65,6 @@ read_file: .github/skills/schema-relations/SKILL.md
 3. スキルに記載されている情報と実際の構造を比較
 4. 差分を特定（新規テーブル、削除されたテーブル、カラム変更）
 5. スキルを更新
-6. 音声で完了報告
 
 ## 画面の基本情報
 
@@ -130,13 +128,6 @@ read_file: .github/skills/schema-relations/SKILL.md
 - `rewardType`: 報酬タイプ
 - `familyTimelineActionType`: 家族タイムラインアクションタイプ
 - `publicTimelineActionType`: 公開タイムラインアクションタイプ
-
-## タスク完了時の音声通知（必須）
-
-すべてのタスク完了時に音声で報告する：
-```
-mcp_yomiage_speak(text="{完了内容}")
-```
 
 ## 制約
 

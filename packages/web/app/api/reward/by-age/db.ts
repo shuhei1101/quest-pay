@@ -30,7 +30,7 @@ export const insertDefaultAgeRewards = async ({
   }
 }
 
-/** 年齢別報酬を更新する */
+/** 年齢別報酬を更新または挿入する（UPSERT） */
 export const updateAgeReward = async ({
   db,
   ageRewardTableId,
@@ -45,9 +45,10 @@ export const updateAgeReward = async ({
   type?: typeof ageRewardTableType.enumValues[number]
 }) => {
   try {
-    await db
-      .update(rewardByAges)
-      .set({ amount })
+    // 既存のレコードを確認
+    const existing = await db
+      .select()
+      .from(rewardByAges)
       .where(
         and(
           eq(rewardByAges.type, type),
@@ -55,6 +56,31 @@ export const updateAgeReward = async ({
           eq(rewardByAges.age, age)
         )
       )
+      .limit(1)
+
+    if (existing.length > 0) {
+      // UPDATEを実行
+      await db
+        .update(rewardByAges)
+        .set({ amount })
+        .where(
+          and(
+            eq(rewardByAges.type, type),
+            eq(rewardByAges.ageRewardTableId, ageRewardTableId),
+            eq(rewardByAges.age, age)
+          )
+        )
+    } else {
+      // INSERTを実行
+      await db
+        .insert(rewardByAges)
+        .values({
+          type,
+          ageRewardTableId,
+          age,
+          amount
+        })
+    }
   } catch (error) {
     devLog("updateAgeReward error:", error)
     throw new DatabaseError("年齢別報酬の更新に失敗しました。")

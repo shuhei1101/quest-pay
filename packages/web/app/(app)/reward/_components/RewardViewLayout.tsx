@@ -1,6 +1,7 @@
 "use client"
-import { Box, Text, LoadingOverlay, Button, Group, Tabs } from "@mantine/core"
+import { Box, LoadingOverlay, Button, Tabs } from "@mantine/core"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
+import { PageTitle } from "@/app/(core)/_components/PageTitle"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { REWARD_URL } from "@/app/(core)/endpoints"
@@ -29,19 +30,20 @@ export const RewardViewLayout = ({
       <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
       {/* ヘッダー */}
-      <Group justify="space-between" mb="md">
-        <Text size="xl" fw={700}>定額報酬</Text>
-        {/* 編集ボタン */}
-        {!hideEditButton && (
-          <Button 
-            leftSection={<IconEdit size={16} />} 
-            onClick={() => router.push(REWARD_URL)}
-            variant="light"
-          >
-            編集
-          </Button>
-        )}
-      </Group>
+      <PageTitle 
+        title="定額報酬"
+        rightSection={
+          !hideEditButton ? (
+            <Button 
+              leftSection={<IconEdit size={16} />} 
+              onClick={() => router.push(REWARD_URL)}
+              variant="light"
+            >
+              編集
+            </Button>
+          ) : undefined
+        }
+      />
 
       {/* タブ切り替え */}
       <ScrollableTabs

@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Paper, Text, Loader, Center, Stack } from "@mantine/core"
+import { Loader, Center, Stack, Text } from "@mantine/core"
 import { IconHome2, IconWorld } from "@tabler/icons-react"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
+import { PageTitle } from "@/app/(core)/_components/PageTitle"
 import { useFamilyTimelines } from "./_hooks/useFamilyTimelines"
 import { usePublicTimelines } from "./_hooks/usePublicTimelines"
 import { TimelineItem } from "./_components/TimelineItem"
@@ -40,9 +41,7 @@ export const TimelinesScreen = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '100px' }}>
       {/* ヘッダータイトル */}
-      <Paper p="md" withBorder shadow="sm" mb="md">
-        <Text size="xl" fw={700}>タイムライン</Text>
-      </Paper>
+      <PageTitle title="タイムライン" />
 
       {/* タブコンポーネント */}
       <ScrollableTabs

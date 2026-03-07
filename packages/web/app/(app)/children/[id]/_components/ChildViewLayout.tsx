@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Card, Group, Stack, Text, SimpleGrid, RingProgress, Center, ThemeIcon, Progress, Divider } from "@mantine/core"
-import { IconCake, IconCalendar, IconSchool, IconTrophy, IconChecklist, IconCoin, IconWallet, IconStar, IconEdit } from "@tabler/icons-react"
+import { IconCake, IconCalendar, IconSchool, IconTrophy, IconChecklist, IconCoin, IconWallet, IconStar, IconEdit, IconExternalLink } from "@tabler/icons-react"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { Child } from "@/app/api/children/query"
@@ -138,7 +138,7 @@ export const ChildViewLayout = ({
           </Box>
           
           <Stack gap="xs" style={{ flex: 1 }}>
-            <Text size="2rem" fw={700}>{child?.profiles?.name ?? ""}くん</Text>
+            <Text size="2rem" fw={700}>{child?.profiles?.name ?? ""}</Text>
             <Group gap="lg">
               <Group gap="xs">
                 <IconCake size={20} color="#666" />
@@ -264,17 +264,22 @@ export const ChildViewLayout = ({
           
           <SimpleGrid cols={3} spacing="md">
             <Card padding="sm" radius="md" withBorder style={{ backgroundColor: "#E1F5FE" }}>
-              <Text size="xs" c="dimmed" mb="xs">合計報酬額</Text>
+              <Text size="xs" c="dimmed" mb="xs">報酬合計</Text>
               <Text size="lg" fw={700} c="#0277BD">{totalReward.toLocaleString()}円</Text>
             </Card>
             <Card 
               padding="sm" 
               radius="md" 
               withBorder 
-              style={{ backgroundColor: "#F3E5F5", cursor: onFixedRewardClick ? "pointer" : "default" }}
+              style={{ backgroundColor: "#F3E5F5", cursor: onFixedRewardClick ? "pointer" : "default", position: "relative" }}
               onClick={onFixedRewardClick}
               className={onFixedRewardClick ? "hover:shadow-md transition-shadow" : ""}
             >
+              {onFixedRewardClick && (
+                <Box style={{ position: "absolute", top: 8, right: 8 }}>
+                  <IconExternalLink size={16} color="#6A1B9A" />
+                </Box>
+              )}
               <Text size="xs" c="dimmed" mb="xs">定額報酬</Text>
               <Text size="lg" fw={700} c="#6A1B9A">{fixedReward.toLocaleString()}円/月</Text>
             </Card>
@@ -282,11 +287,16 @@ export const ChildViewLayout = ({
               padding="sm" 
               radius="md" 
               withBorder 
-              style={{ backgroundColor: "#E8F5E9", cursor: onSavingsClick ? "pointer" : "default" }}
+              style={{ backgroundColor: "#E8F5E9", cursor: onSavingsClick ? "pointer" : "default", position: "relative" }}
               onClick={onSavingsClick}
               className={onSavingsClick ? "hover:shadow-md transition-shadow" : ""}
             >
-              <Text size="xs" c="dimmed" mb="xs">現在の貯金</Text>
+              {onSavingsClick && (
+                <Box style={{ position: "absolute", top: 8, right: 8 }}>
+                  <IconExternalLink size={16} color="#2E7D32" />
+                </Box>
+              )}
+              <Text size="xs" c="dimmed" mb="xs">貯金</Text>
               <Text size="lg" fw={700} c="#2E7D32">{(child?.children?.currentSavings ?? 0).toLocaleString()}円</Text>
             </Card>
           </SimpleGrid>

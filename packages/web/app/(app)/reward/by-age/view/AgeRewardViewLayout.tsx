@@ -8,6 +8,22 @@ export const AgeRewardViewLayout = ({
 }: {
   ageRewards: Array<{ age: number; amount: number }>
 }) => {
+  /** 実際に存在する年齢範囲を取得する */
+  const getAgeRange = (): [number, number] => {
+    if (ageRewards.length === 0) return [5, 22]
+    const ages = ageRewards.map(r => r.age)
+    return [Math.min(...ages), Math.max(...ages)]
+  }
+
+  /** 年齢範囲でフィルタリングされたグループを取得する */
+  const getFilteredGroups = () => {
+    const [minAge, maxAge] = getAgeRange()
+    return GRADE_GROUPS.map(group => ({
+      ...group,
+      ages: group.ages.filter(age => age >= minAge && age <= maxAge)
+    })).filter(group => group.ages.length > 0)
+  }
+
   /** 年齢別の合計金額を計算する（年額） */
   const calculateAgeTotal = () => {
     return ageRewards.reduce((sum, reward) => sum + reward.amount * 12, 0)
@@ -21,6 +37,8 @@ export const AgeRewardViewLayout = ({
     }, 0)
   }
 
+  const filteredGroups = getFilteredGroups()
+
   return (
     <Box className="space-y-6" style={{ width: "100%" }}>
       {/* 説明文 */}
@@ -28,7 +46,7 @@ export const AgeRewardViewLayout = ({
         年齢ごとに毎月のお小遣い金額を設定できます。お子様の年齢に応じて、定額で支給される報酬額を確認できます。学校の学年に合わせて、成長とともに金額を調整しましょう。
       </Text>
 
-      {GRADE_GROUPS.map((group) => {
+      {filteredGroups.map((group) => {
         const groupTotal = calculateGroupTotal(group.ages)
         const years = group.ages.length
 

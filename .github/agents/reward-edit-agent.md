@@ -53,7 +53,6 @@ read_file: .github/skills/reward-api/SKILL.md
 3. `coding-standards`、`architecture-guide`、`database-operations` を参照
 4. 実装を行う
 5. 変更内容に基づいてスキルを更新（必要に応じて）
-6. 音声で完了報告
 
 ### 機能説明時
 1. 説明対象を特定（報酬設定フォーム、テーブル編集、バリデーション）
@@ -66,7 +65,6 @@ read_file: .github/skills/reward-api/SKILL.md
 2. スキルに記載されている情報と実際の構造を比較
 3. 差分を特定
 4. スキルを更新
-5. 音声で完了報告
 
 ## 画面の基本情報
 
@@ -121,13 +119,6 @@ export const FAMILY_LEVEL_REWARD_TABLE_API_URL = `${REWARD_API_URL}/by-level/tab
 - API経由でのデータ更新
 - 楽観的更新による即座のUI反映
 - エラーハンドリング
-
-## タスク完了時の音声通知（必須）
-
-すべてのタスク完了時に音声で報告する：
-```
-mcp_yomiage_speak(text="{完了内容}")
-```
 
 ## 制約
 

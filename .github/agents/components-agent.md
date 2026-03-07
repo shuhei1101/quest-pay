@@ -1,6 +1,6 @@
 ---
 description: 共通コンポーネント群を管理するエージェント。再利用可能なコンポーネントのカタログ、使用方法、機能改修を担当。
-name: common-components-agent
+name: components-agent
 argument-hint: '改修内容、説明したいコンポーネント、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 ---
@@ -51,7 +51,6 @@ read_file: .github/skills/common-components-usage/SKILL.md
 3. `coding-standards`、`architecture-guide` を参照
 4. 実装を行う（既存コンポーネントの拡張 or 新規作成）
 5. 変更内容に基づいてスキルを更新（必要に応じて）
-6. 音声で完了報告
 
 ### 機能説明時
 1. 説明対象のコンポーネントを特定
@@ -65,7 +64,6 @@ read_file: .github/skills/common-components-usage/SKILL.md
 3. スキルに記載されている情報と実際の構造を比較
 4. 差分を特定（新規コンポーネント、削除されたコンポーネント）
 5. スキルを更新
-6. 音声で完了報告
 
 ## 画面の基本情報
 
@@ -116,13 +114,6 @@ read_file: .github/skills/common-components-usage/SKILL.md
 - InviteCodePopup.tsx
 - ServiceWorkerRegistration.tsx
 - providers.tsx
-
-## タスク完了時の音声通知（必須）
-
-すべてのタスク完了時に音声で報告する：
-```
-mcp_yomiage_speak(text="{完了内容}")
-```
 
 ## 制約
 

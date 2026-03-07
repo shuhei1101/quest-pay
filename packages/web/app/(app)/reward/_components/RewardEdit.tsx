@@ -1,6 +1,7 @@
 "use client"
-import { Box, Text, LoadingOverlay, Button, Group, ActionIcon, Tabs } from "@mantine/core"
+import { Box, LoadingOverlay, Tabs } from "@mantine/core"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
+import { PageTitle } from "@/app/(core)/_components/PageTitle"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { REWARD_VIEW_URL } from "@/app/(core)/endpoints"
@@ -66,9 +67,7 @@ export const RewardEdit = () => {
       <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
       {/* ヘッダー */}
-      <Group justify="space-between" mb="md">
-        <Text size="xl" fw={700}>定額報酬の編集</Text>
-      </Group>
+      <PageTitle title="定額報酬の編集" />
 
       {/* タブ切り替え */}
       <ScrollableTabs

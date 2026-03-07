@@ -52,7 +52,6 @@ read_file: .github/skills/child-management-api/SKILL.md
 3. `coding-standards`、`architecture-guide`、`database-operations` を参照
 4. 実装を行う
 5. 変更内容に基づいてスキルを更新（必要に応じて）
-6. 音声で完了報告
 
 ### 機能説明時
 1. 説明対象を特定（フォーム構造、バリデーション、アイコン選択、API連携）
@@ -66,7 +65,6 @@ read_file: .github/skills/child-management-api/SKILL.md
 3. スキルに記載されている情報と実際の構造を比較
 4. 差分を特定
 5. スキルを更新
-6. 音声で完了報告
 
 ## 画面の基本情報
 
@@ -128,13 +126,6 @@ export const CHILD_API_URL = (childId: string) => `${CHILDREN_API_URL}/${childId
 3. API呼び出し（POST /api/children または PUT /api/children/[id]）
 4. 成功時: メンバー一覧画面へ遷移
 5. エラー時: エラーメッセージ表示
-
-## タスク完了時の音声通知（必須）
-
-すべてのタスク完了時に音声で報告する：
-```
-mcp_yomiage_speak(text="{完了内容}")
-```
 
 ## 制約
 

@@ -8,6 +8,7 @@ import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { useTabAutoScroll, useTabHorizontalScroll } from "@/app/(core)/_hooks/useTabScrollControl"
+import { PageTitle } from "@/app/(core)/_components/PageTitle"
 
 /** 有効なタブ値の一覧 */
 const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
@@ -61,6 +62,9 @@ export function GuestQuestsScreen() {
 
   return (
       <>
+    {/* ページタイトル */}
+    <PageTitle title="クエスト一覧" />
+
     <Tabs variant="pills" value={tabValue} onChange={setTabValue} color={
       tabValue == 'public' ? "rgb(96 165 250)" :
       tabValue == 'family' ? "rgb(74, 222, 128)" :

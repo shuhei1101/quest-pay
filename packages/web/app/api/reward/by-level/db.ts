@@ -30,7 +30,7 @@ export const insertDefaultLevelRewards = async ({
   }
 }
 
-/** レベル別報酬を更新する */
+/** レベル別報酬を更新または挿入する（UPSERT） */
 export const updateLevelReward = async ({
   db,
   levelRewardTableId,
@@ -45,9 +45,10 @@ export const updateLevelReward = async ({
   type?: typeof levelRewardTableType.enumValues[number]
 }) => {
   try {
-    await db
-      .update(rewardByLevels)
-      .set({ amount })
+    // 既存のレコードを確認
+    const existing = await db
+      .select()
+      .from(rewardByLevels)
       .where(
         and(
           eq(rewardByLevels.type, type),
@@ -55,6 +56,31 @@ export const updateLevelReward = async ({
           eq(rewardByLevels.level, level)
         )
       )
+      .limit(1)
+
+    if (existing.length > 0) {
+      // UPDATEを実行
+      await db
+        .update(rewardByLevels)
+        .set({ amount })
+        .where(
+          and(
+            eq(rewardByLevels.type, type),
+            eq(rewardByLevels.levelRewardTableId, levelRewardTableId),
+            eq(rewardByLevels.level, level)
+          )
+        )
+    } else {
+      // INSERTを実行
+      await db
+        .insert(rewardByLevels)
+        .values({
+          type,
+          levelRewardTableId,
+          level,
+          amount
+        })
+    }
   } catch (error) {
     devLog("updateLevelReward error:", error)
     throw new DatabaseError("レベル別報酬の更新に失敗しました。")

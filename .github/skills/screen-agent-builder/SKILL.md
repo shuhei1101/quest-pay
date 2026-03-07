@@ -288,7 +288,7 @@ app/(app)/quests/_components/
    - `app-shell-structure-skill`
    - `app-shell-components-skill`
 
-9. **common-components-agent** (共通コンポーネント)
+9. **components-agent** (共通コンポーネント)
    - `common-components-catalog-skill`
    - `common-components-usage-skill`
 
