@@ -2,14 +2,17 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchChild, fetchChildQuestStats } from "../query"
+import { fetchChild, fetchChildQuestStats, fetchChildRewardStats, fetchChildFixedReward } from "../query"
 import { fetchUserInfoByUserId } from "../../users/query"
+import { calculateAge } from "@/app/(core)/util"
 
 
 /** 子供を取得する */
 export type GetChildResponse = {
   child: Awaited<ReturnType<typeof fetchChild>>
   questStats: Awaited<ReturnType<typeof fetchChildQuestStats>>
+  rewardStats: Awaited<ReturnType<typeof fetchChildRewardStats>>
+  fixedReward: Awaited<ReturnType<typeof fetchChildFixedReward>>
 }
 export async function GET(
   req: NextRequest,
@@ -38,6 +41,21 @@ export async function GET(
     // クエスト統計を取得する
     const questStats = await fetchChildQuestStats({db, childId})
 
-    return NextResponse.json({child: data, questStats} as GetChildResponse)
+    // 報酬統計を取得する
+    const rewardStats = await fetchChildRewardStats({db, childId})
+
+    // 年齢を計算する
+    const age = calculateAge(data.profiles?.birthday)
+    const level = data.children?.currentLevel ?? 1
+
+    // 定額報酬を取得する
+    const fixedReward = await fetchChildFixedReward({db, childId, age, level})
+
+    return NextResponse.json({
+      child: data, 
+      questStats,
+      rewardStats,
+      fixedReward
+    } as GetChildResponse)
   })
 }

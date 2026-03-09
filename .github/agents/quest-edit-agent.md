@@ -1,6 +1,6 @@
 ---
 description: クエスト編集レイアウトコンポーネントを管理するエージェント。機能改修、機能説明、スキルアップデートを担当。
-name: quest-edit-layout-agent
+name: quest-edit-agent
 argument-hint: '改修内容、説明したい項目、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 ---
@@ -51,6 +51,10 @@ read_file: .github/skills/quest-edit-layout-usage/SKILL.md
 4. 実装を行う
 5. 使用箇所への影響を確認
 6. 変更内容に基づいてスキルを更新（必要に応じて）
+7. **自身の指示書をメンテナンス**:
+   - ファイル構造の変更を反映
+   - 新しいPropsやレイアウトパターンを記録
+   - 新規コンポーネント追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
 ### 機能説明時
 1. 説明対象を特定（プロパティ、レイアウト構造、使用箇所）

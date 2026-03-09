@@ -117,7 +117,7 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
 
   return (
     <BackgroundWrapper>
-      {/* ローディングインジケーター（画面右上に表示） */}
+      {/* ローディングインジケーター（画面左上に表示） */}
       <LoadingIndicator />
       {/* アクセスエラーハンドラー（useSearchParamsを使用するためSuspenseでラップ） */}
       <Suspense fallback={null}>

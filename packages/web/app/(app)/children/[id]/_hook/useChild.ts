@@ -23,6 +23,8 @@ export const useChild = ({childId}: {childId: string}) => {
   return {
     child: data?.child,
     questStats: data?.questStats,
+    rewardStats: data?.rewardStats,
+    fixedReward: data?.fixedReward,
     isLoading
   }
 }

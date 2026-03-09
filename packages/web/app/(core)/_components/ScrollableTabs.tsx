@@ -2,6 +2,7 @@
 import { Tabs } from "@mantine/core"
 import { ReactNode, useRef, useEffect } from "react"
 import { useSystemTheme } from "../useSystemTheme"
+import { useSwipeable } from "react-swipeable"
 
 /** スクロール可能なタブアイテムの型 */
 export type ScrollableTabItem = {
@@ -34,6 +35,35 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
 
   /** スクロール時の余白（ピクセル） */
   const SCROLL_MARGIN = 16
+
+  /** スワイプで次のタブに移動 */
+  const handleSwipeLeft = () => {
+    if (!activeTab) return
+
+    const currentIndex = tabs.findIndex((tab) => tab.value === activeTab)
+    if (currentIndex < tabs.length - 1) {
+      onChange(tabs[currentIndex + 1].value)
+    }
+  }
+
+  /** スワイプで前のタブに移動 */
+  const handleSwipeRight = () => {
+    if (!activeTab) return
+
+    const currentIndex = tabs.findIndex((tab) => tab.value === activeTab)
+    if (currentIndex > 0) {
+      onChange(tabs[currentIndex - 1].value)
+    }
+  }
+
+  /** スワイプハンドラを設定 */
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: handleSwipeLeft,
+    onSwipedRight: handleSwipeRight,
+    trackMouse: false, // マウスでのスワイプは無効化
+    preventScrollOnSwipe: false, // 縦スクロールとの共存を許可
+    delta: 30 // スワイプと判定する最小距離（ピクセル）- より反応良く調整
+  })
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */
   useEffect(() => {
@@ -114,8 +144,17 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
         </div>
       </Tabs.List>
       
-      {/* タブパネルコンテンツ */}
-      {children}
+      {/* タブパネルコンテンツ（スワイプ対応） */}
+      <div 
+        {...swipeHandlers}
+        style={{
+          touchAction: "pan-y", // 縦スクロールは許可、横スクロールでスワイプ検出
+          WebkitUserSelect: "none", // iOS Safari対応
+          userSelect: "none", // テキスト選択を防止してスワイプを優先
+        }}
+      >
+        {children}
+      </div>
     </Tabs>
   )
 }

@@ -51,6 +51,10 @@ read_file: .github/skills/common-components-usage/SKILL.md
 3. `coding-standards`、`architecture-guide` を参照
 4. 実装を行う（既存コンポーネントの拡張 or 新規作成）
 5. 変更内容に基づいてスキルを更新（必要に応じて）
+6. **自身の指示書をメンテナンス**:
+   - ファイル構造の変更を反映
+   - 新しいコンポーネントやPropsを記録
+   - 新規コンポーネントカテゴリ追加時は専用スキルを作成（`@repo-architect`や`skill-creator`に依頼）
 
 ### 機能説明時
 1. 説明対象のコンポーネントを特定

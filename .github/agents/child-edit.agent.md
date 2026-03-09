@@ -52,6 +52,10 @@ read_file: .github/skills/child-management-api/SKILL.md
 3. `coding-standards`、`architecture-guide`、`database-operations` を参照
 4. 実装を行う
 5. 変更内容に基づいてスキルを更新（必要に応じて）
+6. **自身の指示書をメンテナンス**:
+   - ファイル構造の変更を反映
+   - 新しいエンドポイントやパスを記録
+   - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
 ### 機能説明時
 1. 説明対象を特定（フォーム構造、バリデーション、アイコン選択、API連携）

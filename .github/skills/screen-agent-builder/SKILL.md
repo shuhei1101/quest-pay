@@ -269,11 +269,11 @@ app/(app)/quests/_components/
    - `child-quest-api-skill`
 
 #### レイアウト関連
-5. **quest-list-layout-agent** (クエスト一覧レイアウト)
+5. **quest-list-agent** (クエスト一覧レイアウト)
    - `quest-list-layout-structure-skill`
    - `quest-list-layout-usage-skill`
 
-6. **quest-edit-layout-agent** (クエスト詳細レイアウト)
+6. **quest-edit-agent** (クエスト詳細レイアウト)
    - `quest-edit-layout-structure-skill`
    - `quest-edit-layout-usage-skill`
 

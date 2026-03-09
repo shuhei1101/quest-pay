@@ -6,6 +6,7 @@ import { useChildren } from "@/app/(app)/children/_hook/useChildren"
 import { useParents } from "@/app/(app)/parents/_hook/useParents"
 import { ParentCardLayout } from "@/app/(app)/parents/_components/ParentCardLayout"
 import { FAMILIES_MEMBERS_CHILD_VIEW_URL, FAMILIES_MEMBERS_PARENT_VIEW_URL } from "@/app/(core)/endpoints"
+import { PageTitle } from "@/app/(core)/_components/PageTitle"
 
 export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
   const router = useRouter() 
@@ -16,7 +17,11 @@ export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
   const { children, questStats } = useChildren()
 
   return (
-    <Card shadow="sm" padding="sm" radius="md" withBorder style={{ height: "100%" }}>
+    <>
+      {/* ページタイトル */}
+      <PageTitle title="家族メンバー" />
+      
+      <Card shadow="sm" padding="sm" radius="md" withBorder style={{ height: "100%" }}>
       <Stack gap={4}>
         {/* 親セクション */}
         <Text size="xs" fw={600} c="dimmed" px="xs" py={4}>親</Text>
@@ -48,5 +53,6 @@ export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
         ))}
       </Stack>
     </Card>
+    </>
   )
 }

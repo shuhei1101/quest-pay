@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useTheme } from "../_theme/useTheme"
 import { FABChildItem, FAB_SPACING } from "./FABChildItem"
 import { useRouter } from "next/navigation"
+import { useWindow } from "../useConstants"
 
 /** 展開パターンの種類 */
 export type ExpandPattern = "slide" | "radial-up" | "radial-down" | "radial-left" | "radial-right" | "hybrid-left"
@@ -108,6 +109,8 @@ export const FloatingActionButton = ({
   const router = useRouter()
   /** テーマ情報 */
   const { colors: themeColors } = useTheme()
+  /** デバイス判定 */
+  const { isMobile } = useWindow()
 
   /** 戻るボタンを含めた最終的なアイテム配列を作成する */
   const finalItems = (() => {
@@ -116,7 +119,7 @@ export const FloatingActionButton = ({
       return items
     }
     
-    // 戻るボタンを最初に追加
+    // 戻るボタンを作成
     const backButton: FloatingActionItem = {
       icon: <IconArrowLeft size={20} />,
       label: "戻る",
@@ -124,6 +127,7 @@ export const FloatingActionButton = ({
       color: "gray",
     }
     
+    // モバイル・PC共に最初に追加（モバイルは上方向、PCは左方向の左端）
     return [backButton, ...items]
   })()
 
@@ -194,9 +198,9 @@ export const FloatingActionButton = ({
       }}
     >
       {isHybridLeftPattern ? (
-        /* hybrid-leftパターン: 最初のアイテムは上、残りは左にスライド */
+        /* hybrid-leftパターン: モバイルは最初のアイテムを上、PCはすべて左にスライド */
         <>
-          {/* 残りのアイテムを左にスライド配置 */}
+          {/* 左にスライド配置するアイテム */}
           <div
             style={{
               display: "flex",
@@ -221,11 +225,17 @@ export const FloatingActionButton = ({
                     height: FAB_SPACING.mainButtonSize,
                   }}
                 >
-                  {[...finalItems.slice(1)].reverse().map((item, index) => {
-                    const originalIndex = finalItems.length - 1 - index
-                    return (
+                  {/* モバイルの場合：2番目以降を左に配置、PCの場合：すべてを左に配置 */}
+                  {(() => {
+                    const itemsToDisplay = isMobile ? finalItems.slice(1) : finalItems
+                    // PCの場合：戻るボタン(最初の要素)を先頭に、残りを逆順で配置
+                    const orderedItems = isMobile 
+                      ? [...itemsToDisplay].reverse()
+                      : [itemsToDisplay[0], ...[...itemsToDisplay.slice(1)].reverse()]
+                    
+                    return orderedItems.map((item, index) => (
                       <FABChildItem
-                        key={originalIndex}
+                        key={index}
                         icon={item.icon}
                         label={item.label}
                         onClick={() => handleItemClick(item)}
@@ -234,8 +244,8 @@ export const FloatingActionButton = ({
                         opacity={themeColors.fab.opacity.inactive}
                         border={`${themeColors.fab.border.inactiveWidth} solid transparent`}
                       />
-                    )
-                  })}
+                    ))
+                  })()}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -252,9 +262,9 @@ export const FloatingActionButton = ({
                 height: FAB_SPACING.mainButtonSize,
               }}
             >
-              {/* 最初のアイテム(戻るボタン)を上に配置 */}
+              {/* モバイルの場合のみ、最初のアイテム(戻るボタン)を上に配置 */}
               <AnimatePresence>
-                {actualOpen && finalItems.length > 0 && (
+                {actualOpen && isMobile && finalItems.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

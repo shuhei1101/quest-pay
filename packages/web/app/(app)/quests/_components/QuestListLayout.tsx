@@ -32,6 +32,9 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
   onFilterOpen,
   onSortOpen,
   onCategoryChange,
+  filterCount = 0,
+  sortCount = 0,
+  searchText = "",
 }: {
   /** 表示するクエスト一覧 */
   quests: T[]
@@ -65,6 +68,12 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
   onSortOpen: () => void
   /** カテゴリ変更時のハンドル */
   onCategoryChange: (categoryId: string | undefined) => void
+  /** フィルター適用数 */
+  filterCount?: number
+  /** ソート適用数 */
+  sortCount?: number
+  /** 検索テキスト */
+  searchText?: string
 }) => {
   /** タブ状態 */
   const [tabValue, setTabValue] = useState<string | null>(TAB_ALL)
@@ -150,8 +159,12 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
         {/* 検索バー */}
         <QuestSearchBar
           onSearch={handleSearchWithText}
+          onSearchTextChange={onSearchTextChange}
           onFilterClick={onFilterOpen}
           onSortClick={onSortOpen}
+          value={searchText}
+          filterCount={filterCount}
+          sortCount={sortCount}
         />
 
         <div className="m-3" />

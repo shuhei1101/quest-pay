@@ -241,6 +241,10 @@ const [selectedLevel, setSelectedLevel] = useState<number>(1)
 2. 変更内容の説明
 3. コード実装
 4. 動作確認方法の提示
+5. **自身の指示書をメンテナンス**:
+   - ファイル構造の変更を反映
+   - 新しいエンドポイントやパスを記録
+   - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
 ### 機能説明時
 1. 概要説明（何のための機能か）

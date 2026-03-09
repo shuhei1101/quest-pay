@@ -130,8 +130,46 @@ import { IconEdit } from '@tabler/icons-react'
 
 ## ローディング関連コンポーネント
 
+### NavigationButton
+画面遷移時に自動的にローディング状態を管理するボタン。クリック時に`useRouter().push()`で遷移し、ローディングを開始する。
+
+**Props:**
+```typescript
+type NavigationButtonProps = Omit<ButtonProps, "onClick"> & {
+  href: string  // 遷移先のURL
+  ignoreLoading?: boolean  // ローディング状態を無視する（デフォルト: false）
+}
+```
+
+**使用例:**
+```typescript
+import { NavigationButton } from '@/app/(core)/_components/NavigationButton'
+
+// 基本的な使用
+<NavigationButton href="/quests/123">
+  クエスト詳細を見る
+</NavigationButton>
+
+// Mantineのボタンプロパティも使用可能
+<NavigationButton 
+  href="/families/456/edit"
+  variant="outline"
+  leftSection={<IconEdit size={16} />}
+  fullWidth
+>
+  編集
+</NavigationButton>
+```
+
+**動作:**
+1. クリック時に`startLoading()`を自動実行
+2. `useRouter().push(href)`で画面遷移
+3. 画面左上にLoadingIndicatorが表示される
+4. 遷移先の`ScreenWrapper`がマウントされると自動的に停止
+5. 3秒経過しても停止しない場合はタイムアウトで自動停止
+
 ### LoadingButton
-画面遷移時に自動的にローディング状態を開始するボタン。ローディング中は押せないようにdisabledになる。
+API呼び出しなど非同期処理時に自動的にローディング状態を開始するボタン。ローディング中は押せないようにdisabledになる。
 
 **Props:**
 ```typescript
@@ -144,17 +182,22 @@ type LoadingButtonProps = ButtonProps & {
 **使用例:**
 ```typescript
 import { LoadingButton } from '@/app/(core)/_components/LoadingButton'
-import { useRouter } from 'next/navigation'
+import { useLoadingContext } from '@/app/(core)/_components/LoadingContext'
 
 const MyComponent = () => {
-  const router = useRouter()
+  const { stopLoading } = useLoadingContext()
+  
+  const handleSubmit = async () => {
+    try {
+      await submitForm()
+    } finally {
+      stopLoading()
+    }
+  }
   
   return (
-    <LoadingButton 
-      onClick={() => router.push('/quests')}
-      color="blue"
-    >
-      クエスト一覧へ
+    <LoadingButton onClick={handleSubmit}>
+      送信
     </LoadingButton>
   )
 }
@@ -162,9 +205,13 @@ const MyComponent = () => {
 
 **動作:**
 1. クリック時に`startLoading()`を自動実行
-2. 画面右上にLoadingIndicatorが表示される
-3. 遷移先の`ScreenWrapper`がマウントされると自動的に停止
+2. 画面左上にLoadingIndicatorが表示される
+3. 手動で`stopLoading()`を呼び出すまで継続
 4. 3秒経過しても停止しない場合はタイムアウトで自動停止
+
+**NavigationButtonとの使い分け:**
+- **NavigationButton**: 画面遷移時に使用（hrefを指定）
+- **LoadingButton**: API呼び出しなど非遷移処理時に使用（onClickを定義）
 
 ### ScreenWrapper
 画面コンポーネント用のラッパー。画面遷移完了を検知してローディングを停止する。

@@ -163,6 +163,20 @@ const FamilyQuestListComponent = () => {
     />
   ), [closeSort, handleSortSearch, sortOpened, sort])
 
+  /** フィルター適用数を計算する */
+  const filterCount = useMemo(() => {
+    let count = 0
+    if (searchFilter.name && searchFilter.name.trim() !== '') count++
+    if (searchFilter.tags && searchFilter.tags.length > 0) count += searchFilter.tags.length
+    if (searchFilter.categoryId) count++
+    return count
+  }, [searchFilter])
+
+  /** ソート適用数を計算する（デフォルトはid, asc） */
+  const sortCount = useMemo(() => {
+    return (sort.column !== 'id' || sort.order !== 'asc') ? 1 : 0
+  }, [sort])
+
   return (
     <QuestListLayout<FamilyQuest, FamilyQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -181,6 +195,9 @@ const FamilyQuestListComponent = () => {
       onCategoryChange={handleCategoryChange}
       filterPopup={filterPopup}
       sortPopup={sortPopup}
+      filterCount={filterCount}
+      sortCount={sortCount}
+      searchText={questFilter.name ?? ""}
     />
   )
 }

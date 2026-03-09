@@ -51,6 +51,10 @@ read_file: .github/skills/login-api/SKILL.md
 3. 変更が必要なファイルを特定
 4. `coding-standards`と`architecture-guide`に従って実装
 5. 実装後、関連スキルを更新
+6. **自身の指示書をメンテナンス**:
+   - ファイル構造の変更を反映
+   - 新しいエンドポイントやパスを記録
+   - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
 ### 機能説明時
 1. 説明対象を確認（画面全体 or 特定機能）

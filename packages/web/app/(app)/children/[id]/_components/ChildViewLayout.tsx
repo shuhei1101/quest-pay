@@ -60,12 +60,16 @@ const calculateGrade = (birthday: string | null | undefined): string | null => {
 export const ChildViewLayout = ({
   child,
   questStats,
+  rewardStats,
+  fixedReward,
   onSavingsClick,
   onFixedRewardClick,
   onFixedRewardEditClick,
 }: {
   child: Child | undefined
   questStats?: { inProgressCount: number; completedCount: number }
+  rewardStats?: { totalReward: number; monthlyReward: number }
+  fixedReward?: { ageReward: number | null; levelReward: number | null; totalFixedReward: number }
   onSavingsClick?: () => void
   onFixedRewardClick?: () => void
   onFixedRewardEditClick?: () => void
@@ -107,15 +111,13 @@ export const ChildViewLayout = ({
   // 経験値のパーセンテージを計算
   const expPercentage = nextLevelExp > 0 ? (currentExp / nextLevelExp) * 100 : 0
   
-  // 合計報酬額を計算する（TODO: 実際のAPIデータに置き換える）
-  const totalReward = 10000
+  // 実際のデータを使用（未設定の場合は0）
+  const totalReward = rewardStats?.totalReward ?? 0
+  const monthlyReward = rewardStats?.monthlyReward ?? 0
+  const totalFixedReward = fixedReward?.totalFixedReward ?? 0
   
-  // 定額報酬を取得する（TODO: 実際のAPIデータに置き換える）
-  const fixedReward = 1900
-  
-  // 今月の報酬を取得する（TODO: 実際のAPIデータに置き換える）
-  const monthlyReward = 3000
-  const monthlyRewardDate = "2024/6/30"
+  // 支払い予定日を計算（次月末）
+  const nextMonthEnd = dayjs().add(1, 'month').endOf('month').format('YYYY/M/D')
 
   return (
     <Box>
@@ -257,7 +259,7 @@ export const ChildViewLayout = ({
                 <IconWallet size={24} color="#F57C00" />
                 <Text fw={600}>今月の報酬</Text>
               </Group>
-              <Text size="xs" c="dimmed">支払い日: {monthlyRewardDate}</Text>
+              <Text size="xs" c="dimmed">支払い日: {nextMonthEnd}</Text>
             </Group>
             <Text size="2.5rem" fw={700} c="#F57C00">{monthlyReward.toLocaleString()}円</Text>
           </Card>
@@ -281,7 +283,7 @@ export const ChildViewLayout = ({
                 </Box>
               )}
               <Text size="xs" c="dimmed" mb="xs">定額報酬</Text>
-              <Text size="lg" fw={700} c="#6A1B9A">{fixedReward.toLocaleString()}円/月</Text>
+              <Text size="lg" fw={700} c="#6A1B9A">{totalFixedReward.toLocaleString()}円/月</Text>
             </Card>
             <Card 
               padding="sm" 

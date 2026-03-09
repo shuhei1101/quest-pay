@@ -9,6 +9,8 @@ import { CHILD_REWARDS_HISTORIES_URL, CHILD_REWARD_VIEW_URL, CHILD_REWARD_URL, F
 import { useDisclosure } from "@mantine/hooks"
 import { InviteCodePopup } from "@/app/(core)/_components/InviteCodePopup"
 import { ChildViewLayout } from "./ChildViewLayout"
+import { PageTitle } from "@/app/(core)/_components/PageTitle"
+import { useWindow } from "@/app/(core)/useConstants"
 // dayjs のロケールを日本語に設定
 dayjs.locale('ja')
 
@@ -17,12 +19,13 @@ export const ChildView = ( params: {
   id: string
 }) => {
   const router = useRouter()
+  const { isMobile } = useWindow()
 
   /** 子供ID */
   const id = params.id
 
   /** 子供情報 */
-  const { child, questStats, isLoading } = useChild({childId: id})
+  const { child, questStats, rewardStats, fixedReward, isLoading } = useChild({childId: id})
 
   /** 招待コードポップアップの状態 */
   const [inviteCodeOpened, { open: openInviteCode, close: closeInviteCode }] = useDisclosure(false)
@@ -38,6 +41,9 @@ export const ChildView = ( params: {
 
   return (
     <>
+      {/* ページタイトル（モバイル時のみ表示） */}
+      {isMobile && <PageTitle title="子供情報" />}
+      
       <Box pos="relative">
         {/* ロード中のオーバーレイ */}
         <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
@@ -59,6 +65,8 @@ export const ChildView = ( params: {
         <ChildViewLayout
           child={child}
           questStats={questStats}
+          rewardStats={rewardStats}
+          fixedReward={fixedReward}
           onSavingsClick={() => router.push(CHILD_REWARDS_HISTORIES_URL(id))}
           onFixedRewardClick={() => router.push(CHILD_REWARD_VIEW_URL(id))}
           onFixedRewardEditClick={() => router.push(CHILD_REWARD_URL(id))}

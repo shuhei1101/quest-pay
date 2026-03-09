@@ -3,7 +3,7 @@
 import { Loader, Box } from "@mantine/core"
 import { useLoadingContext } from "./LoadingContext"
 
-/** 画面右上に表示されるローディングインジケーター */
+/** 画面左上に表示されるローディングインジケーター */
 export const LoadingIndicator = () => {
   const { isLoading } = useLoadingContext()
 
@@ -14,7 +14,7 @@ export const LoadingIndicator = () => {
       style={{
         position: "fixed",
         top: 16,
-        right: 16,
+        left: 16,
         zIndex: 9999,
         display: "flex",
         alignItems: "center",
