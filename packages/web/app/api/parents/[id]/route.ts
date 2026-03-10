@@ -3,12 +3,16 @@ import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchUserInfoByUserId } from "../../users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { fetchParent } from "../query"
+import { fetchParent, fetchParentStats } from "../query"
 
 
 /** 家族の親を取得する */
 export type GetParentResponse = {
   parent: Awaited<ReturnType<typeof fetchParent>>
+  stats?: {
+    approvedCount: number
+    rejectedCount: number
+  }
 }
 export async function GET(
   req: NextRequest,
@@ -34,6 +38,13 @@ export async function GET(
       // 家族IDが一致しない場合
       if (userInfo.profiles.familyId !== data.profiles?.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
   
-      return NextResponse.json({parent: data} as GetParentResponse)
+      // 親の統計情報を取得する
+      const stats = await fetchParentStats({
+        db, 
+        profileId: data.profiles?.id ?? "",
+        familyId: userInfo.profiles.familyId
+      })
+
+      return NextResponse.json({parent: data, stats} as GetParentResponse)
     })
 }

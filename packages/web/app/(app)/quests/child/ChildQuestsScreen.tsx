@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { FAMILY_QUEST_NEW_URL, LOGIN_URL } from "@/app/(core)/endpoints"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { ChildQuestList } from "./_components/ChildQuestList"
-import { PageTitle } from "@/app/(core)/_components/PageTitle"
+import { PageHeader } from "@/app/(core)/_components/PageHeader"
 
 export function ChildQuestsScreen() {
   const router = useRouter()
@@ -18,7 +18,7 @@ export function ChildQuestsScreen() {
   return (
     <>
       {/* ページタイトル */}
-      <PageTitle title="マイクエスト" />
+      <PageHeader title="マイクエスト" />
 
       {/* 子供クエストリスト */}
       <ChildQuestList />

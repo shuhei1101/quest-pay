@@ -6,7 +6,7 @@ import { useChildren } from "@/app/(app)/children/_hook/useChildren"
 import { useParents } from "@/app/(app)/parents/_hook/useParents"
 import { ParentCardLayout } from "@/app/(app)/parents/_components/ParentCardLayout"
 import { FAMILIES_MEMBERS_CHILD_VIEW_URL, FAMILIES_MEMBERS_PARENT_VIEW_URL } from "@/app/(core)/endpoints"
-import { PageTitle } from "@/app/(core)/_components/PageTitle"
+import { PageHeader } from "@/app/(core)/_components/PageHeader"
 
 export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
   const router = useRouter() 
@@ -19,7 +19,7 @@ export const FamilyMemberList = ({selectedId}: {selectedId: string | null}) => {
   return (
     <>
       {/* ページタイトル */}
-      <PageTitle title="家族メンバー" />
+      <PageHeader title="家族メンバー" />
       
       <Card shadow="sm" padding="sm" radius="md" withBorder style={{ height: "100%" }}>
       <Stack gap={4}>

@@ -1,9 +1,8 @@
 "use client"
-import { IconMenu, IconArrowLeft } from "@tabler/icons-react"
+import { IconMenu } from "@tabler/icons-react"
 import { FloatingActionButton, FloatingActionItem } from "./FloatingActionButton"
 import { useWindow } from "../useConstants"
-import { useRouter } from "next/navigation"
-import { useMemo, useCallback } from "react"
+import { useCallback } from "react"
 import { useFABContext } from "./FABContext"
 
 /** サブメニューFABを表示する */
@@ -12,7 +11,6 @@ export const SubMenuFAB = ({
   open,
   onToggle,
   defaultOpen = false,
-  addBackButton = true,
   pattern,
 }: {
   /** 展開するアクションアイテムの配列 */
@@ -23,13 +21,10 @@ export const SubMenuFAB = ({
   onToggle?: (open: boolean) => void
   /** デフォルトで展開状態にするか */
   defaultOpen?: boolean
-  /** 戻るボタンを配列の最初に自動追加するか（デフォルトtrue） */
-  addBackButton?: boolean
   /** 展開パターン（デフォルトは"hybrid-left"） */
   pattern?: "slide" | "radial-up" | "radial-left" | "hybrid-left"
 }) => {
   const { isMobile } = useWindow()
-  const router = useRouter()
   const { openFab, closeFab, isOpen } = useFABContext()
 
   /** FABContextを使った状態管理（外部制御されていない場合） */
@@ -55,20 +50,6 @@ export const SubMenuFAB = ({
     onToggle?.(willOpen)
   }, [closeFab, openFab, onToggle, open])
 
-  /** 戻るボタンを含むアイテム配列を生成 */
-  const finalItems = useMemo(() => {
-    if (!addBackButton) return items
-
-    const backButtonItem: FloatingActionItem = {
-      icon: <IconArrowLeft size={20} />,
-      label: "戻る",
-      onClick: () => router.back(),
-      color: "lime",
-    }
-
-    return [backButtonItem, ...items]
-  }, [addBackButton, items, router])
-
   return (
     <div
       style={{
@@ -79,13 +60,12 @@ export const SubMenuFAB = ({
       }}
     >
       <FloatingActionButton
-        items={finalItems}
+        items={items}
         pattern={pattern ?? "hybrid-left"}
         open={finalOpen}
         onToggle={handleToggle}
         defaultOpen={defaultOpen}
         mainIcon={<IconMenu size={24} />}
-        showBackButton={false}
       />
     </div>
   )

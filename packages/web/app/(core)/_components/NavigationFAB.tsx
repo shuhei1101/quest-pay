@@ -42,7 +42,6 @@ export const NavigationFAB = ({
         onToggle={onToggle}
         defaultOpen={defaultOpen}
         mainIcon={<IconApps size={24} />}
-        showBackButton={false}
       />
     </div>
   )

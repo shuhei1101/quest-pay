@@ -2,7 +2,7 @@
 
 import { Paper, Tabs, Text, Button, Badge } from "@mantine/core"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
-import { PageTitle } from "@/app/(core)/_components/PageTitle"
+import { PageHeader } from "@/app/(core)/_components/PageHeader"
 import { useState } from "react"
 import { useWindow } from "@/app/(core)/useConstants"
 import dayjs from "dayjs"
@@ -91,7 +91,7 @@ export const RewardHistoryLayout = ({
   return (
     <div className="flex flex-col h-full p-4 gap-4">
       {/* ヘッダー */}
-      <PageTitle title={`${childName}のお小遣い管理`} />
+      <PageHeader title={`${childName}のお小遣い管理`} />
 
       {/* 月タブ */}
       <div>

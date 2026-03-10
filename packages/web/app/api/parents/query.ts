@@ -1,8 +1,8 @@
 import { devLog } from "@/app/(core)/util"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
-import { icons, parents, profiles } from "@/drizzle/schema"
-import { eq } from "drizzle-orm"
+import { icons, parents, profiles, questChildren } from "@/drizzle/schema"
+import { eq, and, sql, count } from "drizzle-orm"
 
 export type Parents = Parent[]
 
@@ -50,5 +50,53 @@ export const fetchParent = async ({ db, parentId }: {
   } catch (error) {
     devLog("fetchParent.取得例外: ", error)
     throw new QueryError("親情報の読み込みに失敗しました。")
+  }
+}
+
+/** 親の統計情報を取得する */
+export const fetchParentStats = async ({ db, profileId, familyId }: {
+  db: Db,
+  profileId: string,
+  familyId: string
+}) => {
+  try {
+    // 承認した回数：quest_childrenのlastApprovedByがこの親のprofileIdで、statusがcompletedのもの
+    const approvedCountResult = await db
+      .select({ count: count() })
+      .from(questChildren)
+      .where(
+        and(
+          eq(questChildren.lastApprovedBy, profileId),
+          eq(questChildren.status, "completed")
+        )
+      )
+    
+    const approvedCount = approvedCountResult[0]?.count ?? 0
+
+    // 却下した回数：quest_childrenのlastApprovedByがこの親のprofileIdで、
+    // statusがcompletedでないもの（却下されてpending_reviewに戻された or in_progressに戻された）
+    // ただし、lastApprovedByが設定されているということは、親が何らかのアクションをしたことを示す
+    const rejectedCountResult = await db
+      .select({ count: count() })
+      .from(questChildren)
+      .where(
+        and(
+          eq(questChildren.lastApprovedBy, profileId),
+          sql`${questChildren.status} != 'completed'`
+        )
+      )
+    
+    const rejectedCount = rejectedCountResult[0]?.count ?? 0
+
+    devLog("fetchParentStats.承認数: ", approvedCount)
+    devLog("fetchParentStats.却下数: ", rejectedCount)
+
+    return {
+      approvedCount,
+      rejectedCount
+    }
+  } catch (error) {
+    devLog("fetchParentStats.取得例外: ", error)
+    throw new QueryError("親の統計情報の読み込みに失敗しました。")
   }
 }

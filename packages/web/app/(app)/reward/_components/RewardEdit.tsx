@@ -1,11 +1,9 @@
 "use client"
 import { Box, LoadingOverlay, Tabs } from "@mantine/core"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
-import { PageTitle } from "@/app/(core)/_components/PageTitle"
+import { PageHeader } from "@/app/(core)/_components/PageHeader"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { REWARD_VIEW_URL } from "@/app/(core)/endpoints"
-import { IconDeviceFloppy, IconRotate, IconEye } from "@tabler/icons-react"
+import { IconDeviceFloppy, IconRotate } from "@tabler/icons-react"
 import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useAgeRewardForm } from "../by-age/_hooks/useAgeRewardForm"
 import { useLevelRewardForm } from "../by-level/_hooks/useLevelRewardForm"
@@ -20,7 +18,6 @@ import { LevelRewardFormType } from "../by-level/form"
 
 /** 報酬編集画面 */
 export const RewardEdit = () => {
-  const router = useRouter()
   const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState<string | null>("age")
 
@@ -34,7 +31,6 @@ export const RewardEdit = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["ageRewardTable"] })
       toast.success("定額報酬を更新しました")
-      router.push(REWARD_VIEW_URL)
     },
     onError: () => {
       toast.error("定額報酬の更新に失敗しました")
@@ -47,7 +43,6 @@ export const RewardEdit = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["levelRewardTable"] })
       toast.success("ランク報酬を更新しました")
-      router.push(REWARD_VIEW_URL)
     },
     onError: () => {
       toast.error("ランク報酬の更新に失敗しました")
@@ -67,7 +62,7 @@ export const RewardEdit = () => {
       <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
       {/* ヘッダー */}
-      <PageTitle title="定額報酬の編集" />
+      <PageHeader title="定額報酬の編集" />
 
       {/* タブ切り替え */}
       <ScrollableTabs
@@ -123,12 +118,6 @@ export const RewardEdit = () => {
               }
             },
             color: "orange"
-          },
-          {
-            icon: <IconEye size={20} />,
-            label: "閲覧",
-            onClick: () => router.push(REWARD_VIEW_URL),
-            color: "violet"
           }
         ]}
       />

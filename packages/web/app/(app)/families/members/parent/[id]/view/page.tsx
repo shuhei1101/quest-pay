@@ -1,5 +1,6 @@
 import { authGuard } from "@/app/(core)/_auth/authGuard"
 import { QUESTS_URL } from "@/app/(core)/endpoints"
+import { ParentView } from "@/app/(app)/parents/[id]/_components/ParentView"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
@@ -9,7 +10,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      {/* <ParentView id={id} /> */}
+      <ParentView id={id} />
     </>
   )
 }

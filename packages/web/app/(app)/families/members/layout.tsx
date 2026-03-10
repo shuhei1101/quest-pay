@@ -66,7 +66,6 @@ export default function FamilyMembersLayout({ children }: {
         {children}
         <SubMenuFAB
           items={actionItems}
-          addBackButton={false}
         />
       </>
     )
@@ -87,7 +86,6 @@ export default function FamilyMembersLayout({ children }: {
       </div>
       <SubMenuFAB
         items={actionItems}
-        addBackButton={false}
       />
     </>
   )

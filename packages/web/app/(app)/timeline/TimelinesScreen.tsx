@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Loader, Center, Stack, Text } from "@mantine/core"
 import { IconHome2, IconWorld } from "@tabler/icons-react"
 import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
-import { PageTitle } from "@/app/(core)/_components/PageTitle"
+import { PageHeader } from "@/app/(core)/_components/PageHeader"
 import { useFamilyTimelines } from "./_hooks/useFamilyTimelines"
 import { usePublicTimelines } from "./_hooks/usePublicTimelines"
 import { TimelineItem } from "./_components/TimelineItem"
@@ -41,7 +41,7 @@ export const TimelinesScreen = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '100px' }}>
       {/* ヘッダータイトル */}
-      <PageTitle title="タイムライン" />
+      <PageHeader title="タイムライン" />
 
       {/* タブコンポーネント */}
       <ScrollableTabs

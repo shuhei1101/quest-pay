@@ -49,6 +49,8 @@ export const CommentsModalLayout = ({
               { value: "likes", label: "いいね順" },
             ]}
             w={120}
+            clearable={false}
+            allowDeselect={false}
           />
         </Group>
       }

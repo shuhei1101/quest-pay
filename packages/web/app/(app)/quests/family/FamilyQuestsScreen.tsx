@@ -12,7 +12,7 @@ import { FamilyQuestList } from "./_components/FamilyQuestList"
 import { PublicQuestList } from "../public/PublicQuestList"
 import { TemplateQuestList } from "../template/_components/TemplateQuestList"
 import { useTabAutoScroll, useTabHorizontalScroll } from "@/app/(core)/_hooks/useTabScrollControl"
-import { PageTitle } from "@/app/(core)/_components/PageTitle"
+import { PageHeader } from "@/app/(core)/_components/PageHeader"
 
 /** 有効なタブ値の一覧 */
 const VALID_TABS = ['public', 'family', 'penalty', 'template'] as const
@@ -56,7 +56,7 @@ export function FamilyQuestsScreen() {
   return (
     <div className="pb-24">
       {/* ページタイトル */}
-      <PageTitle title="クエスト一覧" />
+      <PageHeader title="クエスト一覧" />
 
       <Tabs variant="pills" value={tabValue} onChange={setTabValue} color={
         tabValue == 'public' ? "rgb(96 165 250)" :
