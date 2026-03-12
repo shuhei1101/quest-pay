@@ -14,7 +14,7 @@ import { NavigationFAB } from '../../(core)/_components/NavigationFAB'
 import { FABProvider, useFABContext } from '../../(core)/_components/FABContext'
 import { LoadingProvider } from '../../(core)/_components/LoadingContext'
 import { LoadingIndicator } from '../../(core)/_components/LoadingIndicator'
-import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUEST_NEW_URL } from '../../(core)/endpoints'
+import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUEST_NEW_URL, FAMILY_QUESTS_URL } from '../../(core)/endpoints'
 import { useLoginUserInfo } from '../../(auth)/login/_hooks/useLoginUserInfo'
 
 /** AppShellコンテンツを取得する */
@@ -56,7 +56,7 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
     {
       icon: <IconClipboard size={20} />,
       label: "クエスト",
-      onClick: () => router.push(QUESTS_URL),
+      onClick: () => router.push(FAMILY_QUESTS_URL),
     },
     ...(isParent ? [{
       icon: <IconUsers size={20} />,

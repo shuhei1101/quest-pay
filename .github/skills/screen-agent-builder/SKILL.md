@@ -147,8 +147,7 @@ description: This skill should be used when creating screen-specific custom agen
    3. `coding-standards`、`architecture-guide` を参照
    4. 実装を行う
    5. 変更内容に基づいてスキルを更新
-   6. 音声で完了報告
-   
+
    ### 機能説明時
    1. 説明対象を特定
    2. 関連するスキルを参照
@@ -159,12 +158,8 @@ description: This skill should be used when creating screen-specific custom agen
    2. 現在のフォルダ構造を確認
    3. 差分を特定
    4. スキルを更新
-   5. 音声で完了報告
    
-   ## タスク完了時の音声通知（必須）
-   
-   すべてのタスク完了時に音声で報告する：
-   ```
+    ```
    mcp_yomiage_speak(text="{完了内容}")
    ```
    
@@ -185,7 +180,6 @@ description: This skill should be used when creating screen-specific custom agen
 2. 関連ディレクトリの現在の構造を確認（`list_dir`、`file_search`）
 3. スキルに記載されているパスと実際の構造を比較
 4. 差分があれば、スキルの内容を更新
-5. 更新内容を音声で報告
 
 ## 画面カテゴリとスキル構成パターン
 

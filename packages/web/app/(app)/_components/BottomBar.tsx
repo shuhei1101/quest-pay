@@ -34,7 +34,7 @@ export const BottomBar = ({isDark, onToggleMenu}: {isDark: boolean, onToggleMenu
         <IconHome2 color={menuColors.home} stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)} aria-label="クエスト">
+      <ActionIcon variant="subtle" onClick={() => router.push(`${QUESTS_URL}?tab=public`)} aria-label="クエスト">
         <IconClipboard color={menuColors.quest} stroke={1.4} />
       </ActionIcon>
       {/* メンバーアイコン（親のみ） */}

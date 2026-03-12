@@ -1,8 +1,9 @@
 "use client"
 
 import { Box, Card, Group, Stack, Text, SimpleGrid, ThemeIcon } from "@mantine/core"
-import { IconCake, IconCalendar, IconChecklist, IconX } from "@tabler/icons-react"
+import { IconCake, IconCalendar, IconChecklist, IconX, IconEdit } from "@tabler/icons-react"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { Parent } from "@/app/api/parents/query"
 import { calculateAge, formatDate } from "@/app/(core)/util"
 import dayjs from 'dayjs'
@@ -15,12 +16,14 @@ dayjs.locale('ja')
 export const ParentViewLayout = ({
   parent,
   stats,
+  onEdit,
 }: {
   parent: Parent | undefined
   stats?: {
     approvedCount: number
     rejectedCount: number
   }
+  onEdit?: () => void
 }) => {
   // 年齢を計算する
   const age = calculateAge(parent?.profiles?.birthday)
@@ -89,6 +92,20 @@ export const ParentViewLayout = ({
             </Box>
           </SimpleGrid>
         </Card>
+      )}
+
+      {/* 編集FAB */}
+      {onEdit && (
+        <SubMenuFAB
+          items={[
+            {
+              icon: <IconEdit size={20} />,
+              label: "編集",
+              onClick: onEdit,
+              color: "violet"
+            }
+          ]}
+        />
       )}
     </Box>
   )

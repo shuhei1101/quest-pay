@@ -1,10 +1,11 @@
 "use client"
 
-import { Paper, Text, Group, Avatar } from "@mantine/core"
+import { Paper, Text, Group, Avatar, ActionIcon } from "@mantine/core"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
-import { FAMILY_VIEW_URL, FAMILIES_MEMBERS_CHILD_VIEW_URL } from "@/app/(core)/endpoints"
+import { FAMILY_VIEW_URL, FAMILIES_MEMBERS_CHILD_VIEW_URL, TEST_URL } from "@/app/(core)/endpoints"
 import { useRouter } from "next/navigation"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { IconFlask } from "@tabler/icons-react"
 
 type PageHeaderProps = {
   /** ページタイトル */
@@ -59,6 +60,16 @@ export const PageHeader = ({
         <Text size="xl" fw={700}>{title}</Text>
         <Group gap="xs">
           {rightSection && <div>{rightSection}</div>}
+          {/* モック画面一覧へのリンクボタン */}
+          <ActionIcon
+            onClick={() => router.push(TEST_URL)}
+            size="lg"
+            variant="subtle"
+            aria-label="モック画面一覧"
+            title="モック画面一覧"
+          >
+            <IconFlask size={24} />
+          </ActionIcon>
           {shouldShowProfileButton && (
             <Avatar 
               onClick={handleProfileClick} 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
-import { upvoteComment, removeCommentVote } from "../../service"
+import { upvoteComment, removeCommentVote, getCommentById } from "../../service"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 
@@ -21,6 +21,17 @@ export async function POST(
     // 親ユーザのみ許可する
     if (userInfo.profiles.type !== "parent") {
       throw new ServerError("親ユーザのみ評価できます。")
+    }
+
+    // コメント情報を取得する
+    const comment = await getCommentById({ commentId, db })
+    if (!comment) {
+      throw new ServerError("コメントが見つかりません。")
+    }
+
+    // 自分のコメントには評価できない
+    if (comment.profileId === userInfo.profiles.id) {
+      throw new ServerError("自分のコメントには評価できません。")
     }
 
     // 高評価を付ける

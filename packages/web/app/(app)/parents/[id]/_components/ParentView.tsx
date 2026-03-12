@@ -9,6 +9,8 @@ import { InviteCodePopup } from "@/app/(core)/_components/InviteCodePopup"
 import { ParentViewLayout } from "./ParentViewLayout"
 import { PageHeader } from "@/app/(core)/_components/PageHeader"
 import { useWindow } from "@/app/(core)/useConstants"
+import { useRouter } from "next/navigation"
+import { FAMILIES_MEMBERS_PARENT_EDIT_URL } from "@/app/(core)/endpoints"
 
 // dayjs のロケールを日本語に設定
 dayjs.locale('ja')
@@ -17,6 +19,7 @@ dayjs.locale('ja')
 export const ParentView = ( params: {
   id: string
 }) => {
+  const router = useRouter()
   const { isMobile } = useWindow()
 
   /** 親ID */
@@ -63,6 +66,7 @@ export const ParentView = ( params: {
         <ParentViewLayout
           parent={parent}
           stats={stats}
+          onEdit={() => router.push(FAMILIES_MEMBERS_PARENT_EDIT_URL(id))}
         />
       </Box>
 

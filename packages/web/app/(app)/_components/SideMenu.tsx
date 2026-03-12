@@ -1,8 +1,8 @@
 "use client"
 
-import { HOME_URL, SETTINGS_URL, QUESTS_URL, FAMILY_MEMBERS_URL, PUBLIC_QUESTS_URL, FAMILY_QUESTS_URL, TEMPLATE_QUESTS_URL, PROFILE_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, SETTINGS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL, TEST_URL, TEST_FAMILY_PROFILE_MOCK_URL, TEST_SETTINGS_MOCK_URL, TEST_STRIPE_TEST_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconChevronLeft, IconChevronRight, IconBell, IconLogout, IconMenu2, IconX, IconPinnedOff, IconCoin } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconBell, IconLogout, IconMenu2, IconPinnedOff, IconCoin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
@@ -109,7 +109,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         {isParent && (
           <NavLink
             className='side-nav'
-            href={`${PUBLIC_QUESTS_URL}`}
+            href={`${FAMILY_QUESTS_URL}?tab=public`}
             label="公開"
             leftSection={<IconWorld color={menuColors.publicQuest} size={18} stroke={1.2} />}
           />
@@ -118,7 +118,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         {isParent && (
           <NavLink
             className='side-nav'
-            href={`${FAMILY_QUESTS_URL}`}
+            href={`${FAMILY_QUESTS_URL}?tab=family`}
             label="家族"
             leftSection={<IconHome2 color={menuColors.familyQuest} size={18} stroke={1.2} />}
           />
@@ -127,7 +127,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         {isParent && (
           <NavLink
             className='side-nav'
-            href={`${TEMPLATE_QUESTS_URL}`}
+            href={`${FAMILY_QUESTS_URL}?tab=template`}
             label="お気に入り"
             leftSection={<IconClipboardPlus color={menuColors.favoriteQuest} size={18} stroke={1.2} />}
           />
@@ -166,6 +166,43 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
             leftSection={<IconCoin color={menuColors.settings} size={18} stroke={1.2} />}
           />
         )}
+      </NavLink>
+      {/* モック（開発・デバッグ用） */}
+      <NavLink
+        className='side-nav'
+        href="#required-for-focus"
+        label="モック"
+        leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
+        childrenOffset={28}
+      >
+        {/* メインテストページ */}
+        <NavLink
+          className='side-nav'
+          href={`${TEST_URL}`}
+          label="テスト"
+          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
+        />
+        {/* 家族プロフィールモック */}
+        <NavLink
+          className='side-nav'
+          href={`${TEST_FAMILY_PROFILE_MOCK_URL}`}
+          label="プロフィール"
+          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
+        />
+        {/* 設定モック */}
+        <NavLink
+          className='side-nav'
+          href={`${TEST_SETTINGS_MOCK_URL}`}
+          label="設定"
+          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
+        />
+        {/* Stripeテスト */}
+        <NavLink
+          className='side-nav'
+          href={`${TEST_STRIPE_TEST_URL}`}
+          label="Stripe"
+          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
+        />
       </NavLink>
       {/* 境界線 */}
       <Divider className="mx-3 my-2" />
@@ -222,7 +259,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
         <IconHome2 color={menuColors.home} stroke={1.4} />
       </ActionIcon>
       {/* クエストアイコン */}
-      <ActionIcon variant="subtle" onClick={() => router.push(QUESTS_URL)} size="xl" aria-label="クエスト">
+      <ActionIcon variant="subtle" onClick={() => router.push(`${FAMILY_QUESTS_URL}?tab=public`)} size="xl" aria-label="クエスト">
         <IconClipboard color={menuColors.quest} stroke={1.4} />
       </ActionIcon>
       {/* メンバーアイコン（親のみ） */}

@@ -10,6 +10,27 @@ import {
 } from "@/drizzle/schema"
 import { and, eq } from "drizzle-orm"
 
+/** コメントをIDで取得する */
+export const getCommentById = async ({
+  commentId,
+  db,
+}: {
+  commentId: string
+  db: Db
+}) => {
+  try {
+    const [comment] = await db
+      .select()
+      .from(publicQuestComments)
+      .where(eq(publicQuestComments.id, commentId))
+
+    return comment
+  } catch (error) {
+    devLog("getCommentById.取得例外: ", error)
+    throw new ServerError("コメントの取得に失敗しました。")
+  }
+}
+
 /** コメントを投稿する */
 export const createPublicQuestComment = async ({
   publicQuestId,

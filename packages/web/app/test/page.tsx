@@ -1,65 +1,90 @@
 "use client"
 
+import { Card, Text, SimpleGrid, Badge, Group } from "@mantine/core"
+import { 
+  IconHome, 
+  IconSettings, 
+  IconBrandStripe 
+} from "@tabler/icons-react"
+import { useRouter } from "next/navigation"
+import { 
+  TEST_FAMILY_PROFILE_MOCK_URL,
+  TEST_SETTINGS_MOCK_URL,
+  TEST_STRIPE_TEST_URL
+} from "@/app/(core)/endpoints"
 
-import { Tabs } from "@mantine/core";
-import { IconMessageCircle, IconPhoto, IconSettings } from "@tabler/icons-react";
+type MockItem = {
+  title: string
+  description: string
+  url: string
+  icon: React.ReactNode
+  badge?: string
+}
 
-export default function Page() {
+export default function MockListPage() {
+  const router = useRouter()
+
+  const mockItems: MockItem[] = [
+    {
+      title: "家族プロフィールモック",
+      description: "家族プロフィール画面のモック",
+      url: TEST_FAMILY_PROFILE_MOCK_URL,
+      icon: <IconHome size={32} />,
+      badge: "UI"
+    },
+    {
+      title: "設定モック",
+      description: "設定画面のモック",
+      url: TEST_SETTINGS_MOCK_URL,
+      icon: <IconSettings size={32} />,
+      badge: "UI"
+    },
+    {
+      title: "Stripeテスト",
+      description: "Stripe決済のテスト",
+      url: TEST_STRIPE_TEST_URL,
+      icon: <IconBrandStripe size={32} />,
+      badge: "Integration"
+    }
+  ]
+
   return (
-    <div className="flex flex-col gap-4 p-4 bg-zinc-200 h-full min-h-0">
-      <div className="bg-red-200 h-30">
-        要素①
-      </div>
-      <Tabs 
-        defaultValue="gallery" 
-        className="flex-1 min-h-0"
-        styles={{
-          root: { display: "flex", flexDirection: "column", height: "100%" },
-          panel: { flex: 1, minHeight: 0, overflow: "auto" },
-        }}
-      >
-        <Tabs.List>
-          <Tabs.Tab value="gallery" leftSection={<IconPhoto size={12} />}>
-            Gallery
-          </Tabs.Tab>
-          <Tabs.Tab value="messages" leftSection={<IconMessageCircle size={12} />}>
-            Messages
-          </Tabs.Tab>
-          <Tabs.Tab value="settings" leftSection={<IconSettings size={12} />}>
-            Settings
-          </Tabs.Tab>
-        </Tabs.List>
+    <div className="p-4">
+      <Text size="xl" fw={700} mb="md">モック画面一覧</Text>
+      <Text size="sm" c="dimmed" mb="xl">
+        UI/UX検証、プロトタイピング用のモック画面です
+      </Text>
 
-        <Tabs.Panel value="gallery">
-          Gallery tab content1<br/>
-          Gallery tab content2<br/>
-          Gallery tab content3<br/>
-          Gallery tab content4<br/>
-          Gallery tab content5<br/>
-          Gallery tab content6<br/>
-          Gallery tab content7<br/>
-          Gallery tab content8<br/>
-          Gallery tab content9<br/>
-          Gallery tab content10<br/>
-          Gallery tab content11<br/>
-          Gallery tab content12<br/>
-          Gallery tab content13<br/>
-          Gallery tab content14<br/>
-          Gallery tab content15<br/>
-        </Tabs.Panel>
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
+        {mockItems.map((item) => (
+          <Card
+            key={item.url}
+            shadow="sm"
+            padding="lg"
+            radius="md"
+            withBorder
+            className="cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => router.push(item.url)}
+          >
+            <Group justify="space-between" mb="xs">
+              <div className="text-blue-600">{item.icon}</div>
+              {item.badge && (
+                <Badge color="blue" variant="light" size="sm">
+                  {item.badge}
+                </Badge>
+              )}
+            </Group>
 
-        <Tabs.Panel value="messages">
-          Messages tab content
-        </Tabs.Panel>
+            <Text fw={500} size="lg" mb="xs">
+              {item.title}
+            </Text>
 
-        <Tabs.Panel value="settings">
-          Settings tab content
-        </Tabs.Panel>
-      </Tabs>
-      <div className="bg-red-200 h-100">
-        要素③
-      </div>
-      
+            <Text size="sm" c="dimmed">
+              {item.description}
+            </Text>
+          </Card>
+        ))}
+      </SimpleGrid>
     </div>
   )
 }

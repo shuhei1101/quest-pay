@@ -157,28 +157,34 @@ export const CommentItemLayout = ({
                 {/* 区切り線（公開者家族の場合） */}
                 {isPublisherFamily && <Menu.Divider />}
 
-                {/* 高評価 */}
-                <Menu.Item 
-                  leftSection={<IconThumbUp size={16} />} 
-                  onClick={onUpvote}
-                  color={commentItem.isUpvoted ? "blue" : undefined}
-                >
-                  {commentItem.isUpvoted ? "高評価を取り消す" : "高評価"} ({commentItem.upvoteCount})
-                </Menu.Item>
+                {/* 高評価（自分のコメントには表示しない） */}
+                {!isCurrentUser && (
+                  <Menu.Item 
+                    leftSection={<IconThumbUp size={16} />} 
+                    onClick={onUpvote}
+                    color={commentItem.isUpvoted ? "blue" : undefined}
+                  >
+                    {commentItem.isUpvoted ? "高評価を取り消す" : "高評価"} ({commentItem.upvoteCount})
+                  </Menu.Item>
+                )}
 
-                {/* 低評価 */}
-                <Menu.Item 
-                  leftSection={<IconThumbDown size={16} />} 
-                  onClick={onDownvote}
-                  color={commentItem.isDownvoted ? "gray" : undefined}
-                >
-                  {commentItem.isDownvoted ? "低評価を取り消す" : "低評価"} ({commentItem.downvoteCount})
-                </Menu.Item>
+                {/* 低評価（自分のコメントには表示しない） */}
+                {!isCurrentUser && (
+                  <Menu.Item 
+                    leftSection={<IconThumbDown size={16} />} 
+                    onClick={onDownvote}
+                    color={commentItem.isDownvoted ? "gray" : undefined}
+                  >
+                    {commentItem.isDownvoted ? "低評価を取り消す" : "低評価"} ({commentItem.downvoteCount})
+                  </Menu.Item>
+                )}
 
-                {/* 報告 */}
-                <Menu.Item leftSection={<IconFlag size={16} />} onClick={onReport}>
-                  報告
-                </Menu.Item>
+                {/* 報告（自分のコメントには表示しない） */}
+                {!isCurrentUser && (
+                  <Menu.Item leftSection={<IconFlag size={16} />} onClick={onReport}>
+                    報告
+                  </Menu.Item>
+                )}
 
                 {/* 削除（自分のコメントのみ） */}
                 {isCurrentUser && (
@@ -198,32 +204,52 @@ export const CommentItemLayout = ({
             {commentItem.content}
           </Text>
 
-          {/* 評価ボタン */}
-          <Group gap="md" mt="xs">
-            <ActionIcon
-              variant={commentItem.isUpvoted ? "filled" : "subtle"}
-              color="blue"
-              size="sm"
-              onClick={onUpvote}
-            >
-              <IconThumbUp size={14} />
-            </ActionIcon>
-            <Text size="xs" c={commentItem.isUpvoted ? "blue" : "dimmed"}>
-              {commentItem.upvoteCount}
-            </Text>
+          {/* 評価ボタン（自分のコメントには表示しない） */}
+          {!isCurrentUser && (
+            <Group gap="md" mt="xs">
+              <ActionIcon
+                variant={commentItem.isUpvoted ? "filled" : "subtle"}
+                color="blue"
+                size="sm"
+                onClick={onUpvote}
+              >
+                <IconThumbUp size={14} />
+              </ActionIcon>
+              <Text size="xs" c={commentItem.isUpvoted ? "blue" : "dimmed"}>
+                {commentItem.upvoteCount}
+              </Text>
 
-            <ActionIcon
-              variant={commentItem.isDownvoted ? "filled" : "subtle"}
-              color="gray"
-              size="sm"
-              onClick={onDownvote}
-            >
-              <IconThumbDown size={14} />
-            </ActionIcon>
-            <Text size="xs" c={commentItem.isDownvoted ? "gray" : "dimmed"}>
-              {commentItem.downvoteCount}
-            </Text>
-          </Group>
+              <ActionIcon
+                variant={commentItem.isDownvoted ? "filled" : "subtle"}
+                color="gray"
+                size="sm"
+                onClick={onDownvote}
+              >
+                <IconThumbDown size={14} />
+              </ActionIcon>
+              <Text size="xs" c={commentItem.isDownvoted ? "gray" : "dimmed"}>
+                {commentItem.downvoteCount}
+              </Text>
+            </Group>
+          )}
+
+          {/* 自分のコメントの場合は評価数のみ表示 */}
+          {isCurrentUser && (
+            <Group gap="md" mt="xs">
+              <Group gap={4}>
+                <IconThumbUp size={14} color="gray" />
+                <Text size="xs" c="dimmed">
+                  {commentItem.upvoteCount}
+                </Text>
+              </Group>
+              <Group gap={4}>
+                <IconThumbDown size={14} color="gray" />
+                <Text size="xs" c="dimmed">
+                  {commentItem.downvoteCount}
+                </Text>
+              </Group>
+            </Group>
+          )}
         </Box>
       </Group>
     </Paper>

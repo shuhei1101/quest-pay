@@ -51,14 +51,30 @@ export function FamilyQuestsScreen() {
     const tabParam = searchParams.get('tab')
     const newTab = isValidTab(tabParam) ? tabParam : 'public'
     setTabValue(newTab)
+    
+    // 初回アクセス時にクエリパラメータがない場合は追加
+    if (!tabParam) {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set('tab', 'public')
+      router.replace(`?${params.toString()}`, { scroll: false })
+    }
   }, [searchParams])
+
+  /** タブ変更時にURLクエリパラメータを更新する */
+  const handleTabChange = (value: string | null) => {
+    if (!value) return
+    setTabValue(value)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('tab', value)
+    router.replace(`?${params.toString()}`, { scroll: false })
+  }
   
   return (
     <div className="pb-24">
       {/* ページタイトル */}
       <PageHeader title="クエスト一覧" />
 
-      <Tabs variant="pills" value={tabValue} onChange={setTabValue} color={
+      <Tabs variant="pills" value={tabValue} onChange={handleTabChange} color={
         tabValue == 'public' ? "rgb(96 165 250)" :
         tabValue == 'family' ? "rgb(74, 222, 128)" :
         tabValue == 'penalty' ? "rgb(252, 132, 132)" :

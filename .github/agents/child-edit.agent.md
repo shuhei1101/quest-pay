@@ -23,6 +23,17 @@ read_file: .github/skills/family-member-child-edit/SKILL.md
 read_file: .github/skills/child-management-api/SKILL.md
 ```
 
+## 共通利用可能スキル
+
+以下のスキルは全エージェントで利用可能：
+- `mock-creator`: モック画面作成スキル（UI/UX検証、プロトタイピング用）
+
+**モック作成方法:**
+ユーザーから「〇〇のモック画面を作成して」という依頼を受けたら、`mock-creator`スキルを参照してモック画面を作成する：
+```
+read_file: .github/skills/mock-creator/SKILL.md
+```
+
 ## 責務
 
 ### 1. 機能改修

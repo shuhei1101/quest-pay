@@ -6,6 +6,7 @@ import { IconAlertCircle, IconMenu } from "@tabler/icons-react"
 import { FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
 import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useWindow } from "@/app/(core)/useConstants"
+import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
 
 /** クエスト編集レイアウトのタブ設定 */
 type TabConfig = {
@@ -79,37 +80,34 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
               {questId ? "クエスト編集" : "クエスト登録"}
             </Title>
 
-            <Tabs value={activeTab} onChange={setActiveTab} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-              {/* タブリスト */}
-              <Tabs.List>
+            <ScrollableTabs 
+              activeTab={activeTab} 
+              onChange={setActiveTab}
+              tabs={tabs.map((tab) => ({
+                value: tab.value,
+                label: tab.label,
+                rightSection: tab.hasErrors ? <IconAlertCircle size={16} color="red" /> : null
+              }))}
+            >
+              <Box style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+                {/* タブパネル */}
                 {tabs.map((tab) => (
-                  <Tabs.Tab
+                  <Tabs.Panel
                     key={tab.value}
                     value={tab.value}
-                    rightSection={tab.hasErrors ? <IconAlertCircle size={16} color="red" /> : null}
+                    pt="xs"
+                    style={{ 
+                      flex: 1, 
+                      // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
+                      overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
+                      overflowX: 'hidden' 
+                    }}
                   >
-                    {tab.label}
-                  </Tabs.Tab>
+                    {tab.content}
+                  </Tabs.Panel>
                 ))}
-              </Tabs.List>
-
-              {/* タブパネル */}
-              {tabs.map((tab) => (
-                <Tabs.Panel
-                  key={tab.value}
-                  value={tab.value}
-                  pt="xs"
-                  style={{ 
-                    flex: 1, 
-                    // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
-                    overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
-                    overflowX: 'hidden' 
-                  }}
-                >
-                  {tab.content}
-                </Tabs.Panel>
-              ))}
-            </Tabs>
+              </Box>
+            </ScrollableTabs>
 
             {/* アクションボタン */}
             <Group mt="md" justify="flex-end" gap="xs">

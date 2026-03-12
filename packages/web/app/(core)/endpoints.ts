@@ -209,3 +209,9 @@ export const TIMELINE_API_URL = `/api${TIMELINE_URL}`
 export const FAMILY_TIMELINE_API_URL = `${TIMELINE_API_URL}/family`
 export const FAMILY_TIMELINE_BY_ID_API_URL = (familyId: string) => `${FAMILY_TIMELINE_API_URL}/${familyId}`
 export const PUBLIC_TIMELINE_API_URL = `${TIMELINE_API_URL}/public`
+
+// テスト・モック画面
+export const TEST_URL = `/test`
+export const TEST_FAMILY_PROFILE_MOCK_URL = `${TEST_URL}/family-profile-mock`
+export const TEST_SETTINGS_MOCK_URL = `${TEST_URL}/settings-mock`
+export const TEST_STRIPE_TEST_URL = `${TEST_URL}/stripe-test`
