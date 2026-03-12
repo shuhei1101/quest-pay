@@ -31,6 +31,11 @@ description: このスキルはモック画面作成依頼を受けて `/package
 
 ユーザーが「内部の構造は何でもいい」と言う場合は、シンプルな構成で作成する。
 
+**重要**: レイアウトやデザインパターンの検証依頼の場合は、**複数バリエーション（3つ程度）をタブで切り替える構成**にすることを前提とする。以下のキーワードが含まれる場合は自動的にこのアプローチを採用：
+- 「レイアウト」「デザイン」「スタイル」「パターン」「バリエーション」
+- 「比較」「検証」「プロトタイプ」
+- サイドメニュー、ヘッダー、フッター、カード、ボタンなどのUI要素名
+
 ### Step 2: Create Mock Page
 
 モック画面を以下の手順で作成する：
@@ -237,13 +242,93 @@ export const TEST_<MOCK_NAME>_URL = `${TEST_URL}/<mock-name>`
 ├── quest-card-layouts/              # クエストカードレイアウト
 ├── settings-mock/                   # 設定モック
 ├── stripe-test/                     # Stripeテスト
-└── theme/                           # テーマモック
+├── theme/                           # テーマモック
+└── side-menu-*/                     # サイドメニューバリエーション（タブ切り替え式）
+    ├── page.tsx                     # タブで3つのバリエーションを切り替え
+    ├── Variant1.tsx                 # オプション: バリエーション1コンポーネント
+    ├── Variant2.tsx                 # オプション: バリエーション2コンポーネント
+    └── Variant3.tsx                 # オプション: バリエーション3コンポーネント
 ```
 
 ### Key Files
 - **Endpoints**: `/home/shuhei2441/repo/quest-pay/packages/web/app/(core)/endpoints.ts`
 - **Test Page**: `/home/shuhei2441/repo/quest-pay/packages/web/app/test/page.tsx`
 - **Test Directory**: `/home/shuhei2441/repo/quest-pay/packages/web/app/test/`
+
+## Example: Layout Mock with Tabs
+
+レイアウト系モック画面の完全な実装例：
+
+```tsx
+"use client"
+
+import { Tabs, Card, Text } from "@mantine/core"
+import { useState } from "react"
+
+/**
+ * サイドメニューデザインバリエーションのモック画面
+ * 目的: 3つの異なるサイドメニューデザインを比較検証
+ */
+export default function SideMenuMockPage() {
+  const [activeTab, setActiveTab] = useState<string | null>("minimal")
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-2">サイドメニューデザイン比較</h1>
+      <p className="text-sm text-gray-600 mb-4">
+        複数のデザインバリエーションをタブで切り替えて比較できます
+      </p>
+
+      <Tabs value={activeTab} onChange={setActiveTab}>
+        <Tabs.List>
+          <Tabs.Tab value="minimal">ミニマル</Tabs.Tab>
+          <Tabs.Tab value="modern">モダン</Tabs.Tab>
+          <Tabs.Tab value="glass">ガラス</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="minimal" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text fw={500} mb="md">ミニマルデザイン</Text>
+            <Text size="sm" c="dimmed" mb="md">
+              シンプルで基本的なデザイン。余計な装飾を排除した清潔感のあるUI。
+            </Text>
+            {/* ミニマルデザインの実装 */}
+            <div className="bg-white p-4 rounded border">
+              {/* サイドメニューのミニマル実装例 */}
+            </div>
+          </Card>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="modern" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text fw={500} mb="md">モダンデザイン</Text>
+            <Text size="sm" c="dimmed" mb="md">
+              洗練された現代的なデザイン。グラデーションやシャドウを活用。
+            </Text>
+            {/* モダンデザインの実装 */}
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 rounded shadow-lg">
+              {/* サイドメニューのモダン実装例 */}
+            </div>
+          </Card>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="glass" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text fw={500} mb="md">ガラスモーフィズムデザイン</Text>
+            <Text size="sm" c="dimmed" mb="md">
+              半透明の背景とぼかし効果を使用した実験的デザイン。
+            </Text>
+            {/* ガラスモーフィズムデザインの実装 */}
+            <div className="bg-white/30 backdrop-blur-lg p-4 rounded border border-white/20">
+              {/* サイドメニューのガラス実装例 */}
+            </div>
+          </Card>
+        </Tabs.Panel>
+      </Tabs>
+    </div>
+  )
+}
+```
 
 ## Resources
 
