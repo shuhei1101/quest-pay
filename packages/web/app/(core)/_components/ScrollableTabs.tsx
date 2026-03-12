@@ -62,7 +62,9 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
     onSwipedRight: handleSwipeRight,
     trackMouse: false, // マウスでのスワイプは無効化
     preventScrollOnSwipe: false, // 縦スクロールとの共存を許可
-    delta: 30 // スワイプと判定する最小距離（ピクセル）- より反応良く調整
+    delta: 50, // スワイプと判定する最小距離（ピクセル）- 確実に検出
+    swipeDuration: 500, // スワイプの最大継続時間（ミリ秒）
+    touchEventOptions: { passive: false } // タッチイベントのpreventDefaultを有効化
   })
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */
@@ -151,6 +153,10 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
           touchAction: "pan-y", // 縦スクロールは許可、横スクロールでスワイプ検出
           WebkitUserSelect: "none", // iOS Safari対応
           userSelect: "none", // テキスト選択を防止してスワイプを優先
+          flex: 1, // 親要素の高さいっぱいに広げる
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0, // フレックスボックスの縮小を許可
         }}
       >
         {children}
