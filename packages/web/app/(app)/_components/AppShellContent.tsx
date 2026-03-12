@@ -1,10 +1,10 @@
 "use client"
 
-import { AppShell } from '@mantine/core'
+import { AppShell, Indicator } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { Suspense, useEffect, useRef } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { IconHome2, IconClipboard, IconUsers } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconBell } from '@tabler/icons-react'
 import { useWindow } from '../../(core)/useConstants'
 import { BackgroundWrapper } from './BackgroundWrapper'
 import { SideMenu } from './SideMenu'
@@ -16,6 +16,8 @@ import { LoadingProvider } from '../../(core)/_components/LoadingContext'
 import { LoadingIndicator } from '../../(core)/_components/LoadingIndicator'
 import { HOME_URL, QUESTS_URL, FAMILY_MEMBERS_URL, FAMILY_QUEST_NEW_URL, FAMILY_QUESTS_URL } from '../../(core)/endpoints'
 import { useLoginUserInfo } from '../../(auth)/login/_hooks/useLoginUserInfo'
+import { NotificationModal } from '../notifications/_components/NotificationModal'
+import { useNotifications } from '../notifications/_hooks/useNotifications'
 
 /** AppShellコンテンツを取得する */
 export const AppShellContent = ({children}: {children: React.ReactNode}) => {
@@ -32,6 +34,8 @@ export const AppShellContent = ({children}: {children: React.ReactNode}) => {
 const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
   /** メニューの表示状態 */
   const [opened, { toggle, close }] = useDisclosure()
+  /** 通知モーダルの開閉状態 */
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   /** ブレークポイント */
   const { isMobile, isDark } = useWindow()
   /** ルーター */
@@ -39,12 +43,17 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
   /** 現在のパス */
   const pathname = usePathname()
   /** ログインユーザ情報 */
-  const { isParent } = useLoginUserInfo()
+  const { isParent, isGuest } = useLoginUserInfo()
   /** FABの開閉状態管理 */
   const { openFab, closeFab, isOpen } = useFABContext()
+  /** 通知データ */
+  const { notifications } = useNotifications()
   
   /** 前回のスクロール位置を保存 */
   const lastScrollY = useRef(0)
+
+  /** 未読数を計算する */
+  const unreadCount = notifications.filter(n => !n.isRead).length
 
   /** ナビゲーションアイテム */
   const navigationItems: FloatingActionItem[] = [
@@ -62,6 +71,15 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
       icon: <IconUsers size={20} />,
       label: "メンバー",
       onClick: () => router.push(FAMILY_MEMBERS_URL),
+    }] : []),
+    ...(!isGuest ? [{
+      icon: (
+        <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
+          <IconBell size={20} />
+        </Indicator>
+      ),
+      label: "通知",
+      onClick: () => setIsNotificationOpen(true),
     }] : []),
   ]
 
@@ -155,6 +173,14 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
           open={isOpen("navigation-fab")}
           onToggle={handleNavigationToggle}
           defaultOpen={false}
+        />
+      )}
+
+      {/* 通知モーダル */}
+      {!isGuest && (
+        <NotificationModal 
+          isOpen={isNotificationOpen} 
+          onClose={() => setIsNotificationOpen(false)} 
         />
       )}
     </BackgroundWrapper>

@@ -92,16 +92,16 @@ export default function FamilyMembersLayout({ children }: {
 
   return (
     <>
-    <div className="flex h-full" style={{ gap: "1rem" }}>
-      {/* 一覧画面 */}
+      <div className="flex h-full" style={{ gap: "1rem" }}>
+        {/* 一覧画面 */}
         <aside className="w-1/3" style={{ borderRight: "1px solid #e0e0e0", paddingRight: "1rem", overflowY: "auto" }}>
-        <FamilyMemberList selectedId={selectedId} />
-      </aside>
-      {/* メインコンテンツ */}
-      <main className="flex-1" style={{ paddingLeft: "1rem", overflowY: "auto" }}>
-        {children}
-      </main>
-    </div>
+          <FamilyMemberList selectedId={selectedId} />
+        </aside>
+        {/* メインコンテンツ */}
+        <main className="flex-1" style={{ paddingLeft: "1rem", overflowY: "auto" }}>
+          {children}
+        </main>
+      </div>
       {/* 左側一覧用のFAB（左下に配置、右に展開） */}
       <SubMenuFAB
         items={leftPaneActionItems}

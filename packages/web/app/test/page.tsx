@@ -6,10 +6,7 @@ import {
   IconSettings, 
   IconBrandStripe,
   IconAlertTriangle,
-  IconMenu2,
-  IconLayoutSidebar,
-  IconUser,
-  IconSparkles
+  IconMenu2
 } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import { 
@@ -17,10 +14,7 @@ import {
   TEST_SETTINGS_MOCK_URL,
   TEST_STRIPE_TEST_URL,
   TEST_ERROR_UNKNOWN_URL,
-  TEST_SIDE_MENU_MINIMAL_URL,
-  TEST_SIDE_MENU_MODERN_URL,
-  TEST_SIDE_MENU_AVATAR_URL,
-  TEST_SIDE_MENU_GLASS_URL
+  TEST_SIDE_MENU_URL
 } from "@/app/(core)/endpoints"
 
 type MockItem = {
@@ -64,31 +58,10 @@ export default function MockListPage() {
       badge: "Test"
     },
     {
-      title: "サイドメニュー: ミニマル",
-      description: "ミニマルデザインのサイドメニュー",
-      url: TEST_SIDE_MENU_MINIMAL_URL,
+      title: "サイドメニュー",
+      description: "サイドメニューのデザインバリエーション（4つ）",
+      url: TEST_SIDE_MENU_URL,
       icon: <IconMenu2 size={32} />,
-      badge: "UI"
-    },
-    {
-      title: "サイドメニュー: モダン",
-      description: "モダンデザインのサイドメニュー",
-      url: TEST_SIDE_MENU_MODERN_URL,
-      icon: <IconLayoutSidebar size={32} />,
-      badge: "UI"
-    },
-    {
-      title: "サイドメニュー: アバター",
-      description: "アバター型デザインのサイドメニュー",
-      url: TEST_SIDE_MENU_AVATAR_URL,
-      icon: <IconUser size={32} />,
-      badge: "UI"
-    },
-    {
-      title: "サイドメニュー: ガラス",
-      description: "グラスモーフィズムデザインのサイドメニュー",
-      url: TEST_SIDE_MENU_GLASS_URL,
-      icon: <IconSparkles size={32} />,
       badge: "UI"
     }
   ]

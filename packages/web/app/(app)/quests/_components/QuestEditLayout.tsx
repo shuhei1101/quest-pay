@@ -89,24 +89,24 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
                 rightSection: tab.hasErrors ? <IconAlertCircle size={16} color="red" /> : null
               }))}
             >
-                {/* タブパネル */}
-                {tabs.map((tab) => (
-                  <Tabs.Panel
-                    key={tab.value}
-                    value={tab.value}
-                    pt="xs"
-                    style={{ 
+              {/* タブパネル */}
+              {tabs.map((tab) => (
+                <Tabs.Panel
+                  key={tab.value}
+                  value={tab.value}
+                  pt="xs"
+                  style={{ 
                     display: activeTab === tab.value ? 'flex' : 'none',
                     flexDirection: 'column',
-                      flex: 1, 
-                      // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
-                      overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
-                      overflowX: 'hidden' 
-                    }}
-                  >
-                    {tab.content}
-                  </Tabs.Panel>
-                ))}
+                    flex: 1, 
+                    // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
+                    overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
+                    overflowX: 'hidden' 
+                  }}
+                >
+                  {tab.content}
+                </Tabs.Panel>
+              ))}
             </ScrollableTabs>
 
             {/* アクションボタン */}
