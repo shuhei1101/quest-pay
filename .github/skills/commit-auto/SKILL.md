@@ -22,74 +22,71 @@ Use this skill when the user provides approval or requests to commit changes wit
 
 When the user requests a commit, follow this workflow:
 
-### Step 1: Check Changed Files
+### Step 1: Identify Session Changes
 
-Use `run_in_terminal` to check the current git status and identify changed files:
-
-```bash
-git status --short
-```
-
-### Step 2: Stage Session Changes Only
-
-**重要**: すべての変更ではなく、このセッションで変更した内容のみをステージングする。
-
-セッション中に変更したファイルを特定してステージング：
+**重要**: このセッション中に実行したツールの履歴を確認し、変更したファイルを特定する。
 
 **ファイルの特定方法:**
-1. このセッション中に実行したツール（`replace_string_in_file`, `multi_replace_string_in_file`, `create_file` など）の履歴を確認
+1. このセッション中に実行したツール（`replace_string_in_file`, `multi_replace_string_in_file`, `create_file`）の履歴を確認
 2. それらのツールで編集・作成したファイルのパスをリストアップ
-3. `git status` の出力と照合
+3. `git status --short` で変更状態を確認
 
-**ステージング実行:**
-```bash
-# セッション中に変更したファイルのみを個別に追加
-git add <file1> <file2> <file3>...
-```
+### Step 2: Generate Commit Message
 
-**絶対に禁止:**
-```bash
-# ❌ すべてのファイルをステージングするコマンドは使用禁止
-git add -A
-git add .
-git add --all
-```
+セッション中の変更内容を分析し、意味のあるコミットメッセージを生成する：
 
-**理由**: セッション外で変更されたファイルまで誤ってコミットしてしまうため。必ずファイルを個別に指定すること。
+- 変更を簡潔に要約
+- 日本語を使用（Quest Payプロジェクト）
+- Conventional Commit形式に従う（feat:, fix:, docs:, refactor: など）
+- 変更した機能やコンポーネントを明記
 
-### Step 3: Generate Commit Message
-
-Analyze the changes and generate a meaningful commit message that:
-- Summarizes the changes concisely
-- Uses Japanese for Quest Pay project
-- Follows conventional commit format when appropriate (feat:, fix:, docs:, refactor:, etc.)
-- References specific features or components modified
-
-**Examples of good commit messages:**
+**良いコミットメッセージの例:**
 - `feat: commit-autoスキルを追加`
 - `fix: タイムアウトエラー画面の表示を修正`
 - `refactor: 家族クエスト一覧のコンポーネント構造を改善`
 - `docs: スキル作成ガイドを更新`
 
-### Step 4: Commit Changes
+### Step 3: Execute Commit Script
 
-Execute the commit with the generated message:
+**重要**: `scripts/commit_session_changes.sh`スクリプトを使用してコミットする。このスクリプトは：
+- ファイルの存在確認
+- 個別ファイル指定によるステージング（`git add -A`等を使用しない）
+- 安全なコミット実行
 
+**実行方法:**
 ```bash
-git commit -m "Your generated commit message"
+.github/skills/commit-auto/scripts/commit_session_changes.sh "<コミットメッセージ>" <file1> <file2> <file3>...
 ```
 
-The commit will be made to the current branch (typically main).
+**例:**
+```bash
+.github/skills/commit-auto/scripts/commit_session_changes.sh \
+  "feat: モック画面管理用エージェントを追加" \
+  .github/agents/mock-agent.md \
+  .github/skills/mock-list/SKILL.md
+```
 
-### Step 5: Confirm Completion
+### Step 4: Confirm Completion
 
-Inform the user that the commit was successful and provide the commit message used.
+ユーザーにコミット成功を報告し、使用したコミットメッセージを提示する。
 
 ## Important Notes
 
-- Always commit to the current branch
+- Always use the `scripts/commit_session_changes.sh` script for commits
 - Generate commit messages autonomously without asking the user
 - Use Japanese for commit messages in this project
 - Keep commit messages concise but descriptive
 - Do NOT push changes automatically - only commit locally
-- **CRITICAL**: Never use `git add -A`, `git add .`, or `git add --all` - always specify individual files from the current session only
+- **CRITICAL**: The script enforces session-only file commits - never use manual `git add -A`, `git add .`, or `git add --all` commands
+
+## Bundled Resources
+
+### scripts/commit_session_changes.sh
+
+Safe commit script that:
+- Validates file existence before staging
+- Stages only specified files (prevents accidental commits)
+- Provides clear feedback at each step
+- Exits on any error
+
+Usage documented in the workflow above.
