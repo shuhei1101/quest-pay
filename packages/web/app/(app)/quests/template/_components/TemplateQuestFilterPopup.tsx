@@ -96,7 +96,12 @@ export const TemplateQuestFilterPopup = ({opened, close, currentFilter, handleSe
 
           </div>
           <div className="mb-5" /> 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <Button variant="default" onClick={() => {
+              const emptyFilter: TemplateQuestFilterType = {tags: []}
+              handleSearch(emptyFilter)
+              close()
+            }}>リセット</Button>
             <Button variant="gradient" onClick={onSearchClick}>検索</Button>
           </div>
     </Modal>

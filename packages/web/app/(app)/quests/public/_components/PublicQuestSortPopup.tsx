@@ -63,7 +63,12 @@ export const PublicQuestSortPopup = ({opened, close, currentSort, handleSearch}:
             <ColumnButton column="name" name="クエスト名" leftSection={<IconArrowsSort size={18}/>} onClick={() => onColumnClick("name")} sort={sort} />
           </SimpleGrid>
           <div className="mb-5" />
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <Button variant="default" onClick={() => {
+              const defaultSort: QuestSort = {column: "id", order: "asc"}
+              handleSearch(defaultSort)
+              close()
+            }}>リセット</Button>
             <Button variant="gradient" onClick={onSearchClick}>検索</Button>
           </div>
     </Modal>
