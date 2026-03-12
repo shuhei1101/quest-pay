@@ -1,6 +1,6 @@
 ---
 description: お小遣いクエストボードプロジェクトのコードレビューを対話的に実施する専門レビュアー。コーディング規約とアーキテクチャパターンに基づいて問題を発見し、改善提案を行う。
-name: code-reviewer
+name: Code Reviewer
 argument-hint: レビューしてほしいファイルパスまたはPRの内容を教えてください
 model: Claude Sonnet 4.5
 handoffs:

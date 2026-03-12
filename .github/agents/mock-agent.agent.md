@@ -1,6 +1,6 @@
 ---
 description: モック画面を総合的に管理するエージェント。モック作成、テスト一覧ページ管理、既存モックの改修・説明を担当。
-name: mock-agent
+name: Mock Agent
 argument-hint: 'モック画面の作成、改修内容、説明したい項目、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 ---

@@ -1,6 +1,6 @@
 ---
 description: DBスキーマ定義を管理するエージェント。データベーステーブル、リレーション、型定義の説明、更新を担当。
-name: schema-agent
+name: Schema Agent
 argument-hint: 'スキーマに関する質問、テーブル追加・更新内容、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 tools: ['read_file', 'grep_search', 'file_search', 'semantic_search', 'list_dir', 'replace_string_in_file', 'multi_replace_string_in_file']

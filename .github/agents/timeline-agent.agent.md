@@ -1,6 +1,6 @@
 ---
 description: タイムライン画面を管理するエージェント。機能改修、機能説明、スキルアップデートを担当。
-name: timeline-agent
+name: Timeline Agent
 argument-hint: '改修内容、説明したい項目、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 handoffs:

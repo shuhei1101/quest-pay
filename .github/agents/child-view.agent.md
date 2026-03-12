@@ -1,6 +1,6 @@
 ---
 description: 子供閲覧画面を管理するエージェント。機能改修、機能説明、スキルアップデートを担当。
-name: child-view
+name: Child View
 argument-hint: '改修内容、説明したい項目、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 handoffs:

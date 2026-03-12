@@ -1,6 +1,6 @@
 ---
 description: 共通コンポーネント群を管理するエージェント。再利用可能なコンポーネントのカタログ、使用方法、機能改修を担当。
-name: components-agent
+name: Components Agent
 argument-hint: '改修内容、説明したいコンポーネント、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 tools: ['read_file', 'grep_search', 'file_search', 'semantic_search', 'list_dir', 'replace_string_in_file', 'multi_replace_string_in_file']

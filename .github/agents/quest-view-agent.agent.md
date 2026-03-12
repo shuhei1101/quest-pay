@@ -1,6 +1,6 @@
 ---
 description: クエスト閲覧画面（QuestView）を横断的に管理するカスタムエージェント。家族・公開・テンプレート・子供クエストのView画面を担当。
-name: quest-view-agent
+name: Quest View Agent
 argument-hint: 'クエスト閲覧画面に関する改修、説明、アップデート指示を入力してください'
 model: Claude Sonnet 4.5
 handoffs:

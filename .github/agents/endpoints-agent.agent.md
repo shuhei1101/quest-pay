@@ -1,6 +1,6 @@
 ---
 description: エンドポイント定義を管理するエージェント。アプリ内すべてのURL・APIエンドポイントの定義、説明、更新を担当。
-name: endpoints-agent
+name: Endpoints Agent
 argument-hint: 'エンドポイントに関する質問、追加・更新内容、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 tools: ['read_file', 'grep_search', 'file_search', 'semantic_search', 'list_dir', 'replace_string_in_file', 'multi_replace_string_in_file']

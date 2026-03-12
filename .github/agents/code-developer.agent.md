@@ -1,6 +1,6 @@
 ---
 description: コードを分析し、最適な改善策を自己判断して実装する専門家。プロジェクト規約と優先度を考慮して自動的にコードを改善する。
-name: code-developer
+name: Code Developer
 argument-hint: 改善したいコードを指定してください。最適な改善を判断して実装します。
 model: Claude Sonnet 4.5
 handoffs:

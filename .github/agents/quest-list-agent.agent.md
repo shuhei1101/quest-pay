@@ -1,6 +1,6 @@
 ---
 description: クエスト一覧レイアウトコンポーネントを管理するエージェント。機能改修、機能説明、スキルアップデートを担当。
-name: quest-list-agent
+name: Quest List Agent
 argument-hint: '改修内容、説明したい項目、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 handoffs:
