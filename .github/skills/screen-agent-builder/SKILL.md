@@ -49,126 +49,31 @@ description: This skill should be used when creating screen-specific custom agen
 
 ### Step 2: スキル群の作成
 
-画面に関連する各スキルを作成する：
+画面に関連する各スキルを初期化する：
 
-1. **スキルの初期化**
-   ```bash
-   python .github/skills/skill-creator/scripts/init_skill.py <screen-name>-<aspect>-skill --path .github/skills
-   ```
+```bash
+# skill-creator/scriptsのinit_skill.pyを使用
+python3 .github/skills/skill-creator/scripts/init_skill.py <screen-name>-<aspect>-skill --path .github/skills
+```
 
-2. **スキルの構成要素を定義**
-   - `SKILL.md`: 画面の構造・責務・パス情報を記述
-   - `references/`: 詳細な構造図やフロー図を配置
-   - `scripts/`: スキルアップデート用のスクリプトを配置
-
-3. **SKILL.mdのフォーマット**
-   ```markdown
-   ---
-   name: <screen-name>-<aspect>-skill
-   description: <画面名>の<側面>に関する構造知識を提供するスキル。パス、コンポーネント、処理フローを含む。
-   ---
-   
-   # <画面名> <側面> スキル
-   
-   ## 概要
-   この画面の目的と責務を記述
-   
-   ## ファイル構成
-   関連するすべてのファイルパスをリスト
-   
-   ## 主要コンポーネント
-   主要なコンポーネントの役割と使用方法
-   
-   ## API エンドポイント
-   関連するAPIエンドポイントとその用途
-   
-   ## 処理フロー
-   画面の処理フローを記述
-   ```
+生成されたスキルのSKILL.mdを編集して、画面の構造・責務・パス情報を記述する。
 
 ### Step 3: カスタムエージェントの作成
 
-画面全体を管理するカスタムエージェントを作成する：
+画面エージェント初期化スクリプトを使用してエージェントとスキル群を一括作成：
 
-1. **エージェントファイルの作成**
-   ```
-   .github/agents/<screen-name>-agent.md
-   ```
+```bash
+# 単一コマンドでエージェントとスキル群を初期化
+.github/skills/screen-agent-builder/scripts/init_screen_agent.sh <screen-name> "<screen-title>" [skill-types...]
 
-2. **エージェントの構造**
-   ```markdown
-   ---
-   description: <画面名>画面を管理するエージェント。機能改修、機能説明、スキルアップデートを担当。
-   name: <screen-name>-agent
-   argument-hint: '改修内容、説明したい項目、またはアップデート指示を入力してください'
-   model: Claude Sonnet 4.5
-   ---
-   
-   # <画面名> Agent
-   
-   あなたは**<画面名>画面**を専門に管理するエージェントだ。
-   この画面に関連するすべてのパス、コンポーネント、API、レイアウトを熟知している。
-   
-   ## 担当スキル
-   
-   以下のスキルを保持し、必要に応じて参照・更新する：
-   - `<screen-name>-view-skill`: 閲覧画面に関する構造知識
-   - `<screen-name>-edit-skill`: 編集画面に関する構造知識
-   - `<screen-name>-api-skill`: API操作に関する知識
-   
-   **スキル参照方法:**
-   各スキルは文脈に応じて自動的にロードされる。明示的に参照する場合は:
-   ```
-   read_file: .github/skills/<skill-name>/SKILL.md
-   ```
-   
-   ## 責務
-   
-   ### 1. 機能改修
-   - 画面に関連する機能の追加・修正・削除
-   - コーディング規約（`coding-standards`）を参照して実装
-   - アーキテクチャガイド（`architecture-guide`）に従って構成
-   
-   ### 2. 機能説明
-   - 画面の構造を説明
-   - 処理フローを解説
-   - 関連ファイルの役割を説明
-   
-   ### 3. スキルアップデート
-   - 現在のフォルダ状況を確認
-   - 担当スキルの内容と実際の構造を比較
-   - 差分があれば担当スキルを更新
-   
-   ## 作業フロー
-   
-   ### 機能改修時
-   1. 要件をヒアリング
-   2. 関連するスキルを参照
-   3. `coding-standards`、`architecture-guide` を参照
-   4. 実装を行う
-   5. 変更内容に基づいてスキルを更新
+# 例: 家族クエスト画面
+.github/skills/screen-agent-builder/scripts/init_screen_agent.sh family-quest "家族クエスト" list view edit api
+```
 
-   ### 機能説明時
-   1. 説明対象を特定
-   2. 関連するスキルを参照
-   3. 構造・フロー・ファイルを説明
-   
-   ### スキルアップデート時
-   1. 担当スキルを読み込む
-   2. 現在のフォルダ構造を確認
-   3. 差分を特定
-   4. スキルを更新
-   
-    ```
-   mcp_yomiage_speak(text="{完了内容}")
-   ```
-   
-   ## 制約
-   
-   - **範囲外の作業はしない**: この画面に関連しない機能修正は他のエージェントに委譲
-   - **規約遵守**: `coding-standards`、`architecture-guide`、`database-operations` を必ず参照
-   - **スキル優先**: 実装前に必ず関連スキルを参照して現在の構造を理解
-   ```
+スクリプトは以下を実行：
+1. 指定されたスキルタイプのスキル群を作成
+2. エージェントファイルを生成
+3. スキルリストをエージェントに自動登録
 
 
 ### Step 4: スキルアップデート機能の実装
@@ -328,22 +233,10 @@ app/(app)/quests/_components/
 ## リソース
 
 ### scripts/
-このスキルにはスキルアップデート用のスクリプトを含めることができる。
-
-**例:**
-- `update_skill.py`: フォルダ構造を解析してスキルを自動更新
+- `init_screen_agent.sh`: 画面エージェントとスキル群を一括初期化するスクリプト
 
 ### references/
-詳細なドキュメントを配置する。
-
-**例:**
-- `agent_template.md`: エージェントファイルのテンプレート
-- `skill_template.md`: スキルファイルのテンプレート
-- `screen_patterns.md`: 画面パターンの詳細説明
+詳細なドキュメントや画面パターンの説明を配置する。
 
 ### assets/
-テンプレートファイルを配置する。
-
-**例:**
-- `agent-template.md`: カスタムエージェントのテンプレート
-- `skill-template.md`: スキルのテンプレート
+テンプレートファイルを配置する（必要に応じて）。
