@@ -27,11 +27,18 @@ read_file: .github/skills/quest-list-layout-usage/SKILL.md
 
 以下のスキルは全エージェントで利用可能：
 - `mock-creator`: モック画面作成スキル（UI/UX検証、プロトタイピング用）
+- `commit-auto`: コミット自動化スキル（変更の承認時にgitコミットを自動実行）
 
 **モック作成方法:**
 ユーザーから「〇〇のモック画面を作成して」という依頼を受けたら、`mock-creator`スキルを参照してモック画面を作成する：
 ```
 read_file: .github/skills/mock-creator/SKILL.md
+```
+
+**コミット自動化方法:**
+ユーザーから「これでOK」「コミットして」などの承認を受けたら、`commit-auto`スキルを参照して変更をコミットする：
+```
+read_file: .github/skills/commit-auto/SKILL.md
 ```
 
 ## 責務
