@@ -2,7 +2,7 @@
 
 import { HOME_URL, SETTINGS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL, TEST_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconBell, IconLogout, IconMenu2, IconPinnedOff, IconCoin } from '@tabler/icons-react'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconBell, IconLogout, IconMenu2, IconCoin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
@@ -50,20 +50,24 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   /** メニューアイテム */
   const menuItems = (
     <div className="relative">
-      {/* ヘッダー部分（アプリアイコン、アプリ名） */}
+      {/* ヘッダー部分（アプリアイコン、アプリ名、三本線アイコン） */}
       <div className='flex items-center justify-between p-3 border-b border-gray-600'>
         <div className='flex items-center gap-3'>
           {/* アプリアイコン */}
-          <Image src="/icon512_maskable.png" alt="アプリアイコン" width={40} height={40} />
+          <Image src="/icon512_maskable.png" alt="アプリアイコン" width={32} height={32} />
           {/* アプリ名 */}
           <Text size="lg" className='font-bold'>クエストペイ</Text>
         </div>
+        {/* 三本線アイコン（閉じる） */}
+        <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
+          <IconMenu2 size={20} stroke={1.5} />
+        </ActionIcon>
       </div>
       {/* 境界線 */}
       <Divider className="mx-3 my-2" />
       {/* プロフィールカード */}
       <Card 
-        className='m-3 cursor-pointer hover:shadow-md transition-shadow'
+        className='m-3 cursor-pointer transition-all hover:scale-[1.02]'
         onClick={() => router.push(FAMILY_VIEW_URL(userInfo?.families?.id || ''))}
         padding="md"
         radius="md"
@@ -203,14 +207,6 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
           label="ログアウト"
           leftSection={<IconLogout size={18} stroke={1.2} />}
         />
-      )}
-      {/* 閉じるボタン */}
-      {!isMobile && (
-        <div className="absolute top-0 right-0 z-10">
-          <ActionIcon variant="subtle" onClick={onToggle} aria-label="メニューを閉じる">
-            <IconPinnedOff size={20} stroke={1} color={isDark ? '#f5f5f5' : '#808080'} />
-          </ActionIcon>
-        </div>
       )}
     </div>
   )

@@ -143,7 +143,7 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
       </Suspense>
       <AppShell
         navbar={{
-          width: opened ? 200 : 60,
+          width: opened ? 240 : 60,
           breakpoint: 601,
           collapsed: { 
             mobile: true,
