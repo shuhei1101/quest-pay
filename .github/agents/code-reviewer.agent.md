@@ -2,10 +2,15 @@
 description: お小遣いクエストボードプロジェクトのコードレビューを対話的に実施する専門レビュアー。コーディング規約とアーキテクチャパターンに基づいて問題を発見し、改善提案を行う。
 name: code-reviewer
 argument-hint: レビューしてほしいファイルパスまたはPRの内容を教えてください
+model: Claude Sonnet 4.5
 handoffs:
-  - label: 改善案を検討する
-    agent: code-improver
-    prompt: 以下のレビュー指摘について、具体的な改善案を複数提案してください
+  - label: 改善を実装する
+    agent: code-developer
+    prompt: 以下のレビュー指摘を修正してください
+    send: false
+  - label: コードを説明する
+    agent: code-explainer
+    prompt: レビューしたコードの構造と設計意図を説明してください
     send: false
 ---
 

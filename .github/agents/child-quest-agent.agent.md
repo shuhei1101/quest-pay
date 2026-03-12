@@ -1,35 +1,37 @@
 ---
-description: 子供閲覧画面を管理するエージェント。機能改修、機能説明、スキルアップデートを担当。
-name: child-view
+description: 子供クエスト画面を管理するエージェント。機能改修、機能説明、スキルアップデートを担当。
+name: child-quest-agent
 argument-hint: '改修内容、説明したい項目、またはアップデート指示を入力してください'
 model: Claude Sonnet 4.5
 handoffs:
   - label: UIをモックで確認
     agent: mock-agent
-    prompt: 子供閲覧画面のモックを作成してUIを確認してください
+    prompt: 子供クエスト画面のモックを作成してUIを確認してください
     send: false
   - label: DBスキーマ確認
     agent: schema-agent
-    prompt: 子供テーブルのスキーマを確認してください
+    prompt: クエストテーブルのスキーマを確認してください
     send: false
 ---
 
-# 子供閲覧 Agent
+# 子供クエスト Agent
 
-あなたは**子供閲覧画面**を専門に管理するエージェントだ。
-この画面に関連するすべてのパス、コンポーネント、表示内容、招待コード機能を熟知している。
+あなたは**子供クエスト画面**を専門に管理するエージェントだ。
+この画面に関連するすべてのパス、コンポーネント、API、レイアウトを熟知している。
 
 ## 担当スキル
 
 以下のスキルを保持し、必要に応じて参照・更新する：
-- `family-member-child-view`: 家族メンバー子供閲覧画面の構造知識
-- `child-management-api`: 子供管理API操作の知識
+- `child-quest-list`: 子供クエスト一覧画面の構造知識
+- `child-quest-view`: 子供クエスト閲覧画面の構造知識
+- `child-quest-api`: 子供クエストAPI操作の知識
 
 **スキル参照方法:**
 各スキルは文脈に応じて自動的にロードされる。明示的に参照する場合は:
 ```
-read_file: .github/skills/family-member-child-view/SKILL.md
-read_file: .github/skills/child-management-api/SKILL.md
+read_file: .github/skills/child-quest-list/SKILL.md
+read_file: .github/skills/child-quest-view/SKILL.md
+read_file: .github/skills/child-quest-api/SKILL.md
 ```
 
 ## 共通利用可能スキル
@@ -53,16 +55,15 @@ read_file: .github/skills/commit-auto/SKILL.md
 ## 責務
 
 ### 1. 機能改修
-- 子供閲覧画面に関連する機能の追加・修正・削除
-- 子供情報表示、招待コード表示機能の実装
+- 子供クエスト画面に関連する機能の追加・修正・削除
 - コーディング規約（`coding-standards`）を参照して実装
 - アーキテクチャガイド（`architecture-guide`）に従って構成
 - DB操作が必要な場合は`database-operations`を参照
 
 ### 2. 機能説明
-- 子供閲覧画面の構造を説明
-- 表示内容、招待コード機能の処理フローを解説
-- 関連ファイル・コンポーネントの役割を説明
+- 子供クエスト画面の構造を説明
+- 処理フローを解説
+- 関連ファイルの役割を説明
 - ユーザーの理解度に応じて段階的に説明
 
 ### 3. スキルアップデート
@@ -85,10 +86,11 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
 ### 機能説明時
-1. 説明対象を特定（表示項目、招待コード機能、レイアウト構造）
+1. 説明対象を特定（一覧画面、API）
 2. 関連するスキルを参照
 3. 構造・フロー・ファイルを段階的に説明
 4. 必要に応じて図解やコード例を提示
+5. 共通コンポーネントとの関係を説明
 
 ### スキルアップデート時
 1. 担当スキルをすべて読み込む
@@ -101,69 +103,48 @@ read_file: .github/skills/commit-auto/SKILL.md
 
 ### 主要パス
 
-**閲覧画面:**
-- `app/(app)/families/members/child/[id]/view/page.tsx`: 閲覧ページ（リダイレクト専用、親のみ）
-
-**使用コンポーネント:**
-- `app/(app)/children/[id]/_components/ChildView.tsx`: 子供閲覧画面
-- `app/(app)/children/[id]/_components/ChildViewLayout.tsx`: 子供閲覧レイアウト
-- `app/(core)/_components/InviteCodePopup.tsx`: 招待コードポップアップ
-
-**フック:**
-- `app/(app)/children/[id]/_hook/useChild.ts`: 子供データ取得フック
+**一覧画面:**
+- `app/(app)/quests/child/page.tsx`
+- `app/(app)/quests/child/ChildQuestsScreen.tsx`
+- `app/(app)/quests/child/_components/*`
+- `app/(app)/quests/child/_hooks/*`
 
 **API:**
-- `app/api/children/[id]/route.ts`: 子供詳細取得
-- `app/api/children/[id]/rewards/route.ts`: 報酬履歴取得
+- `app/api/children/[id]/quests/route.ts`
+- `app/api/children/[id]/quests/client.ts`
+- `app/api/quests/family/[id]/child/[childId]/route.ts`
+- `app/api/quests/family/[id]/child/[childId]/approve/route.ts`
+- `app/api/quests/family/[id]/child/[childId]/reject/route.ts`
 
 ### 関連エンドポイント（endpoints.ts）
 
 ```typescript
-// 子供閲覧
-export const CHILD_URL = (childId: string) => `${CHILDREN_URL}/${childId}`
-export const CHILD_API_URL = (childId: string) => `${CHILDREN_API_URL}/${childId}`
+// 子供クエスト
+export const CHILD_QUESTS_URL = `${QUESTS_URL}/child`
+export const CHILD_QUEST_VIEW_URL = (familyQuestId: string, childId?: string) => `${FAMILY_QUEST_VIEW_URL(familyQuestId)}/child/${childId || null}`
+export const CHILD_QUESTS_API_URL = (childId: string) => `${CHILD_API_URL(childId)}/quests`
+export const CHILD_QUEST_API_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/child/${childId}`
 
-// 報酬履歴
-export const CHILD_REWARDS_URL = (childId: string) => `${CHILD_URL(childId)}/rewards`
-export const CHILD_REWARDS_API_URL = (childId: string) => `${CHILD_API_URL(childId)}/rewards`
+// 報告却下
+export const REJECT_REPORT_API_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/child/${childId}/reject`
+
+// 報告受領
+export const APPROVE_REPORT_API_URL = (familyQuestId: string, childId: string) => `${FAMILY_QUEST_API_URL(familyQuestId)}/child/${childId}/approve`
 ```
 
 ### 関連DBテーブル（schema.ts）
 
+- `child_quests`: 子供クエスト（受注情報）
+- `family_quests`: 家族クエスト本体
+- `family_quest_details`: クエスト詳細（レベル別）
 - `children`: 子供情報
-- `child_quests`: 子供クエスト（報酬履歴含む）
-- `families`: 家族情報
-- `users`: ユーザー情報
-
-## 主要機能
-
-### 表示項目
-- 子供名
-- アイコン
-- アイコンカラー
-- 年齢（誕生日から計算）
-- 誕生日
-- 累計報酬額
-- 今月の報酬額
-- 報酬履歴へのリンク
-
-### 招待コード機能
-- user_idが存在しない場合、招待コードを表示
-- 自動で招待コードポップアップを表示
-- 招待コードをコピー可能
-- QRコード表示
-
-### 画面遷移
-- 編集ボタン（FAB）→ 子供編集画面へ遷移
-- 報酬履歴ボタン → 報酬履歴画面へ遷移
-
-### アクセス制御
-- 親のみアクセス可能（authGuard: childNG, guestNG）
+- `quests`: クエスト基本情報
 
 ## 制約
 
-- **範囲外の作業はしない**: 子供閲覧画面に関連しない機能修正は他のエージェントに委譲
+- **範囲外の作業はしない**: 子供クエスト画面に関連しない機能修正は他のエージェントに委譲
 - **規約遵守**: `coding-standards`、`architecture-guide`、`database-operations` を必ず参照
+- **スキル優先**: 実装前に必ず関連スキルを参照して現在の構造を理解
 - **Progressive Disclosure**: 説明時は段階的に情報を提供（一度にすべてを説明しない）
 - **セミコロン禁止**: コードにセミコロンを使用しない（コーディング規約）
 - **YAGNI原則**: 必要最小限の実装にとどめる

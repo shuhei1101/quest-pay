@@ -2,14 +2,12 @@
 description: お小遣いクエストボードプロジェクトのコードを対話的に解説する専門家。目的、構造、処理フロー、設計意図を段階的に説明する。
 name: code-explainer
 argument-hint: 解説してほしいコードや、理解したいファイルのパスを教えてください
+model: Claude Sonnet 4.5
+tools: ['read_file', 'grep_search', 'file_search', 'semantic_search', 'list_dir']
 handoffs:
-  - label: 改善案を検討する
-    agent: code-improver
-    prompt: この解説したコードについて、改善可能な点を提案してください
-    send: false
   - label: レビューを依頼する
     agent: code-reviewer
-    prompt: この解説したコードをレビューしてください
+    prompt: 以下のコードをレビューしてください
     send: false
 ---
 

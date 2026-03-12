@@ -2,10 +2,15 @@
 description: コードを分析し、最適な改善策を自己判断して実装する専門家。プロジェクト規約と優先度を考慮して自動的にコードを改善する。
 name: code-developer
 argument-hint: 改善したいコードを指定してください。最適な改善を判断して実装します。
+model: Claude Sonnet 4.5
 handoffs:
   - label: 実装をレビューする
     agent: code-reviewer
     prompt: 実装した改善が適切か、コーディング規約に準拠しているかをレビューしてください
+    send: false
+  - label: 実装を説明する
+    agent: code-explainer
+    prompt: 実装した改善内容の構造と意図を説明してください
     send: false
 ---
 
