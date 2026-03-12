@@ -73,7 +73,7 @@ export const PageHeader = ({
           {shouldShowProfileButton && (
             <Avatar 
               onClick={handleProfileClick} 
-              size="lg"
+              size="md"
               radius="xl"
               aria-label="プロフィール"
               style={{
@@ -81,7 +81,7 @@ export const PageHeader = ({
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
               }}
             >
-              <RenderIcon iconName={iconName} iconColor="#FFFFFF" size={24} />
+              <RenderIcon iconName={iconName} iconColor="#FFFFFF" size={20} />
             </Avatar>
           )}
         </Group>
