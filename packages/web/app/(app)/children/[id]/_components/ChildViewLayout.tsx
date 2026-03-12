@@ -253,7 +253,7 @@ export const ChildViewLayout = ({
       <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
         <Text size="lg" fw={600} mb="md">お金の管理</Text>
         <Stack gap="md">
-          <Card padding="md" radius="md" withBorder style={{ backgroundColor: "#FFF9C4" }}>
+          <Card padding="md" radius="md" style={{ backgroundColor: "#FFF9C4" }}>
             <Group justify="space-between" mb="xs">
               <Group gap="xs">
                 <IconWallet size={24} color="#F57C00" />
@@ -265,14 +265,13 @@ export const ChildViewLayout = ({
           </Card>
           
           <SimpleGrid cols={3} spacing="md">
-            <Card padding="sm" radius="md" withBorder style={{ backgroundColor: "#E1F5FE" }}>
+            <Card padding="sm" radius="md" style={{ backgroundColor: "#E1F5FE" }}>
               <Text size="xs" c="dimmed" mb="xs">報酬合計</Text>
               <Text size="lg" fw={700} c="#0277BD">{totalReward.toLocaleString()}円</Text>
             </Card>
             <Card 
               padding="sm" 
               radius="md" 
-              withBorder 
               style={{ backgroundColor: "#F3E5F5", cursor: onFixedRewardClick ? "pointer" : "default", position: "relative" }}
               onClick={onFixedRewardClick}
               className={onFixedRewardClick ? "hover:shadow-md transition-shadow" : ""}
@@ -288,7 +287,6 @@ export const ChildViewLayout = ({
             <Card 
               padding="sm" 
               radius="md" 
-              withBorder 
               style={{ backgroundColor: "#E8F5E9", cursor: onSavingsClick ? "pointer" : "default", position: "relative" }}
               onClick={onSavingsClick}
               className={onSavingsClick ? "hover:shadow-md transition-shadow" : ""}
