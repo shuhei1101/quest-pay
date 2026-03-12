@@ -1,6 +1,6 @@
 "use client"
 
-import { HOME_URL, SETTINGS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL, TEST_URL, TEST_FAMILY_PROFILE_MOCK_URL, TEST_SETTINGS_MOCK_URL, TEST_STRIPE_TEST_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, SETTINGS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL, TEST_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
 import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconBell, IconLogout, IconMenu2, IconPinnedOff, IconCoin } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
@@ -170,40 +170,10 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {/* モック（開発・デバッグ用） */}
       <NavLink
         className='side-nav'
-        href="#required-for-focus"
+        href={`${TEST_URL}`}
         label="モック"
         leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
-        childrenOffset={28}
-      >
-        {/* メインテストページ */}
-        <NavLink
-          className='side-nav'
-          href={`${TEST_URL}`}
-          label="テスト"
-          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
-        />
-        {/* 家族プロフィールモック */}
-        <NavLink
-          className='side-nav'
-          href={`${TEST_FAMILY_PROFILE_MOCK_URL}`}
-          label="プロフィール"
-          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
-        />
-        {/* 設定モック */}
-        <NavLink
-          className='side-nav'
-          href={`${TEST_SETTINGS_MOCK_URL}`}
-          label="設定"
-          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
-        />
-        {/* Stripeテスト */}
-        <NavLink
-          className='side-nav'
-          href={`${TEST_STRIPE_TEST_URL}`}
-          label="Stripe"
-          leftSection={<IconSettings color={menuColors.settings} size={18} stroke={1.2} />}
-        />
-      </NavLink>
+      />
       {/* 境界線 */}
       <Divider className="mx-3 my-2" />
       {/* カラーパレット */}
