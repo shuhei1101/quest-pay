@@ -8,7 +8,7 @@ import { FABChildItem, FAB_SPACING } from "./FABChildItem"
 import { useWindow } from "../useConstants"
 
 /** 展開パターンの種類 */
-export type ExpandPattern = "slide" | "radial-up" | "radial-down" | "radial-left" | "radial-right" | "hybrid-left"
+export type ExpandPattern = "slide" | "radial-up" | "radial-down" | "radial-left" | "radial-right" | "hybrid-left" | "hybrid-right"
 
 /** スライド方向 */
 export type SlideDirection = "left" | "right"
@@ -116,6 +116,9 @@ export const FloatingActionButton = ({
   /** hybrid-leftパターンかどうか */
   const isHybridLeftPattern = actualPattern === "hybrid-left"
 
+  /** hybrid-rightパターンかどうか */
+  const isHybridRightPattern = actualPattern === "hybrid-right"
+
   /** 内部で管理する開閉状態 */
   const [internalOpen, setInternalOpen] = useState(defaultOpen)
 
@@ -140,13 +143,13 @@ export const FloatingActionButton = ({
     }
   }, [isExternalControl, externalOnToggle, items])
 
-  /** 子アイテムをクリックする（slideパターンまたはhybrid-leftパターンの場合は自動でクローズ） */
+  /** 子アイテムをクリックする（slideパターンまたはhybrid-leftパターンまたはhybrid-rightパターンの場合は自動でクローズ） */
   const handleItemClick = useCallback((item: FloatingActionItem) => {
     item.onClick()
-    if (isSlidePattern || isHybridLeftPattern) {
+    if (isSlidePattern || isHybridLeftPattern || isHybridRightPattern) {
       handleToggle(false)
     }
-  }, [isSlidePattern, isHybridLeftPattern, handleToggle])
+  }, [isSlidePattern, isHybridLeftPattern, isHybridRightPattern, handleToggle])
 
   // パターンに基づいてアイテムの座標を計算する（radialパターンの場合のみ使用）
   const itemPositions = calculateItemPositions(items, actualPattern, spacing)
@@ -162,6 +165,10 @@ export const FloatingActionButton = ({
       // hybrid-leftパターンで開いているときは、閉じるアイコンを示す
       return <IconChevronRight size={24} />
     }
+    if (actualOpen && items.length > 1 && isHybridRightPattern) {
+      // hybrid-rightパターンで開いているときは、閉じるアイコンを示す
+      return <IconChevronLeft size={24} />
+    }
     return mainIcon
   })()
 
@@ -173,7 +180,85 @@ export const FloatingActionButton = ({
         display: "inline-block",
       }}
     >
-      {isHybridLeftPattern ? (
+      {isHybridRightPattern ? (
+        /* hybrid-rightパターン: 右にスライド展開 */
+        <>
+          {/* 右にスライド配置するアイテム */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: FAB_SPACING.mainToItemsGap,
+            }}
+          >
+            {/* メインボタン */}
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                width: FAB_SPACING.mainButtonSize,
+                height: FAB_SPACING.mainButtonSize,
+              }}
+            >
+              <ActionIcon
+                radius="xl"
+                variant={themeColors.fab.variant}
+                color={themeColors.buttonColors.primary}
+                onClick={() => handleToggle(!actualOpen)}
+                style={{
+                  width: FAB_SPACING.mainButtonSize,
+                  height: FAB_SPACING.mainButtonSize,
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
+                  border: `${themeColors.fab.border.activeWidth} solid ${themeColors.borderColors.focus}`,
+                  boxSizing: "border-box",
+                  opacity: 1,
+                  backdropFilter: "blur(1px)",
+                  WebkitBackdropFilter: "blur(1px)",
+                }}
+              >
+                {displayMainIcon}
+              </ActionIcon>
+            </div>
+
+            <AnimatePresence>
+              {actualOpen && items.length > 1 && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: FAB_SPACING.itemsGap,
+                    padding: `0 ${FAB_SPACING.itemsContainerPadding}px`,
+                    height: FAB_SPACING.mainButtonSize,
+                  }}
+                >
+                  {/* すべてのアイテムを順番に配置 */}
+                  {items.map((item, index) => (
+                    <FABChildItem
+                      key={index}
+                      icon={item.icon}
+                      label={item.label}
+                      onClick={() => handleItemClick(item)}
+                      color={item.color || themeColors.buttonColors.primary}
+                      variant={themeColors.fab.variant}
+                      opacity={themeColors.fab.opacity.inactive}
+                      border={`${themeColors.fab.border.inactiveWidth} solid transparent`}
+                    />
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </>
+      ) : isHybridLeftPattern ? (
         /* hybrid-leftパターン: モバイルは最初のアイテムを上、PCはすべて左にスライド */
         <>
           {/* 左にスライド配置するアイテム */}

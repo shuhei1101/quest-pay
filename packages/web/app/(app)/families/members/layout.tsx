@@ -72,20 +72,49 @@ export default function FamilyMembersLayout({ children }: {
   }
   
   // PC（タブレットより大きい）の場合、2ペインで表示する
+  
+  // 左側一覧用のFABアイテム（追加ボタンのみ）
+  const leftPaneActionItems: FloatingActionItem[] = [
+    { 
+      icon: <IconPlus size={20} />,
+      onClick: () => router.push(FAMILIES_MEMBERS_CHILD_NEW_URL)
+    },
+  ]
+
+  // 右側詳細用のFABアイテム（編集ボタンのみ、子供閲覧画面の場合）
+  const rightPaneActionItems: FloatingActionItem[] = []
+  if (childIdForEdit) {
+    rightPaneActionItems.push({
+      icon: <IconEdit size={20} />,
+      onClick: () => router.push(FAMILIES_MEMBERS_CHILD_EDIT_URL(childIdForEdit))
+    })
+  }
+
   return (
+    <>
     <div className="flex h-full" style={{ gap: "1rem" }}>
       {/* 一覧画面 */}
-      <aside className="w-1/3" style={{ borderRight: "1px solid #e0e0e0", paddingRight: "1rem", overflowY: "auto", position: "relative" }}>
+        <aside className="w-1/3" style={{ borderRight: "1px solid #e0e0e0", paddingRight: "1rem", overflowY: "auto" }}>
         <FamilyMemberList selectedId={selectedId} />
-        <SubMenuFAB
-          items={actionItems}
-        />
       </aside>
       {/* メインコンテンツ */}
       <main className="flex-1" style={{ paddingLeft: "1rem", overflowY: "auto" }}>
         {children}
       </main>
     </div>
+      {/* 左側一覧用のFAB（左下に配置、右に展開） */}
+      <SubMenuFAB
+        items={leftPaneActionItems}
+        position="left"
+        pattern="hybrid-right"
+      />
+      {/* 右側詳細用のFAB（右下に配置、編集ボタンがある場合のみ） */}
+      {rightPaneActionItems.length > 0 && (
+        <SubMenuFAB
+          items={rightPaneActionItems}
+        />
+      )}
+    </>
   )
 
 }

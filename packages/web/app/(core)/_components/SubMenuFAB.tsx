@@ -12,6 +12,7 @@ export const SubMenuFAB = ({
   onToggle,
   defaultOpen = false,
   pattern,
+  position = "right",
 }: {
   /** 展開するアクションアイテムの配列 */
   items: FloatingActionItem[]
@@ -22,7 +23,9 @@ export const SubMenuFAB = ({
   /** デフォルトで展開状態にするか */
   defaultOpen?: boolean
   /** 展開パターン（デフォルトは"hybrid-left"） */
-  pattern?: "slide" | "radial-up" | "radial-left" | "hybrid-left"
+  pattern?: "slide" | "radial-up" | "radial-left" | "hybrid-left" | "hybrid-right"
+  /** FABの配置位置（デフォルトは"right"） */
+  position?: "left" | "right"
 }) => {
   const { isMobile } = useWindow()
   const { openFab, closeFab, isOpen } = useFABContext()
@@ -55,7 +58,10 @@ export const SubMenuFAB = ({
       style={{
         position: "fixed",
         bottom: isMobile ? "16px" : "40px",
-        right: isMobile ? "16px" : "40px",
+        ...(position === "left" 
+          ? { left: isMobile ? "16px" : "40px" }
+          : { right: isMobile ? "16px" : "40px" }
+        ),
         zIndex: 3000,
       }}
     >
