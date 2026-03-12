@@ -34,6 +34,8 @@ read_file: .github/skills/mock-list/SKILL.md
 read_file: .github/skills/commit-auto/SKILL.md
 ```
 
+**重要**: コミット時は必ずセッション中に変更したファイルのみを個別指定でステージングすること。`git add -A`や`git add .`は絶対に使用しない。
+
 ## 責務
 
 ### 1. モック画面作成

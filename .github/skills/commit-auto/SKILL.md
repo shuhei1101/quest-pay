@@ -47,6 +47,16 @@ git status --short
 git add <file1> <file2> <file3>...
 ```
 
+**絶対に禁止:**
+```bash
+# ❌ すべてのファイルをステージングするコマンドは使用禁止
+git add -A
+git add .
+git add --all
+```
+
+**理由**: セッション外で変更されたファイルまで誤ってコミットしてしまうため。必ずファイルを個別に指定すること。
+
 ### Step 3: Generate Commit Message
 
 Analyze the changes and generate a meaningful commit message that:
@@ -82,3 +92,4 @@ Inform the user that the commit was successful and provide the commit message us
 - Use Japanese for commit messages in this project
 - Keep commit messages concise but descriptive
 - Do NOT push changes automatically - only commit locally
+- **CRITICAL**: Never use `git add -A`, `git add .`, or `git add --all` - always specify individual files from the current session only
