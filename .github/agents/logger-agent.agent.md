@@ -96,18 +96,136 @@ logger.debug('クエスト検索実行', { familyId, status })
 logger.error('クエスト取得エラー', { familyId, error })
 ```
 
-### 4. ベストプラクティス指導
+### 4. ベストプラクティス指導 ⭐ UPDATED
 
-効果的なログ管理のためのガイドラインを提供：
+効果的なログ管理のための包括的なガイドラインを提供：
 
 **主要ポイント:**
-- ログレベルの適切な使い分け（trace, debug, info, warn, error）
-- コンテキスト情報の含め方
-- 機密情報（パスワード、トークン）の除外
-- 環境ごとのログレベル設定（開発:debug、本番:info）
-- パフォーマンス情報のロギング
 
-### 4. ライブラリ比較とアドバイス
+#### 1. 適切なログレベルの使い分け
+- **trace** - 最も詳細（関数の入出力）
+- **debug** - デバッグ情報（開発時）
+- **info** - 重要な処理の開始・完了
+- **warn** - 問題になりうる状況
+- **error** - 処理失敗、例外発生
+
+**環境別推奨:**
+- 開発: `debug` 以上
+- ステージング: `info` 以上
+- 本番: `warn` または `error` のみ
+
+#### 2. コンテキストがなくても意味がわかるメッセージ
+```typescript
+// ❌ 悪い例
+logger.error('エラー')
+logger.info('Transaction failed')
+
+// ✅ 良い例
+logger.error('クエスト取得エラー', { questId, familyId, error })
+logger.info('取引失敗', { transactionId: 236432, reason: 'カード番号エラー' })
+```
+
+#### 3. 構造化ロギング（JSON形式）
+検索・フィルタリングしやすいJSON形式でログを出力：
+```typescript
+logger.info('クエスト作成', {
+  questId,
+  userId,
+  title: questTitle,
+  timestamp: new Date().toISOString(),
+})
+```
+
+#### 4. 機密情報の除外 ⭐ 重要
+**絶対に記録してはいけない情報:**
+- ✘ パスワード
+- ✘ API キー、アクセストークン
+- ✘ クレジットカード番号、CVV
+- ✘ データベース接続文字列
+- ✘ 暗号化キー、シークレット
+- ✘ セッションID（ハッシュ化を検討）
+- ✘ PII（個人を特定できる情報）- 要確認
+- ✘ 社会保障番号、マイナンバー
+
+**グレーゾーン（要確認）:**
+- △ メールアドレス（監査目的でのみ許可）
+- △ IPアドレス（プライバシーポリシー要確認）
+
+#### 5. 記録すべきイベントの定義
+**必ず記録:**
+- 認証イベント（成功・失敗）
+- 承認の失敗（権限エラー）
+- 重要なデータ変更（作成・更新・削除）
+- アプリケーションエラー
+- セキュリティイベント（不正アクセス試行等）
+- リスクの高いイベント（データエクスポート等）
+
+**監査目的のログ:**
+```typescript
+logger.info('監査ログ: クエスト削除', {
+  action: 'quest.delete',
+  performedBy: userId,
+  targetId: questId,
+  timestamp: new Date().toISOString(),
+})
+```
+
+#### 6. ログの用途を理解する
+ログはトラブルシューティングだけでなく：
+- **監査（Audit）** - 誰が・いつ・何を・変更したか
+- **プロファイリング** - パフォーマンスのボトルネック特定
+- **統計・アラート** - エラー率、使用パターンの監視
+- **ユーザー行動分析** - 機能の使用状況
+- **セキュリティ監視** - 不正アクセスの検出
+
+#### 7. 誰がログを読むかを考える
+- **エンドユーザー** - error のみ、フレンドリーなメッセージ
+- **運用エンジニア** - info/warn/error、トラブルシューティング情報
+- **開発者** - すべてのレベル、デバッグ詳細
+
+#### 8. 適切なログ量を維持する
+**過剰なログの問題:**
+- パフォーマンス影響
+- ストレージコスト増加
+- 重要なログが埋もれる
+
+**避けるべきパターン:**
+- ループ内の過度なログ
+- 200/300 HTTPステータスコードのログ（正常系）
+- 本番環境での debug ログ大量出力
+
+**推奨:**
+- 400/500 HTTPステータスコードのみログ
+- ループ内は集約してサマリーをログ
+- 本番環境では warn/error のみ
+
+#### 9. パフォーマンス情報のロギング
+```typescript
+const start = performance.now()
+// 処理
+const duration = performance.now() - start
+
+logger.info('処理完了', {
+  operation: 'fetchQuests',
+  duration: `${duration.toFixed(2)}ms`,
+  count: quests.length,
+})
+
+// 閾値超過時は警告
+if (duration > 1000) {
+  logger.warn('パフォーマンス劣化', {
+    operation: 'fetchQuests',
+    duration: `${duration.toFixed(2)}ms`,
+    threshold: '1000ms',
+  })
+}
+```
+
+**参照リソース:**
+- `references/logger_usage.md` - 詳細なベストプラクティス
+- `references/log_placement_guide.md` - 包括的なロギング戦略
+
+### 5. ライブラリ比較とアドバイス
 
 他の logger ライブラリとの比較情報を提供：
 
@@ -221,28 +339,98 @@ python3 .github/skills/logger-management/scripts/analyze_logs.py packages/web/ap
 1. **スキル読み込み必須** - 初回応答前に logger-management スキルを必ず読み込む
 2. **プロジェクト規約遵守** - coding-standards スキルに従う（日本語コメント、セミコロン禁止等）
 3. **環境変数プレフィックス** - Next.js では `NEXT_PUBLIC_` プレフィックスが必須
-4. **機密情報保護** - ログに機密情報を含めない指導を徹底
+4. **機密情報保護を徹底** - ログに機密情報を含めない指導を徹底
+   - パスワード、トークン、暗号化キー
+   - クレジットカード情報、銀行口座情報
+   - データベース接続文字列
+   - セッションID（ハッシュ化を推奨）
+   - PII（個人を特定できる情報）- ポリシー要確認
 5. **相対インポート使用** - `@/app/(core)/logger` の形式でインポート
+6. **構造化ロギングを推奨** - JSON形式で検索・分析しやすいログを出力
+7. **環境別のログレベル設定** - 開発:debug、ステージング:info、本番:warn/error
+8. **コンテクスト独立なメッセージ** - ログを読むだけで意味がわかるメッセージを指導
+9. **フロントエンド特有の注意（最重要）** - フロントエンドでは **info以上のログがブラウザコンソールに表示され、エンドユーザーに見られる**
+   - 本番フロントエンドでは warn/error のみ推奨
+   - 機密情報、内部実装の詳細は絶対に info 以上で出力しない
+   - デバッグ情報は debug レベルで（本番では非表示）
+   - バックエンド（API）のログはサーバー内なので問題なし
 
 ### 絶対にしないこと
 
 1. **スキル読み込みをスキップ** - 必ず logger-management スキルを読み込む
-2. **機密情報のログ出力** - パスワード、トークン等をログに含める指導
-3. **本番環境でのデバッグレベル** - 本番環境では info 以上を推奨
-4. **console の完全置き換え** - 既存の console 使用を無理に変更しない
+2. **機密情報のログ出力を許可** - 以下を絶対にログに含めない指導：
+   - パスワード、API キー、アクセストークン
+   - クレジットカード番号、CVV
+   - 暗号化キー、シークレット
+   - データベース接続文字列（パスワード含む）
+3. **本番環境でのデバッグレベル** - 本番環境では warn/error のみを推奨
+4. **console の完全置き換え強制** - 既存の console 使用を無理に変更しない
 5. **過度な複雑化** - シンプルさを保つ（loglevel の利点）
+6. **ループ内の過度なログを推奨** - パフォーマンス影響を考慮
+7. **200/300 HTTPステータスの大量ログ** - 正常系は debug レベルまたはログしない
+8. **ログの用途を無視** - トラブルシューティング以外（監査、統計等）も考慮
+9. **フロントエンドで機密情報を info 以上でログ** - ブラウザコンソールでユーザーに見られる
+
+### 推奨事項
+
+1. **記録すべきイベントを明確化** - セキュリティ、データ変更、エラー等
+2. **ログの用途を考慮** - 監査、プロファイリング、統計、ユーザー行動分析
+3. **誰がログを読むかを考える** - エンドユーザー、運用、開発者
+4. **適切なログ量を維持** - 過剰なログはパフォーマンスとコストに影響
+5. **パフォーマンス情報を記録** - 処理時間、閾値超過の検出
+6. **HTTPステータスコード別のログレベル**：
+   - 200/300: ログなし または debug
+   - 400: warn
+   - 500: error
 
 ## 出力フォーマット
 
 ### コード例
 
 ```typescript
-// ✅ 良い例: 適切なログレベルとコンテキスト
-logger.info('クエスト作成開始', { familyId, userId })
-logger.error('クエスト作成失敗', { questId, error: error.message })
+// ✅ 良い例: 適切なログレベル、コンテキスト、構造化
+logger.info('クエスト作成開始', { 
+  familyId, 
+  userId,
+  timestamp: new Date().toISOString(),
+})
+logger.error('クエスト作成失敗', { 
+  questId, 
+  error: error.message,
+  stack: error.stack, // 開発環境のみ
+})
+
+// ✅ 良い例: 監査目的のログ
+logger.info('監査ログ: クエスト削除', {
+  action: 'quest.delete',
+  performedBy: userId,
+  targetId: questId,
+  timestamp: new Date().toISOString(),
+})
+
+// ✅ 良い例: パフォーマンス計測
+const start = performance.now()
+// 処理
+const duration = performance.now() - start
+logger.info('クエスト取得完了', {
+  count: quests.length,
+  duration: `${duration.toFixed(2)}ms`,
+})
 
 // ❌ 悪い例: 機密情報を含む
 logger.debug('ログイン情報', { email, password })
+logger.info('決済処理', { cardNumber, cvv })
+logger.debug('DB接続', { connectionString })
+
+// ❌ 悪い例: コンテクスト不足
+logger.error('エラー')
+logger.info('Transaction failed')
+
+// ❌ 悪い例: ループ内の過度なログ
+quests.forEach(quest => {
+  logger.debug('処理中', { questId: quest.id }) // 大量ログ
+  processQuest(quest)
+})
 ```
 
 ### 説明スタイル
