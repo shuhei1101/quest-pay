@@ -1,5 +1,4 @@
 import { CHILD_QUEST_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetChildQuestResponse } from "./route";
 
@@ -9,7 +8,6 @@ export const getChildQuest = async ({familyQuestId, childId}: {
   familyQuestId: string
   childId: string
 }) => {
-  logger.debug("getChildQuest.API呼び出し: ", {URL: CHILD_QUEST_API_URL(familyQuestId, childId })})
   // APIを実行する
   const res = await fetch(`${CHILD_QUEST_API_URL(familyQuestId, childId)}`, {
     method: "GET",
@@ -22,7 +20,6 @@ export const getChildQuest = async ({familyQuestId, childId}: {
     throw AppError.fromResponse(data, res.status)
   }
 
-  logger.debug("getChildQuest.取得データ: ", { res })
 
   const data = await res.json()
 
@@ -34,7 +31,6 @@ export const deleteChildQuest = async ({familyQuestId, childId}: {
   familyQuestId: string
   childId: string
 }) => {
-  logger.debug("deleteChildQuest.API呼び出し: ", {URL: CHILD_QUEST_API_URL(familyQuestId, childId })})
   // APIを実行する
   const res = await fetch(`${CHILD_QUEST_API_URL(familyQuestId, childId)}`, {
     method: "DELETE",
@@ -47,5 +43,4 @@ export const deleteChildQuest = async ({familyQuestId, childId}: {
     throw AppError.fromResponse(data, res.status)
   }
 
-  logger.debug("deleteChildQuest.削除完了")
 }

@@ -1,5 +1,4 @@
 import { PUBLIC_QUEST_COMMENT_REPORT_API_URL } from "@/app/(core)/endpoints"
-import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 import { PostCommentReportRequest } from "./route"
 
@@ -13,7 +12,6 @@ export const reportPublicQuestComment = async ({
   commentId: string
   reason: string
 }) => {
-  logger.debug("reportPublicQuestComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_REPORT_API_URL(publicQuestId, commentId }) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_REPORT_API_URL(publicQuestId, commentId), {
     method: "POST",

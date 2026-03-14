@@ -1,6 +1,5 @@
 import queryString from "query-string"
 import { CHILD_QUESTS_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetChildQuestsResponse } from "./route";
 import { ChildQuestSearchParams } from "../../../quests/family/[id]/child/query";
@@ -10,7 +9,6 @@ export const getChildQuests = async ({params, childId}: {
   childId: string,
   params: ChildQuestSearchParams
 }) => {
-  logger.debug("getChildQuests.API呼び出し: ", {URL: CHILD_QUESTS_API_URL(childId }), params})
 
   // クエリストリングを生成する
   const qs = queryString.stringify(params, { arrayFormat: "none" })
@@ -27,7 +25,6 @@ export const getChildQuests = async ({params, childId}: {
     throw AppError.fromResponse(data, res.status)
   }
 
-  logger.debug("getChildQuests.戻り値: ", { data })
 
   return data as GetChildQuestsResponse
 }

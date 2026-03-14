@@ -1,5 +1,4 @@
 import { PUBLIC_QUEST_LIKE_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 
 
@@ -7,7 +6,6 @@ import { AppError } from "@/app/(core)/error/appError";
 export const likeQuest = async ({publicQuestId}: {
   publicQuestId: string
 }) => {
-  logger.debug("likeQuest.API呼び出し: ", {URL: PUBLIC_QUEST_LIKE_API_URL(publicQuestId })})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_LIKE_API_URL(publicQuestId)}`, {
     method: "POST",

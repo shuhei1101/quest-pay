@@ -1,5 +1,4 @@
 import { PUBLIC_QUEST_BY_FAMILY_QUEST_ID_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import { GetPublicQuestByFamilyQuestIdResponse } from "./route";
 
@@ -8,7 +7,6 @@ import { GetPublicQuestByFamilyQuestIdResponse } from "./route";
 export const getPublicQuestByFamilyQuestId = async ({familyQuestId}: {
   familyQuestId: string
 }) => {
-  logger.debug("getPublicQuestByFamilyQuestId.API呼び出し: ", {URL: PUBLIC_QUEST_BY_FAMILY_QUEST_ID_API_URL(familyQuestId })})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_BY_FAMILY_QUEST_ID_API_URL(familyQuestId)}`, {
     method: "GET",
@@ -20,8 +18,6 @@ export const getPublicQuestByFamilyQuestId = async ({familyQuestId}: {
     const data = await res.json()
     throw AppError.fromResponse(data, res.status)
   }
-
-  logger.debug("getPublicQuestByFamilyQuestId.取得データ: ", { `${PUBLIC_QUEST_BY_FAMILY_QUEST_ID_API_URL(familyQuestId })}`)
 
   const data = await res.json()
 

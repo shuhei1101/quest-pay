@@ -2,7 +2,6 @@ import { DatabaseError } from "@/app/(core)/error/appError"
 import { fetchChildQuest } from "./query"
 import { Db } from "@/index"
 import { ChildSelect } from "@/drizzle/schema"
-import { logger } from "@/app/(core)/logger"
 
 export const questChildExclusiveControl = {
   /** 既に存在するかどうかを確認する */
@@ -22,7 +21,6 @@ export const questChildExclusiveControl = {
   }) => {
 
     if (beforeDate !== afterDate) {
-      logger.error("排他エラー発生: ", {beforeDate, afterDate} })
       // 排他例外を発生させる
       throw new DatabaseError("他のユーザによって更新されました。")
     }

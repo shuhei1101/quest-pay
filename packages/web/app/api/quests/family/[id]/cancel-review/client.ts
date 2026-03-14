@@ -1,5 +1,4 @@
 import { CANCEL_REVIEW_API_URL } from "@/app/(core)/endpoints"
-import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 import type { CancelReviewRequest } from "./route"
 
@@ -8,7 +7,6 @@ export const cancelReview = async ({request, familyQuestId}: {
   request: CancelReviewRequest,
   familyQuestId: string
 }) => {
-  logger.debug("cancelReview.API呼び出し: ", {URL: CANCEL_REVIEW_API_URL(familyQuestId }), request})
   // APIを実行する
   const res = await fetch(`${CANCEL_REVIEW_API_URL(familyQuestId)}`, {
     method: "PUT",

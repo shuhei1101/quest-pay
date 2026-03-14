@@ -1,13 +1,11 @@
 import queryString from "query-string"
 import { PUBLIC_QUESTS_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetPublicQuestsResponse } from "./route";
 import { PublicQuestSearchParams } from "./query";
 
 /** 公開クエストをGETする */
 export const getPublicQuests = async (params: PublicQuestSearchParams) => {
-  logger.debug("getPublicQuests.API呼び出し: ", {URL: PUBLIC_QUESTS_API_URL, params} })
 
   // クエリストリングを生成する
   const qs = queryString.stringify(params, { arrayFormat: "none" })
@@ -24,7 +22,6 @@ export const getPublicQuests = async (params: PublicQuestSearchParams) => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  logger.debug("getPublicQuests.戻り値: ", { data })
 
   return data as GetPublicQuestsResponse
 }

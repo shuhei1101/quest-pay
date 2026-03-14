@@ -1,5 +1,4 @@
 import { PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL } from "@/app/(core)/endpoints"
-import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 
 /** コメントに低評価を付ける */
@@ -10,7 +9,6 @@ export const downvotePublicQuestComment = async ({
   publicQuestId: string
   commentId: string
 }) => {
-  logger.debug("downvotePublicQuestComment.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId }) })
   
   const res = await fetch(PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId), {
     method: "POST",
@@ -31,8 +29,6 @@ export const removePublicQuestCommentDownvote = async ({
   publicQuestId: string
   commentId: string
 }) => {
-  logger.debug("removePublicQuestCommentDownvote.API呼び出し: ", { URL: PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId }) })
-  
   const res = await fetch(PUBLIC_QUEST_COMMENT_DOWNVOTE_API_URL(publicQuestId, commentId), {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },

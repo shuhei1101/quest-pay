@@ -1,5 +1,4 @@
 import { PUBLIC_QUEST_API_URL, QUESTS_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { DeletePublicQuestRequest, GetPublicQuestResponse, PutPublicQuestRequest } from "./route";
 
@@ -8,7 +7,6 @@ import type { DeletePublicQuestRequest, GetPublicQuestResponse, PutPublicQuestRe
 export const getPublicQuest = async ({publicQuestId}: {
   publicQuestId: string
 }) => {
-  logger.debug("getPublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId })})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_API_URL(publicQuestId)}`, {
     method: "GET",
@@ -21,8 +19,6 @@ export const getPublicQuest = async ({publicQuestId}: {
     throw AppError.fromResponse(data, res.status)
   }
 
-  logger.debug("getPublicQuest.取得データ: ", { `${PUBLIC_QUEST_API_URL(publicQuestId })}`)
-
   const data = await res.json()
 
   return data as GetPublicQuestResponse
@@ -33,7 +29,6 @@ export const putPublicQuest = async ({request, publicQuestId}: {
   request: PutPublicQuestRequest,
   publicQuestId: string
 }) => {
-  logger.debug("putPublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId }), request})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_API_URL(publicQuestId)}`, {
     method: "PUT",
@@ -53,7 +48,6 @@ export const deletePublicQuest = async ({request, publicQuestId}: {
   request: DeletePublicQuestRequest,
   publicQuestId: string
 }) => {
-  logger.debug("deletePublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId }), request})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_API_URL(publicQuestId)}`, {
     method: "DELETE",

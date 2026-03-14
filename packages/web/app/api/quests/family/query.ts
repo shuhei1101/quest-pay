@@ -1,5 +1,4 @@
 import { calculatePagination } from "@/app/(core)/util"
-import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { familyQuests, FamilyQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect } from "@/drizzle/schema"
@@ -124,7 +123,6 @@ export const fetchFamilyQuests = async ({ params, db, familyId }: {
       totalRecords: total ?? 0
     }
   } catch (error) {
-    logger.error("fetchFamilyQuests.取得例外: ", { error })
     throw new QueryError("家族クエストの読み込みに失敗しました。")
   }
 }
@@ -149,7 +147,6 @@ export const fetchFamilyQuest = async ({id, db}: {
     // データを結果オブジェクトに変換する
     const result = buildResult(rows)
     
-    logger.debug("fetchFamilyQuest.クエリ結果: ", {
       rowsCount: rows.length,
       hasResult: !!result[0],
       resultLength: result.length,
@@ -160,11 +157,10 @@ export const fetchFamilyQuest = async ({id, db}: {
       tagsCount: result[0]?.tags?.length,
       childrenCount: result[0]?.children?.length,
       icon: result[0]?.icon
-    } })
+    })
     
     return result[0]
   } catch (error) {
-    logger.error("fetchFamilyQuest.取得例外: ", { error })
     throw new QueryError("家族クエストの読み込みに失敗しました。")
   }
 }

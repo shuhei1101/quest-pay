@@ -1,5 +1,4 @@
 import { PUBLIC_QUEST_LIKE_COUNT_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetPublicQuestLikeCountResponse } from "./route";
 
@@ -7,7 +6,6 @@ import type { GetPublicQuestLikeCountResponse } from "./route";
 export const getPublicQuestLikeCount = async ({publicQuestId}: {
   publicQuestId: string
 }) => {
-  logger.debug("getPublicQuestLikeCount.API呼び出し: ", {URL: PUBLIC_QUEST_LIKE_COUNT_API_URL(publicQuestId })})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_LIKE_COUNT_API_URL(publicQuestId)}`, {
     method: "GET",
@@ -21,7 +19,6 @@ export const getPublicQuestLikeCount = async ({publicQuestId}: {
   }
 
   const data = await res.json()
-  logger.debug("getPublicQuestLikeCount.取得データ: ", { data })
 
 
   return data as GetPublicQuestLikeCountResponse
