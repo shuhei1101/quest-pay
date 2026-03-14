@@ -68,7 +68,7 @@ export const FamilyProfileMock = () => {
 
   return (
     <Box p="md">
-      <PageHeader title="家族プロフィール画面モック" />
+      <PageHeader title="家族プロフィール" />
       
       {/* トップバー */}
       <div className="flex items-center gap-3 justify-end mb-4">
