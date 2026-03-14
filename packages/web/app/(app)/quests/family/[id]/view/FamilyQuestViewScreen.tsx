@@ -4,15 +4,13 @@ import { useState, useRef, useEffect } from "react"
 import { FamilyQuestViewLayout } from "./_components/FamilyQuestViewLayout"
 import { useFamilyQuest } from "./_hooks/useFamilyQuest"
 import { useRouter } from "next/navigation"
-import { useDisclosure } from "@mantine/hooks"
-import { QuestEditModal } from "../../../_components/QuestEditModal"
-import { FamilyQuestEdit } from "../FamilyQuestEdit"
 import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { IconEdit } from "@tabler/icons-react"
 import { useWindow } from "@/app/(core)/useConstants"
 import { Indicator, Paper, Stack, Text } from "@mantine/core"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
 import { useFABContext } from "@/app/(core)/_components/FABContext"
+import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
 
 /** 家族クエスト閲覧画面 */
 export const FamilyQuestViewScreen = ({id}: {id: string}) => {
@@ -29,8 +27,6 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   const [selectedLevel, setSelectedLevel] = useState<number>(1)
   /** 現在のクエスト状態 */
   const {familyQuest, isLoading} = useFamilyQuest({id})
-  /** 編集モーダル制御状態 */
-  const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false)
 
   /** 選択中のレベルの詳細を取得する */
   const selectedDetail = familyQuest?.details?.find(d => d.level === selectedLevel) || familyQuest?.details?.[0]
@@ -90,13 +86,6 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
       availableLevels={availableLevels}
       onLevelChange={handleLevelChange}
     />
-      {/* 編集モーダル */}
-      <QuestEditModal
-        opened={editModalOpened}
-        onClose={closeEditModal}
-      >
-        <FamilyQuestEdit id={id} />
-      </QuestEditModal>
 
       {/* レベル選択メニュー（レベル選択ボタンをクリックしたときに表示） */}
       {availableLevels.length > 1 && levelMenuOpened && (
@@ -161,7 +150,7 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
           {
             icon: <IconEdit size={20} />,
             label: "編集",
-            onClick: openEditModal,
+            onClick: () => router.push(FAMILY_QUEST_EDIT_URL(id)),
           },
           ...(availableLevels.length > 1 ? [{
             icon: (
@@ -178,7 +167,6 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
         ]}
         open={isOpen("family-quest-fab")}
         onToggle={(open) => open ? openFab("family-quest-fab") : closeFab("family-quest-fab")}
-        pattern={isMobile ? "radial-up" : "radial-left"}
       />
     </>
   )

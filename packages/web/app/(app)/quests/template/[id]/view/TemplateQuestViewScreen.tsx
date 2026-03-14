@@ -226,7 +226,6 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         ]}
         open={isOpen("template-quest-fab")}
         onToggle={(open) => open ? openFab("template-quest-fab") : closeFab("template-quest-fab")}
-        pattern={isMobile ? "radial-up" : "radial-left"}
       />
     </>
   )
