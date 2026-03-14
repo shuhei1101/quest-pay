@@ -7,6 +7,7 @@ import { fetchAgeRewards } from "../query"
 import { updateFamilyAgeRewards } from "../service"
 import { fetchUserInfoByUserId } from "../../../users/query"
 import { z } from "zod"
+import { logger } from "@/app/(core)/logger"
 
 /** 家族の年齢別報酬テーブルを取得する */
 export type GetFamilyAgeRewardTableResponse = {
@@ -17,18 +18,32 @@ export type GetFamilyAgeRewardTableResponse = {
 }
 export async function GET(req: NextRequest) {
   return withRouteErrorHandling(async () => {
+    logger.info('年齢別報酬テーブル取得API開始', {
+      path: '/api/reward/by-age/table',
+      method: 'GET',
+    })
+
     // 認証コンテキストを取得する
     const { db, userId } = await getAuthContext()
+    logger.debug('認証コンテキスト取得完了', { userId })
 
     // プロフィール情報を取得する
     const userInfo = await fetchUserInfoByUserId({ userId, db })
     if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
+    logger.debug('プロフィール情報取得完了', { familyId: userInfo.profiles.familyId })
 
     // 年齢別報酬テーブルを取得または作成する
     const table = await getOrCreateFamilyAgeRewardTable({ db, familyId: userInfo.profiles.familyId })
+    logger.debug('年齢別報酬テーブル取得完了', { tableId: table.id })
     
     // 報酬データを取得する
     const rewards = await fetchAgeRewards({ db, ageRewardTableId: table.id })
+    logger.debug('年齢別報酬データ取得完了', { rewardsCount: rewards.length })
+
+    logger.info('年齢別報酬テーブル取得成功', {
+      tableId: table.id,
+      rewardsCount: rewards.length,
+    })
 
     return NextResponse.json({ 
       ageRewardTable: {

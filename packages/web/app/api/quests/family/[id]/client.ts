@@ -21,19 +21,6 @@ export const getFamilyQuest = async ({familyQuestId}: {
   }
 
   const data = await res.json()
-  
-    URL: FAMILY_QUEST_API_URL(familyQuestId),
-    hasData: !!data,
-    hasFamilyQuest: !!data?.familyQuest,
-    familyQuestId: data?.familyQuest?.base?.id,
-    questName: data?.familyQuest?.quest?.name,
-    detailsCount: data?.familyQuest?.details?.length,
-    tagsCount: data?.familyQuest?.tags?.length,
-    childrenCount: data?.familyQuest?.children?.length,
-    iconName: data?.familyQuest?.icon?.name,
-    fullData: data
-  })
-
   return data as GetFamilyQuestResponse
 }
 
