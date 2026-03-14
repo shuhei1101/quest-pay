@@ -129,6 +129,8 @@ export const PublicQuestView = ({id}: {id: string}) => {
         monthFrom={publicQuest?.quest?.monthFrom}
         monthTo={publicQuest?.quest?.monthTo}
         requiredClearCount={selectedDetail?.requiredClearCount ?? null}
+        availableLevels={availableLevels}
+        onLevelChange={handleLevelChange}
       />
 
       {/* FAB */}

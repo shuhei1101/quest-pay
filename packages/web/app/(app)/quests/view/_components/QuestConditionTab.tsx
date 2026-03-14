@@ -1,10 +1,11 @@
 "use client"
 
-import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Slider, Stack, Text, Grid } from "@mantine/core"
-import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget } from "@tabler/icons-react"
+import { Badge, Box, Divider, Group, Paper, Rating, ScrollArea, Slider, Stack, Text, Grid, Menu, ActionIcon } from "@mantine/core"
+import { IconCategory, IconChartBar, IconCoin, IconRepeat, IconSparkles, IconTarget, IconChevronDown } from "@tabler/icons-react"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
 import { useWindow } from "@/app/(core)/useConstants"
 import { QuestViewIcon } from "./QuestViewIcon"
+import { useState } from "react"
 
 /** クエスト条件タブ */
 export const QuestConditionTab = ({
@@ -22,6 +23,8 @@ export const QuestConditionTab = ({
   iconName,
   iconSize,
   iconColor,
+  availableLevels,
+  onLevelChange,
 }: {
   level: number
   maxLevel?: number
@@ -37,9 +40,15 @@ export const QuestConditionTab = ({
   iconName?: string
   iconSize?: number
   iconColor?: string
+  availableLevels?: number[]
+  onLevelChange?: (level: number) => void
 }) => {
 
-  const { isMobile } = useWindow()
+  const { isMobile, isDark } = useWindow()
+  const [menuOpened, setMenuOpened] = useState(false)
+  
+  // レベル切り替えが可能かどうか
+  const canChangeLevel = availableLevels && availableLevels.length > 1 && onLevelChange
  
   return (
     <Stack gap="md" className="overflow-x-hidden overflow-y-auto">
@@ -64,10 +73,80 @@ export const QuestConditionTab = ({
               <Group gap="xs" mb={4}>
                 <LevelIcon size={20} />
                 <Text fw={500}>クエストレベル</Text>
+                {canChangeLevel && (
+                  <Text size="xs" c="dimmed">(クリックで変更)</Text>
+                )}
               </Group>
-              <Group justify="flex-end">
-                <Rating value={level} count={maxLevel} readOnly size="lg" />
-              </Group>
+              
+              {/* レベル選択メニュー */}
+              {canChangeLevel ? (
+                <Menu 
+                  opened={menuOpened} 
+                  onChange={setMenuOpened}
+                  position="bottom-end"
+                  width={200}
+                >
+                  <Menu.Target>
+                    <Box 
+                      style={{ 
+                        cursor: "pointer",
+                        borderRadius: 8,
+                        padding: "4px 8px",
+                        transition: "background-color 0.2s",
+                        backgroundColor: menuOpened 
+                          ? (isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)")
+                          : "transparent"
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!menuOpened) {
+                          e.currentTarget.style.backgroundColor = isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.03)"
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!menuOpened) {
+                          e.currentTarget.style.backgroundColor = "transparent"
+                        }
+                      }}
+                    >
+                      <Group justify="flex-end" gap="xs">
+                        <Rating value={level} count={maxLevel} readOnly size="lg" />
+                        <ActionIcon 
+                          variant="subtle" 
+                          size="sm"
+                          color={isDark ? "gray" : "dark"}
+                        >
+                          <IconChevronDown size={16} />
+                        </ActionIcon>
+                      </Group>
+                    </Box>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Label>レベルを選択</Menu.Label>
+                    {availableLevels.map((lvl) => (
+                      <Menu.Item
+                        key={lvl}
+                        onClick={() => onLevelChange(lvl)}
+                        style={{
+                          backgroundColor: lvl === level 
+                            ? (isDark ? "rgba(255, 159, 0, 0.2)" : "rgba(255, 159, 0, 0.1)")
+                            : undefined,
+                          fontWeight: lvl === level ? 600 : undefined,
+                        }}
+                      >
+                        <Group gap="xs">
+                          <Rating value={lvl} count={maxLevel} readOnly size="sm" />
+                          <Text size="sm">レベル {lvl}</Text>
+                        </Group>
+                      </Menu.Item>
+                    ))}
+                  </Menu.Dropdown>
+                </Menu>
+              ) : (
+                <Group justify="flex-end">
+                  <Rating value={level} count={maxLevel} readOnly size="lg" />
+                </Group>
+              )}
+              
               {/* レベルアップまでの進捗（子供用） */}
               {type === "child" && currentClearCount !== undefined && requiredClearCount !== undefined && requiredClearCount > 0 && (
                 <Box mt={8} className="w-full flex flex-col items-end">

@@ -53,6 +53,10 @@ type PublicQuestViewLayoutProps = {
   monthTo?: number | null
   /** 必要クリア回数 */
   requiredClearCount: number | null
+  /** 利用可能なレベル一覧 */
+  availableLevels?: number[]
+  /** レベル変更時のコールバック */
+  onLevelChange?: (level: number) => void
 }
 
 /** 公開クエスト閲覧画面の共通レイアウト */
@@ -78,6 +82,8 @@ export const PublicQuestViewLayout = ({
   monthFrom,
   monthTo,
   requiredClearCount,
+  availableLevels,
+  onLevelChange,
 }: PublicQuestViewLayoutProps) => {
   const {isDark} = useWindow()
   
@@ -126,6 +132,8 @@ export const PublicQuestViewLayout = ({
               iconName={iconName}
               iconSize={iconSize}
               iconColor={iconColor}
+              availableLevels={availableLevels}
+              onLevelChange={onLevelChange}
             />
           </Tabs.Panel>
 

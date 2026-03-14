@@ -53,6 +53,10 @@ type FamilyQuestViewLayoutProps = {
   monthTo?: number | null
   /** 必要クリア回数 */
   requiredClearCount: number | null
+  /** 利用可能なレベル一覧 */
+  availableLevels?: number[]
+  /** レベル変更時のコールバック */
+  onLevelChange?: (level: number) => void
 }
 
 /** 家族クエスト閲覧画面の共通レイアウト */
@@ -78,6 +82,8 @@ export const FamilyQuestViewLayout = ({
   monthFrom,
   monthTo,
   requiredClearCount,
+  availableLevels,
+  onLevelChange,
 }: FamilyQuestViewLayoutProps) => {
   const {isDark} = useWindow()
   
@@ -127,6 +133,8 @@ export const FamilyQuestViewLayout = ({
               iconName={iconName}
               iconSize={iconSize}
               iconColor={iconColor}
+              availableLevels={availableLevels}
+              onLevelChange={onLevelChange}
             />
           </Tabs.Panel>
 

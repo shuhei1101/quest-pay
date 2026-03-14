@@ -129,6 +129,8 @@ export const TemplateQuestViewScreen = ({id}: {id: string}) => {
         monthFrom={templateQuest?.quest?.monthFrom}
         monthTo={templateQuest?.quest?.monthTo}
         requiredClearCount={selectedDetail?.requiredClearCount ?? null}
+        availableLevels={availableLevels}
+        onLevelChange={handleLevelChange}
       />
 
       {/* レベル選択メニュー（レベル選択ボタンをクリックしたときに表示） */}

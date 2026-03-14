@@ -87,6 +87,8 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
       monthFrom={familyQuest?.quest?.monthFrom}
       monthTo={familyQuest?.quest?.monthTo}
       requiredClearCount={selectedDetail?.requiredClearCount ?? null}
+      availableLevels={availableLevels}
+      onLevelChange={handleLevelChange}
     />
       {/* 編集モーダル */}
       <QuestEditModal
