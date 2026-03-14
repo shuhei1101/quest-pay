@@ -1,12 +1,13 @@
 "use client"
 
-import { Box, Group, LoadingOverlay, Paper, Tabs, Title } from "@mantine/core"
+import { Box, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
 import { useState, ReactNode } from "react"
-import { IconAlertCircle, IconMenu } from "@tabler/icons-react"
+import { IconAlertCircle } from "@tabler/icons-react"
 import { FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
 import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useWindow } from "@/app/(core)/useConstants"
-import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
+import { ScrollableTabs } from "@/app/(core)/_components/ScrollableTabs"
+import { PageHeader } from "@/app/(core)/_components/PageHeader"
 
 /** クエスト編集レイアウトのタブ設定 */
 type TabConfig = {
@@ -68,6 +69,12 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
 
   return (
     <>
+      {/* ページタイトル */}
+      <PageHeader 
+        title={questId ? "クエスト編集" : "クエスト登録"}
+        showProfileButton={false}
+      />
+
       <Box pos="relative">
         {/* ロード中のオーバーレイ */}
         <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
@@ -75,11 +82,6 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
         {/* クエスト入力フォーム */}
         <form onSubmit={onSubmit}>
           <Paper p="md" withBorder style={{ height: 'var(--content-height)', display: 'flex', flexDirection: 'column' }}>
-            {/* タイトル */}
-            <Title order={2} mb="md">
-              {questId ? "クエスト編集" : "クエスト登録"}
-            </Title>
-
             <ScrollableTabs 
               activeTab={activeTab} 
               onChange={setActiveTab}
