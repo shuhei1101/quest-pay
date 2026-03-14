@@ -36,39 +36,54 @@ export const DetailSettings = ({
 
   /** レベルを追加する */
   const handleAddLevel = () => {
-    if (visibleLevels.length < 5) {
-      const nextLevel = Math.max(...visibleLevels) + 1
-      setActiveLevel(nextLevel.toString())
+    if (visibleLevels.length < 5 && activeLevel) {
+      const currentLevel = parseInt(activeLevel)
+      const newLevel = currentLevel + 1
       
-      // 新しいレベルのdetailを追加する
+      // 現在のレベルより大きいレベルを+1して繰り上げる
       const currentDetails = watch().details
-      const willBeMaxLevel = nextLevel >= 5
-      setValue("details", [...currentDetails, {
-        level: nextLevel,
+      const updatedDetails = currentDetails.map(d => 
+        d.level > currentLevel ? { ...d, level: d.level + 1 } : d
+      )
+      
+      // 新しいレベルを挿入する
+      const willBeMaxLevel = newLevel >= 5
+      const newDetail = {
+        level: newLevel,
         successCondition: "",
         requiredClearCount: willBeMaxLevel ? null : 1,
         reward: 0,
         childExp: 0,
         requiredCompletionCount: 1,
-      }])
+      }
+      
+      setValue("details", [...updatedDetails, newDetail].sort((a, b) => a.level - b.level))
+      setActiveLevel(newLevel.toString())
     }
   }
 
   /** レベルを削除する */
   const handleRemoveLevel = () => {
-    if (visibleLevels.length > 1) {
-      const lastLevel = Math.max(...visibleLevels)
+    if (visibleLevels.length > 1 && activeLevel) {
+      const currentLevel = parseInt(activeLevel)
       const currentDetails = watch().details
-      const targetDetail = currentDetails.find(d => d.level === lastLevel)
+      const targetDetail = currentDetails.find(d => d.level === currentLevel)
       
       /** レベルを削除する処理 */
       const executeRemove = () => {
-        const newDetails = currentDetails.filter(d => d.level !== lastLevel)
+        // 現在のレベルを削除し、それ以降のレベルを-1する
+        const newDetails = currentDetails
+          .filter(d => d.level !== currentLevel)
+          .map(d => d.level > currentLevel ? { ...d, level: d.level - 1 } : d)
+          .sort((a, b) => a.level - b.level)
+        
         setValue("details", newDetails)
         
-        // アクティブなタブを前のレベルに変更する
+        // アクティブなタブを適切に設定する
+        // 削除したレベルより前のレベルがあればそちらに、なければ次のレベル（繰り下げ後）に移動
         const remainingLevels = newDetails.map(d => d.level).sort((a, b) => a - b)
-        setActiveLevel(remainingLevels[remainingLevels.length - 1].toString())
+        const newActiveLevel = remainingLevels.find(l => l < currentLevel) ?? remainingLevels[0]
+        setActiveLevel(newActiveLevel.toString())
       }
       
       // デフォルト値のままの場合は確認せずに削除する
@@ -80,7 +95,7 @@ export const DetailSettings = ({
       // 入力内容がある場合は確認メッセージを表示する
       modals.openConfirmModal({
         title: "レベル削除の確認",
-        children: `レベル${lastLevel}の入力を破棄しますか?`,
+        children: `レベル${currentLevel}の入力を破棄しますか?`,
         labels: { confirm: "削除", cancel: "キャンセル" },
         confirmProps: { color: "red" },
         onConfirm: executeRemove
@@ -89,7 +104,7 @@ export const DetailSettings = ({
   }
 
   const maxLevel = visibleLevels.length > 0 ? Math.max(...visibleLevels) : 1
-  const canAddLevel = maxLevel < 5
+  const canAddLevel = visibleLevels.length < 5
 
   /** タブアイテムを生成する */
   const tabItems: ScrollableTabItem[] = visibleLevels.map((level) => {
@@ -147,13 +162,13 @@ export const DetailSettings = ({
         onCopy={handleCopyLevel}
       />
 
-      {/* 削除ボタン(レベル2以上の場合のみ表示) */}
+      {/* 削除ボタン(レベルが2つ以上ある場合のみ表示) */}
       {visibleLevels.length > 1 && (
         <ActionIcon 
           variant="default" 
           size="lg"
           onClick={handleRemoveLevel}
-          title="最後のレベルを削除"
+          title="現在のレベルを削除"
         >
           <IconMinus size={18} />
         </ActionIcon>
