@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { ClientAuthError } from "@/app/(core)/error/appError"
 import { useRouter } from "next/navigation"
-import { logger } from "@/app/(core)/logger"
 import { createQuestCategoryById } from "@/app/api/quests/category/service"
 import { getQuestCategories } from "@/app/api/quests/category/client"
 
@@ -17,10 +16,8 @@ export const useQuestCategories = () => {
     queryKey: ["questCategories"],
     retry: false,
     queryFn: async () => {
-      logger.debug("クエストカテゴリ取得開始")
       // セッションストレージからクエストカテゴリを取得する
       let fetchedQuestCategories = appStorage.questCategories.get() || []
-      logger.debug("キャッシュからクエストカテゴリ取得", { count: fetchedQuestCategories.length })
       // 取得できなかった場合
       if (fetchedQuestCategories.length == 0) {
         // クエストカテゴリを取得する
@@ -39,7 +36,6 @@ export const useQuestCategories = () => {
       // クエストカテゴリ辞書を取得する
       const questCategoryById = createQuestCategoryById(fetchedQuestCategories)
 
-      logger.debug("クエストカテゴリ取得完了", { count: fetchedQuestCategories.length })
       return { questCategories: fetchedQuestCategories, questCategoryById }
     }
   })

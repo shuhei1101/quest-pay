@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { Db } from "@/index"
 import { deleteQuest, insertQuest, updateQuest } from "../db"
 import { deletePublicQuest, insertPublicQuest, updatePublicQuest, UpdatePublicQuestRecord } from "./db"
@@ -52,7 +51,6 @@ export const registerPublicQuestByFamilyQuest = async ({
       return questId
     })
   } catch (error) {
-    logger.error("registerPublicQuestByFamilyQuest error", { error })
     throw new DatabaseError("公開クエストの登録に失敗しました。")
   }
 }
@@ -103,7 +101,6 @@ export const editPublicQuest = async ({db, quest, questDetails, publicQuest, que
       if (questTags.length > 0) await insertQuestTags({db: tx, records: questTags, questId: quest.id})
     })
   } catch (error) {
-    logger.error("editPublicQuest error", { error })
     throw new DatabaseError("公開クエストの更新に失敗しました。")
   }
 }
@@ -138,7 +135,6 @@ export const removePublicQuest = async ({db, publicQuest, quest}: {
     })
 
   } catch (error) {
-    logger.error("deletePublicQuest error", { error })
     throw new DatabaseError("公開クエストの削除に失敗しました。")
   }
 }
@@ -180,7 +176,6 @@ export const activatePublicQuest = async ({db, publicQuest}: {
       })
     })
   } catch (error) {
-    logger.error("activatePublicQuest error", { error })
     throw new DatabaseError("公開クエストの有効化に失敗しました。")
   }
 }
@@ -205,7 +200,6 @@ export const deactivatePublicQuest = async ({db, publicQuest}: {
       })
     })
   } catch (error) {
-    logger.error("deactivatePublicQuest error", { error })
     throw new DatabaseError("公開クエストの無効化に失敗しました。")
   }
 }

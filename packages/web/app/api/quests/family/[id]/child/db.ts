@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { FamilyQuestSelect, questChildren, QuestChildrenInsert, QuestChildrenSelect, QuestChildrenUpdate, QuestSelect } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { and, eq } from "drizzle-orm"
@@ -20,8 +19,6 @@ export const insertQuestChildren = async ({db, records, familyQuestId}: {
       familyQuestId
      })))
   } catch (error) {
-    logger.error("insertQuestChildren error", { error })
-    logger.debug("insertQuestChildren records", { records })
     throw new DatabaseError("クエスト対象の子供の登録に失敗しました。")
   }
 }
@@ -51,7 +48,6 @@ export const updateQuestChild = async ({db, familyQuestId, updatedAt, record, ch
     ))
     
   } catch (error) {
-    logger.error("updateQuestChild error", { error })
     throw new DatabaseError("クエスト対象の子供の更新に失敗しました。")
   }
 }
@@ -71,7 +67,6 @@ export const updateQuestChildSettings = async ({db, familyQuestId, record, child
     ))
     
   } catch (error) {
-    logger.error("updateQuestChildSettings error", { error })
     throw new DatabaseError("クエスト対象の子供の設定更新に失敗しました。")
   }
 }
@@ -85,7 +80,6 @@ export const deleteQuestChildren = async ({db, familyQuestId}: {
     // クエスト対象の子供を削除する
     await db.delete(questChildren).where(eq(questChildren.familyQuestId, familyQuestId))
   } catch (error) {
-    logger.error("deleteQuestChildrenByQuestId error", { error })
     throw new DatabaseError("クエスト対象の子供の削除に失敗しました。")
   }
 }
@@ -103,7 +97,6 @@ export const deleteQuestChild = async ({db, familyQuestId, childId}: {
       eq(questChildren.childId, childId)
     ))
   } catch (error) {
-    logger.error("deleteQuestChild error", { error })
     throw new DatabaseError("クエスト対象の子供の削除に失敗しました。")
   }
 }

@@ -1,4 +1,3 @@
-import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { icons, parents, profiles, questChildren } from "@/drizzle/schema"
@@ -20,11 +19,9 @@ export const fetchFamilyParents = async ({ db, familyId }: {
       .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(profiles.familyId, familyId))
 
-    logger.debug("親一覧取得完了", { data })
 
     return data as Parents
   } catch (error) {
-    logger.error("親一覧取得失敗", { error })
     throw new QueryError("親情報の読み込みに失敗しました。")
   }
 }
@@ -44,11 +41,9 @@ export const fetchParent = async ({ db, parentId }: {
       .leftJoin(profiles, eq(profiles.id, parents.profileId))
       .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(parents.id, parentId))
-    logger.debug("親情報取得完了", { data })
 
     return data[0]
   } catch (error) {
-    logger.error("親情報取得失敗", { error })
     throw new QueryError("親情報の読み込みに失敗しました。")
   }
 }
@@ -88,14 +83,12 @@ export const fetchParentStats = async ({ db, profileId, familyId }: {
     
     const rejectedCount = rejectedCountResult[0]?.count ?? 0
 
-    logger.debug("親統計情報取得完了", { approvedCount, rejectedCount })
 
     return {
       approvedCount,
       rejectedCount
     }
   } catch (error) {
-    logger.error("親統計情報取得失敗", { error })
     throw new QueryError("親の統計情報の読み込みに失敗しました。")
   }
 }

@@ -1,4 +1,3 @@
-import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 import type { ReadNotificationsRequest } from "./route"
 
@@ -6,7 +5,6 @@ import type { ReadNotificationsRequest } from "./route"
 export const readNotifications = async ({request}: {
   request: ReadNotificationsRequest,
 }) => {
-  logger.debug("通知既読化API呼び出し", { URL: `/api/notifications/read`, request })
   // APIを実行する
   const res = await fetch(`/api/notifications/read`, {
     method: "PUT",

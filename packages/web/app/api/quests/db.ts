@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { QuestInsert, quests, QuestUpdate } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { questExclusiveControl } from "./dbHelper"
@@ -17,7 +16,6 @@ export const insertQuest = async ({db, record}: {
       id: newQuest.id
     } 
   } catch (error) {
-    logger.error("クエスト登録失敗", { error })
     throw new DatabaseError("クエストの登録に失敗しました。")
   }
 }
@@ -43,7 +41,6 @@ export const updateQuest = async ({db, record, id, updatedAt}: {
     await db.update(quests).set(record).where(eq(quests.id, id))
     
   } catch (error) {
-    logger.error("クエスト更新失敗", { error })
     throw new DatabaseError("クエストの更新に失敗しました。")
   }
 }
@@ -68,7 +65,6 @@ export const deleteQuest = async ({db, id, updatedAt}: {
     await db.delete(quests).where(eq(quests.id, id)).execute()
     
   } catch (error) {
-    logger.error("クエスト削除失敗", { error })
     throw new DatabaseError("クエストの削除に失敗しました。")
   }
 }

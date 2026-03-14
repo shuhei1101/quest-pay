@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { getChildQuest } from "@/app/api/quests/family/[id]/child/[childId]/client"
 import { useQuery } from "@tanstack/react-query"
-import { logger } from "@/app/(core)/logger"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { HOME_URL } from "@/app/(core)/endpoints"
 
@@ -24,7 +23,6 @@ export const useChildQuest = ({
     queryFn: async () => {
       // データを取得する
       const childQuest = await getChildQuest({ familyQuestId: id, childId })
-      logger.debug("子供クエスト取得", { familyQuestId: id, childId })
       // データが取得できなかった場合、ホームにリダイレクトする
       if (!childQuest.childQuest) {
         appStorage.feedbackMessage.set({ message: "子供クエストの取得に失敗しました。", type: "error" })

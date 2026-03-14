@@ -1,4 +1,3 @@
-import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { quests } from "@/drizzle/schema"
@@ -17,7 +16,6 @@ export const fetchQuest = async ({id, db}: {
       .where(eq(quests.id, id))
     return data[0]
   } catch (error) {
-    logger.error("fetchQuest.取得例外: ", { error })
     throw new QueryError("クエスト情報の読み込みに失敗しました。")
   }
 }

@@ -4,7 +4,6 @@ import { fetchFamilyQuest } from "../query"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { removeFamilyQuest, editFamilyQuest } from "../service"
-import { logger } from "@/app/(core)/logger"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import z from "zod"
 import { FamilyQuestFormScheme } from "@/app/(app)/quests/family/[id]/form"
@@ -23,12 +22,10 @@ export async function GET(
       // パスパラメータからIDを取得する
       const params = await context.params
       
-      logger.debug("GetFamilyQuest.パラメータ.ID", { id: params.id })
       
       // 家族クエストを取得する
       const data = await fetchFamilyQuest({ db, id: params.id })
       
-      logger.debug("GetFamilyQuest.取得した家族クエスト", {
         hasData: !!data,
         familyQuestId: data?.base?.id,
         questId: data?.quest?.id,

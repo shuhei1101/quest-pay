@@ -1,5 +1,4 @@
 import { calculatePagination } from "@/app/(core)/util"
-import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { templateQuests, TemplateQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, familyQuests, FamilyQuestSelect, FamilyInsert, FamilySelect, families, publicQuests, PublicQuestSelect } from "@/drizzle/schema"
@@ -124,14 +123,12 @@ export const fetchTemplateQuests = async ({ params, db, familyId }: {
     // データをオブジェクトに変換する
     const result = buildResult(rows)
 
-    logger.debug("fetchTemplateQuests.取得データ: ", { result })
 
     return {
       rows: result,
       totalRecords: total ?? 0
     }
   } catch (error) {
-    logger.error("fetchTemplateQuests.取得例外: ", { error })
     throw new QueryError("テンプレートクエストの読み込みに失敗しました。")
   }
 }
@@ -157,11 +154,9 @@ export const fetchTemplateQuest = async ({id, db}: {
     // データを結果オブジェクトに変換する
     const result = buildResult(rows)
 
-    logger.debug("fetchTemplateQuest.取得データ: ", { result })
 
     return result[0]
   } catch (error) {
-    logger.error("fetchTemplateQuest.取得例外: ", { error })
     throw new QueryError("テンプレートクエストの読み込みに失敗しました。")
   }
 }
@@ -183,11 +178,9 @@ export const fetchTemplateQuestByPublicQuestId = async ({publicQuestId, db, fami
         eq(templateQuests.familyId, familyId)
       ))
 
-    logger.debug("fetchTemplateQuestByPublicQuestId.取得データ: ", { rows })
 
     return rows[0]
   } catch (error) {
-    logger.error("fetchTemplateQuestByPublicQuestId.取得例外: ", { error })
     throw new QueryError("テンプレートクエストの読み込みに失敗しました。")
   }
 }
@@ -204,11 +197,9 @@ export const fetchQuestLikeCount = async ({publicQuestId, db}: {
       .from(templateQuests)
       .where(eq(templateQuests.publicQuestId, publicQuestId))
 
-    logger.debug("fetchQuestLikeCount.取得データ: ", { total })
 
     return total
   } catch (error) {
-    logger.error("fetchQuestLikeCount.取得例外: ", { error })
     throw new QueryError("クエストいいね数の読み込みに失敗しました。")
   }
 }

@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { ChildFormSchema, ChildFormType } from "../form"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { logger } from "@/app/(core)/logger"
 import { useRouter } from "next/navigation"
 import { getChild } from "@/app/api/children/[id]/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"
@@ -43,7 +42,6 @@ export const useChildForm = ({childId}: {childId?: string}) => {
     retry: false,
     queryFn: async () => {
       const { child } = await getChild(childId!)
-      logger.debug("子供フォーム取得", { childId })
 
       if (!child) return {}
 
@@ -78,11 +76,6 @@ export const useChildForm = ({childId}: {childId?: string}) => {
     current.birthday !== fetchedChild.birthday ||
     current.iconColor !== fetchedChild.iconColor ||
     current.iconId !== fetchedChild.iconId
-
-  logger.debug("子供フォーム状態", { 
-    current, 
-    childEntity: data?.childEntity
-  })
 
 
   return {

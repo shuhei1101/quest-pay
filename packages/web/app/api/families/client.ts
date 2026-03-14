@@ -1,11 +1,9 @@
-import { logger } from "@/app/(core)/logger";
 import { FAMILY_API_URL } from "@/app/(core)/endpoints";
 import { AppError } from "@/app/(core)/error/appError";
 import type { PostFamilyRequest } from "./route";
 
 /** 家族をPOSTする */
 export const postFamily = async (request: PostFamilyRequest) => {
-  logger.debug("家族登録API呼び出し", { URL: FAMILY_API_URL, request })
   // APIを実行する
   const res = await fetch(`${FAMILY_API_URL}`, {
     method: "POST",

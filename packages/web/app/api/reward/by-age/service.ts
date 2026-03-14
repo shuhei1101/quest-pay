@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { Db } from "@/index"
 import { updateAgeReward } from "./db"
 import type { ageRewardTableType } from "@/drizzle/schema"
@@ -30,7 +29,6 @@ export const updateFamilyAgeRewards = async ({
       }
     })
   } catch (error) {
-    logger.error("updateFamilyAgeRewards error", { error })
     throw new DatabaseError("年齢別報酬の更新に失敗しました。")
   }
 }

@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation"
 import { FAMILY_NEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
 import { useEffect, useState } from "react"
 import { useLoginUserInfo } from "../_hooks/useLoginUserInfo"
-import { logger } from "@/app/(core)/logger"
 import { useJoinAsParent } from "../_hooks/useJoinAsParent"
 import { useJoinAsChild } from "../_hooks/useJoinAsChild"
 
@@ -38,7 +37,6 @@ export const LoginTypeSelectPopup = ({opened ,close}: {
     if (!opened) return
     // ユーザ情報を再取得する
     refetch()
-    logger.debug("ログインタイプ選択ポップアップ起動", { userInfo })
     // 状態をリセットする
     setParentInviteCode("")
     setParentInviteCodeError("")

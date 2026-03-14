@@ -76,7 +76,19 @@ read_file: .github/skills/commit-auto/SKILL.md
 1. ユーザーの要件をヒアリング
 2. 関連スキルを読み込み、現在の構造を理解
 3. 変更が必要なファイルを特定
-4. `coding-standards`と`architecture-guide`に従って実装
+4. **基盤スキル**を参照:
+   - `coding-standards`: コーディング規約
+   - `architecture-guide`: アーキテクチャガイド
+   - 必要に応じて以下も参照:
+     - `database-operations`: DB操作ガイド
+     - `schema-structure`: DBスキーマ構造
+     - `schema-relations`: テーブル間リレーション
+     - `error-handling`: エラーハンドリング
+     - `logger-management`: ログ配置ルール
+     - `endpoints-definition`: エンドポイント確認
+     - `common-components-catalog`: 共通コンポーネント一覧
+     - `common-components-usage`: 共通コンポーネント使用方法
+     - `environment-variables`: 環境変数設定
 5. 実装後、関連スキルを更新
 6. **自身の指示書をメンテナンス**:
    - ファイル構造の変更を反映

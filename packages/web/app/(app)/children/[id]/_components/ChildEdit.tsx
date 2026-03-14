@@ -8,7 +8,6 @@ import 'dayjs/locale/ja'
 import { useRegisterChild } from "../_hook/useRegisterChild"
 import { useIcons } from "@/app/(app)/icons/_hooks/useIcons"
 import { useChildForm } from "../_hook/useChildForm"
-import { logger } from "@/app/(core)/logger"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { IconSelectPopup } from "@/app/(app)/icons/_components/IconSelectPopup"
 // dayjs のロケールを日本語に設定

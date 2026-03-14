@@ -1,4 +1,3 @@
-import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { publicQuestComments, profiles, icons, commentUpvotes, commentLikes, commentReports, PublicQuestSelect } from "@/drizzle/schema"
@@ -142,11 +141,9 @@ export const fetchPublicQuestComments = async ({
       })
     )
 
-    logger.debug("fetchPublicQuestComments.取得データ: ", { commentsWithStats })
 
     return commentsWithStats
   } catch (error) {
-    logger.error("fetchPublicQuestComments.取得例外: ", { error })
     throw new QueryError("コメントの読み込みに失敗しました。")
   }
 }
@@ -165,11 +162,9 @@ export const fetchPublicQuestCommentsCount = async ({
       .from(publicQuestComments)
       .where(eq(publicQuestComments.publicQuestId, publicQuestId))
 
-    logger.debug("fetchPublicQuestCommentsCount.取得データ: ", { total })
 
     return total || 0
   } catch (error) {
-    logger.error("fetchPublicQuestCommentsCount.取得例外: ", { error })
     throw new QueryError("コメント数の読み込みに失敗しました。")
   }
 }

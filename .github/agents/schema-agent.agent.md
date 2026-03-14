@@ -71,7 +71,19 @@ read_file: .github/skills/commit-auto/SKILL.md
 ### 機能改修時
 1. 要件をヒアリング（新規テーブル追加、カラム追加など）
 2. 関連するスキルを参照して現在の構造を理解
-3. `coding-standards`、`database-operations` を参照
+3. **基盤スキル**を参照:
+   - `coding-standards`: コーディング規約
+   - `database-operations`: DB操作ガイド
+   - 必要に応じて以下も参照:
+     - `architecture-guide`: アーキテクチャガイド
+     - `schema-structure`: DBスキーマ構造
+     - `schema-relations`: テーブル間リレーション
+     - `error-handling`: エラーハンドリング
+     - `logger-management`: ログ配置ルール
+     - `endpoints-definition`: エンドポイント確認
+     - `common-components-catalog`: 共通コンポーネント一覧
+     - `common-components-usage`: 共通コンポーネント使用方法
+     - `environment-variables`: 環境変数設定
 4. スキーマ定義を追加・修正
 5. マイグレーションファイルを作成（必要に応じて）
 6. 変更内容に基づいてスキルを更新（必要に応じて）

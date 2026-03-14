@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { db } from "@/index"
 import { updateNotification } from "./db"
 
@@ -25,7 +24,6 @@ export const readNotifications = async ({notificationIds, updatedAt, profileId}:
 
     return result
   } catch (error) {
-    logger.error("通知既読処理失敗", { error, notificationIds, updatedAt })
     throw new DatabaseError('通知の既読処理に失敗しました。')
   }
 }

@@ -11,13 +11,11 @@ import { useLogin } from "./_hooks/useLogin"
 import { useRouter } from "next/navigation"
 import { FAMILY_QUESTS_URL, QUESTS_URL, SIGNUP_URL, FORGOT_PASSWORD_URL, HOME_URL } from "../../(core)/endpoints"
 import Link from "next/link"
-import { logger } from "@/app/(core)/logger"
 import { AccessErrorHandler } from "@/app/(core)/_components/AccessErrorHandler"
 
 export const LoginScreen = () => {
   /** セッションストレージを空にする */
   useEffect(() => {
-    logger.debug("セッションストレージをクリア")
     sessionStorage.clear()
   }, [])
 

@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { getPublicQuest } from "@/app/api/quests/public/[id]/client"
 import { useState } from "react"
 import { isSameArray } from "@/app/(core)/util"
-import { logger } from "@/app/(core)/logger"
 import { useMantineTheme } from "@mantine/core"
 import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
@@ -59,7 +58,6 @@ export const usePublicQuestForm = ({publicQuestId}: {publicQuestId: string}) => 
     retry: false,
     queryFn: async () => {
       const { publicQuest } = await getPublicQuest({publicQuestId: publicQuestId!})
-      logger.debug("公開クエストフォーム取得", { publicQuestId })
       // クエストフォームに変換する
       const fetchedPublicQuestForm: PublicQuestFormType = {
         name: publicQuest.quest.name || "",

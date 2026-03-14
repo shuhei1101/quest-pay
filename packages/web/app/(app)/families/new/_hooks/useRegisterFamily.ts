@@ -5,7 +5,6 @@ import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 import { FamilyRegisterFormType } from "../form"
 import { postFamily } from "@/app/api/families/client"
-import { logger } from "@/app/(core)/logger"
 import { HOME_URL } from "@/app/(core)/endpoints"
 
 
@@ -24,7 +23,6 @@ export const useRegisterFamily = () => {
     },
     onError: (error) => {
       // エラーをチェックする
-        logger.error("子供登録失敗", { error })
         throw error
     }
   })

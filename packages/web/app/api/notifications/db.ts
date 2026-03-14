@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { NotificationInsert, notifications, NotificationSelect, NotificationUpdate } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { notificationExclusiveControl } from "./dbHelper"
@@ -20,7 +19,6 @@ export const insertNotification = async ({db, record}: {
       id: newNotification.id
     } 
   } catch (error) {
-    logger.error("通知登録失敗", { error })
     throw new DatabaseError("通知の登録に失敗しました。")
   }
 }
@@ -46,7 +44,6 @@ export const updateNotification = async ({db, record, id, updatedAt}: {
     await db.update(notifications).set(record).where(eq(notifications.id, id))
     
   } catch (error) {
-    logger.error("通知更新失敗", { error })
     throw new DatabaseError("通知の更新に失敗しました。")
   }
 }
@@ -71,7 +68,6 @@ export const deleteNotification = async ({db, id, updatedAt}: {
     await db.delete(notifications).where(eq(notifications.id, id))
     
   } catch (error) {
-    logger.error("通知削除失敗", { error })
     throw new DatabaseError("通知の削除に失敗しました。")
   }
 }

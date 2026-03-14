@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { db } from "@/index"
 import { profiles, children, ProfileInsert, ChildInsert } from "@/drizzle/schema"
 import { insertChild, InsertChildRecord } from "./db"
@@ -31,7 +30,6 @@ export const registerChild = async ({profile, child}: {
 
     return result
   } catch (error) {
-    logger.error("子供登録失敗", { error, profile, child })
     throw new DatabaseError('子供の登録に失敗しました。')
   }
 }

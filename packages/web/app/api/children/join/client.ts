@@ -1,10 +1,8 @@
 import { CHILD_JOIN_API_URL } from "@/app/(core)/endpoints";
 import { AppError } from "@/app/(core)/error/appError";
 import type { JoinChildRequest } from "./route";
-import { logger } from "@/app/(core)/logger";
 
 export const postJoinChild = async (request: JoinChildRequest) => {
-  logger.debug("子供参加API呼び出し", { URL: CHILD_JOIN_API_URL, request })
   // APIを実行する
   const res = await fetch(`${CHILD_JOIN_API_URL}`, {
     method: "POST",

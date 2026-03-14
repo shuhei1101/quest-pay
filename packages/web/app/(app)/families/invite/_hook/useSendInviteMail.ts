@@ -1,5 +1,4 @@
 import { FamilyInviteType } from "../form"
-import { logger } from "@/app/(core)/logger"
 import toast from "react-hot-toast"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
@@ -15,7 +14,6 @@ export const useSendInviteMail = () => {
         toast("メールの送信が完了しました。")
       },
       onError: (error) => {
-        logger.error("メール送信失敗", { error })
         throw error
       }
     })

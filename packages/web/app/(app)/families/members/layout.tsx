@@ -8,7 +8,6 @@ import { FloatingActionItem } from "@/app/(core)/_components/FloatingActionButto
 import { IconPlus, IconEdit } from "@tabler/icons-react"
 import { useRouter, usePathname } from "next/navigation"
 import { FAMILIES_MEMBERS_CHILD_NEW_URL, FAMILIES_MEMBERS_CHILD_EDIT_URL } from "@/app/(core)/endpoints"
-import { logger } from "@/app/(core)/logger"
 
 export default function FamilyMembersLayout({ children }: {
   children: React.ReactNode
@@ -51,12 +50,6 @@ export default function FamilyMembersLayout({ children }: {
   // SSRレンダリング時の処理
   const [mounted, setMounted] = useState(false)
   useEffect(() => {
-    logger.debug('家族メンバーレイアウトマウント', { 
-      pathname, 
-      selectedId, 
-      isTablet,
-      isChildViewPage: !!isChildViewPage,
-    })
     setMounted(true)
   }, [])
   if (!mounted) return (<></>)

@@ -1,4 +1,3 @@
-import { logger } from "@/app/(core)/logger"
 import { ServerError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import {
@@ -26,7 +25,6 @@ export const getCommentById = async ({
 
     return comment
   } catch (error) {
-    logger.error("getCommentById.取得例外: ", { error })
     throw new ServerError("コメントの取得に失敗しました。")
   }
 }
@@ -53,11 +51,9 @@ export const createPublicQuestComment = async ({
       })
       .returning()
 
-    logger.debug("createPublicQuestComment.作成データ: ", { result })
 
     return result
   } catch (error) {
-    logger.error("createPublicQuestComment.作成例外: ", { error })
     throw new ServerError("コメントの投稿に失敗しました。")
   }
 }
@@ -92,9 +88,7 @@ export const deletePublicQuestComment = async ({
       .delete(publicQuestComments)
       .where(eq(publicQuestComments.id, commentId))
 
-    logger.debug("deletePublicQuestComment.削除完了: ", { commentId })
   } catch (error) {
-    logger.error("deletePublicQuestComment.削除例外: ", { error })
     throw new ServerError("コメントの削除に失敗しました。")
   }
 }
@@ -141,9 +135,7 @@ export const upvoteComment = async ({
       })
     }
 
-    logger.debug("upvoteComment.高評価完了: ", { commentId })
   } catch (error) {
-    logger.error("upvoteComment.高評価例外: ", { error })
     throw new ServerError("高評価の登録に失敗しました。")
   }
 }
@@ -190,9 +182,7 @@ export const downvoteComment = async ({
       })
     }
 
-    logger.debug("downvoteComment.低評価完了: ", { commentId })
   } catch (error) {
-    logger.error("downvoteComment.低評価例外: ", { error })
     throw new ServerError("低評価の登録に失敗しました。")
   }
 }
@@ -217,9 +207,7 @@ export const removeCommentVote = async ({
         )
       )
 
-    logger.debug("removeCommentVote.評価削除完了: ", { commentId })
   } catch (error) {
-    logger.error("removeCommentVote.評価削除例外: ", { error })
     throw new ServerError("評価の削除に失敗しました。")
   }
 }
@@ -258,9 +246,7 @@ export const reportComment = async ({
       reason,
     })
 
-    logger.debug("reportComment.報告完了: ", { commentId })
   } catch (error) {
-    logger.error("reportComment.報告例外: ", { error })
     if (error instanceof ServerError) throw error
     throw new ServerError("コメントの報告に失敗しました。")
   }
@@ -294,9 +280,7 @@ export const pinComment = async ({
       .set({ isPinned: true })
       .where(eq(publicQuestComments.id, commentId))
 
-    logger.debug("pinComment.ピン留め完了: ", { commentId })
   } catch (error) {
-    logger.error("pinComment.ピン留め例外: ", { error })
     throw new ServerError("ピン留めに失敗しました。")
   }
 }
@@ -315,9 +299,7 @@ export const unpinComment = async ({
       .set({ isPinned: false })
       .where(eq(publicQuestComments.id, commentId))
 
-    logger.debug("unpinComment.ピン留め解除完了: ", { commentId })
   } catch (error) {
-    logger.error("unpinComment.ピン留め解除例外: ", { error })
     throw new ServerError("ピン留め解除に失敗しました。")
   }
 }
@@ -336,9 +318,7 @@ export const likeByPublisher = async ({
       .set({ isLikedByPublisher: true })
       .where(eq(publicQuestComments.id, commentId))
 
-    logger.debug("likeByPublisher.公開者いいね完了: ", { commentId })
   } catch (error) {
-    logger.error("likeByPublisher.公開者いいね例外: ", { error })
     throw new ServerError("公開者いいねに失敗しました。")
   }
 }
@@ -357,9 +337,7 @@ export const unlikeByPublisher = async ({
       .set({ isLikedByPublisher: false })
       .where(eq(publicQuestComments.id, commentId))
 
-    logger.debug("unlikeByPublisher.公開者いいね解除完了: ", { commentId })
   } catch (error) {
-    logger.error("unlikeByPublisher.公開者いいね解除例外: ", { error })
     throw new ServerError("公開者いいね解除に失敗しました。")
   }
 }

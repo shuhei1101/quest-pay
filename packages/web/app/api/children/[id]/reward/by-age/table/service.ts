@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { Db } from "@/index"
 import { fetchChildAgeRewardTable } from "./query"
 import { insertChildAgeRewardTable } from "./db"
@@ -28,7 +27,6 @@ export const getOrCreateChildAgeRewardTable = async ({
       return table
     })
   } catch (error) {
-    logger.error("getOrCreateChildAgeRewardTable error", { error })
     throw new DatabaseError("子供の年齢別報酬テーブルの取得または作成に失敗しました。")
   }
 }

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
 import { fetchChildQuest } from "../query"
-import { logger } from "@/app/(core)/logger"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
@@ -28,7 +27,6 @@ export async function GET(
       // 子供クエストを取得する
       const data = await fetchChildQuest({ db, familyQuestId: params.id, childId: params.childId })
       
-      logger.debug("取得した子供クエスト: ", { data })
   
       return NextResponse.json({childQuest: data} as GetChildQuestResponse)
     })
@@ -53,7 +51,6 @@ export async function DELETE(
     // 子供クエストを削除する
     await deleteQuestChild({ db, familyQuestId: params.id, childId: params.childId })
 
-    logger.debug("子供クエストを削除しました: ", { params })
 
     return NextResponse.json({})
   })

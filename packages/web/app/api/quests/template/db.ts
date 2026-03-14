@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { TemplateQuestInsert, templateQuests, TemplateQuestUpdate, questDetails, quests } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { templateQuestExclusiveControl } from "./dbHelper"
@@ -23,7 +22,6 @@ export const insertTemplateQuest = async ({db, record, questId}: {
       id: newTemplateQuest.id
     } 
   } catch (error) {
-    logger.error("テンプレートクエスト登録失敗", { error })
     throw new DatabaseError("テンプレートクエストの登録に失敗しました。")
   }
 }
@@ -51,7 +49,6 @@ export const updateTemplateQuest = async ({db, record, id, updatedAt}: {
     await db.update(templateQuests).set(record).where(eq(templateQuests.id, id))
     
   } catch (error) {
-    logger.error("テンプレートクエスト更新失敗", { error })
     throw new DatabaseError("テンプレートクエストの更新に失敗しました。")
   }
 }
@@ -76,7 +73,6 @@ export const deleteTemplateQuest = async ({db, id, updatedAt}: {
     await db.delete(templateQuests).where(eq(templateQuests.id, id))
     
   } catch (error) {
-    logger.error("テンプレートクエスト削除失敗", { error })
     throw new DatabaseError("テンプレートクエストの削除に失敗しました。")
   }
 }

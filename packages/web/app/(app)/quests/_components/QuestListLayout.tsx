@@ -7,7 +7,6 @@ import { QuestSearchBar } from "./QuestSearchBar"
 import { QuestGrid } from "./QuestGrid"
 import { QuestCategorySelect, QuestSelect } from "@/drizzle/schema"
 import { QuestCategoryById } from "@/app/api/quests/category/service"
-import { logger } from "@/app/(core)/logger"
 import { TAB_ALL, TAB_OTHERS } from "./questTabConstants"
 
 type QuestItem = {
@@ -119,7 +118,6 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
   /** 下まで来たら次ページを取得する */
   useEffect(() => {
     if (entry?.isIntersecting) {
-      logger.debug("ページ最下層検知", { page, maxPage, totalRecords })
       // 次のページが存在するときだけセットする
       if (page < maxPage && !isLoading) {
         onPageChange(page + 1)

@@ -1,11 +1,9 @@
 import { CHILD_API_URL, CHILDREN_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetChildResponse } from "./route";
 
 /** 子供をGETする */
 export const getChild = async (childId: string) => {
-  logger.debug("子供情報取得API呼び出し", { URL: CHILD_API_URL(childId) })
   // APIを実行する
   const res = await fetch(`${CHILD_API_URL(childId)}`, {
     method: "GET",
@@ -16,7 +14,6 @@ export const getChild = async (childId: string) => {
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) throw AppError.fromResponse(data, res.status)
 
-  logger.debug("子供情報取得完了", { data })
 
   return data as GetChildResponse
 }

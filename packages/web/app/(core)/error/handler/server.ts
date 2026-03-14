@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { AppError, ErrorResponse, UNKNOWN_ERROR } from "../appError"
-import { logger } from "../../logger"
 
 /** APIRouteの例外をハンドルする関数ラッパー */
 export async function withRouteErrorHandling(
@@ -12,7 +11,6 @@ export async function withRouteErrorHandling(
   } catch (error) {
     if (error instanceof AppError) {
       // アプリ固有エラーのハンドル
-      logger.error("APIルートエラー（アプリエラー）", { 
         code: error.code, 
         message: error.message, 
         path: error.path,
@@ -20,7 +18,6 @@ export async function withRouteErrorHandling(
       })
       return NextResponse.json(error.toResponse(), { status: error.status })
     } else {
-      logger.error("APIルートエラー（想定外）", { 
         message: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
         path: "app/(core)/error/handler/server.ts"

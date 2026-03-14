@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { QuestDetailInsert, questDetails, QuestSelect } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq } from "drizzle-orm"
@@ -16,7 +15,6 @@ export const insertQuestDetails = async ({db, records, questId}: {
     // クエスト詳細を挿入する
     await db.insert(questDetails).values(records.map(record => ({ ...record, questId }))).execute()
   } catch (error) {
-    logger.error("insertQuestDetails error", { error })
     throw new DatabaseError("クエスト詳細の登録に失敗しました。")
   }
 }
@@ -30,7 +28,6 @@ export const deleteQuestDetails = async ({db, questId}: {
     // クエスト詳細を削除する
     await db.delete(questDetails).where(eq(questDetails.questId, questId)).execute()
   } catch (error) {
-    logger.error("deleteQuestDetailsByQuestId error", { error })
     throw new DatabaseError("クエスト詳細の削除に失敗しました。")
   }
 }

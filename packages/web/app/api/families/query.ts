@@ -1,5 +1,4 @@
 import { generateInviteCode } from "@/app/(core)/util"
-import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { families, publicQuests, templateQuests, icons } from "@/drizzle/schema"
@@ -20,11 +19,9 @@ export const fetchFamily = async ({ db, familyId }: {
       .where(eq(families.id, familyId))
       .limit(1)
 
-      logger.debug("fetchFamily.取得データ: ", { rows })
 
       return rows[0]
   } catch (error) {
-    logger.error("fetchFamily.取得例外: ", { error })
     throw new QueryError("家族情報の読み込みに失敗しました。")
   }
 }
@@ -43,7 +40,6 @@ export const getFamilyByInviteCode = async ({db, code}: {
 
     return rows[0]
   } catch (error) {
-    logger.error("getFamilyByInviteCode.取得例外: ", { error })
     throw new QueryError("家族招待コードの生成に失敗しました。")
   }
 }
@@ -77,7 +73,6 @@ export const fetchFamilyStats = async ({db, familyId}: {
       likeCount: likeCountResult[0]?.count ?? 0,
     }
   } catch (error) {
-    logger.error("fetchFamilyStats error", { error })
     throw new QueryError("家族統計情報の取得に失敗しました。")
   }
 }

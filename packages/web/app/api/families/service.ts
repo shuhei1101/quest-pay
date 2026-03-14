@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { insertFamily, InsertFamilyRecord } from "./db"
 import { insertParentProfile, InsertParentProfileRecord } from "../users/db"
 import { insertParent, InsertParentRecord } from "../parents/db"
@@ -31,7 +30,6 @@ export const registerFamilyAndParent = async ({db, family, profile, parent}: {
       })
     })
   } catch (error) {
-    logger.error("家族登録失敗", { error, family, profile, parent })
     throw new DatabaseError('家族の登録に失敗しました。')
   }
 }

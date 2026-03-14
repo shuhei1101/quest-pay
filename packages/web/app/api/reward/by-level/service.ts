@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { Db } from "@/index"
 import { updateLevelReward } from "./db"
 import type { levelRewardTableType } from "@/drizzle/schema"
@@ -30,7 +29,6 @@ export const updateFamilyLevelRewards = async ({
       }
     })
   } catch (error) {
-    logger.error("レベル別報酬一括更新失敗", { levelRewardTableId, type, error })
     throw new DatabaseError("レベル別報酬の更新に失敗しました。")
   }
 }

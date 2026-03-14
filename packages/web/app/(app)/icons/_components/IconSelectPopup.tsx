@@ -4,7 +4,6 @@ import { ActionIcon, Button, ColorPicker, Input, Modal, Popover, Space, Tabs, Te
 import { useEffect, useState } from "react"
 import { RenderIcon } from "./RenderIcon"
 import { useIcons } from "../_hooks/useIcons"
-import { logger } from "@/app/(core)/logger"
 import { useIconCategories } from "../category/_hook/useIconCategories"
 import { IconSelect } from "@/drizzle/schema"
 import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
@@ -51,7 +50,6 @@ export const IconSelectPopup = ({opened, close, currentIconId ,setIcon, setColor
   
   /** 確定ボタン押下時のハンドル */
   const onSubmit = () => {
-    logger.debug("アイコン選択確定", {selectedIconId, selectedColor})
     // アイコンをセットする
     setIcon(selectedIconId!)
     // カラーをセットする

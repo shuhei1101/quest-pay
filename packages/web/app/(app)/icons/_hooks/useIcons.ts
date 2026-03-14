@@ -4,7 +4,6 @@ import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { useQuery } from "@tanstack/react-query"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { useRouter } from "next/navigation"
-import { logger } from "@/app/(core)/logger"
 import { getIcons } from "@/app/api/icons/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { createIconById } from "@/app/api/icons/service"
@@ -36,7 +35,6 @@ export const useIcons = () => {
       // アイコン辞書を取得する
       const iconById = createIconById(fetchedIcons)
 
-      logger.debug("アイコン取得", { count: fetchedIcons.length })
       return { icons: fetchedIcons, iconById }
     }
   })

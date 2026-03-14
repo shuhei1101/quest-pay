@@ -1,4 +1,3 @@
-import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { rewardHistories } from "@/drizzle/schema"
@@ -32,11 +31,8 @@ export const fetchRewardHistories = async ({ db, childId, yearMonth }: {
       .where(and(...whereConditions))
       .orderBy(rewardHistories.rewardedAt)
 
-    logger.debug("fetchRewardHistories.取得データ: ", { data, "app/api/children/[id]/rewards/query.ts" })
-
     return data
   } catch (error) {
-    logger.error("fetchRewardHistories.取得例外: ", { error, "app/api/children/[id]/rewards/query.ts" })
     throw new QueryError("報酬履歴の読み込みに失敗しました。")
   }
 }
@@ -61,11 +57,8 @@ export const fetchRewardHistoryMonthlyStats = async ({ db, childId }: {
       .groupBy(sql`TO_CHAR(${rewardHistories.rewardedAt}, 'YYYY-MM')`)
       .orderBy(sql`TO_CHAR(${rewardHistories.rewardedAt}, 'YYYY-MM') DESC`)
 
-    logger.debug("fetchRewardHistoryMonthlyStats.取得データ: ", { data, "app/api/children/[id]/rewards/query.ts" })
-
     return data
   } catch (error) {
-    logger.error("fetchRewardHistoryMonthlyStats.取得例外: ", { error, "app/api/children/[id]/rewards/query.ts" })
     throw new QueryError("月別報酬統計の読み込みに失敗しました。")
   }
 }

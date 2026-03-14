@@ -1,11 +1,9 @@
 import { FAMILY_INVITE_API_URL } from "@/app/(core)/endpoints";
-import { logger } from "@/app/(core)/logger";
 import { PostFamilyInviteRequest } from "./scheme";
 import { AppError } from "@/app/(core)/error/appError";
 
 /** 家族招待メールをPOSTする */
 export const postFamilyInvite = async (request: PostFamilyInviteRequest) => {
-  logger.debug("家族招待API呼び出し", { URL: FAMILY_INVITE_API_URL, request })
   // APIを実行する
   const res = await fetch(`${FAMILY_INVITE_API_URL}`, {
     method: "POST",
@@ -21,5 +19,4 @@ export const postFamilyInvite = async (request: PostFamilyInviteRequest) => {
 
   const data = await res.json()
 
-  logger.debug("家族招待完了", { data })
 }

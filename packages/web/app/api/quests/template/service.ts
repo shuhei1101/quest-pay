@@ -1,5 +1,4 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { logger } from "@/app/(core)/logger"
 import { Db } from "@/index"
 import { deleteQuest, insertQuest, updateQuest } from "../db"
 import { deleteTemplateQuest, insertTemplateQuest, updateTemplateQuest, UpdateTemplateQuestRecord } from "./db"
@@ -51,7 +50,6 @@ export const registerTemplateQuestByPublicQuest = async ({
       return questId
     })
   } catch (error) {
-    logger.error("テンプレートクエスト登録失敗", { error })
     throw new DatabaseError("テンプレートクエストの登録に失敗しました。")
   }
 }
@@ -103,7 +101,6 @@ export const editTemplateQuest = async ({db, quest, questDetails, templateQuest,
       if (questTags.length > 0) await insertQuestTags({db: tx, records: questTags, questId: quest.id})
     })
   } catch (error) {
-    logger.error("テンプレートクエスト更新失敗", { error })
     throw new DatabaseError("テンプレートクエストの更新に失敗しました。")
   }
 }
@@ -138,7 +135,6 @@ export const removeTemplateQuest = async ({db, templateQuest, quest}: {
     })
 
   } catch (error) {
-    logger.error("テンプレートクエスト削除失敗", { error })
     throw new DatabaseError("テンプレートクエストの削除に失敗しました。")
   }
 }

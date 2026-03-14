@@ -1,13 +1,11 @@
 import queryString from "query-string"
 import { TEMPLATE_QUESTS_API_URL } from "@/app/(core)/endpoints"
-import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 import type { GetTemplateQuestsResponse } from "./route"
 import { TemplateQuestSearchParams } from "./query"
 
 /** テンプレートクエストをGETする */
 export const getTemplateQuests = async (params: TemplateQuestSearchParams) => {
-  logger.debug("テンプレートクエスト一覧取得API呼び出し", { URL: TEMPLATE_QUESTS_API_URL, params })
 
   // クエリストリングを生成する
   const qs = queryString.stringify(params, { arrayFormat: "none" })
@@ -24,7 +22,6 @@ export const getTemplateQuests = async (params: TemplateQuestSearchParams) => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  logger.debug("テンプレートクエスト一覧取得完了", { data })
 
   return data as GetTemplateQuestsResponse
 }
