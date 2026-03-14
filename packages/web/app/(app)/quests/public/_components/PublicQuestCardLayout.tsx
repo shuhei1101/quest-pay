@@ -6,6 +6,7 @@ import { Badge, Card, Group, Text, Stack, Flex } from "@mantine/core"
 import { IconHeart, IconMessageCircle } from "@tabler/icons-react"
 import { formatAgeRange, formatMonthRange } from "@/app/(core)/util"
 import { useLikeCount } from "../[id]/view/_hooks/useLikeCount"
+import { useCommentCount } from "../[id]/view/_hooks/useCommentCount"
 import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 公開クエストカードレイアウトコンポーネント */
@@ -28,6 +29,9 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
   
   // いいね数を取得する
   const { likeCount } = useLikeCount({id: publicQuest.base.id})
+  
+  // コメント数を取得する
+  const { commentCount } = useCommentCount({id: publicQuest.base.id})
   
   return (
     <Card 
@@ -75,10 +79,9 @@ export const PublicQuestCardLayout = ({publicQuest, onClick}: {
             <Text size="xs" fw={500}>{likeCount}</Text>
           </Group>
           
-          {/* TODO: コメント数をAPIから取得して表示する */}
           <Group gap={4}>
             <IconMessageCircle size={16} />
-            <Text size="xs" fw={500}>0</Text>
+            <Text size="xs" fw={500}>{commentCount ?? 0}</Text>
           </Group>
         </Group>
       </Flex>
