@@ -1,5 +1,5 @@
 import { TEMPLATE_QUEST_BY_PUBLIC_QUEST_ID_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetTemplateQuestByPublicQuestIdResponse } from "./route";
 
@@ -7,7 +7,7 @@ import type { GetTemplateQuestByPublicQuestIdResponse } from "./route";
 export const getTemplateQuestByPublicQuestId = async ({publicQuestId}: {
   publicQuestId: string
 }) => {
-  devLog("getTemplateQuestByPublicQuestId.API呼び出し: ", {URL: TEMPLATE_QUEST_BY_PUBLIC_QUEST_ID_API_URL(publicQuestId)})
+  logger.debug("getTemplateQuestByPublicQuestId.API呼び出し: ", {URL: TEMPLATE_QUEST_BY_PUBLIC_QUEST_ID_API_URL(publicQuestId })})
   // APIを実行する
   const res = await fetch(`${TEMPLATE_QUEST_BY_PUBLIC_QUEST_ID_API_URL(publicQuestId)}`, {
     method: "GET",
@@ -21,7 +21,7 @@ export const getTemplateQuestByPublicQuestId = async ({publicQuestId}: {
   }
 
   const data = await res.json()
-  devLog("getTemplateQuestByPublicQuestId.取得データ: ", data)
+  logger.debug("getTemplateQuestByPublicQuestId.取得データ: ", { data })
 
 
   return data as GetTemplateQuestByPublicQuestIdResponse

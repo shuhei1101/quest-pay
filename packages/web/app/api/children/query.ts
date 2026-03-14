@@ -1,4 +1,4 @@
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { 
@@ -32,11 +32,11 @@ export const fetchChildrenByFamilyId = async ({ db, familyId }: {
       .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(profiles.familyId, familyId))
 
-    devLog("fetchChildrenByFamilyId.取得データ: ", data, "app/api/children/query.ts")
+    logger.debug("子供一覧取得完了", { data, source: "app/api/children/query.ts" })
 
     return data
   } catch (error) {
-    devLog("fetchChildrenByFamilyId.取得例外: ", error, "app/api/children/query.ts")
+    logger.error("子供一覧取得失敗", { error, source: "app/api/children/query.ts" })
     throw new QueryError("子供情報の読み込みに失敗しました。")
   }
 }
@@ -57,11 +57,11 @@ export const fetchChild = async ({ db,  childId }: {
       .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(children.id, childId))
 
-    devLog("fetchChild.取得データ: ", data)
+    logger.debug("子供情報取得完了", { data })
 
     return data[0]
   } catch (error) {
-    devLog("fetchChild.取得例外: ", error, "app/api/children/query.ts")
+    logger.error("子供情報取得失敗", { error, source: "app/api/children/query.ts" })
     throw new QueryError("子供情報の読み込みに失敗しました。")
   }
 }
@@ -81,7 +81,7 @@ export const fetchChildByInviteCode = async ({db, invite_code}: {
 
   return data[0]
   } catch (error) {
-    devLog("getChildByInviteCode.取得例外: ", error)
+    logger.error("招待コード取得失敗", { error })
     throw new QueryError("招待コードの生成に失敗しました。", "app/api/children/query.ts")
   }
 }
@@ -101,11 +101,11 @@ export const fetchChildQuestStats = async ({db, childId}: {
       .from(questChildren)
       .where(eq(questChildren.childId, childId))
 
-    devLog("fetchChildQuestStats.取得データ: ", data, "app/api/children/query.ts")
+    logger.debug("子供クエスト統計取得完了", { data, source: "app/api/children/query.ts" })
 
     return data[0] ?? { inProgressCount: 0, completedCount: 0 }
   } catch (error) {
-    devLog("fetchChildQuestStats.取得例外: ", error, "app/api/children/query.ts")
+    logger.error("子供クエスト統計取得失敗", { error, source: "app/api/children/query.ts" })
     throw new QueryError("クエスト統計の読み込みに失敗しました。", "app/api/children/query.ts")
   }
 }
@@ -136,7 +136,7 @@ export const fetchChildRewardStats = async ({db, childId}: {
         eq(questChildren.status, 'completed')
       ))
 
-    devLog("fetchChildRewardStats.報酬データ: ", rewardData, "app/api/children/query.ts")
+    logger.debug("子供報酬統計取得完了", { rewardData, source: "app/api/children/query.ts" })
 
     const result = rewardData[0] ?? { totalReward: 0, monthlyReward: 0 }
     
@@ -145,7 +145,7 @@ export const fetchChildRewardStats = async ({db, childId}: {
       monthlyReward: result.monthlyReward,
     }
   } catch (error) {
-    devLog("fetchChildRewardStats.取得例外: ", error, "app/api/children/query.ts")
+    logger.error("子供報酬統計取得失敗", { error, source: "app/api/children/query.ts" })
     throw new QueryError("報酬統計の読み込みに失敗しました。", "app/api/children/query.ts")
   }
 }
@@ -248,7 +248,7 @@ export const fetchChildFixedReward = async ({db, childId, age, level}: {
       }
     }
 
-    devLog("fetchChildFixedReward.取得データ: ", { ageReward, levelReward }, "app/api/children/query.ts")
+    logger.debug("子供定額報酬取得完了", { ageReward, levelReward, source: "app/api/children/query.ts" })
 
     return {
       ageReward,
@@ -257,7 +257,7 @@ export const fetchChildFixedReward = async ({db, childId, age, level}: {
       totalFixedReward: (ageReward ?? 0) + (levelReward ?? 0)
     }
   } catch (error) {
-    devLog("fetchChildFixedReward.取得例外: ", error, "app/api/children/query.ts")
+    logger.error("子供定額報酬取得失敗", { error, source: "app/api/children/query.ts" })
     throw new QueryError("定額報酬の読み込みに失敗しました。", "app/api/children/query.ts")
   }
 }

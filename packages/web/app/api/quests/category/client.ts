@@ -1,12 +1,12 @@
 import { FAMILY_QUEST_API_URL, QUEST_CATEGORIES_URL, QUESTS_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import { GetQuestCategoriesResponse } from "./route";
 
 
 /** クエストカテゴリを取得する */
 export const getQuestCategories = async () => {
-  devLog("getQuestCategories.API呼び出し: ", {URL: QUEST_CATEGORIES_URL})
+  logger.debug("getQuestCategories.API呼び出し", { URL: QUEST_CATEGORIES_URL })
   // APIを実行する
   const res = await fetch(`${QUEST_CATEGORIES_URL}`, {
     method: "GET",
@@ -20,7 +20,7 @@ export const getQuestCategories = async () => {
   }
 
   const data: GetQuestCategoriesResponse = await res.json()
-  devLog("getQuestCategories.取得データ: ", `${data}`)
+  logger.debug("getQuestCategories.取得データ", { data })
 
 
   return data.questCategories

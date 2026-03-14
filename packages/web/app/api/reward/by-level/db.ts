@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { rewardByLevels, type levelRewardTableType } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq, and } from "drizzle-orm"
@@ -25,7 +25,7 @@ export const insertDefaultLevelRewards = async ({
     
     await db.insert(rewardByLevels).values(defaultRewards)
   } catch (error) {
-    devLog("insertDefaultLevelRewards error:", error)
+    logger.error("デフォルトレベル別報酬作成失敗", { levelRewardTableId, type, error })
     throw new DatabaseError("デフォルトレベル別報酬の作成に失敗しました。")
   }
 }
@@ -82,7 +82,7 @@ export const updateLevelReward = async ({
         })
     }
   } catch (error) {
-    devLog("updateLevelReward error:", error)
+    logger.error("レベル別報酬更新失敗", { levelRewardTableId, level, amount, type, error })
     throw new DatabaseError("レベル別報酬の更新に失敗しました。")
   }
 }

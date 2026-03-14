@@ -7,54 +7,6 @@ export const isSameArray = (a: string[], b: string[]) => {
   return b.every((item) => set.has(item));
 }
 
-/** スタックトレースを配列に変換する */
-const stackToArray = (stack: string): string[] => {
-  if (!stack) return [];
-  return stack.split("\n").map((line) => line.trim())
-}
-
-/** 開発時ログを出力する */
-export const devLog = (text: string, obj?: unknown, path?: string) => {
-  if (process.env.NODE_ENV !== "development") return
-
-  try {
-    let logObj = obj
-
-    if (typeof obj === 'string') {
-      try {
-        logObj = JSON.parse(obj)
-      } catch {
-        // パースできなければそのまま文字列
-        logObj = obj
-      }
-    }
-
-    // ZodErrorの場合はissuesを整形して表示する
-    if (obj && typeof obj === 'object' && 'name' in obj && obj.name === 'ZodError' && 'issues' in obj) {
-      logObj = {
-        name: obj.name,
-        issues: obj.issues,
-      }
-    }
-    // Errorオブジェクトの場合はスタックトレースを配列化する
-    else if (obj instanceof Error) {
-      logObj = {
-        name: obj.name,
-        message: obj.message,
-        stack: obj.stack ? stackToArray(obj.stack) : [],
-      }
-    }
-
-    if (logObj === undefined) {
-      console.log(`【DEBUG】${getJstTimestamp()}`, path ? `[${path}]->` : "", `${text}`)
-    } else {
-      console.log(`【DEBUG】${getJstTimestamp()}`, path ? `[${path}]->` : "", `${text}`, logObj)
-    }
-  } catch (e) {
-    console.log(`【DEBUG】${getJstTimestamp()}`, path ? `[${path}]->` : "", `${text}`, obj ?? "")
-  }
-}
-
 const CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 /** 招待コードを生成する */
 export const generateInviteCode = (length = 8) => {
@@ -69,22 +21,6 @@ export const generateInviteCode = (length = 8) => {
 
   return code;
 };
-
-/** 現在日時(JST)を取得する */
-export const getJstTimestamp = () => {
-  const date = new Date();
-  // 日本時間に変換しフォーマットを整える
-  return date.toLocaleString("ja-JP", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-    timeZone: "Asia/Tokyo",
-  }).replace(/\//g, "-")
-}
 
 /** ページネーション用の値を計算する */
 export const calculatePagination = (params: {

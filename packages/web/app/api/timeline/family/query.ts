@@ -1,7 +1,7 @@
 import { and, desc, eq } from "drizzle-orm"
 import { Db } from "@/index"
 import { familyTimelines, profiles } from "@/drizzle/schema"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { DatabaseError } from "@/app/(core)/error/appError"
 
 /** 家族タイムラインを取得する */
@@ -21,7 +21,7 @@ export const fetchFamilyTimelines = async ({db, familyId, limit = 50}: {
 
     return timelineList
   } catch (error) {
-    devLog("fetchFamilyTimelines error:", error)
+    logger.error("fetchFamilyTimelines error", { error })
     throw new DatabaseError("家族タイムラインの取得に失敗しました。")
   }
 }

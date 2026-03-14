@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { useQuery } from "@tanstack/react-query"
 import { getPublicQuestByFamilyQuestId } from "@/app/api/quests/family/[id]/public/client"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 
 /** 家族クエストIDに紐づく公開クエストの存在フラグを取得する */
 export const usePublicQuest = ({familyQuestId}:{
@@ -17,7 +17,7 @@ export const usePublicQuest = ({familyQuestId}:{
     queryKey: ["publicQuestByFamilyQuestId", familyQuestId],
     retry: false,
     queryFn: async () => {
-      devLog("usePublicQuest.家族クエストID: ", familyQuestId)
+      logger.debug("家族クエストから公開クエスト取得", { familyQuestId })
       return await getPublicQuestByFamilyQuestId({ familyQuestId: familyQuestId! })
     },
     staleTime: 0,

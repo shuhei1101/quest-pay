@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { childAgeRewardTables } from "@/drizzle/schema"
 import { Db } from "@/index"
 
@@ -19,7 +19,7 @@ export const insertChildAgeRewardTable = async ({
     
     return result[0]
   } catch (error) {
-    devLog("insertChildAgeRewardTable error:", error)
+    logger.error("insertChildAgeRewardTable error", { error })
     throw new DatabaseError("子供の年齢別報酬テーブルの作成に失敗しました。")
   }
 }

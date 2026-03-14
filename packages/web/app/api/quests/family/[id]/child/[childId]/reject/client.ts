@@ -1,4 +1,4 @@
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 import { REJECT_REPORT_API_URL } from "@/app/(core)/endpoints"
 import type { RejectReportRequest } from "./route"
@@ -9,7 +9,7 @@ export const rejectReport = async ({request, familyQuestId, childId}: {
   familyQuestId: string
   childId: string
 }) => {
-  devLog("rejectReport.API呼び出し: ", {URL: REJECT_REPORT_API_URL(familyQuestId, childId), request})
+  logger.debug("rejectReport.API呼び出し: ", {URL: REJECT_REPORT_API_URL(familyQuestId, childId }), request})
   
   // APIを実行する
   const res = await fetch(REJECT_REPORT_API_URL(familyQuestId, childId), {

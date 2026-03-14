@@ -1,4 +1,4 @@
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { children, families, icons, parents, profiles } from "@/drizzle/schema"
@@ -18,7 +18,7 @@ export const fetchProfile = async ({id, db}: {
 
     return data[0]
   } catch (error) {
-    devLog("fetchProfile.取得例外: ", error)
+    logger.error("プロフィール取得失敗", { id, error })
     throw new QueryError("ユーザ情報の読み込みに失敗しました。")
   }
 }
@@ -41,11 +41,11 @@ export const fetchUserInfoByUserId = async ({userId, db}: {
       .leftJoin(icons, eq(profiles.iconId, icons.id))
       .where(eq(profiles.userId, userId))
 
-    devLog("fetchUserInfoByUserId.取得データ: ", rows)
+    logger.debug("ユーザ情報取得", { userId, count: rows.length })
 
     return rows[0]
   } catch (error) {
-    devLog("fetchUserInfoByUserId.取得例外: ", error)
+    logger.error("ユーザ情報取得失敗", { userId, error })
     throw new QueryError("ユーザ情報の読み込みに失敗しました。")
   }
 }

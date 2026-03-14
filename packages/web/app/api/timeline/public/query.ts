@@ -1,7 +1,7 @@
 import { desc, eq } from "drizzle-orm"
 import { Db } from "@/index"
 import { publicTimelines, families } from "@/drizzle/schema"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { DatabaseError } from "@/app/(core)/error/appError"
 
 /** 公開タイムラインを取得する */
@@ -19,7 +19,7 @@ export const fetchPublicTimelines = async ({db, limit = 50}: {
 
     return timelineList
   } catch (error) {
-    devLog("fetchPublicTimelines error:", error)
+    logger.error("fetchPublicTimelines error", { error })
     throw new DatabaseError("公開タイムラインの取得に失敗しました。")
   }
 }

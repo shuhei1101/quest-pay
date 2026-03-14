@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { QuestSelect, QuestTagInsert, questTags } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq } from "drizzle-orm"
@@ -16,7 +16,7 @@ export const insertQuestTags = async ({db, records, questId}: {
     // クエストタグを挿入する
     await db.insert(questTags).values(records.map(record => ({ ...record, questId })) ).execute()
   } catch (error) {
-    devLog("insertQuestTags error:", error)
+    logger.error("insertQuestTags error", { error })
     throw new DatabaseError("クエストタグの登録に失敗しました。")
   }
 }
@@ -30,7 +30,7 @@ export const deleteQuestTags = async ({db, questId}: {
     // クエストタグを削除する
     await db.delete(questTags).where(eq(questTags.questId, questId)).execute()
   } catch (error) {
-    devLog("deleteQuestTagsByQuestId error:", error)
+    logger.error("deleteQuestTagsByQuestId error", { error })
     throw new DatabaseError("クエストタグの削除に失敗しました。")
   }
 }

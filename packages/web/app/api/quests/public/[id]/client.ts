@@ -1,5 +1,5 @@
 import { PUBLIC_QUEST_API_URL, QUESTS_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { DeletePublicQuestRequest, GetPublicQuestResponse, PutPublicQuestRequest } from "./route";
 
@@ -8,7 +8,7 @@ import type { DeletePublicQuestRequest, GetPublicQuestResponse, PutPublicQuestRe
 export const getPublicQuest = async ({publicQuestId}: {
   publicQuestId: string
 }) => {
-  devLog("getPublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId)})
+  logger.debug("getPublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId })})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_API_URL(publicQuestId)}`, {
     method: "GET",
@@ -21,7 +21,7 @@ export const getPublicQuest = async ({publicQuestId}: {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getPublicQuest.取得データ: ", `${PUBLIC_QUEST_API_URL(publicQuestId)}`)
+  logger.debug("getPublicQuest.取得データ: ", { `${PUBLIC_QUEST_API_URL(publicQuestId })}`)
 
   const data = await res.json()
 
@@ -33,7 +33,7 @@ export const putPublicQuest = async ({request, publicQuestId}: {
   request: PutPublicQuestRequest,
   publicQuestId: string
 }) => {
-  devLog("putPublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId), request})
+  logger.debug("putPublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId }), request})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_API_URL(publicQuestId)}`, {
     method: "PUT",
@@ -53,7 +53,7 @@ export const deletePublicQuest = async ({request, publicQuestId}: {
   request: DeletePublicQuestRequest,
   publicQuestId: string
 }) => {
-  devLog("deletePublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId), request})
+  logger.debug("deletePublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_API_URL(publicQuestId }), request})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_API_URL(publicQuestId)}`, {
     method: "DELETE",

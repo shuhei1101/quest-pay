@@ -7,7 +7,7 @@ import queryString from "query-string"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { ChildSelect } from "@/drizzle/schema"
 import { fetchChild } from "../../query"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 
 /** 子供のクエストを取得する */
 export type GetChildQuestsResponse = Awaited<ReturnType<typeof fetchChildQuests>>
@@ -18,7 +18,7 @@ export async function GET(
   return withRouteErrorHandling(async () => {
     // パスパラメータからIDを取得する
     const { id: childId } = await context.params
-    devLog("GetChildQuestsAPI.childId: ", childId)
+    logger.debug("GetChildQuestsAPI.childId: ", { childId })
     // 認証コンテキストを取得する
     const { db, userId } = await getAuthContext()
     // クエリパラメータを取得する

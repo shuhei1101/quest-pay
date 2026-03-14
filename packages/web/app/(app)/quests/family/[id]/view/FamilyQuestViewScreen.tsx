@@ -11,7 +11,7 @@ import { Indicator, Paper, Stack, Text } from "@mantine/core"
 import { LevelIcon } from "@/app/(core)/_components/LevelIcon"
 import { useFABContext } from "@/app/(core)/_components/FABContext"
 import { FAMILY_QUEST_EDIT_URL } from "@/app/(core)/endpoints"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 
 /** 家族クエスト閲覧画面 */
 export const FamilyQuestViewScreen = ({id}: {id: string}) => {
@@ -35,13 +35,10 @@ export const FamilyQuestViewScreen = ({id}: {id: string}) => {
   /** 利用可能なレベル一覧を取得する */
   const availableLevels = familyQuest?.details?.map(d => d.level).filter((level): level is number => level !== null && level !== undefined) || []
 
-  devLog("FamilyQuestViewScreen.レンダリング状態: ", {
+  logger.debug("家族クエスト閲覧画面レンダリング", {
     isLoading,
     hasFamilyQuest: !!familyQuest,
     questName: familyQuest?.quest?.name,
-    iconName: familyQuest?.icon?.name,
-    iconSize: familyQuest?.icon?.size,
-    iconColor: familyQuest?.quest?.iconColor,
     selectedLevel,
     hasSelectedDetail: !!selectedDetail,
     selectedDetailLevel: selectedDetail?.level,

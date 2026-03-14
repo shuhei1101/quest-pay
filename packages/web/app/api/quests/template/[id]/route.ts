@@ -4,7 +4,7 @@ import { fetchTemplateQuest } from "../query"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { removeTemplateQuest, editTemplateQuest } from "../service"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import z from "zod"
 import { TemplateQuestFormScheme } from "@/app/(app)/quests/template/[id]/form"
@@ -23,12 +23,12 @@ export async function GET(
       // パスパラメータからIDを取得する
       const { id } = await context.params
       
-      devLog("GetTemplateQuest.パラメータ.ID: ", id)
+      logger.debug("GetTemplateQuest.パラメータ.ID: ", { id })
       
       // テンプレートクエストを取得する
       const data = await fetchTemplateQuest({ db, id: id })
       
-      devLog("取得したテンプレートクエスト: ", data)
+      logger.debug("取得したテンプレートクエスト: ", { data })
   
       return NextResponse.json({templateQuest: data} as GetTemplateQuestResponse)
     })

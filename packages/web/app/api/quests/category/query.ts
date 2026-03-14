@@ -1,4 +1,4 @@
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { QueryError } from "@/app/(core)/error/appError";
 import { Db } from "@/index";
 import { questCategories } from "@/drizzle/schema";
@@ -13,11 +13,11 @@ export const fetchQuestCategories = async ({db}: {
       .select()
       .from(questCategories)
     
-    devLog("fetchQuestCategories.取得クエストカテゴリ: ", data)
+    logger.debug("fetchQuestCategories.取得クエストカテゴリ: ", { data })
 
     return data
   } catch (error) {
-    devLog("fetchQuestCategories.取得例外: ", error)
+    logger.error("fetchQuestCategories.取得例外: ", { error })
     throw new QueryError("クエストカテゴリの読み込みに失敗しました。")
   }
 }

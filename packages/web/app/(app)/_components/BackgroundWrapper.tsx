@@ -3,7 +3,6 @@
 import { Box, Image, useMantineColorScheme } from '@mantine/core'
 import { useSystemTheme } from '../../(core)/useSystemTheme'
 import { useEffect, useState } from 'react'
-import { devLog } from '../../(core)/util'
 import { FeedbackMessage } from '../../(core)/_components/FeedbackMessageWrapper'
 
 /** 背景とカラースキーム管理のラッパーを取得する */

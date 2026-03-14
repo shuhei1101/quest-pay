@@ -1,4 +1,4 @@
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 import { APPROVE_REPORT_API_URL } from "@/app/(core)/endpoints"
 import type { ApproveReportRequest } from "./route"
@@ -9,7 +9,7 @@ export const approveReport = async ({request, familyQuestId, childId}: {
   familyQuestId: string
   childId: string
 }) => {
-  devLog("approveReport.API呼び出し: ", {URL: APPROVE_REPORT_API_URL(familyQuestId, childId), request})
+  logger.debug("approveReport.API呼び出し: ", {URL: APPROVE_REPORT_API_URL(familyQuestId, childId }), request})
   
   // APIを実行する
   const res = await fetch(APPROVE_REPORT_API_URL(familyQuestId, childId), {

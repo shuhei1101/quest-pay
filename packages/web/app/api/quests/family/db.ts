@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { FamilyQuestInsert, familyQuests, FamilyQuestUpdate, questDetails, quests } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { familyQuestExclusiveControl } from "./dbHelper"
@@ -23,7 +23,7 @@ export const insertFamilyQuest = async ({db, record, questId}: {
       id: newFamilyQuest.id
     } 
   } catch (error) {
-    devLog("insertFamilyQuest error:", error)
+    logger.error("insertFamilyQuest error", { error })
     throw new DatabaseError("家族クエストの登録に失敗しました。")
   }
 }
@@ -51,7 +51,7 @@ export const updateFamilyQuest = async ({db, record, id, updatedAt}: {
     await db.update(familyQuests).set(record).where(eq(familyQuests.id, id))
     
   } catch (error) {
-    devLog("updateFamilyQuest error:", error)
+    logger.error("updateFamilyQuest error", { error })
     throw new DatabaseError("家族クエストの更新に失敗しました。")
   }
 }
@@ -76,7 +76,7 @@ export const deleteFamilyQuest = async ({db, id, updatedAt}: {
     await db.delete(familyQuests).where(eq(familyQuests.id, id))
     
   } catch (error) {
-    devLog("deleteFamilyQuest error:", error)
+    logger.error("deleteFamilyQuest error", { error })
     throw new DatabaseError("家族クエストの削除に失敗しました。")
   }
 }

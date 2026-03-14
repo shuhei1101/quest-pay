@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { PublicQuestInsert, publicQuests, PublicQuestUpdate, questDetails, quests } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { publicQuestExclusiveControl } from "./dbHelper"
@@ -23,7 +23,7 @@ export const insertPublicQuest = async ({db, record, questId}: {
       id: newPublicQuest.id
     } 
   } catch (error) {
-    devLog("insertPublicQuest error:", error)
+    logger.error("insertPublicQuest error", { error })
     throw new DatabaseError("公開クエストの登録に失敗しました。")
   }
 }
@@ -51,7 +51,7 @@ export const updatePublicQuest = async ({db, record, id, updatedAt}: {
     await db.update(publicQuests).set(record).where(eq(publicQuests.id, id))
     
   } catch (error) {
-    devLog("updatePublicQuest error:", error)
+    logger.error("updatePublicQuest error", { error })
     throw new DatabaseError("公開クエストの更新に失敗しました。")
   }
 }
@@ -76,7 +76,7 @@ export const deletePublicQuest = async ({db, id, updatedAt}: {
     await db.delete(publicQuests).where(eq(publicQuests.id, id))
     
   } catch (error) {
-    devLog("deletePublicQuest error:", error)
+    logger.error("deletePublicQuest error", { error })
     throw new DatabaseError("公開クエストの削除に失敗しました。")
   }
 }

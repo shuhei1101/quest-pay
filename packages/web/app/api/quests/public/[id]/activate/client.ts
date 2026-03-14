@@ -1,5 +1,5 @@
 import { PUBLIC_QUEST_ACTIVATE_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { ActivatePublicQuestRequest } from "./route";
 
@@ -9,7 +9,7 @@ export const activatePublicQuest = async ({request, publicQuestId}: {
   request: ActivatePublicQuestRequest,
   publicQuestId: string
 }) => {
-  devLog("activatePublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_ACTIVATE_API_URL(publicQuestId), request})
+  logger.debug("activatePublicQuest.API呼び出し: ", {URL: PUBLIC_QUEST_ACTIVATE_API_URL(publicQuestId }), request})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_ACTIVATE_API_URL(publicQuestId)}`, {
     method: "PUT",

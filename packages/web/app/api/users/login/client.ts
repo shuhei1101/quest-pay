@@ -1,10 +1,10 @@
 import { LOGIN_USER_API_URL } from "@/app/(core)/endpoints"
 import { AppError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import type { GetLoginUserResponse } from "./route"
 
 export const getLoginUser = async () => {
-  devLog("getLoginUser.API呼び出し: ", {URL: LOGIN_USER_API_URL})
+  logger.debug("ログインユーザ取得API呼び出し", { url: LOGIN_USER_API_URL })
   // APIを実行する
   const res = await fetch(`${LOGIN_USER_API_URL}`, {
     method: "GET",

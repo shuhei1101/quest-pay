@@ -1,12 +1,12 @@
 import queryString from "query-string"
 import { ICONS_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetIconsResponse } from "./route";
 
 /** 家族クエストをGETする */
 export const getIcons = async () => {
-  devLog("getIcons.API呼び出し: ", {URL: ICONS_API_URL})
+  logger.debug("アイコン取得API呼び出し", { URL: ICONS_API_URL })
   // APIを実行する
   const res = await fetch(`${ICONS_API_URL}`, {
     method: "GET",
@@ -19,7 +19,7 @@ export const getIcons = async () => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getIcons.戻り値: ", data)
+  logger.debug("アイコン取得完了", { data })
 
   return data as GetIconsResponse
 }

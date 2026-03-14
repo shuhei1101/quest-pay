@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchQuestCategories } from "./query"
 
@@ -18,7 +18,7 @@ export async function GET(
       // クエストカテゴリを取得する
       const data = await fetchQuestCategories({ db })
       
-      devLog("取得したクエストカテゴリ: ", data)
+      logger.debug("取得したクエストカテゴリ: ", { data })
   
       return NextResponse.json({questCategories: data} as GetQuestCategoriesResponse)
     })

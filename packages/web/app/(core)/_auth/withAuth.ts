@@ -1,7 +1,8 @@
 import { createClient } from "../_supabase/server"
 import { LOGIN_URL } from "../endpoints"
 import { AuthorizedError } from "../error/appError"
-import { addQueryParam, devLog } from "../util"
+import { addQueryParam } from "../util"
+import { logger } from "../logger"
 import { db } from "@/index"
 import { redirect } from "next/navigation"
 
@@ -14,7 +15,7 @@ export async function getAuthContext() {
     await supabase.auth.getUser()
 
   if (error) {
-    devLog("getAuthContext.user取得失敗:", error)
+    logger.error("認証コンテキスト取得失敗", { error })
     throw error
   }
 

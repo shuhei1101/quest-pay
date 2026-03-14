@@ -1,4 +1,5 @@
-import { calculatePagination, devLog } from "@/app/(core)/util"
+import { calculatePagination } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { QueryError } from "@/app/(core)/error/appError"
 import { Db } from "@/index"
 import { publicQuests, PublicQuestSelect, icons, IconSelect, questChildren, QuestChildrenSelect, QuestColumnSchema, questDetails, QuestDetailSelect, quests, QuestSelect, questTags, QuestTagSelect, familyQuests, FamilyQuestSelect, FamilyInsert, FamilySelect, families } from "@/drizzle/schema"
@@ -84,7 +85,7 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
 }) => {
   try {
 
-    devLog("fetchPublicQuests.検索パラメータ: ", params)
+    logger.debug("fetchPublicQuests.検索パラメータ: ", { params })
     const { pageSize, offset } = calculatePagination({ page: params.page, pageSize: params.pageSize })
     const conditions = []
     const familyIcons = alias(icons, "family_icons")
@@ -147,22 +148,22 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
         .where(and(...conditions))
     ])
 
-    devLog("fetchPublicQuests.生クエリ結果件数: ", rows.length)
-    devLog("fetchPublicQuests.familyId: ", familyId)
-    devLog("fetchPublicQuests.conditions: ", conditions.length)
-    devLog("fetchPublicQuests.total: ", total)
+    logger.debug("fetchPublicQuests.生クエリ結果件数: ", { rows.length })
+    logger.debug("fetchPublicQuests.familyId: ", { familyId })
+    logger.debug("fetchPublicQuests.conditions: ", { conditions.length })
+    logger.debug("fetchPublicQuests.total: ", { total })
 
     // データをオブジェクトに変換する
     const result = buildResult(rows)
 
-    devLog("fetchPublicQuests.取得データ: ", result)
+    logger.debug("fetchPublicQuests.取得データ: ", { result })
 
     return {
       rows: result,
       totalRecords: total ?? 0
     }
   } catch (error) {
-    devLog("fetchPublicQuests.取得例外: ", error)
+    logger.error("fetchPublicQuests.取得例外: ", { error })
     throw new QueryError("公開クエストの読み込みに失敗しました。")
   }
 }
@@ -192,11 +193,11 @@ export const fetchPublicQuest = async ({id, db}: {
     // データを結果オブジェクトに変換する
     const result = buildResult(rows)
 
-    devLog("fetchPublicQuest.取得データ: ", result)
+    logger.debug("fetchPublicQuest.取得データ: ", { result })
 
     return result[0]
   } catch (error) {
-    devLog("fetchPublicQuest.取得例外: ", error)
+    logger.error("fetchPublicQuest.取得例外: ", { error })
     throw new QueryError("公開クエストの読み込みに失敗しました。")
   }
 }
@@ -216,11 +217,11 @@ export const fetchPublicQuestByFamilyId = async ({db, familyQuestId}: {
       .from(publicQuests)
       .where(eq(publicQuests.familyQuestId, familyQuestId))
 
-    devLog("fetchPublicQuest.取得データ: ", rows)
+    logger.debug("fetchPublicQuest.取得データ: ", { rows })
 
     return rows[0]
   } catch (error) {
-    devLog("fetchPublicQuest.取得例外: ", error)
+    logger.error("fetchPublicQuest.取得例外: ", { error })
     throw new QueryError("公開クエストの読み込みに失敗しました。")
   }
 }

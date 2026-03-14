@@ -1,5 +1,5 @@
 import { PUBLIC_QUEST_LIKE_CANCEL_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 
 
@@ -7,7 +7,7 @@ import { AppError } from "@/app/(core)/error/appError";
 export const cancelLikeQuest = async ({publicQuestId}: {
   publicQuestId: string
 }) => {
-  devLog("cancelLikeQuest.API呼び出し: ", {URL: PUBLIC_QUEST_LIKE_CANCEL_API_URL(publicQuestId)})
+  logger.debug("cancelLikeQuest.API呼び出し: ", {URL: PUBLIC_QUEST_LIKE_CANCEL_API_URL(publicQuestId })})
   // APIを実行する
   const res = await fetch(`${PUBLIC_QUEST_LIKE_CANCEL_API_URL(publicQuestId)}`, {
     method: "POST",

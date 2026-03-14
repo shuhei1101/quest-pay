@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { familyTimelines, FamilyTimelineInsert, PublicTimelineInsert, publicTimelines } from "@/drizzle/schema"
 import { Db } from "@/index"
 
@@ -18,7 +18,7 @@ export const insertFamilyTimeline = async ({db, record}: {
       id: newTimeline.id
     } 
   } catch (error) {
-    devLog("insertFamilyTimeline error:", error)
+    logger.error("家族タイムライン登録失敗", { error })
     throw new DatabaseError("家族タイムラインの登録に失敗しました。")
   }
 }
@@ -38,7 +38,7 @@ export const insertPublicTimeline = async ({db, record}: {
       id: newTimeline.id
     } 
   } catch (error) {
-    devLog("insertPublicTimeline error:", error)
+    logger.error("公開タイムライン登録失敗", { error })
     throw new DatabaseError("公開タイムラインの登録に失敗しました。")
   }
 }

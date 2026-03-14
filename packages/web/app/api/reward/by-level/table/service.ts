@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { Db } from "@/index"
 import { fetchFamilyLevelRewardTable } from "./query"
 import { insertFamilyLevelRewardTable } from "./db"
@@ -27,7 +27,7 @@ export const getOrCreateFamilyLevelRewardTable = async ({
       return table
     })
   } catch (error) {
-    devLog("getOrCreateFamilyLevelRewardTable error:", error)
+    logger.error("getOrCreateFamilyLevelRewardTable error", { error })
     throw new DatabaseError("レベル別報酬テーブルの取得または作成に失敗しました。")
   }
 }

@@ -1,11 +1,11 @@
 import { ICON_CATEGORIES_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { GetIconCategoriesResponse } from "./route";
 
 /** 家族クエストをGETする */
 export const getIconCategories = async () => {
-  devLog("getIconCategories.API呼び出し: ", {URL: ICON_CATEGORIES_API_URL})
+  logger.debug("アイコンカテゴリ取得API呼び出し", { URL: ICON_CATEGORIES_API_URL })
   // APIを実行する
   const res = await fetch(`${ICON_CATEGORIES_API_URL}`, {
     method: "GET",
@@ -18,7 +18,7 @@ export const getIconCategories = async () => {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getIconCategories.戻り値: ", data)
+  logger.debug("アイコンカテゴリ取得完了", { data })
 
   return data as GetIconCategoriesResponse
 }

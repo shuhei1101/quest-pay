@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { LOGIN_URL } from "@/app/(core)/endpoints"
 import { ClientAuthError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { getIconCategories } from "@/app/api/icons/category/client"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 
@@ -35,7 +35,7 @@ export const useIconCategories = () => {
         // セッションストレージに格納する
         if (fetchedIconCategories) appStorage.iconCategories.set(fetchedIconCategories)
       }
-      devLog("取得カテゴリ: ", fetchedIconCategories)
+      logger.debug("アイコンカテゴリ取得", { count: fetchedIconCategories.length })
       return { iconCategories: fetchedIconCategories }
     }
   })

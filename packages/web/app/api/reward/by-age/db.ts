@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { rewardByAges, type ageRewardTableType } from "@/drizzle/schema"
 import { Db } from "@/index"
 import { eq, and } from "drizzle-orm"
@@ -25,7 +25,7 @@ export const insertDefaultAgeRewards = async ({
     
     await db.insert(rewardByAges).values(defaultRewards)
   } catch (error) {
-    devLog("insertDefaultAgeRewards error:", error)
+    logger.error("insertDefaultAgeRewards error", { error })
     throw new DatabaseError("デフォルト年齢別報酬の作成に失敗しました。")
   }
 }
@@ -82,7 +82,7 @@ export const updateAgeReward = async ({
         })
     }
   } catch (error) {
-    devLog("updateAgeReward error:", error)
+    logger.error("updateAgeReward error", { error })
     throw new DatabaseError("年齢別報酬の更新に失敗しました。")
   }
 }

@@ -5,7 +5,7 @@ import { fetchPublicQuestComments } from "./query"
 import { createPublicQuestComment } from "./service"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 
 /** コメント一覧を取得する */
 export type GetPublicQuestCommentsResponse = {
@@ -47,7 +47,7 @@ export async function POST(
     const { id } = await context.params
     const body: PostPublicQuestCommentRequest = await request.json()
 
-    devLog("PostPublicQuestComment.パラメータ: ", { id, body })
+    logger.debug("PostPublicQuestComment.パラメータ: ", { id, body } })
 
     // プロフィール情報を取得する
     const userInfo = await fetchUserInfoByUserId({ userId, db })

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchTemplateQuestByPublicQuestId } from "@/app/api/quests/template/query"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
@@ -20,7 +20,7 @@ export async function GET(
       // パスパラメータからIDを取得する
       const { id } = await context.params
       
-      devLog("GetPublicQuest.パラメータ.ID: ", id)
+      logger.debug("GetPublicQuest.パラメータ.ID: ", { id })
       
       // ユーザ情報を取得する
       const userInfo = await fetchUserInfoByUserId({userId, db})
@@ -29,7 +29,7 @@ export async function GET(
       // テンプレートクエストを取得する
       const templateQuest = await fetchTemplateQuestByPublicQuestId({ db, publicQuestId: id, familyId: userInfo.profiles.familyId })
       
-      devLog("取得したテンプレートクエスト: ", templateQuest)
+      logger.debug("取得したテンプレートクエスト: ", { templateQuest })
   
       return NextResponse.json({templateQuest} as GetTemplateQuestByPublicQuestIdResponse)
     })

@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getFamilyQuest } from "@/app/api/quests/family/[id]/client"
 import { useState } from "react"
-import { devLog, isSameArray } from "@/app/(core)/util"
+import { isSameArray } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { useMantineTheme } from "@mantine/core"
 import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
@@ -59,7 +60,7 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
     retry: false,
     queryFn: async () => {
       const { familyQuest } = await getFamilyQuest({familyQuestId: familyQuestId!})
-      devLog("useFamilyQuestForm.取得処理: ", familyQuest)
+      logger.debug("家族クエストフォーム取得", { familyQuestId })
       // クエストフォームに変換する
       const fetchedFamilyQuestForm: FamilyQuestFormType = {
         name: familyQuest.quest.name || "",

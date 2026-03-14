@@ -4,7 +4,7 @@ import { fetchPublicQuest } from "../query"
 import { fetchUserInfoByUserId } from "@/app/api/users/query"
 import { ServerError } from "@/app/(core)/error/appError"
 import { removePublicQuest, editPublicQuest } from "../service"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import z from "zod"
 import { PublicQuestFormScheme } from "@/app/(app)/quests/public/[id]/form"
@@ -23,12 +23,12 @@ export async function GET(
       // パスパラメータからIDを取得する
       const { id } = await context.params
       
-      devLog("GetPublicQuest.パラメータ.ID: ", id)
+      logger.debug("GetPublicQuest.パラメータ.ID: ", { id })
       
       // 公開クエストを取得する
       const data = await fetchPublicQuest({ db, id: id })
       
-      devLog("取得した公開クエスト: ", data)
+      logger.debug("取得した公開クエスト: ", { data })
   
       return NextResponse.json({publicQuest: data} as GetPublicQuestResponse)
     })

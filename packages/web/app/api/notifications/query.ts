@@ -1,7 +1,7 @@
 import { and, desc, eq } from "drizzle-orm"
 import { Db } from "@/index"
 import { notifications, NotificationSelect } from "@/drizzle/schema"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { DatabaseError } from "@/app/(core)/error/appError"
 
 /** 自身の通知を全件取得する */
@@ -18,7 +18,7 @@ export const fetchNotifications = async ({db, profileId}: {
 
   return notificationList
   } catch (error) {
-    devLog("fetchNotifications error:", error)
+    logger.error("fetchNotifications error", { error })
     throw new DatabaseError("通知一覧の取得に失敗しました。")
   }
 }
@@ -36,7 +36,7 @@ export const fetchNotification = async ({id, db}: {
 
   return data[0]
   } catch (error) {
-    devLog("fetchNotification error:", error)
+    logger.error("fetchNotification error", { error })
     throw new DatabaseError("通知の取得に失敗しました。")
   }
 }

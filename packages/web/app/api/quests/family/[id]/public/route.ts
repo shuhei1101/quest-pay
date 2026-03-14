@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getAuthContext } from "@/app/(core)/_auth/withAuth"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchPublicQuestByFamilyId } from "../../../public/query"
 
@@ -18,12 +18,12 @@ export async function GET(
       // パスパラメータからIDを取得する
       const params = await context.params
       
-      devLog("GetPublicQuestByFamilyQuestId.パラメータ.ID: ", params.id)
+      logger.debug("GetPublicQuestByFamilyQuestId.パラメータ.ID: ", { params.id })
       
       // 公開クエストを取得する
       const data = await fetchPublicQuestByFamilyId({ db, familyQuestId: params.id })
       
-      devLog("取得した公開クエスト: ", data)
+      logger.debug("取得した公開クエスト: ", { data })
   
       return NextResponse.json({publicQuest: data} as GetPublicQuestByFamilyQuestIdResponse)
     })

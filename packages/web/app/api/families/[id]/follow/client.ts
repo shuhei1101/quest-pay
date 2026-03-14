@@ -1,10 +1,10 @@
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { FAMILY_FOLLOW_API_URL, FAMILY_FOLLOW_STATUS_API_URL, FAMILY_FOLLOW_COUNT_API_URL } from "@/app/(core)/endpoints"
 import { AppError } from "@/app/(core)/error/appError"
 
 /** フォローを追加する */
 export const postFollow = async ({familyId}: {familyId: string}) => {
-  devLog("postFollow.API呼び出し: ", {URL: FAMILY_FOLLOW_API_URL(familyId)})
+  logger.debug("postFollow.API呼び出し: ", {URL: FAMILY_FOLLOW_API_URL(familyId })})
   
   const res = await fetch(FAMILY_FOLLOW_API_URL(familyId), {
     method: "POST",
@@ -19,7 +19,7 @@ export const postFollow = async ({familyId}: {familyId: string}) => {
 
 /** フォローを解除する */
 export const deleteFollow = async ({familyId}: {familyId: string}) => {
-  devLog("deleteFollow.API呼び出し: ", {URL: FAMILY_FOLLOW_API_URL(familyId)})
+  logger.debug("deleteFollow.API呼び出し: ", {URL: FAMILY_FOLLOW_API_URL(familyId })})
   
   const res = await fetch(FAMILY_FOLLOW_API_URL(familyId), {
     method: "DELETE",
@@ -34,7 +34,7 @@ export const deleteFollow = async ({familyId}: {familyId: string}) => {
 
 /** フォロー状態を取得する */
 export const fetchFollowStatus = async ({familyId}: {familyId: string}): Promise<{isFollowing: boolean}> => {
-  devLog("fetchFollowStatus.API呼び出し: ", {URL: FAMILY_FOLLOW_STATUS_API_URL(familyId)})
+  logger.debug("fetchFollowStatus.API呼び出し: ", {URL: FAMILY_FOLLOW_STATUS_API_URL(familyId })})
   
   const res = await fetch(FAMILY_FOLLOW_STATUS_API_URL(familyId), {
     method: "GET",
@@ -51,7 +51,7 @@ export const fetchFollowStatus = async ({familyId}: {familyId: string}): Promise
 
 /** フォロワー数とフォロー数を取得する */
 export const fetchFollowCount = async ({familyId}: {familyId: string}): Promise<{followerCount: number, followingCount: number}> => {
-  devLog("fetchFollowCount.API呼び出し: ", {URL: FAMILY_FOLLOW_COUNT_API_URL(familyId)})
+  logger.debug("fetchFollowCount.API呼び出し: ", {URL: FAMILY_FOLLOW_COUNT_API_URL(familyId })})
   
   const res = await fetch(FAMILY_FOLLOW_COUNT_API_URL(familyId), {
     method: "GET",

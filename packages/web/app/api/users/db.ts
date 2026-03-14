@@ -1,5 +1,5 @@
 import { DatabaseError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { profileExclusiveControl } from "./dbHelper"
 import { ProfileInsert, profiles } from "@/drizzle/schema"
 import { Db } from "@/index"
@@ -20,7 +20,7 @@ export const insertProfile = async ({db, record}: {
       id: newProfile.id
     } 
   } catch (error) {
-    devLog("insertProfile error:", error)
+    logger.error("プロフィール作成失敗", { error })
     throw new DatabaseError("プロフィールの作成に失敗しました。")
   }
 }
@@ -43,7 +43,7 @@ export const insertParentProfile = async ({db, record}: {
       id: newProfile.id
     }
   } catch (error) {
-    devLog("insertParentProfile error:", error)
+    logger.error("親プロフィール作成失敗", { error })
     throw new DatabaseError("親プロフィールの作成に失敗しました。")
   }
 }
@@ -66,7 +66,7 @@ export const insertChildProfile = async ({db, record}: {
       id: newProfile.id
     }
   } catch (error) {
-    devLog("insertChildProfile error:", error)
+    logger.error("子プロフィール作成失敗", { error })
     throw new DatabaseError("子プロフィールの作成に失敗しました。")
   }
 }
@@ -87,7 +87,7 @@ export const linkProfileAndUser = async ({profileId, userId, db}: {
       .where(eq(profiles.id, profileId))
 
   } catch (error) {
-    devLog("linkProfileAndUser error:", error)
+    logger.error("プロフィールとユーザの紐づけ失敗", { profileId, userId, error })
     throw new DatabaseError("プロフィールとユーザの紐づけに失敗しました。")
   }
 

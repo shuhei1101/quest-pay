@@ -1,5 +1,5 @@
 import { TEMPLATE_QUEST_API_URL, QUESTS_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 import type { DeleteTemplateQuestRequest, GetTemplateQuestResponse, PutTemplateQuestRequest } from "./route";
 
@@ -8,7 +8,7 @@ import type { DeleteTemplateQuestRequest, GetTemplateQuestResponse, PutTemplateQ
 export const getTemplateQuest = async ({templateQuestId}: {
   templateQuestId: string
 }) => {
-  devLog("getTemplateQuest.API呼び出し: ", {URL: TEMPLATE_QUEST_API_URL(templateQuestId)})
+  logger.debug("getTemplateQuest.API呼び出し: ", {URL: TEMPLATE_QUEST_API_URL(templateQuestId })})
   // APIを実行する
   const res = await fetch(`${TEMPLATE_QUEST_API_URL(templateQuestId)}`, {
     method: "GET",
@@ -21,7 +21,7 @@ export const getTemplateQuest = async ({templateQuestId}: {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getTemplateQuest.取得データ: ", `${TEMPLATE_QUEST_API_URL(templateQuestId)}`)
+  logger.debug("getTemplateQuest.取得データ: ", { `${TEMPLATE_QUEST_API_URL(templateQuestId })}`)
 
   const data = await res.json()
 
@@ -33,7 +33,7 @@ export const putTemplateQuest = async ({request, templateQuestId}: {
   request: PutTemplateQuestRequest,
   templateQuestId: string
 }) => {
-  devLog("putTemplateQuest.API呼び出し: ", {URL: TEMPLATE_QUEST_API_URL(templateQuestId), request})
+  logger.debug("putTemplateQuest.API呼び出し: ", {URL: TEMPLATE_QUEST_API_URL(templateQuestId }), request})
   // APIを実行する
   const res = await fetch(`${TEMPLATE_QUEST_API_URL(templateQuestId)}`, {
     method: "PUT",
@@ -53,7 +53,7 @@ export const deleteTemplateQuest = async ({request, templateQuestId}: {
   request: DeleteTemplateQuestRequest,
   templateQuestId: string
 }) => {
-  devLog("deleteTemplateQuest.API呼び出し: ", {URL: TEMPLATE_QUEST_API_URL(templateQuestId), request})
+  logger.debug("deleteTemplateQuest.API呼び出し: ", {URL: TEMPLATE_QUEST_API_URL(templateQuestId }), request})
   // APIを実行する
   const res = await fetch(`${TEMPLATE_QUEST_API_URL(templateQuestId)}`, {
     method: "DELETE",

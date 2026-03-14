@@ -1,5 +1,5 @@
 import { DatabaseError, ServerError } from "@/app/(core)/error/appError"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { Db } from "@/index"
 import { deleteQuest, insertQuest, updateQuest } from "../db"
 import { deleteFamilyQuest, insertFamilyQuest, InsertFamilyQuestRecord, updateFamilyQuest, UpdateFamilyQuestRecord } from "./db"
@@ -74,7 +74,7 @@ export const registerFamilyQuest = async ({db, quests, questDetails, familyQuest
       return questId
     })
   } catch (error) {
-    devLog("registerFamilyQuest error:", error)
+    logger.error("registerFamilyQuest error", { error })
     throw new DatabaseError("家族クエストの登録に失敗しました。")
   }
 }
@@ -165,7 +165,7 @@ export const editFamilyQuest = async ({db, quest, questDetails, familyQuest, que
       if (questTags.length > 0) await insertQuestTags({db: tx, records: questTags, questId: quest.id})
     })
   } catch (error) {
-    devLog("registerFamilyQuest error:", error)
+    logger.error("registerFamilyQuest error", { error })
     throw new DatabaseError("家族クエストの更新に失敗しました。")
   }
 }
@@ -203,7 +203,7 @@ export const removeFamilyQuest = async ({db, familyQuest, quest}: {
     })
 
   } catch (error) {
-    devLog("deleteFamilyQuest error:", error)
+    logger.error("deleteFamilyQuest error", { error })
     throw new DatabaseError("家族クエストの削除に失敗しました。")
   }
 }
@@ -296,7 +296,7 @@ export const reviewRequest = async ({db, familyQuestId, updatedAt, childId, requ
       }
     })
   } catch (error) {
-    devLog("reviewRequest error:", error)
+    logger.error("reviewRequest error", { error })
     throw new DatabaseError("家族クエストの完了報告に失敗しました。")
   }
 }
@@ -349,7 +349,7 @@ export const cancelReview = async ({db, familyQuestId, updatedAt, childId, reque
       }
     })
   } catch (error) {
-    devLog("cancelReview error:", error)
+    logger.error("cancelReview error", { error })
     throw new DatabaseError("家族クエストの完了報告キャンセルに失敗しました。")
   }
 }
@@ -397,7 +397,7 @@ export const rejectReport = async ({db, familyQuestId, childId, responseMessage,
       })
     })
   } catch (error) {
-    devLog("rejectReport error:", error)
+    logger.error("rejectReport error", { error })
     throw new DatabaseError("報告の却下に失敗しました。")
   }
 }
@@ -601,7 +601,7 @@ export const approveReport = async ({db, familyQuestId, childId, responseMessage
       }
     })
   } catch (error) {
-    devLog("approveReport error:", error)
+    logger.error("approveReport error", { error })
     throw new DatabaseError("報告の受領に失敗しました。")
   }
 }

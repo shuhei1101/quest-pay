@@ -1,5 +1,5 @@
 import { FAMILY_QUEST_PUBLISH_API_URL, QUESTS_API_URL } from "@/app/(core)/endpoints";
-import { devLog } from "@/app/(core)/util";
+import { logger } from "@/app/(core)/logger";
 import { AppError } from "@/app/(core)/error/appError";
 
 
@@ -9,7 +9,7 @@ import { AppError } from "@/app/(core)/error/appError";
 export const publishFamilyQuestPublic = async ({familyQuestId}: {
   familyQuestId: string
 }) => {
-  devLog("publishFamilyQuestPublic.API呼び出し: ", {URL: FAMILY_QUEST_PUBLISH_API_URL(familyQuestId)})
+  logger.debug("publishFamilyQuestPublic.API呼び出し: ", {URL: FAMILY_QUEST_PUBLISH_API_URL(familyQuestId })})
   // APIを実行する
   const res = await fetch(`${FAMILY_QUEST_PUBLISH_API_URL(familyQuestId)}`, {
     method: "POST",

@@ -1,12 +1,12 @@
 import { CHILD_LEVEL_REWARD_TABLE_API_URL } from "@/app/(core)/endpoints"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { AppError } from "@/app/(core)/error/appError"
 import { GetChildLevelRewardTableResponse, PutChildLevelRewardTableRequest } from "./route"
 
 /** 子供のレベル別報酬テーブルを取得する */
 export const getChildLevelRewardTable = async (childId: string) => {
   const url = CHILD_LEVEL_REWARD_TABLE_API_URL(childId)
-  devLog("getChildLevelRewardTable.API呼び出し: ", { URL: url, childId })
+  logger.debug("getChildLevelRewardTable.API呼び出し: ", { URL: url, childId } })
   // APIを実行する
   const res = await fetch(url, {
     method: "GET",
@@ -17,7 +17,7 @@ export const getChildLevelRewardTable = async (childId: string) => {
   // ステータスが不正な場合、アプリ例外を発生させる
   if (!res.ok) throw AppError.fromResponse(data, res.status)
 
-  devLog("getChildLevelRewardTable.戻り値: ", data)
+  logger.debug("getChildLevelRewardTable.戻り値: ", { data })
 
   return data as GetChildLevelRewardTableResponse
 }
@@ -25,7 +25,7 @@ export const getChildLevelRewardTable = async (childId: string) => {
 /** 子供のレベル別報酬テーブルを更新する */
 export const putChildLevelRewardTable = async (childId: string, request: PutChildLevelRewardTableRequest) => {
   const url = CHILD_LEVEL_REWARD_TABLE_API_URL(childId)
-  devLog("putChildLevelRewardTable.API呼び出し: ", { URL: url, childId, request })
+  logger.debug("putChildLevelRewardTable.API呼び出し: ", { URL: url, childId, request } })
   // APIを実行する
   const res = await fetch(url, {
     method: "PUT",
@@ -39,5 +39,5 @@ export const putChildLevelRewardTable = async (childId: string, request: PutChil
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("putChildLevelRewardTable.完了")
+  logger.debug("putChildLevelRewardTable.完了")
 }

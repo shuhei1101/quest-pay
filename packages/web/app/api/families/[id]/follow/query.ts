@@ -1,7 +1,7 @@
 import { eq, and, sql } from "drizzle-orm"
 import { Db } from "@/index"
 import { follows } from "@/drizzle/schema"
-import { devLog } from "@/app/(core)/util"
+import { logger } from "@/app/(core)/logger"
 import { DatabaseError } from "@/app/(core)/error/appError"
 
 /** フォロー状態を取得する */
@@ -24,7 +24,7 @@ export const fetchFollowStatus = async ({db, followerFamilyId, followFamilyId}: 
 
     return rows[0] !== undefined
   } catch (error) {
-    devLog("fetchFollowStatus error:", error)
+    logger.error("fetchFollowStatus error", { error })
     throw new DatabaseError("フォロー状態の取得に失敗しました。")
   }
 }
@@ -52,7 +52,7 @@ export const fetchFollowCount = async ({db, familyId}: {
       followingCount: followingCountResult[0]?.count ?? 0,
     }
   } catch (error) {
-    devLog("fetchFollowCount error:", error)
+    logger.error("fetchFollowCount error", { error })
     throw new DatabaseError("フォロー数の取得に失敗しました。")
   }
 }
