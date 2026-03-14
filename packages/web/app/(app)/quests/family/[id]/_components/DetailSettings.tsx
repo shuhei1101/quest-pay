@@ -6,6 +6,7 @@ import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "rea
 import { modals } from "@mantine/modals"
 import { BaseQuestFormType, isDefaultDetail } from "../../../form"
 import { ScrollableTabs, ScrollableTabItem } from "@/app/(core)/_components/ScrollableTabs"
+import { useWindow } from "@/app/(core)/useConstants"
 
 /** 詳細設定コンポーネント */
 export const DetailSettings = ({ 
@@ -27,6 +28,9 @@ export const DetailSettings = ({
   setValue: UseFormSetValue<BaseQuestFormType>
   watch: UseFormWatch<BaseQuestFormType>
 }) => {
+  // モバイル判定
+  const { isMobile } = useWindow()
+  
   // 表示するレベルのリスト
   const visibleLevels = watch().details.map(d => d.level).sort((a, b) => a - b)
 
@@ -133,14 +137,50 @@ export const DetailSettings = ({
     }
   }
 
+  /** レベル操作ボタン群 */
+  const levelActionButtons = (
+    <Group gap="xs" style={{ flexShrink: 0 }}>
+      {/* コピーボタン */}
+      <LevelCopyButton 
+        currentLevel={activeLevel}
+        visibleLevels={visibleLevels}
+        onCopy={handleCopyLevel}
+      />
+
+      {/* 削除ボタン(レベル2以上の場合のみ表示) */}
+      {visibleLevels.length > 1 && (
+        <ActionIcon 
+          variant="default" 
+          size="lg"
+          onClick={handleRemoveLevel}
+          title="最後のレベルを削除"
+        >
+          <IconMinus size={18} />
+        </ActionIcon>
+      )}
+
+      {/* 追加ボタン(レベル5で無効化) */}
+      <ActionIcon 
+        variant="default" 
+        size="lg"
+        onClick={handleAddLevel}
+        disabled={!canAddLevel}
+        title={canAddLevel ? "新しいレベルを追加" : "最大レベルに達しました"}
+      >
+        <IconPlus size={18} />
+      </ActionIcon>
+    </Group>
+  )
+
   return (
     <div className="flex flex-col gap-4" style={{ height: '100%' }}>
       <Tabs value={activeLevel} onChange={setActiveLevel} variant="outline" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         {/* レベルタブヘッダー（固定） */}
         <div className="px-4 pt-4">
-          <Group gap="xs" wrap="nowrap" style={{ alignItems: 'flex-start' }}>
-            {/* レベルタブ（スクロール可能領域） */}
-            <div style={{ flex: 1, minWidth: 0 }}>
+          {isMobile ? (
+            // モバイル: 縦並び
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {/* レベルタブ */}
               <ScrollableTabs
                 activeTab={activeLevel}
                 onChange={setActiveLevel}
@@ -149,41 +189,31 @@ export const DetailSettings = ({
                 {/* タブパネルコンテンツはここでは表示しない（下で別途表示） */}
                 <></>
               </ScrollableTabs>
+              
+              {/* タブ操作ボタン */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {levelActionButtons}
+              </div>
             </div>
-
-            {/* タブ操作ボタン（固定） */}
-            <Group gap="xs" style={{ flexShrink: 0 }}>
-              {/* コピーボタン */}
-              <LevelCopyButton 
-                currentLevel={activeLevel}
-                visibleLevels={visibleLevels}
-                onCopy={handleCopyLevel}
-              />
-
-              {/* 削除ボタン(レベル2以上の場合のみ表示) */}
-              {visibleLevels.length > 1 && (
-                <ActionIcon 
-                  variant="default" 
-                  size="lg"
-                  onClick={handleRemoveLevel}
-                  title="最後のレベルを削除"
+          ) : (
+            // デスクトップ: 横並び
+            <Group gap="xs" wrap="nowrap" style={{ alignItems: 'flex-start' }}>
+              {/* レベルタブ（スクロール可能領域） */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <ScrollableTabs
+                  activeTab={activeLevel}
+                  onChange={setActiveLevel}
+                  tabs={tabItems}
                 >
-                  <IconMinus size={18} />
-                </ActionIcon>
-              )}
+                  {/* タブパネルコンテンツはここでは表示しない（下で別途表示） */}
+                  <></>
+                </ScrollableTabs>
+              </div>
 
-              {/* 追加ボタン(レベル5で無効化) */}
-              <ActionIcon 
-                variant="default" 
-                size="lg"
-                onClick={handleAddLevel}
-                disabled={!canAddLevel}
-                title={canAddLevel ? "新しいレベルを追加" : "最大レベルに達しました"}
-              >
-                <IconPlus size={18} />
-              </ActionIcon>
+              {/* タブ操作ボタン（固定） */}
+              {levelActionButtons}
             </Group>
-          </Group>
+          )}
         </div>
 
         {/* タブパネルコンテンツ（スクロール可能） */}
