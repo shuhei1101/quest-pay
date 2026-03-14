@@ -13,6 +13,7 @@ export const getFamilyQuest = async ({familyQuestId}: {
   const res = await fetch(`${FAMILY_QUEST_API_URL(familyQuestId)}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
+    cache: "no-store", // キャッシュを無効化
   })
 
   // ステータスが不正な場合、アプリ例外を発生させる
@@ -21,9 +22,20 @@ export const getFamilyQuest = async ({familyQuestId}: {
     throw AppError.fromResponse(data, res.status)
   }
 
-  devLog("getFamilyQuest.取得データ: ", `${FAMILY_QUEST_API_URL(familyQuestId)}`)
-
   const data = await res.json()
+  
+  devLog("getFamilyQuest.取得データ: ", {
+    URL: FAMILY_QUEST_API_URL(familyQuestId),
+    hasData: !!data,
+    hasFamilyQuest: !!data?.familyQuest,
+    familyQuestId: data?.familyQuest?.base?.id,
+    questName: data?.familyQuest?.quest?.name,
+    detailsCount: data?.familyQuest?.details?.length,
+    tagsCount: data?.familyQuest?.tags?.length,
+    childrenCount: data?.familyQuest?.children?.length,
+    iconName: data?.familyQuest?.icon?.name,
+    fullData: data
+  })
 
   return data as GetFamilyQuestResponse
 }

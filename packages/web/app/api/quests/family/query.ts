@@ -148,6 +148,19 @@ export const fetchFamilyQuest = async ({id, db}: {
     // データを結果オブジェクトに変換する
     const result = buildResult(rows)
     
+    devLog("fetchFamilyQuest.クエリ結果: ", {
+      rowsCount: rows.length,
+      hasResult: !!result[0],
+      resultLength: result.length,
+      resultData: result[0],
+      base: result[0]?.base,
+      quest: result[0]?.quest,
+      detailsCount: result[0]?.details?.length,
+      tagsCount: result[0]?.tags?.length,
+      childrenCount: result[0]?.children?.length,
+      icon: result[0]?.icon
+    })
+    
     return result[0]
   } catch (error) {
     devLog("fetchFamilyQuest.取得例外: ", error)

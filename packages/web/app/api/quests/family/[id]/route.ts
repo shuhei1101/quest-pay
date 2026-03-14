@@ -28,7 +28,21 @@ export async function GET(
       // 家族クエストを取得する
       const data = await fetchFamilyQuest({ db, id: params.id })
       
-      devLog("取得した家族クエスト: ", data)
+      devLog("GetFamilyQuest.取得した家族クエスト: ", {
+        hasData: !!data,
+        familyQuestId: data?.base?.id,
+        questId: data?.quest?.id,
+        questName: data?.quest?.name,
+        detailsCount: data?.details?.length,
+        tagsCount: data?.tags?.length,
+        childrenCount: data?.children?.length,
+        iconId: data?.quest?.iconId,
+        iconName: data?.icon?.name,
+        details: data?.details,
+        tags: data?.tags,
+        icon: data?.icon,
+        fullData: data
+      })
   
       return NextResponse.json({familyQuest: data} as GetFamilyQuestResponse)
     })

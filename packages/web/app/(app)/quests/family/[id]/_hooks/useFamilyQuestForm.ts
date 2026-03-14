@@ -55,7 +55,7 @@ export const useFamilyQuestForm = ({familyQuestId}: {familyQuestId?: string}) =>
 
   // IDに紐づくクエストを取得する
   const { data, error, isLoading } = useQuery({
-    queryKey: ["familyQuest", familyQuestId],
+    queryKey: ["familyQuestForm", familyQuestId], // 編集用に変更してキャッシュ競合を防ぐ
     retry: false,
     queryFn: async () => {
       const { familyQuest } = await getFamilyQuest({familyQuestId: familyQuestId!})

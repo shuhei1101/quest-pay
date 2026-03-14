@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { handleAppError } from "@/app/(core)/error/handler/client"
 import { getFamilyQuest } from "@/app/api/quests/family/[id]/client"
 import { useQuery } from "@tanstack/react-query"
+import { devLog } from "@/app/(core)/util"
 
 /** クエストを取得する */
 export const useFamilyQuest = ({
@@ -19,6 +20,22 @@ export const useFamilyQuest = ({
     retry: false,
     queryFn: () => getFamilyQuest({ familyQuestId: id }),
     enabled: !!id
+  })
+
+  devLog("useFamilyQuest.データ状態: ", {
+    isLoading,
+    hasError: !!error,
+    hasData: !!data,
+    dataKeys: data ? Object.keys(data) : [],
+    dataType: typeof data,
+    dataAsString: JSON.stringify(data),
+    hasFamilyQuest: !!data?.familyQuest,
+    questName: data?.familyQuest?.quest?.name,
+    detailsCount: data?.familyQuest?.details?.length,
+    tagsCount: data?.familyQuest?.tags?.length,
+    iconName: data?.familyQuest?.icon?.name,
+    fullData: data,
+    fullFamilyQuest: data?.familyQuest
   })
 
   // エラーをチェックする
