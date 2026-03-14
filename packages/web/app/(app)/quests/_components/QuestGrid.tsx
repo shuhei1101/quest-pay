@@ -16,8 +16,6 @@ type QuestGridProps<T extends QuestItem> = {
   quests: T[]
   /** クエストをレンダリングする関数 */
   renderQuest: (quest: T, index: number) => ReactNode
-  /** 無限スクロール用のsentinelRef */
-  sentinelRef?: (node?: Element | null) => void
   /** スクロール最下部検知時のコールバック */
   onScrollBottom?: () => void
   /** パネルの高さ */
@@ -38,7 +36,6 @@ type QuestGridProps<T extends QuestItem> = {
 export const QuestGrid = <T extends QuestItem>({
   quests,
   renderQuest,
-  sentinelRef,
   onScrollBottom,
   panelHeight = "calc(100vh - 200px)",
   tabValue,
@@ -87,9 +84,6 @@ export const QuestGrid = <T extends QuestItem>({
       <SimpleGrid cols={getGridCols()} spacing="md">
         {quests.map((quest, index) => renderQuest(quest, index))}
       </SimpleGrid>
-      
-      {/* 無限スクロール用のセンチネル（カードが見切れないよう余白を確保する） */}
-      {sentinelRef && <div ref={sentinelRef} style={{ height: 200 }} />}
     </div>
   )
 }

@@ -181,16 +181,17 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
               <QuestGrid<T>
                 quests={displayQuests}
                 renderQuest={renderQuestCard}
-                sentinelRef={sentinelRef}
                 tabValue={tabValue}
                 questCategoryById={questCategoryById}
                 onTabChange={handleTabChange}
                 tabList={tabList}
               />
+              {/* 無限スクロール検知エリア */}
+              <div ref={sentinelRef} style={{ height: 1 }} />
               {/* 追加ページローディング表示 */}
               {isLoading && displayQuests.length > 0 && (
-                <Center className="my-4">
-                  <Loader size="md" />
+                <Center className="my-8">
+                  <Loader size="lg" type="dots" />
                 </Center>
               )}
             </>
@@ -210,16 +211,17 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 <QuestGrid<T>
                   quests={displayQuests}
                   renderQuest={renderQuestCard}
-                  sentinelRef={sentinelRef}
                   tabValue={tabValue}
                   questCategoryById={questCategoryById}
                   onTabChange={handleTabChange}
                   tabList={tabList}
                 />
+                {/* 無限スクロール検知エリア */}
+                <div ref={sentinelRef} style={{ height: 1 }} />
                 {/* 追加ページローディング表示 */}
                 {isLoading && displayQuests.length > 0 && (
-                  <Center className="my-4">
-                    <Loader size="md" />
+                  <Center className="my-8">
+                    <Loader size="lg" type="dots" />
                   </Center>
                 )}
               </>
@@ -239,16 +241,17 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
               <QuestGrid<T>
                 quests={displayQuests}
                 renderQuest={renderQuestCard}
-                sentinelRef={sentinelRef}
                 tabValue={tabValue}
                 questCategoryById={questCategoryById}
                 onTabChange={handleTabChange}
                 tabList={tabList}
               />
+              {/* 無限スクロール検知エリア */}
+              <div ref={sentinelRef} style={{ height: 1 }} />
               {/* 追加ページローディング表示 */}
               {isLoading && displayQuests.length > 0 && (
-                <Center className="my-4">
-                  <Loader size="md" />
+                <Center className="my-8">
+                  <Loader size="lg" type="dots" />
                 </Center>
               )}
             </>

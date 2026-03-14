@@ -13,8 +13,6 @@ import { useCancelQuestLike } from "./_hooks/useCancelQuestLike"
 import { useCommentsCount } from "../comments/_hooks/useCommentsCount"
 import { useLoginUserInfo } from "@/app/(auth)/login/_hooks/useLoginUserInfo"
 import { useDisclosure } from "@mantine/hooks"
-import { QuestEditModal } from "../../../_components/QuestEditModal"
-import { PublicQuestEdit } from "../PublicQuestEdit"
 import { SubMenuFAB } from "@/app/(core)/_components/SubMenuFAB"
 import { useFABContext } from "@/app/(core)/_components/FABContext"
 import { IconArrowLeft, IconHeart, IconHeartFilled, IconMessage, IconMenu } from "@tabler/icons-react"
@@ -41,10 +39,6 @@ export const PublicQuestView = ({id}: {id: string}) => {
   const {publicQuest, isLoading} = usePublicQuest({id})
   /** ログインユーザ情報 */
   const { userInfo } = useLoginUserInfo()
-  /** 編集権限があるかどうか */
-  const hasEditPermission = publicQuest?.base.familyId === userInfo?.profiles?.familyId
-  /** 編集モーダル制御状態 */
-  const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false)
   /** コメントモーダル制御状態 */
   const [commentModalOpened, { open: openCommentModal, close: closeCommentModal }] = useDisclosure(false)
 
@@ -238,16 +232,6 @@ export const PublicQuestView = ({id}: {id: string}) => {
         </div>
       )}
       
-      {/* 編集モーダル */}
-      {hasEditPermission && (
-        <QuestEditModal
-          opened={editModalOpened}
-          onClose={closeEditModal}
-        >
-          <PublicQuestEdit id={id} />
-        </QuestEditModal>
-      )}
-
       {/* コメントモーダル */}
       <PublicQuestComments
         id={id}
