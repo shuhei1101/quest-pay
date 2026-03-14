@@ -16,13 +16,10 @@ import { useActivatePublicQuest } from "./_hooks/useActivatePublicQuest"
 import { useDeactivatePublicQuest } from "./_hooks/useDeactivatePublicQuest"
 import { FAMILY_QUEST_VIEW_URL } from "@/app/(core)/endpoints"
 import { useRouter } from "next/navigation"
-import { ActionIcon, Tooltip } from "@mantine/core"
-import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 公開クエスト編集コンポーネント */
 export const PublicQuestEdit = ({ id }: { id: string }) => {
   const router = useRouter()
-  const { colors: themeColors } = useTheme()
   /** 公開クエストID */
   const [publicQuestId, setPublicQuestId] = useState(id)
 
@@ -112,8 +109,35 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
   const fabEditActions: FloatingActionItem[] = [
     {
       icon: <IconDeviceFloppy size={20} />,
-      label: "保存",
-      onClick: () => onSubmit(),
+      label: "更新",
+      onClick: () => {
+        if (isValueChanged) {
+          onSubmit()
+        }
+      },
+    },
+    {
+      icon: <IconLink size={20} />,
+      label: "元クエスト確認",
+      onClick: handleCheckOriginalQuest,
+      color: "blue" as const,
+    },
+    fetchedEntity?.base.isActivate ? {
+      icon: <IconWorldOff size={20} />,
+      label: "非公開",
+      onClick: () => handleDeactivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
+      color: "gray" as const,
+    } : {
+      icon: <IconWorld size={20} />,
+      label: "公開",
+      onClick: () => handleActivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
+      color: "green" as const,
+    },
+    {
+      icon: <IconTrash size={20} />,
+      label: "削除",
+      onClick: () => handleDelete({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
+      color: "red" as const,
     },
   ]
 
@@ -121,7 +145,7 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
   const fabCreateActions: FloatingActionItem[] = [
     {
       icon: <IconDeviceFloppy size={20} />,
-      label: "保存",
+      label: "登録",
       onClick: () => onSubmit(),
     },
   ]
@@ -169,79 +193,8 @@ export const PublicQuestEdit = ({ id }: { id: string }) => {
           ),
         },
       ]}
-      editActions={[
-        <Tooltip key="check-original" label="元の家族クエストを確認">
-          <ActionIcon
-            color="blue.7"
-            size="lg"
-            onClick={handleCheckOriginalQuest}
-            variant="filled"
-          >
-            <IconLink size={20} />
-          </ActionIcon>
-        </Tooltip>,
-        fetchedEntity?.base.isActivate ? (
-          <Tooltip key="unpublish" label="非公開にする">
-            <ActionIcon
-              color="gray.7"
-              size="lg"
-              loading={deactivateLoading}
-              onClick={() => handleDeactivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
-              variant="filled"
-            >
-              <IconWorldOff style={{ width: "70%", height: "70%" }} />
-            </ActionIcon>
-          </Tooltip>
-        ) : (
-          <Tooltip key="publish" label="公開にする">
-            <ActionIcon
-              color={themeColors.buttonColors.success}
-              size="lg"
-              loading={activateLoading}
-              onClick={() => handleActivate({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
-              variant="filled"
-            >
-              <IconWorld style={{ width: "70%", height: "70%" }} />
-            </ActionIcon>
-          </Tooltip>
-        ),
-        <Tooltip key="delete" label="削除">
-          <ActionIcon
-            color={themeColors.buttonColors.danger}
-            size="lg"
-            loading={submitLoading}
-            onClick={() => handleDelete({ publicQuestId: publicQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
-            variant="filled"
-          >
-            <IconTrash style={{ width: "70%", height: "70%" }} />
-          </ActionIcon>
-        </Tooltip>,
-        <Tooltip key="save" label="更新">
-          <ActionIcon
-            color={themeColors.buttonColors.primary}
-            size="lg"
-            loading={submitLoading}
-            disabled={!isValueChanged}
-            type="submit"
-            variant="filled"
-          >
-            <IconDeviceFloppy style={{ width: "70%", height: "70%" }} />
-          </ActionIcon>
-        </Tooltip>,
-      ]}
-      createActions={[
-        <Tooltip key="save" label="登録">
-          <ActionIcon
-            color={themeColors.buttonColors.primary}
-            size="lg"
-            loading={submitLoading}
-            type="submit"
-            variant="filled"
-          >
-            <IconDeviceFloppy style={{ width: "70%", height: "70%" }} />
-          </ActionIcon>
-        </Tooltip>,
-      ]}
+      editActions={[]}
+      createActions={[]}
       fabEditActions={fabEditActions}
       fabCreateActions={fabCreateActions}
       popups={

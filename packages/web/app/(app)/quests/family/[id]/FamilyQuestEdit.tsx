@@ -15,19 +15,16 @@ import { FAMILY_QUEST_VIEW_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
 import { usePublishFamilyQuest } from "./_hooks/usePublishFamilyQuest"
 import { QuestEditLayout } from "../../_components/QuestEditLayout"
 import { FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
-import { IconDeviceFloppy, IconWorldCheck, IconTrash, IconWorld, IconExternalLink } from "@tabler/icons-react"
+import { IconDeviceFloppy, IconTrash, IconWorld, IconExternalLink } from "@tabler/icons-react"
 import { FamilyQuestFormType } from "./form"
 import { UseFormRegister, UseFormSetValue, UseFormWatch, FieldErrors } from "react-hook-form"
 import { BaseQuestFormType } from "../../form"
 import { appStorage } from "@/app/(core)/_sessionStorage/appStorage"
 import { usePublicQuest } from "./_hooks/usePublicQuest"
-import { ActionIcon, Tooltip } from "@mantine/core"
-import { useTheme } from "@/app/(core)/_theme/useTheme"
 
 /** 家族クエスト編集コンポーネント */
 export const FamilyQuestEdit = ({ id }: { id?: string }) => {
   const router = useRouter()
-  const { colors: themeColors } = useTheme()
 
   /** 家族クエストID */
   const [familyQuestId, setFamilyQuestId] = useState<string | undefined>(id)
@@ -133,6 +130,23 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
       label: "保存",
       onClick: () => onSubmit(),
     },
+    publicQuest ? {
+      icon: <IconExternalLink size={20} />,
+      label: "公開中確認",
+      onClick: () => router.push(PUBLIC_QUEST_URL(publicQuest!.id)),
+      color: "violet" as const,
+    } : {
+      icon: <IconWorld size={20} />,
+      label: "公開",
+      onClick: () => handlePublish({ familyQuestId: familyQuestId! }),
+      color: "green" as const,
+    },
+    {
+      icon: <IconTrash size={20} />,
+      label: "削除",
+      onClick: () => handleDelete({ familyQuestId: familyQuestId!, updatedAt: fetchedEntity?.base.updatedAt }),
+      color: "red" as const,
+    },
   ]
 
   /** FABアクション（新規作成モード時） */
@@ -199,42 +213,7 @@ export const FamilyQuestEdit = ({ id }: { id?: string }) => {
           ),
         },
       ]}
-      editActions={[
-        publicQuest ? (
-          <Tooltip key="check-public" label="公開中のクエストを確認">
-            <ActionIcon
-              color="violet.7"
-              size="lg"
-              onClick={() => router.push(PUBLIC_QUEST_URL(publicQuest!.id))}
-              variant="filled"
-            >
-              <IconExternalLink size={20} />
-            </ActionIcon>
-          </Tooltip>
-        ) : (
-          <Tooltip key="publish" label="オンラインに公開">
-            <ActionIcon
-              color={themeColors.buttonColors.success}
-              size="lg"
-              onClick={() => handlePublish({ familyQuestId: familyQuestId! })}
-              variant="filled"
-            >
-              <IconWorld style={{ width: "70%", height: "70%" }} />
-            </ActionIcon>
-          </Tooltip>
-        ),
-        <Tooltip key="delete" label="削除">
-          <ActionIcon
-            color={themeColors.buttonColors.danger}
-            size="lg"
-            loading={submitLoading}
-            onClick={() => handleDelete({ familyQuestId: familyQuestId!, updatedAt: fetchedEntity?.base.updatedAt })}
-            variant="filled"
-          >
-            <IconTrash style={{ width: "70%", height: "70%" }} />
-          </ActionIcon>
-        </Tooltip>,
-      ]}
+      editActions={[]}
       createActions={[]}
       fabEditActions={fabEditActions}
       fabCreateActions={fabCreateActions}

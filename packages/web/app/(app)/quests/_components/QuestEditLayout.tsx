@@ -111,10 +111,12 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
               ))}
             </ScrollableTabs>
 
-            {/* アクションボタン */}
-            <Group mt="md" justify="flex-end" gap="xs">
-              {actionButtons}
-            </Group>
+            {/* アクションボタン（ボタンがある場合のみ表示） */}
+            {actionButtons.length > 0 && (
+              <Group mt="md" justify="flex-end" gap="xs">
+                {actionButtons}
+              </Group>
+            )}
           </Paper>
         </form>
       </Box>
