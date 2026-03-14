@@ -25,7 +25,6 @@ export const FamilyProfileViewLayout = ({
     memberStats: {
       parentCount: number
       childCount: number
-      totalCount: number
     }
     questStats: {
       totalCount: number
@@ -101,7 +100,7 @@ export const FamilyProfileViewLayout = ({
       {/* メンバー統計カード */}
       <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
         <Text size="lg" fw={600} mb="md">メンバー構成</Text>
-        <SimpleGrid cols={3} spacing="md">
+        <SimpleGrid cols={2} spacing="md">
           <Box style={{ textAlign: "center" }}>
             <ThemeIcon size={50} radius="xl" variant="light" color="blue" mb="xs">
               <IconUser size={28} />
@@ -115,13 +114,6 @@ export const FamilyProfileViewLayout = ({
             </ThemeIcon>
             <Text size="xs" c="dimmed">子供</Text>
             <Text size="xl" fw={700}>{family.memberStats.childCount}人</Text>
-          </Box>
-          <Box style={{ textAlign: "center" }}>
-            <ThemeIcon size={50} radius="xl" variant="light" color="violet" mb="xs">
-              <IconUsers size={28} />
-            </ThemeIcon>
-            <Text size="xs" c="dimmed">合計</Text>
-            <Text size="xl" fw={700}>{family.memberStats.totalCount}人</Text>
           </Box>
         </SimpleGrid>
       </Card>

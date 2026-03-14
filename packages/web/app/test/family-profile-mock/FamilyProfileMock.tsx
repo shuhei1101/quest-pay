@@ -22,7 +22,6 @@ type MockFamilyProfile = {
   memberStats: {
     parentCount: number
     childCount: number
-    totalCount: number
   }
   questStats: {
     totalCount: number
@@ -50,7 +49,6 @@ const mockFamily: MockFamilyProfile = {
   memberStats: {
     parentCount: 2,
     childCount: 3,
-    totalCount: 5,
   },
   questStats: {
     totalCount: 125,
