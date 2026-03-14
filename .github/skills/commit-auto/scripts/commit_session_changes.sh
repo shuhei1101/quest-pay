@@ -3,19 +3,40 @@
 # セッション中に変更したファイルのみを安全にコミットするスクリプト
 #
 # Usage: ./commit_session_changes.sh "commit message" file1 [file2] [file3]...
+#        ./commit_session_changes.sh --skip-security "commit message" file1 [file2] [file3]...
+#
+# Options:
+#   --skip-security  セキュリティチェックをスキップ（false positiveの場合に使用）
 #
 # Example:
 #   ./commit_session_changes.sh "feat: 新機能を追加" src/app.ts src/utils.ts
 
 set -e  # エラー時に即座に終了
 
+# スクリプトのディレクトリパスを取得
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SECURITY_CHECK_SCRIPT="$SCRIPT_DIR/security_check.sh"
+
+# セキュリティチェックをスキップするかどうか
+SKIP_SECURITY=0
+
+# --skip-security オプションのチェック
+if [ "$1" = "--skip-security" ]; then
+  SKIP_SECURITY=1
+  shift
+fi
+
 # 引数チェック
 if [ $# -lt 2 ]; then
   echo "エラー: 引数が不足しています"
-  echo "使用法: $0 <コミットメッセージ> <ファイル1> [ファイル2] [ファイル3]..."
+  echo "使用法: $0 [--skip-security] <コミットメッセージ> <ファイル1> [ファイル2] [ファイル3]..."
+  echo ""
+  echo "オプション:"
+  echo "  --skip-security  セキュリティチェックをスキップ"
   echo ""
   echo "例:"
   echo "  $0 \"feat: 新機能を追加\" src/app.ts src/utils.ts"
+  echo "  $0 --skip-security \"feat: 新機能を追加\" src/app.ts src/utils.ts"
   exit 1
 fi
 
@@ -33,6 +54,26 @@ for file in "${FILES[@]}"; do
   fi
   echo "✓ $file"
 done
+
+# セキュリティチェック
+if [ $SKIP_SECURITY -eq 0 ]; then
+  echo ""
+  if [ -x "$SECURITY_CHECK_SCRIPT" ]; then
+    "$SECURITY_CHECK_SCRIPT" "${FILES[@]}"
+  else
+    echo "⚠️  警告: セキュリティチェックスクリプトが実行可能ではありません"
+    echo "  パス: $SECURITY_CHECK_SCRIPT"
+    echo "  以下のコマンドで実行可能にしてください:"
+    echo "    chmod +x $SECURITY_CHECK_SCRIPT"
+    echo ""
+    echo "続行しますか? (y/N): "
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+      echo "中止しました"
+      exit 1
+    fi
+  fi
+fi
 
 # git statusで変更確認
 echo ""
