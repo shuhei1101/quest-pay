@@ -1,5 +1,5 @@
 "use client"
-import { useState, ReactNode, useEffect, memo, useCallback, useMemo } from "react"
+import { useState, ReactNode, useEffect, useRef, memo, useCallback, useMemo } from "react"
 import { Tabs, Loader, Center } from "@mantine/core"
 import { useIntersection } from "@mantine/hooks"
 import { QuestCategoryTabs } from "./QuestCategoryTabs"
@@ -110,18 +110,36 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
   /** 現在のクエスト一覧状態 */
   const [displayQuests, setDisplayQuests] = useState<T[]>([])
 
+  /** 追加ページ取得中フラグ（intersection検知で即座にtrueにする） */
+  const [isFetchingMore, setIsFetchingMore] = useState(false)
+
   /** 無限スクロール用 Intersection Observer */
   const { ref: sentinelRef, entry } = useIntersection({
     threshold: 0,
     rootMargin: '0px 0px 300px 0px',
   })
 
-  /** 下まで来たら次ページを取得する */
+  /** isIntersecting の前回値を保持し、false→true 遷移のみでトリガーする */
+  const prevIsIntersecting = useRef(false)
+
+  /** 下まで来たら次ページを取得する（false→true 遷移時のみ） */
   useEffect(() => {
-    if (entry?.isIntersecting && page < maxPage && !isLoading) {
+    const isIntersecting = entry?.isIntersecting ?? false
+    const wasIntersecting = prevIsIntersecting.current
+    prevIsIntersecting.current = isIntersecting
+
+    if (isIntersecting && !wasIntersecting && page < maxPage && !isLoading) {
+      setIsFetchingMore(true)
       onPageChange(page + 1)
     }
   }, [entry?.isIntersecting, page, maxPage, isLoading, onPageChange])
+
+  /** API完了時にisFetchingMoreをリセット */
+  useEffect(() => {
+    if (!isLoading) {
+      setIsFetchingMore(false)
+    }
+  }, [isLoading])
 
   /** データ取得時に表示クエスト一覧を更新する */
   useEffect(() => {
@@ -184,8 +202,8 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
               />
               {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
               <div ref={tabValue === TAB_ALL ? sentinelRef : undefined} style={{ height: 1 }} />
-              {/* 追加ページローディング表示 */}
-              {isLoading && displayQuests.length > 0 && (
+              {/* 追加ページローディング表示（intersection検知で即座に表示） */}
+              {(isFetchingMore || isLoading) && displayQuests.length > 0 && (
                 <Center className="my-8">
                   <Loader size="lg" type="dots" />
                 </Center>
@@ -214,8 +232,8 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 />
                 {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
                 <div ref={tabValue === category.name ? sentinelRef : undefined} style={{ height: 1 }} />
-                {/* 追加ページローディング表示 */}
-                {isLoading && displayQuests.length > 0 && (
+                {/* 追加ページローディング表示（intersection検知で即座に表示） */}
+                {(isFetchingMore || isLoading) && displayQuests.length > 0 && (
                   <Center className="my-8">
                     <Loader size="lg" type="dots" />
                   </Center>
@@ -244,8 +262,8 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
               />
               {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
               <div ref={tabValue === TAB_OTHERS ? sentinelRef : undefined} style={{ height: 1 }} />
-              {/* 追加ページローディング表示 */}
-              {isLoading && displayQuests.length > 0 && (
+              {/* 追加ページローディング表示（intersection検知で即座に表示） */}
+              {(isFetchingMore || isLoading) && displayQuests.length > 0 && (
                 <Center className="my-8">
                   <Loader size="lg" type="dots" />
                 </Center>
