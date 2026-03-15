@@ -3,450 +3,106 @@ name: quest-view-api
 description: クエスト閲覧画面のAPI操作知識を提供するスキル。エンドポイント、リクエスト/レスポンス、フック、DB操作を含む。
 ---
 
-# quest-view-api
+# クエストビューAPI スキル
 
-このスキルは、クエスト閲覧画面（QuestView）のAPI操作に関する知識を提供する。各クエストタイプ（家族、公開、テンプレート、子供）の閲覧画面で使用されるAPIクライアント、フック、エンドポイント、リクエスト/レスポンスの型定義を網羅する。
+## 概要
 
-## 対象範囲
+このスキルは、異なるクエストタイプ（家族、公開、テンプレート、子供）の閲覧ビューを統合的に管理するAPI群の知識を提供します。各タイプのクエストに対する統一的なインターフェースと、タイプ固有の追加情報（いいね、ステータス等）を提供します。
 
-- 家族クエスト閲覧API (`app/api/quests/family/[id]/`)
-- 公開クエスト閲覧API (`app/api/quests/public/[id]/`)
-- テンプレートクエスト閲覧API (`app/api/quests/template/[id]/`)
-- 子供クエスト閲覧API (`app/api/quests/family/[id]/child/[childId]/`)
-- 関連フック (`_hooks/`)
+## メインソースファイル
 
-## 家族クエスト閲覧API
+### API Routes（家族クエスト）
+- `packages/web/app/api/quests/family/[id]/route.ts`: 詳細取得、更新、削除
+- `packages/web/app/api/quests/family/[id]/child/[childId]/route.ts`: 子供クエスト取得/生成
 
-### エンドポイント
+### API Routes（公開クエスト）
+- `packages/web/app/api/quests/public/[id]/route.ts`: 詳細取得、更新、削除
+- `packages/web/app/api/quests/public/[id]/like/route.ts`: いいね追加、解除
+- `packages/web/app/api/quests/public/[id]/like-count/route.ts`: いいね数取得
+- `packages/web/app/api/quests/public/[id]/is-like/route.ts`: いいね状態取得
 
-**URL:** `FAMILY_QUEST_API_URL(familyQuestId)` - `/api/quests/family/[id]`
+### API Routes（テンプレートクエスト）
+- `packages/web/app/api/quests/template/[id]/route.ts`: 詳細取得、更新、削除
 
-**定義場所:** `app/(core)/endpoints.ts`
+### クライアント側
+- `packages/web/app/api/quests/family/[id]/client.ts`: 家族クエストAPIクライアント関数
+- `packages/web/app/api/quests/public/[id]/client.ts`: 公開クエストAPIクライアント関数
+- `packages/web/app/api/quests/template/[id]/client.ts`: テンプレートクエストAPIクライアント関数
+- `packages/web/app/api/quests/family/[id]/query.ts`: React Queryフック
 
-### GET /api/quests/family/[id]
+### データベース
+- `drizzle/schema.ts`: family_quests, public_quests, template_quests, child_quests
 
-**役割:** 家族クエストの詳細を取得する
+## 主要機能グループ
 
-**パラメータ:**
-- `id: string` - 家族クエストID（パスパラメータ）
+### 1. 統合クエストビュー
+- 4つの異なるクエストタイプに対する統一的な閲覧インターフェース
+- 共通フォーマット: base, quest, details, icon, category, tags
 
-**レスポンス型:** `GetFamilyQuestResponse`
+### 2. タイプ別追加機能
+- **公開クエスト**: いいね機能、コメント表示、家族情報
+- **子供クエスト**: ステータス情報、進捗管理
+- **テンプレート**: 公式フラグ
+- **家族クエスト**: 基本情報のみ
 
-```typescript
-export type GetFamilyQuestResponse = {
-  familyQuest: Awaited<ReturnType<typeof fetchFamilyQuest>>
-}
+### 3. CRUD操作
+- 詳細取得、更新、削除（権限に応じて）
+- 楽観的排他制御による更新競合対策
+
+### 4. インタラクション機能
+- 公開クエストのいいね/いいね解除
+- いいね数・状態のリアルタイム取得
+
+## Reference Files Usage
+
+### データベース構造を把握する場合
+クエストタイプ横断のER図、共通フィールド構造を確認：
+```
+references/er_diagram.md
 ```
 
-**主要フィールド:**
-- `base` - 基本情報（id, familyId, questId, updatedAt等）
-- `quest` - クエスト情報（name, requestDetail, client等）
-- `details` - レベル別詳細（level, successCondition, reward, childExp等）
-- `icon` - アイコン情報（name, size）
-- `category` - カテゴリ情報
-- `tags` - タグ情報
-
-**クライアント関数:** `getFamilyQuest({ familyQuestId })`
-
-**実装場所:** `app/api/quests/family/[id]/client.ts`
-
-### PUT /api/quests/family/[id]
-
-**役割:** 家族クエストを更新する
-
-**リクエスト型:** `PutFamilyQuestRequest`
-
-```typescript
-export const PutFamilyQuestRequestScheme = z.object({
-  form: FamilyQuestFormScheme,
-  familyQuestUpdatedAt: z.string(),
-  questUpdatedAt: z.string(),
-})
+### クエストビュー解決フローを理解する場合
+タイプ検出、データ取得、変換パイプラインを確認：
+```
+references/flow_diagram.md
 ```
 
-**クライアント関数:** `putFamilyQuest({ request, familyQuestId })`
-
-### DELETE /api/quests/family/[id]
-
-**役割:** 家族クエストを削除する
-
-**リクエスト型:** `DeleteFamilyQuestRequest`
-
-```typescript
-export const DeleteFamilyQuestRequestScheme = z.object({
-  updatedAt: z.string(),
-})
+### API呼び出しフローを把握する場合
+各タイプのエンドポイント処理シーケンス、並列データ取得を確認：
+```
+references/sequence_diagram.md
 ```
 
-**クライアント関数:** `deleteFamilyQuest({ request, familyQuestId })`
-
-### フック: useFamilyQuest
-
-**パス:** `app/(app)/quests/family/[id]/view/_hooks/useFamilyQuest.ts`
-
-**役割:** 家族クエストデータを取得するカスタムフック
-
-**パラメータ:**
-- `id: string` - 家族クエストID
-
-**返り値:**
-- `familyQuest` - 取得した家族クエストデータ
-- `isLoading` - ローディング状態
-
-**実装:**
-```typescript
-export const useFamilyQuest = ({id}: {id: string}) => {
-  const router = useRouter()
-  
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["familyQuest", id],
-    retry: false,
-    queryFn: () => getFamilyQuest({ familyQuestId: id }),
-    enabled: !!id
-  })
-
-  if (error) handleAppError(error, router)
-
-  return {
-    familyQuest: data?.familyQuest,
-    isLoading,
-  }
-}
+### API仕様を詳細に確認する場合
+リクエスト/レスポンス形式、エラーコード、クライアント関数、フックを確認：
+```
+references/api_endpoints.md
 ```
 
-## 公開クエスト閲覧API
-
-### エンドポイント
-
-**URL:** `PUBLIC_QUEST_API_URL(publicQuestId)` - `/api/quests/public/[id]`
-
-**定義場所:** `app/(core)/endpoints.ts`
-
-### GET /api/quests/public/[id]
-
-**役割:** 公開クエストの詳細を取得する
-
-**パラメータ:**
-- `id: string` - 公開クエストID（パスパラメータ）
-
-**レスポンス型:** `GetPublicQuestResponse`
-
-```typescript
-export type GetPublicQuestResponse = {
-  publicQuest: Awaited<ReturnType<typeof fetchPublicQuest>>
-}
-```
-
-**主要フィールド:**
-- `base` - 基本情報（id, updatedAt等）
-- `quest` - クエスト詳細
-- `details` - レベル別詳細
-- `icon` - アイコン情報
-- `familyIcon` - 家族アイコン情報
-- `tags` - タグ情報
-
-**クライアント関数:** `getPublicQuest({ publicQuestId })`
-
-**実装場所:** `app/api/quests/public/[id]/client.ts`
-
-### PUT /api/quests/public/[id]
-
-**役割:** 公開クエストを更新する（編集権限がある場合のみ）
-
-**リクエスト型:** `PutPublicQuestRequest`
-
-```typescript
-export const PutPublicQuestRequestScheme = z.object({
-  form: PublicQuestFormScheme,
-  updatedAt: z.string(),
-})
-```
-
-### DELETE /api/quests/public/[id]
-
-**役割:** 公開クエストを削除する
-
-**リクエスト型:** `DeletePublicQuestRequest`
-
-```typescript
-export const DeletePublicQuestRequestScheme = z.object({
-  updatedAt: z.string(),
-})
-```
-
-### フック: usePublicQuest
-
-**パス:** `app/(app)/quests/public/[id]/view/_hooks/usePublicQuest.ts`
-
-**役割:** 公開クエストデータを取得するカスタムフック
-
-**パラメータ:**
-- `id: string` - 公開クエストID
-
-**返り値:**
-- `publicQuest` - 取得した公開クエストデータ
-- `isLoading` - ローディング状態
-
-### フック: useLikeQuest
-
-**パス:** `app/(app)/quests/public/[id]/view/_hooks/useLikeQuest.ts`
-
-**役割:** 公開クエストにいいねを追加するカスタムフック
-
-**返り値:**
-- `handleLike` - いいねハンドラー関数
-- `isLoading` - ローディング状態
-
-**パラメータ（handleLike）:**
-- `publicQuestId: string` - 公開クエストID
-
-### フック: useCancelQuestLike
-
-**パス:** `app/(app)/quests/public/[id]/view/_hooks/useCancelQuestLike.ts`
-
-**役割:** 公開クエストのいいねを解除するカスタムフック
-
-**返り値:**
-- `handleCancelLike` - いいね解除ハンドラー関数
-- `isLoading` - ローディング状態
-
-### フック: useLikeCount
-
-**パス:** `app/(app)/quests/public/[id]/view/_hooks/useLikeCount.ts`
-
-**役割:** 公開クエストのいいね数を取得するカスタムフック
-
-**パラメータ:**
-- `id: string` - 公開クエストID
-
-**返り値:**
-- `likeCount` - いいね数
-
-### フック: useIsLike
-
-**パス:** `app/(app)/quests/public/[id]/view/_hooks/useIsLike.ts`
-
-**役割:** ログインユーザーがいいねしているかどうかを取得するカスタムフック
-
-**パラメータ:**
-- `id: string` - 公開クエストID
-
-**返り値:**
-- `isLike` - いいねしているかどうか（boolean）
-
-## テンプレートクエスト閲覧API
-
-### エンドポイント
-
-**URL:** `TEMPLATE_QUEST_API_URL(templateQuestId)` - `/api/quests/template/[id]`
-
-**定義場所:** `app/(core)/endpoints.ts`
-
-### GET /api/quests/template/[id]
-
-**役割:** テンプレートクエストの詳細を取得する
-
-**パラメータ:**
-- `id: string` - テンプレートクエストID（パスパラメータ）
-
-**レスポンス型:** `GetTemplateQuestResponse`
-
-```typescript
-export type GetTemplateQuestResponse = {
-  templateQuest: Awaited<ReturnType<typeof fetchTemplateQuest>>
-}
-```
-
-**主要フィールド:**
-- `base` - 基本情報
-- `quest` - クエスト詳細
-- `details` - レベル別詳細
-- `icon` - アイコン情報
-- `tags` - タグ情報
-
-**クライアント関数:** `getTemplateQuest({ templateQuestId })`
-
-**実装場所:** `app/api/quests/template/[id]/client.ts`
-
-### PUT /api/quests/template/[id]
-
-**役割:** テンプレートクエストを更新する
-
-**リクエスト型:** `PutTemplateQuestRequest`
-
-```typescript
-export const PutTemplateQuestRequestScheme = z.object({
-  form: TemplateQuestFormScheme,
-  updatedAt: z.string(),
-})
-```
-
-### DELETE /api/quests/template/[id]
-
-**役割:** テンプレートクエストを削除する
-
-**リクエスト型:** `DeleteTemplateQuestRequest`
-
-```typescript
-export const DeleteTemplateQuestRequestScheme = z.object({
-  updatedAt: z.string(),
-})
-```
-
-### フック: useTemplateQuest
-
-**パス:** `app/(app)/quests/template/[id]/view/_hooks/useTemplateQuest.ts`
-
-**役割:** テンプレートクエストデータを取得するカスタムフック
-
-**パラメータ:**
-- `id: string` - テンプレートクエストID
-
-**返り値:**
-- `templateQuest` - 取得したテンプレートクエストデータ
-- `isLoading` - ローディング状態
-
-## 子供クエスト閲覧API
-
-### エンドポイント
-
-**URL:** `CHILD_QUEST_API_URL(familyQuestId, childId)` - `/api/quests/family/[id]/child/[childId]`
-
-**定義場所:** `app/(core)/endpoints.ts`
-
-### GET /api/quests/family/[id]/child/[childId]
-
-**役割:** 子供クエストの詳細を取得する
-
-**パラメータ:**
-- `id: string` - 家族クエストID（パスパラメータ）
-- `childId: string` - 子供ID（パスパラメータ）
-
-**レスポンス型:** `GetChildQuestResponse`
-
-```typescript
-export type GetChildQuestResponse = {
-  childQuest: Awaited<ReturnType<typeof fetchChildQuest>>
-}
-```
-
-**主要フィールド:**
-- `base` - 基本情報（家族クエストのベース）
-- `quest` - クエスト情報
-- `details` - レベル別詳細
-- `children` - 子供別クエスト情報（status, level, completionCount, requestMessage等）
-- `icon` - アイコン情報
-- `category` - カテゴリ情報
-- `tags` - タグ情報
-
-**クライアント関数:** `getChildQuest({ familyQuestId, childId })`
-
-**実装場所:** `app/api/quests/family/[id]/child/[childId]/client.ts`
-
-### フック: useChildQuest
-
-**パス:** `app/(app)/quests/family/[id]/view/child/[childId]/_hooks/useChildQuest.ts`
-
-**役割:** 子供クエストデータを取得するカスタムフック
-
-**パラメータ:**
-- `id: string` - 家族クエストID
-- `childId: string` - 子供ID
-
-**返り値:**
-- `childQuest` - 取得した子供クエストデータ
-- `isLoading` - ローディング状態
-
-**特記事項:** データ取得失敗時は自動的にホーム画面へリダイレクトし、フィードバックメッセージを表示する
-
-### フック: useReviewRequest
-
-**パス:** `app/(app)/quests/family/[id]/view/child/[childId]/_hooks/useReviewRequest.ts`
-
-**役割:** 完了報告を送信するカスタムフック（子供用）
-
-**返り値:**
-- `handleReviewRequest` - 報告リクエストハンドラー（モーダルオープン）
-- `executeReviewRequest` - 実際の報告実行関数
-- `closeModal` - モーダルクローズ関数
-- `isModalOpen` - モーダル開閉状態
-- `isLoading` - ローディング状態
-
-### フック: useCancelReview
-
-**パス:** `app/(app)/quests/family/[id]/view/child/[childId]/_hooks/useCancelReview.ts`
-
-**役割:** 完了報告を取り消すカスタムフック（子供用）
-
-**返り値:**
-- `handleCancelReview` - 報告取消ハンドラー（モーダルオープン）
-- `executeCancelReview` - 実際の取消実行関数
-- `closeModal` - モーダルクローズ関数
-- `isModalOpen` - モーダル開閉状態
-- `isLoading` - ローディング状態
-
-### フック: useRejectReport
-
-**パス:** `app/(app)/quests/family/[id]/view/child/[childId]/_hooks/useRejectReport.ts`
-
-**役割:** 完了報告を却下するカスタムフック（親用）
-
-**返り値:**
-- `handleRejectReport` - 報告却下ハンドラー
-- `executeRejectReport` - 実際の却下実行関数
-- `closeModal` - モーダルクローズ関数
-- `isModalOpen` - モーダル開閉状態
-- `isLoading` - ローディング状態
-
-### フック: useApproveReport
-
-**パス:** `app/(app)/quests/family/[id]/view/child/[childId]/_hooks/useApproveReport.ts`
-
-**役割:** 完了報告を承認するカスタムフック（親用）
-
-**返り値:**
-- `handleApproveReport` - 報告承認ハンドラー（モーダルオープン）
-- `executeApproveReport` - 実際の承認実行関数
-- `closeModal` - モーダルクローズ関数
-- `isModalOpen` - モーダル開閉状態
-- `isLoading` - ローディング状態
-
-### フック: useDeleteChildQuest
-
-**パス:** `app/(app)/quests/family/[id]/view/child/[childId]/_hooks/useDeleteChildQuest.ts`
-
-**役割:** 子供クエストを削除（リセット）するカスタムフック（親用）
-
-**返り値:**
-- `handleDelete` - 削除ハンドラー関数
-- `isLoading` - ローディング状態
-
-**パラメータ（handleDelete）:**
-- `familyQuestId: string` - 家族クエストID
-- `childId: string` - 子供ID
-
-## 共通のAPI設計パターン
-
-### エラーハンドリング
-- すべてのAPIは`withRouteErrorHandling`でラップされる
-- クライアント側では`AppError.fromResponse`で例外を生成
-- フック内で`handleAppError(error, router)`を使用してエラー処理
-
-### 認証コンテキスト
-- すべてのAPIルートで`getAuthContext()`を使用
-- `db`インスタンスと`userId`を取得
-- `fetchUserInfoByUserId`でユーザー情報・家族情報を取得
-
-### 排他制御
-- 更新・削除時は`updatedAt`を使用した楽観的ロック
-- バックエンド側で`updatedAt`を検証
-
-### useQuery設定
-- `retry: false` - リトライなし
-- `enabled: !!id` - IDが存在する場合のみクエリ実行
-- `queryKey` - 適切なキャッシュキーを設定
-
-### useMutation設定
-- `onSuccess`でキャッシュ無効化（`queryClient.invalidateQueries`）
-- ローディング状態を管理
-- 成功時はフィードバックメッセージ表示
+## クイックスタート
+
+1. **全体像の把握**: `references/er_diagram.md`でクエストタイプ統合の概念確認
+2. **フロー理解**: `references/flow_diagram.md`でタイプ検出・変換フロー確認
+3. **実装時**: `references/api_endpoints.md`で各タイプの詳細仕様確認
+4. **デバッグ時**: `references/sequence_diagram.md`で処理シーケンス確認
+
+## 実装上の注意点
+
+### 必須パターン
+- **client.ts + route.ts**: セットで実装
+- **React Query**: useQuery/useMutationでAPIアクセス
+- **統一レスポンス形式**: 各タイプで共通フィールド構造を維持
+- **楽観的排他制御**: 更新・削除時にupdatedAtチェック
+- **Logger**: すべてのAPI処理でlogger使用
+
+### 権限管理
+- **家族クエスト**: 家族メンバー閲覧可、親のみ更新・削除
+- **公開クエスト**: 全員閲覧可、投稿元のみ更新・削除、ログインユーザーのみいいね可
+- **テンプレート**: 全ユーザー閲覧可、管理者のみ更新・削除
+- **子供クエスト**: 本人または親のみ閲覧可
+
+### クエストタイプ別の特性
+- **家族クエスト**: 家族内共有、レベルシステム
+- **公開クエスト**: ソーシャル機能（いいね、コメント）、家族情報表示
+- **テンプレート**: 公式クエスト、is_officialフラグ
+- **子供クエスト**: ステータス遷移、進捗管理、自動生成機能
