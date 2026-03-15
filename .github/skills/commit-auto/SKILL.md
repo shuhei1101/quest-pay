@@ -1,13 +1,21 @@
 ---
 name: commit-auto
-description: This skill should be used when the user requests to commit changes using phrases like "これでOK", "コミットして", "commit this", or similar approval statements. It automates the git workflow by staging changes and creating commits with self-generated meaningful commit messages.
+description: '**MANDATORY**: すべてのエージェントはgitコミット操作の前に必ずこのスキルを読み込むこと。Quest Payプロジェクト専用のコミットメッセージフォーマット「{ドメイン名}、{ラベル}（{変更概要}）」を定義。ユーザーが「コミットして」「これでOK」などの承認フレーズを使った際、自動的にセキュリティチェックを実行し、正しいフォーマットでコミットを実行する。'
 ---
 
 # Commit Auto スキル
 
+## ⚠️ 重要: 必須スキル
+
+**このスキルは、すべてのエージェント（デフォルト含む）がgitコミット操作を行う前に必ず読み込む必要があります。**
+
+- コミット操作 = `git commit` を実行する全ての場面
+- ユーザーから「コミットして」「これでOK」などの承認があった場合
+- トリガーフレーズがなくても、コミット実行前にこのスキルを確認すること
+
 ## 概要
 
-ユーザーの承認フレーズを受けて、セッション中の変更を安全にコミットするスキルです。自動的にセキュリティチェックを実行し、意味のあるコミットメッセージを生成します。
+ユーザーの承認フレーズを受けて、セッション中の変更を安全にコミットするスキルです。自動的にセキュリティチェックを実行し、Quest Payプロジェクト専用フォーマットで意味のあるコミットメッセージを生成します。
 
 ## トリガーフレーズ
 
@@ -37,8 +45,9 @@ description: This skill should be used when the user requests to commit changes 
 
 ### 3. コミットメッセージ生成
 - 変更内容を分析
-- フォーマット: `{ドメイン名}、{ラベル}（{変更概要}）`
+- **必須フォーマット**: `{ドメイン名}、{ラベル}（{変更概要}）`
 - 日本語で簡潔に要約
+- ❌ 禁止: `feat:`, `fix:`, `docs:` などの英語Conventional Commits形式は使用しない
 
 ### 4. 安全なコミット実行
 - 個別ファイル指定によるステージング
@@ -98,10 +107,16 @@ references/workflow.md
 {ドメイン名}、{ラベル}（{変更概要}）
 ```
 
-**例:**
+**✅ 正しい例:**
 - `共通コンポーネント、レイアウト調整（ページヘッダーのプロフィールアイコンサイズを縮小）`
 - `家族クエスト一覧、バグ修正（完了済みクエストの表示エラーを修正）`
 - `タイムライン、新規機能（コメント投稿機能を追加）`
+- `エージェント管理、新規機能（スキル発見機能を追加）`
+
+**❌ 誤った例（使用禁止）:**
+- `feat: エージェントのスキル発見機能を実装` ← Conventional Commits形式は使わない
+- `fix: update component` ← 英語は使わない
+- `docs(agents): add skill discovery` ← このフォーマットは禁止
 
 ### referenceメンテナンス
 **機能修正・改善時は必ず対応するreferenceファイルを更新してください:**
