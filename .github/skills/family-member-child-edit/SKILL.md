@@ -143,6 +143,14 @@ const handleSubmit = (data: any) => {
 3. **LoadingOverlay の条件不足**
    - `isLoading` と `isSubmitting` 両方をチェック
 
+### referenceメンテナンス
+**機能修正・改善時は必ず対応するreferenceファイルを更新してください:**
+- コード構造変更時: `references/component_structure.md`, `references/flow_diagram.md` を更新
+- API仕様変更時: `references/api_endpoints.md`, `references/sequence_diagram.md` を更新
+- DB修正時: `references/er_diagram.md`, `references/table_details.md` を更新
+- 記載年月日時を必ず更新: `(○○年○○月○○日 ○○:○○記載)` 形式で最新化
+
+
 ## エンドポイント
 
 ### 画面URL

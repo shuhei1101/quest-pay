@@ -91,6 +91,9 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新しいコンポーネントやPropsを記録
    - 新規コンポーネントカテゴリ追加時は専用スキルを作成（`@repo-architect`や`skill-creator`に依頼）
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 説明対象のコンポーネントを特定
 2. 関連するスキルを参照

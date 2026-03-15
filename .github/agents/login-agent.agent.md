@@ -95,6 +95,9 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新しいエンドポイントやパスを記録
    - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 説明対象を確認（画面全体 or 特定機能）
 2. 関連スキルから情報を取得
@@ -176,3 +179,5 @@ read_file: .github/skills/commit-auto/SKILL.md
 - パスワードはSupabase認証で管理（DB保存禁止）
 - ログイン時にセッションストレージをクリア
 - 認証済みの場合は自動でクエスト画面へリダイレクト
+6. 変更内容に基づいて担当スキルのreferenceファイルをメンテナンス（必要に応じて）
+

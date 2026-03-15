@@ -96,6 +96,9 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新しいエンドポイントやパスを記録
    - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 説明対象を特定（2ペイン設計、一覧表示、カード表示、レイアウト）
 2. 関連するスキルを参照

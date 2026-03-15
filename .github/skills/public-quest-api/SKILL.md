@@ -112,3 +112,11 @@ references/api_endpoints.md
 - **is_pinned**: ピン留めコメントは一覧最上位表示
 - **publisher_liked**: 公開者いいねマーク付き表示
 - **deleted_at**: ソフトデリートで履歴保持
+### referenceメンテナンス
+**機能修正・改善時は必ず対応するreferenceファイルを更新してください:**
+- コード構造変更時: `references/component_structure.md`, `references/flow_diagram.md` を更新
+- API仕様変更時: `references/api_endpoints.md`, `references/sequence_diagram.md` を更新
+- DB修正時: `references/er_diagram.md`, `references/table_details.md` を更新
+- 記載年月日時を必ず更新: `(○○年○○月○○日 ○○:○○記載)` 形式で最新化
+
+

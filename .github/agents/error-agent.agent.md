@@ -105,6 +105,9 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新しいエラー画面が必要な場合は `/app/error/` に追加
 5. 変更内容に基づいてスキルを更新
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 説明対象を特定
    - グローバルエラーハンドラー？
@@ -224,3 +227,5 @@ export const QuestDetail = () => {
 ```
 
 ---
+6. 変更内容に基づいて担当スキルのreferenceファイルをメンテナンス（必要に応じて）
+

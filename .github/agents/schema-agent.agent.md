@@ -92,6 +92,9 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新しいテーブルやリレーションを記録
    - 新規テーブル追加時は専用スキルを作成（`@repo-architect`や`skill-creator`に依頼）
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 説明対象のテーブルを特定
 2. 関連するスキルを参照
@@ -178,3 +181,5 @@ read_file: .github/skills/commit-auto/SKILL.md
 - **整合性**: テーブル間のリレーションを正しく定義
 - **マイグレーション**: スキーマ変更時は必ずマイグレーションファイルも作成
 - **型安全性**: Drizzleの型推論を活用して型安全なスキーマを定義
+6. 変更内容に基づいて担当スキルのreferenceファイルをメンテナンス（必要に応じて）
+

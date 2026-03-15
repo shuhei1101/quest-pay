@@ -275,6 +275,9 @@ const [selectedLevel, setSelectedLevel] = useState<number>(1)
    - 新しいエンドポイントやパスを記録
    - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 概要説明（何のための機能か）
 2. 構造説明（ファイル構成、コンポーネント関係）
@@ -285,3 +288,5 @@ const [selectedLevel, setSelectedLevel] = useState<number>(1)
 1. 変更理由の説明
 2. スキルファイルの更新
 3. 変更内容のサマリー
+6. 変更内容に基づいて担当スキルのreferenceファイルをメンテナンス（必要に応じて）
+

@@ -99,6 +99,9 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新しいエンドポイントやパスを記録
    - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 説明対象を特定（家族一覧、家族新規作成、家族詳細、メンバー管理）
 2. 現在の構造を確認

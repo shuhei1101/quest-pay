@@ -90,6 +90,9 @@ read_file: .github/skills/commit-auto/SKILL.md
    - 新しいコンポーネントや機能を記録
    - 新規画面やAPI追加時は専用スキルやエージェントを作成（`@repo-architect`や`skill-creator`に依頼）
 
+**referencesファイルのメンテナンス:**
+機能修正・改善を行った際は、対応するsk illのreferenceファイルを必ず更新してください。
+
 ### 機能説明時
 1. 説明対象を特定（サイドメニュー、フッター、ヘッダー）
 2. 関連するスキルを参照
@@ -148,3 +151,5 @@ read_file: .github/skills/commit-auto/SKILL.md
 - **セミコロン禁止**: コードにセミコロンを使用しない（コーディング規約）
 - **YAGNI原則**: 必要最小限の実装にとどめる
 - **一貫性**: アプリ全体で統一されたUIを保つ
+6. 変更内容に基づいて担当スキルのreferenceファイルをメンテナンス（必要に応じて）
+
