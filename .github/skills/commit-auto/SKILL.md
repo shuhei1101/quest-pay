@@ -53,14 +53,17 @@ When the user requests a commit, follow this workflow:
 
 - 変更を簡潔に要約
 - 日本語を使用（Quest Payプロジェクト）
-- Conventional Commit形式に従う（feat:, fix:, docs:, refactor: など）
-- 変更した機能やコンポーネントを明記
+- **フォーマット**: `{ドメイン名}、{ラベル}（{変更概要}）`
+  - **ドメイン名**: 変更対象のドメイン（家族クエスト閲覧、家族メンバー一覧、クエスト詳細、共通コンポーネントなど）
+  - **ラベル**: 変更の種類を表す単語（機能追加、新規機能、バグ修正、レイアウト調整、リファクタリングなど）
+  - **変更概要**: 具体的な変更内容を一言で
 
 **良いコミットメッセージの例:**
-- `feat: commit-autoスキルを追加`
-- `fix: タイムアウトエラー画面の表示を修正`
-- `refactor: 家族クエスト一覧のコンポーネント構造を改善`
-- `docs: スキル作成ガイドを更新`
+- `共通コンポーネント、レイアウト調整（ページヘッダーのプロフィールアイコンサイズを縮小）`
+- `家族プロフィール、レイアウト調整（タイトルを簡潔化）`
+- `家族クエスト一覧、バグ修正（完了済みクエストの表示エラーを修正）`
+- `タイムライン、新規機能（コメント投稿機能を追加）`
+- `スキル管理、機能追加（commit-autoスキルを追加）`
 
 ### Step 4: Execute Commit Script
 
@@ -72,20 +75,27 @@ When the user requests a commit, follow this workflow:
 
 **実行方法:**
 ```bash
-.github/skills/commit-auto/scripts/commit_session_changes.sh "<コミットメッセージ>" <file1> <file2> <file3>...
+.github/skills/commit-auto/scripts/commit_session_changes.sh "<ドメイン名>" "<ラベル>" "<変更概要>" <file1> <file2> <file3>...
 ```
 
 **セキュリティチェックをスキップ（false positiveの場合）:**
 ```bash
-.github/skills/commit-auto/scripts/commit_session_changes.sh --skip-security "<コミットメッセージ>" <file1> <file2> <file3>...
+.github/skills/commit-auto/scripts/commit_session_changes.sh --skip-security "<ドメイン名>" "<ラベル>" "<変更概要>" <file1> <file2> <file3>...
 ```
 
 **例:**
 ```bash
 .github/skills/commit-auto/scripts/commit_session_changes.sh \
-  "feat: モック画面管理用エージェントを追加" \
+  "モック画面管理" \
+  "新規機能" \
+  "モック画面管理用エージェントを追加" \
   .github/agents/mock-agent.md \
   .github/skills/mock-list/SKILL.md
+```
+
+**生成されるコミットメッセージ:**
+```
+モック画面管理、新規機能（モック画面管理用エージェントを追加）
 ```
 
 ### Step 5: Handle Security Issues
@@ -138,12 +148,19 @@ When the user requests a commit, follow this workflow:
 ### scripts/commit_session_changes.sh
 
 Safe commit script that:
+- **Generates commit message from 3 components**: `{ドメイン名}、{ラベル}（{変更概要}）`
 - Validates file existence before staging
 - **Executes security check automatically**
 - Stages only specified files (prevents accidental commits)
 - Provides clear feedback at each step
 - Exits on any error
 - Supports `--skip-security` option for false positives
+
+**Arguments:**
+1. Domain name (ドメイン名): e.g., "家族クエスト閲覧", "共通コンポーネント"
+2. Label (ラベル): e.g., "新規機能", "バグ修正", "レイアウト調整"
+3. Summary (変更概要): e.g., "ページヘッダーのアイコンサイズを縮小"
+4. Files: List of files to commit
 
 Usage documented in the workflow above.
 

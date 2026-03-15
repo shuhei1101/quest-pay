@@ -2,14 +2,17 @@
 # commit_session_changes.sh
 # セッション中に変更したファイルのみを安全にコミットするスクリプト
 #
-# Usage: ./commit_session_changes.sh "commit message" file1 [file2] [file3]...
-#        ./commit_session_changes.sh --skip-security "commit message" file1 [file2] [file3]...
+# Usage: ./commit_session_changes.sh "ドメイン名" "ラベル" "変更概要" file1 [file2] [file3]...
+#        ./commit_session_changes.sh --skip-security "ドメイン名" "ラベル" "変更概要" file1 [file2] [file3]...
 #
 # Options:
 #   --skip-security  セキュリティチェックをスキップ（false positiveの場合に使用）
 #
+# Message Format: {ドメイン名}、{ラベル}（{変更概要}）
+#
 # Example:
-#   ./commit_session_changes.sh "feat: 新機能を追加" src/app.ts src/utils.ts
+#   ./commit_session_changes.sh "共通コンポーネント" "レイアウト調整" "ページヘッダーのプロフィールアイコンサイズを縮小" src/app.ts
+#   Result: "共通コンポーネント、レイアウト調整（ページヘッダーのプロフィールアイコンサイズを縮小）"
 
 set -e  # エラー時に即座に終了
 
@@ -27,21 +30,29 @@ if [ "$1" = "--skip-security" ]; then
 fi
 
 # 引数チェック
-if [ $# -lt 2 ]; then
+if [ $# -lt 4 ]; then
   echo "エラー: 引数が不足しています"
-  echo "使用法: $0 [--skip-security] <コミットメッセージ> <ファイル1> [ファイル2] [ファイル3]..."
+  echo "使用法: $0 [--skip-security] <ドメイン名> <ラベル> <変更概要> <ファイル1> [ファイル2] [ファイル3]..."
   echo ""
   echo "オプション:"
   echo "  --skip-security  セキュリティチェックをスキップ"
   echo ""
+  echo "メッセージフォーマット: {ドメイン名}、{ラベル}（{変更概要}）"
+  echo ""
   echo "例:"
-  echo "  $0 \"feat: 新機能を追加\" src/app.ts src/utils.ts"
-  echo "  $0 --skip-security \"feat: 新機能を追加\" src/app.ts src/utils.ts"
+  echo "  $0 \"共通コンポーネント\" \"レイアウト調整\" \"ページヘッダーのアイコンサイズを縮小\" src/app.ts"
+  echo "  $0 --skip-security \"家族プロフィール\" \"バグ修正\" \"タイトル表示エラーを修正\" src/profile.ts"
   exit 1
 fi
 
-COMMIT_MESSAGE="$1"
-shift  # 残りの引数はすべてファイルパス
+# コミットメッセージの構成要素を取得
+DOMAIN="$1"
+LABEL="$2"
+SUMMARY="$3"
+shift 3  # 残りの引数はすべてファイルパス
+
+# コミットメッセージを生成
+COMMIT_MESSAGE="${DOMAIN}、${LABEL}（${SUMMARY}）"
 
 FILES=("$@")
 
