@@ -7,96 +7,62 @@ description: エンドポイント定義の知識を提供するスキル。endp
 
 ## 概要
 
-エンドポイント定義（`endpoints.ts`）は、アプリ内のすべてのURLパスを一元管理するファイル。
+このスキルは、Quest Payアプリケーションのすべてのエンドポイント（ページURL・API URL）を一元管理する`endpoints.ts`の知識を提供します。
 
-## ファイル構成
+## メインソースファイル
 
-### メインファイル
-- `app/(core)/endpoints.ts`: エンドポイント定義
+### エンドポイント定義
+- `app/(core)/endpoints.ts`: すべてのURL定義を一元管理
 
-## 主要なエンドポイントカテゴリ
+## 主要機能グループ
 
-### 認証関連
-- LOGIN_URL: ログイン
-- SIGNUP_URL: サインアップ
-- PASSWORD_URL: パスワード関連
+### 1. ページURL管理
+- 認証関連: ログイン、サインアップ、パスワードリセット
+- メイン画面: ホーム、タイムライン
+- クエスト画面: 家族クエスト、公開クエスト、テンプレートクエスト
+- 管理画面: 家族管理、子供管理、報酬設定
 
-### クエスト関連
-- FAMILY_QUESTS_URL: 家族クエスト
-- PUBLIC_QUESTS_URL: 公開クエスト
-- TEMPLATE_QUESTS_URL: テンプレートクエスト
-- CHILD_QUESTS_URL: 子供クエスト
+### 2. API URL管理
+- クエストAPI: 家族クエスト、公開クエスト、テンプレートクエスト
+- 管理API: 家族、子供、ユーザー
+- 操作API: いいね、コメント、フォロー
 
-### 画面URL
-- HOME_URL: ホーム
-- TIMELINE_URL: タイムライン
-- FAMILIES_URL: 家族管理
-- CHILDREN_URL: 子供管理
-- REWARD_URL: 報酬設定
-- NOTIFICATIONS_URL: 通知
+### 3. 動的URL生成
+- 関数形式でIDを受け取りURLを生成
+- 型安全なURL構築
 
-### API URL
-- QUESTS_API_URL: クエストAPIベース
-- FAMILY_QUESTS_API_URL: 家族クエストAPI
-- PUBLIC_QUESTS_API_URL: 公開クエストAPI
+## Reference Files Usage
 
-## 使用方法
-
-```typescript
-import { FAMILY_QUESTS_URL, FAMILY_QUEST_API_URL } from '@/(core)/endpoints'
-
-// 画面遷移
-navigate(FAMILY_QUESTS_URL)
-
-// API呼び出し
-const response = await fetch(FAMILY_QUEST_API_URL(questId))
+### APIルート一覧を確認する場合
+すべてのAPIエンドポイントとHTTPメソッドを確認：
+```
+references/api_routes.md
 ```
 
-## 注意点
+### ページルート一覧を確認する場合
+すべてのページURLと画面遷移を確認：
+```
+references/page_routes.md
+```
 
-- すべてのURLはendpoints.tsで管理
-- 直接文字列でURLを書かない
-- 関数形式はIDを受け取る
+### 実装パターンを学ぶ場合
+ルート定義のベストプラクティス、命名規則、使用例を確認：
+```
+references/route_patterns.md
+```
 
-## Structuring This Skill
+## クイックスタート
 
-[TODO: Choose the structure that best fits this skill's purpose. Common patterns:
+1. **全体像の把握**: `references/page_routes.md`でページ構成確認
+2. **API理解**: `references/api_routes.md`でAPIエンドポイント確認
+3. **実装時**: `references/route_patterns.md`でパターン確認
 
-**1. Workflow-Based** (best for sequential processes)
-- Works well when there are clear step-by-step procedures
-- Example: DOCX skill with "Workflow Decision Tree" → "Reading" → "Creating" → "Editing"
-- Structure: ## Overview → ## Workflow Decision Tree → ## Step 1 → ## Step 2...
+## 実装上の注意点
 
-**2. Task-Based** (best for tool collections)
-- Works well when the skill offers different operations/capabilities
-- Example: PDF skill with "Quick Start" → "Merge PDFs" → "Split PDFs" → "Extract Text"
-- Structure: ## Overview → ## Quick Start → ## Task Category 1 → ## Task Category 2...
-
-**3. Reference/Guidelines** (best for standards or specifications)
-- Works well for brand guidelines, coding standards, or requirements
-- Example: Brand styling with "Brand Guidelines" → "Colors" → "Typography" → "Features"
-- Structure: ## Overview → ## Guidelines → ## Specifications → ## Usage...
-
-**4. Capabilities-Based** (best for integrated systems)
-- Works well when the skill provides multiple interrelated features
-- Example: Product Management with "Core Capabilities" → numbered capability list
-- Structure: ## Overview → ## Core Capabilities → ### 1. Feature → ### 2. Feature...
-
-Patterns can be mixed and matched as needed. Most skills combine patterns (e.g., start with task-based, add workflow for complex operations).
-
-Delete this entire "Structuring This Skill" section when done - it's just guidance.]
-
-## [TODO: Replace with the first main section based on chosen structure]
-
-[TODO: Add content here. See examples in existing skills:
-- Code samples for technical skills
-- Decision trees for complex workflows
-- Concrete examples with realistic user requests
-- References to scripts/templates/references as needed]
-
-## Resources
-
-This skill includes example resource directories that demonstrate how to organize different types of bundled resources:
+### 必須パターン
+1. **URL直書き禁止**: すべて`endpoints.ts`から参照
+2. **動的URLは関数形式**: `QUEST_URL(id)`の形式で定義
+3. **階層構造を保つ**: 親階層から順にURLを構築
 
 ### scripts/
 Executable code (Python/Bash/etc.) that can be run directly to perform specific operations.

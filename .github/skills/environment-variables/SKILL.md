@@ -3,101 +3,73 @@ name: environment-variables
 description: プロジェクトで使用する環境変数の定義と使用方法を提供するスキル。Supabase、Stripe、Logger、Platformなど全環境変数の設定方法を網羅。
 ---
 
-# Environment Variables
+# Environment Variables スキル
 
 ## 概要
 
-このスキルは、お小遣いクエストボードプロジェクトで使用する環境変数の定義と使用方法を提供する。環境変数の追加・変更時は、必ずこのスキルを更新すること。
+このスキルは、Quest Payアプリケーションで使用するすべての環境変数の定義、設定方法、セキュリティベストプラクティスを提供します。
 
-## 環境変数ファイル
+## メインソースファイル
 
-### ファイル構成
+### 環境変数ファイル
+- `.env`: デフォルト設定（Gitにコミット可能）
+- `.env.local`: ローカル開発環境用（Gitにコミット禁止）
+- `.env.production`: 本番環境用（Gitにコミット禁止）
 
-- **`.env`**: デフォルト設定（すべての環境で共通）
-- **`.env.local`**: ローカル開発環境用（Gitにコミットしない）
-- **`.env.production`**: 本番環境用（未作成の場合は作成推奨）
+### 使用場所
+- `app/(core)/_supabase/client.ts`: Supabase設定
+- `app/(core)/_supabase/server.ts`: サーバーサイドSupabase
+- `app/(core)/logger.ts`: ログレベル設定
+- `drizzle.config.ts`: Database設定
+- `next.config.ts`: Platform設定
 
-**重要**: `.env.local`と`.env.production`は機密情報を含むため、`.gitignore`に追加済み。絶対にGitにコミットしないこと。
+## 主要機能グループ
 
-## 環境変数一覧
+### 1. 基本変数（必須）
+- Supabase: プロジェクトURL、認証キー
+- Database: 接続URL
+- App Domain: アプリケーションドメイン
 
-### Supabase関連
+### 2. オプション変数
+- Logger: ログレベル設定
+- Platform: Capacitor/Web切り替え
 
-| 変数名 | 種類 | 説明 | 使用場所 | 取得方法 |
-|--------|------|------|----------|----------|
-| `NEXT_PUBLIC_SUPABASE_URL` | クライアント | Supabase プロジェクトURL | `app/(core)/_supabase/client.ts`<br>`app/(core)/_supabase/server.ts` | Supabaseダッシュボード > Settings > API |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | クライアント | Supabase 匿名キー（公開可能） | `app/(core)/_supabase/client.ts`<br>`app/(core)/_supabase/server.ts` | Supabaseダッシュボード > Settings > API |
-| `SUPABASE_SERVICE_ROLE_KEY` | サーバー | Supabase サービスロールキー（秘密） | サーバーサイドAPI | Supabaseダッシュボード > Settings > API |
+### 3. 機能別変数
+- Stripe: 決済機能（オプション）
+- Email: メール送信（オプション）
 
-**注意**: `NEXT_PUBLIC_` プレフィックスはクライアントサイドで公開される。機密情報には使用しないこと。
+## Reference Files Usage
 
-### Database
+### 環境変数一覧を確認する場合
+すべての環境変数の完全リストと詳細仕様を確認：
+```
+references/variable_list.md
+```
 
-| 変数名 | 種類 | 説明 | 使用場所 | 取得方法 |
-|--------|------|------|----------|----------|
-| `DATABASE_URL` | サーバー | PostgreSQL接続URL | `drizzle.config.ts`<br>マイグレーション<br>Drizzle ORM | Supabaseダッシュボード > Settings > Database > Connection string |
+### 初期セットアップを行う場合
+ステップバイステップの設定手順を確認：
+```
+references/setup_guide.md
+```
 
-**フォーマット**: `postgresql://[user]:[password]@[host]:[port]/[database]`
+### セキュリティを確認する場合
+機密情報の取り扱い、ベストプラクティスを確認：
+```
+references/security_notes.md
+```
 
-### App Domain
+## クイックスタート
 
-| 変数名 | 種類 | 説明 | 使用場所 | 設定例 |
-|--------|------|------|----------|--------|
-| `APP_DOMAIN` | サーバー | アプリケーションのドメイン | API、リダイレクト、メール送信 | 開発: `http://localhost:3000`<br>本番: `https://yourdomain.com` |
+1. **初回セットアップ**: `references/setup_guide.md`で手順確認
+2. **変数追加時**: `references/variable_list.md`で既存変数確認
+3. **セキュリティレビュー**: `references/security_notes.md`で確認
 
-### Logger設定
+## 実装上の注意点
 
-| 変数名 | 種類 | 説明 | 使用場所 | 設定値 |
-|--------|------|------|----------|--------|
-| `NEXT_PUBLIC_LOG_LEVEL` | クライアント | ログレベル | `app/(core)/logger.ts` | `debug`, `info`, `warn`, `error`<br>デフォルト: `info` |
-
-**ログレベルの意味**:
-- `debug`: デバッグ情報を含むすべてのログを出力
-- `info`: 通常の情報ログ以上を出力（推奨：開発環境）
-- `warn`: 警告とエラーのみ出力
-- `error`: エラーのみ出力（推奨：本番環境）
-
-### Platform設定
-
-| 変数名 | 種類 | 説明 | 使用場所 | 設定値 |
-|--------|------|------|----------|--------|
-| `NEXT_PUBLIC_PLATFORM` | クライアント | プラットフォーム識別子 | `next.config.ts` | `capacitor`: Capacitorビルド時<br>未設定: Webブラウザ |
-
-**用途**: Capacitorでのネイティブアプリビルド時、静的エクスポートを有効化するために使用。
-
-### Stripe設定（決済機能）
-
-| 変数名 | 種類 | 説明 | 使用場所 | 取得方法 |
-|--------|------|------|----------|----------|
-| `STRIPE_SECRET_KEY` | サーバー | Stripe秘密鍵 | サーバーサイドAPI | Stripeダッシュボード > Developers > API keys |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | クライアント | Stripe公開鍵 | クライアントサイド決済フォーム | Stripeダッシュボード > Developers > API keys |
-| `STRIPE_WEBHOOK_SECRET` | サーバー | Webhook署名シークレット | Webhook検証 | `stripe listen --forward-to localhost:3000/api/webhooks/stripe` |
-| `NEXT_PUBLIC_STRIPE_PRICE_ID_LITE_MONTHLY` | クライアント | Liteプラン月額の価格ID | 決済画面 | Stripeダッシュボード > Products |
-| `NEXT_PUBLIC_STRIPE_PRICE_ID_LITE_YEARLY` | クライアント | Liteプラン年額の価格ID | 決済画面 | Stripeダッシュボード > Products |
-
-**テストモード/本番モード**:
-- テストモード: キーに `test` が含まれる（例: `sk_test_...`, `pk_test_...`）
-- 本番モード: キーに `live` が含まれる（例: `sk_live_...`, `pk_live_...`）
-
-### メール送信設定
-
-| 変数名 | 種類 | 説明 | 使用場所 |
-|--------|------|------|----------|
-| `ICLOUD_SMTP_USER` | サーバー | iCloud SMTPユーザー名 | メール送信機能 |
-| `ICLOUD_SMTP_PASS` | サーバー | iCloud SMTPパスワード | メール送信機能 |
-
-**注意**: 本番環境では、SendGrid、AWS SES、Resendなどの専用メール送信サービスへの移行を推奨。
-
-## 環境変数の使用方法
-
-### クライアントサイド
-
-`NEXT_PUBLIC_` プレフィックス付き変数は、クライアントサイドで使用可能：
-
-```typescript
-// app/(core)/_supabase/client.ts
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+### 必須パターン
+1. **機密情報は`.env.local`**: Gitにコミットしない
+2. **公開可能な変数のみ`NEXT_PUBLIC_`**: クライアント公開
+3. **環境別設定**: 開発/本番で異なる値を使用
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Supabase環境変数が設定されていません')

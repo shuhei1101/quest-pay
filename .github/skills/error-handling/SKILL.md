@@ -3,101 +3,82 @@ name: error-handling
 description: エラーハンドリングの知識を提供するスキル。エラークラス定義、クライアント/サーバーエラーハンドラーを含む。
 ---
 
-# エラーハンドリングスキル
+# エラーハンドリング スキル
 
 ## 概要
 
-このスキルは、Quest Payアプリケーションにおけるエラーハンドリングユーティリティの知識を提供する。エラークラス定義、クライアント/サーバー両方のエラーハンドラー、エラーバウンダリーのフォールバックコンポーネントを網羅する。
+このスキルは、Quest Payアプリケーションの統一的なエラーハンドリング戦略の知識を提供します。エラークラス定義、ハンドラーパターン、ロギング統合を含みます。
 
-## ファイル構成
+## メインソースファイル
 
 ### エラークラス定義
-- **`/packages/web/app/(core)/error/appError.ts`**: アプリケーション固有のエラークラス
-  - `AppError`: 基底エラークラス
-  - `ClientValueError`: クライアントバリデーションエラー
-  - `ClientAuthError`: クライアント認証エラー
+- `app/(core)/error/appError.ts`: 基底エラークラスと派生クラス
+  - `AppError`: 基底クラス
+  - `ClientValueError`: バリデーションエラー
+  - `ClientAuthError`: 認証エラー
 
 ### エラーハンドラー
-- **`/packages/web/app/(core)/error/handler/client.ts`**: クライアントサイドエラーハンドラー
-- **`/packages/web/app/(core)/error/handler/server.ts`**: サーバーサイドエラーハンドラー
+- `app/(core)/error/handler/client.ts`: クライアントサイドハンドラー
+- `app/(core)/error/handler/server.ts`: サーバーサイドハンドラー
 
 ### エラーバウンダリー
-- **`/packages/web/app/(core)/error/ErrorFallback.tsx`**: エラーバウンダリーのフォールバックコンポーネント
+- `app/(core)/error/ErrorFallback.tsx`: Reactエラーバウンダリー
+- `app/error.tsx`: ページレベルエラーハンドラー
+- `app/global-error.tsx`: グローバルエラーハンドラー
 
-## エラークラス (appError.ts)
+### ロガー統合
+- `app/(core)/logger.ts`: loglevelベースのロガー
 
-### ErrorResponseScheme
-```typescript
-export const ErrorResponseScheme = z.object({
-  code: z.string(),
-  message: z.string(),
-  path: z.string().optional(),
-})
-export type ErrorResponse = z.infer<typeof ErrorResponseScheme>
+## 主要機能グループ
+
+### 1. エラークラス階層
+- 基底クラス（AppError）
+- バリデーションエラー（ClientValueError）
+- 認証エラー（ClientAuthError）
+- カスタムエラー拡張可能
+
+### 2. エラーハンドリングフロー
+- クライアントサイド: ルーティング、UI更新
+- サーバーサイド: HTTPレスポンス変換
+- エラーバウンダリー: React境界
+
+### 3. ロギング統合
+- エラーレベル別ログ出力
+- デバッグ情報記録
+- 本番環境でのログ制御
+
+## Reference Files Usage
+
+### エラークラス定義を確認する場合
+すべてのエラークラスの詳細仕様とAPI：
+```
+references/error_classes.md
 ```
 
-### AppError (基底クラス)
-```typescript
-export class AppError extends Error {
-  constructor(
-    public code: string,
-    public status: number,
-    message: string,
-    public path = '',
-  )
-  
-  public toResponse(): ErrorResponse
-  static fromResponse(data: any, status: number): AppError
-}
+### ハンドラーパターンを学ぶ場合
+クライアント/サーバーのエラー処理パターンと実装例：
+```
+references/handler_patterns.md
 ```
 
-**プロパティ:**
-- `code`: エラーコード
-- `status`: HTTPステータスコード
-- `message`: エラーメッセージ
-- `path`: エラー発生パス（オプション）
-
-**メソッド:**
-- `toResponse()`: エラーをレスポンス形式に変換
-- `fromResponse()`: レスポンスからエラーインスタンスを生成
-
-### ClientValueError (クライアントバリデーションエラー)
-```typescript
-export const CLIENT_VALUE_ERROR_CODE = 'CLIENT_ERROR'
-export class ClientValueError extends AppError {
-  constructor(message = '不正な値が入力されました。', path = '')
-}
+### ロギング戦略を確認する場合
+ログレベル、出力パターン、デバッグ方法：
+```
+references/logging_strategy.md
 ```
 
-デフォルトメッセージ: 「不正な値が入力されました。」
+## クイックスタート
 
-### ClientAuthError (クライアント認証エラー)
-```typescript
-export const CLIENT_AUTH_ERROR_CODE = 'CLIENT_AUTH_ERROR'
-export class ClientAuthError extends AppError
-```
+1. **エラークラス理解**: `references/error_classes.md`で階層確認
+2. **ハンドラー実装**: `references/handler_patterns.md`でパターン確認
+3. **ログ設定**: `references/logging_strategy.md`でログ戦略確認
 
-### 定数
-- `UNKNOWN_ERROR`: 'UNKNOWN_ERROR' - 不明なエラーコード
-- `APP_ERROR`: 'AppError' - アプリエラー識別子
-- `CLIENT_VALUE_ERROR_CODE`: 'CLIENT_ERROR' - クライアントエラーコード
-- `CLIENT_AUTH_ERROR_CODE`: 'CLIENT_AUTH_ERROR' - 認証エラーコード
+## 実装上の注意点
 
-## クライアントサイドエラーハンドラー (handler/client.ts)
-
-### handleAppError
-```typescript
-export const handleAppError = async (
-  error: Error,
-  router: AppRouterInstance
-) => {
-  devLog("handleAppError.エラー内容: ", error)
-  
-  // 次画面で表示するメッセージを登録
-  appStorage.feedbackMessage.set({ 
-    message: error.message, 
-    type: "error" 
-  })
+### 必須パターン
+1. **エラーは早期キャッチ**: バリデーション後即座にスロー
+2. **適切なエラーコード**: 意味のあるコードを使用
+3. **ユーザーフレンドリー**: 分かりやすいメッセージ
   
   // 前画面がある場合、遷移する
   let redirectUrl = appStorage.parentScreen.get()

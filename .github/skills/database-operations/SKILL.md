@@ -5,184 +5,137 @@ description: This skill should be used when implementing database operations usi
 
 # Database Operations
 
-## Overview
+## 概要
 
 このスキルは、Drizzle ORMとSupabaseを使用したデータベース操作のベストプラクティスを提供する。低レベルクエリの使用、排他制御、トランザクション処理などの重要な技術を含む。
+
+## メインソースファイル
+
+### データベース
+- **スキーマ定義**: `packages/web/drizzle/schema.ts`
+- **Entity定義**: `packages/web/drizzle/entity.ts`
+- **マイグレーション**: `packages/web/supabase/migrations/`
+
+### DB操作
+- **DB接続**: `packages/web/app/(core)/_supabase/db.ts`
+- **DB Helper**: `packages/web/app/api/_db_helper/db_helper.ts`
+- **各機能のdb.ts**: `packages/web/app/api/{feature}/db.ts`
+- **各機能のquery.ts**: `packages/web/app/api/{feature}/query.ts`
+- **各機能のservice.ts**: `packages/web/app/api/{feature}/service.ts`
 
 ## 基本原則
 
 ### 必須ルール
 1. **低レベルクエリの使用**: Drizzleの低レベルクエリを使用すること
-2. **高レベルクエリの禁止**: `db.query.xxx.findFirst`などの高レベルクエリは使用しないこと
+2. **高レベルクエリの禁止**: `db.query.xxx.findFirst`などは使用しないこと
 3. **排他制御**: 必要な場合は`db_helper.ts`を使用すること
-4. **トランザクション**: 複数テーブル更新時はSupabaseの`Database Functions`またはservice.tsのトランザクションを使用すること
+4. **トランザクション**: 複数テーブル更新時はトランザクションを使用すること
 
-### DB接続
-- Supabase Clientを使用してDB接続を行うこと
-- 接続設定は`app/(core)/_supabase/`を参照すること
+## Reference Files Usage
 
-## クエリパターン
+### クエリパターンを確認する場合
+SELECT、INSERT、UPDATE、DELETE、JOIN、集計などの基本パターンを確認：
+```
+references/query_patterns.md
+```
 
-### 読み取りクエリ（SELECT）
+### トランザクション実装を確認する場合
+トランザクション基本、実装パターン、エラーハンドリングを確認：
+```
+references/transaction_examples.md
+```
 
-**基本的な読み取り**:
+### 最適化ガイドを確認する場合
+排他制御、インデックス、クエリ最適化、パフォーマンス監視を確認：
+```
+references/optimization_guide.md
+```
+
+## クイックスタート
+
+1. **基本クエリ**: `references/query_patterns.md`でSELECT/INSERT/UPDATE/DELETE確認
+2. **複雑な処理**: `references/transaction_examples.md`でトランザクション確認
+3. **パフォーマンス**: `references/optimization_guide.md`で最適化確認
+
+## 実装上の注意点
+
+### 必須パターン
+- **低レベルクエリ**: `db.select().from().where()`形式を使用
+- **排他制御**: `checkVersion()`を使用
+- **トランザクション**: `db.transaction()`を使用
+- **returning()**: INSERT/UPDATE後は必ず`.returning()`を使用
+
+### ファイル構成
+- **db.ts**: 単一テーブルの更新操作
+- **query.ts**: 読み取り専用クエリ
+- **service.ts**: トランザクション処理、複数テーブル更新
+
+### よくあるエラー回避
+- ❌ `db.query.xxx.findFirst`の使用
+- ❌ 排他制御なしの更新
+- ❌ トランザクションなしの複数テーブル更新
+- ✅ 低レベルクエリ + 排他制御 + トランザクション
+
+## ファイル構成と責務
+
+### db.ts
+- **責務**: 単一テーブルの更新操作
+- **パターン**: INSERT、UPDATE、DELETE
+
+### query.ts
+- **責務**: 読み取り専用クエリ
+- **パターン**: 複雑なSELECT、JOIN、集計
+
+### service.ts
+- **責務**: トランザクション処理、複数テーブル更新
+- **パターン**: 複数のdb.ts、query.tsの呼び出し
+
+## よくあるエラーと解決策
+
+### エラー: 高レベルクエリの使用
 ```ts
-import { db } from "@/app/(core)/_supabase/db"
-import { questsTable } from "@/drizzle/schema"
-import { eq } from "drizzle-orm"
+// ❌ 避けるべき
+const quest = await db.query.quests.findFirst({
+  where: eq(questsTable.id, questId)
+})
 
-// 単一レコードの取得
-const quest = await db
+// ✅ 推奨
+const [quest] = await db
   .select()
   .from(questsTable)
   .where(eq(questsTable.id, questId))
   .limit(1)
-
-// 複数レコードの取得
-const quests = await db
-  .select()
-  .from(questsTable)
-  .where(eq(questsTable.family_id, familyId))
 ```
 
-**複雑な読み取り（JOIN）**:
+### エラー: 排他制御の欠如
 ```ts
-import { questsTable, categoriesTable } from "@/drizzle/schema"
-import { eq } from "drizzle-orm"
-
-// JOINを使用した読み取り
-const questsWithCategory = await db
-  .select({
-    id: questsTable.id,
-    title: questsTable.title,
-    categoryName: categoriesTable.name,
-  })
-  .from(questsTable)
-  .leftJoin(categoriesTable, eq(questsTable.category_id, categoriesTable.id))
-  .where(eq(questsTable.family_id, familyId))
-```
-
-**ネストされたオブジェクトの変換**:
-```ts
-// クエリ結果をネストされたオブジェクトに変換する場合は、
-// プライベート関数を作成して変換ロジックを集約すること
-
-type QuestWithCategory = {
-  id: string
-  title: string
-  category: {
-    id: string
-    name: string
-  } | null
-}
-
-/** クエリ結果を変換する */
-const convertToQuestWithCategory = (rows: any[]): QuestWithCategory[] => {
-  return rows.map(row => ({
-    id: row.id,
-    title: row.title,
-    category: row.categoryId ? {
-      id: row.categoryId,
-      name: row.categoryName,
-    } : null,
-  }))
-}
-
-// 使用例
-const rows = await db
-  .select({
-    id: questsTable.id,
-    title: questsTable.title,
-    categoryId: categoriesTable.id,
-    categoryName: categoriesTable.name,
-  })
-  .from(questsTable)
-  .leftJoin(categoriesTable, eq(questsTable.category_id, categoriesTable.id))
-
-const result = convertToQuestWithCategory(rows)
-```
-
-### 挿入クエリ（INSERT）
-
-**基本的な挿入**:
-```ts
-import { questsTable } from "@/drizzle/schema"
-
-// 単一レコードの挿入
-const [insertedQuest] = await db
-  .insert(questsTable)
-  .values({
-    id: newId,
-    family_id: familyId,
-    title: "新しいクエスト",
-    description: "説明",
-  })
-  .returning()
-
-// 複数レコードの挿入
-const insertedQuests = await db
-  .insert(questsTable)
-  .values([
-    { id: id1, family_id: familyId, title: "クエスト1" },
-    { id: id2, family_id: familyId, title: "クエスト2" },
-  ])
-  .returning()
-```
-
-### 更新クエリ（UPDATE）
-
-**基本的な更新**:
-```ts
-import { questsTable } from "@/drizzle/schema"
-import { eq } from "drizzle-orm"
-
-// 単一レコードの更新
-const [updatedQuest] = await db
+// ❌ 排他制御なし（同時更新で問題が発生する可能性）
+await db
   .update(questsTable)
-  .set({
-    title: "更新されたタイトル",
-    updated_at: new Date(),
-  })
+  .set({ title: newTitle })
   .where(eq(questsTable.id, questId))
-  .returning()
-```
 
-**排他制御を伴う更新**:
-```ts
+// ✅ 排他制御あり
 import { checkVersion } from "@/app/api/_db_helper/db_helper"
-import { questsTable } from "@/drizzle/schema"
-import { eq, and } from "drizzle-orm"
 
-// バージョンチェック付き更新
 await checkVersion(db, questsTable, questId, currentVersion)
-
-const [updatedQuest] = await db
+await db
   .update(questsTable)
   .set({
-    title: "更新されたタイトル",
+    title: newTitle,
     version: currentVersion + 1,
-    updated_at: new Date(),
   })
   .where(and(
     eq(questsTable.id, questId),
     eq(questsTable.version, currentVersion)
   ))
-  .returning()
 ```
 
-### 削除クエリ（DELETE）
+## References
 
-**基本的な削除**:
-```ts
-import { questsTable } from "@/drizzle/schema"
-import { eq } from "drizzle-orm"
-
-// 単一レコードの削除
-await db
-  .delete(questsTable)
-  .where(eq(questsTable.id, questId))
-
-// 複数レコードの削除
+- DBスキーマ定義: `packages/web/drizzle/schema.ts`
+- DB接続設定: `app/(core)/_supabase/`
+- 排他制御ヘルパー: `app/api/_db_helper/db_helper.ts`
 await db
   .delete(questsTable)
   .where(eq(questsTable.family_id, familyId))
