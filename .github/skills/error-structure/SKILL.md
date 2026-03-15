@@ -3,51 +3,85 @@ name: error-structure
 description: エラー画面の構造知識を提供するスキル。グローバルエラーハンドラー、認証エラー画面の構造を含む。
 ---
 
-# エラー画面構造スキル
+# エラー画面構造 スキル
 
 ## 概要
 
-このスキルは、Quest Payアプリケーションにおけるエラー画面の構造知識を提供する。不明なエラーをキャッチするグローバルエラーハンドラーと、認証エラー専用画面の構造・責務・パスを網羅する。
+このスキルは、Quest Payアプリケーションにおけるエラー画面の構造知識を提供します。不明なエラーをキャッチするグローバルエラーハンドラー、認証エラー専用画面、エラーハンドリング戦略を含みます。
 
-## ファイル構成
+## メインソースファイル
 
-### グローバルエラーハンドラー
-- **`/packages/web/app/error.tsx`**: Next.js標準のエラーバウンダリー
-  - 不明なエラーをキャッチして中央揃えで表示
-  - Paper/Cardコンポーネントでラップされた洗練されたUI
-  - 再読み込み、ホームへ戻るボタンを提供
+### エラー画面
+- `packages/web/app/error.tsx`: グローバルエラーハンドラー（Error Boundary）
+- `packages/web/app/error/unauthorized/page.tsx`: 認証エラーページ
+- `packages/web/app/error/unauthorized/UnauthorizedScreen.tsx`: 認証エラー画面
 
-### 認証エラー専用画面
-- **`/packages/web/app/error/unauthorized/page.tsx`**: ルートページ
-- **`/packages/web/app/error/unauthorized/UnauthorizedScreen.tsx`**: 認証エラー画面コンポーネント
-- **`/packages/web/app/error/unauthorized/mock.tsx`**: モック画面
+### エラーハンドラー
+- `packages/web/app/(core)/error/handler/client.ts`: クライアント側エラーハンドラー
+- `packages/web/app/(core)/error/handler/server.ts`: サーバー側エラーハンドラー
+- `packages/web/app/(core)/error/appError.ts`: エラークラス定義
 
-## グローバルエラーハンドラー (error.tsx)
+### セッションストレージ
+- `packages/web/app/(core)/_sessionStorage/appStorage.ts`: feedbackMessage管理
 
-### 構造
-```tsx
-export default function ErrorPage({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-})
+## 主要機能グループ
+
+### 1. グローバルエラーハンドラー
+- コンポーネントレンダリング中の予期しないエラーをキャッチ
+- 中央配置の洗練されたエラーUI表示
+- reset関数によるエラー回復
+
+### 2. 認証エラー画面
+- 401/403エラー専用の表示
+- セッションストレージからのフィードバックメッセージ表示
+- ログインページへの誘導
+
+### 3. エラーハンドリング戦略
+- ClientError/ServerErrorの適切な処理振り分け
+- エラータイプに応じたtoast通知 or ページ遷移
+- ログレベルの使い分け（error/warn/info/debug）
+
+## Reference Files Usage
+
+### コンポーネント構造を把握する場合
+エラー画面の階層、アイコン、ボタン配置を確認：
+```
+references/component_structure.md
 ```
 
-### UI要素
-- **中央配置レイアウト**: `Center` コンポーネントで画面中央に配置
-- **Paperカード**: 影付きのカードコンポーネントでラップ
-- **アイコン**: オレンジ色の `IconAlertTriangle` で視覚的に警告
-- **タイトル**: 「予期しないエラーが発生しました」
-- **説明文**: ユーザーフレンドリーなエラーメッセージ
-- **エラー詳細Alert**: オレンジ色のアラートでエラーコードとdigestを表示
-- **アクションボタン**: 2つのボタン（再読み込み、ホームへ戻る）
+### エラー処理フローを理解する場合
+エラー発生からユーザー通知までの流れを確認：
+```
+references/flow_diagram.md
+```
 
-### 機能
-1. **再読み込みボタン**: `reset()` を呼び出してエラー状態をリセット
-2. **ホームへ戻るボタン**: `HOME_URL` へ遷移
-3. **エラーdigest表示**: `error.digest` が存在する場合は表示
+### エラーハンドリング詳細を確認する場合
+エラークラス、ハンドラー、ログ戦略、リカバリー方法を確認：
+```
+references/error_handling.md
+```
+
+## クイックスタート
+
+1. **全体像の把握**: `references/flow_diagram.md`でエラー処理フロー確認
+2. **コンポーネント理解**: `references/component_structure.md`でUI構造確認
+3. **実装時**: `references/error_handling.md`でハンドリング戦略確認
+
+## 実装上の注意点
+
+### 必須パターン
+- **エラークラスの使用**: `throw new ClientError("メッセージ", 401)` でエラータイプを明確化
+- **統一ハンドラー**: `handleAppError(error, router)` で一貫したエラー処理
+- **ログの構造化**: `logger.error('コンテキスト', { ...詳細 })` で検索・分析可能に
+
+### 推奨パターン
+- **ユーザーフレンドリーなメッセージ**: 専門用語を避け、次のアクションを示唆
+- **開発者向け詳細**: logger経由で詳細なエラー情報（stack trace等）を記録
+- **リカバリー手段の提供**: 再読み込みボタン、ホームへ戻るボタン等
+
+### エラーバウンダリーの配置
+- **グローバル**: `app/error.tsx` でアプリ全体をカバー
+- **レイアウト固有**: 将来的に `app/(app)/error.tsx` で特定セクションをカバー可能
 
 ### 使用コンポーネント
 - `@mantine/core`: Button, Center, Paper, Stack, Text, Title, Alert

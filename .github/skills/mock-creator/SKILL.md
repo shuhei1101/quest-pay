@@ -3,13 +3,67 @@ name: mock-creator
 description: このスキルはモック画面作成依頼を受けて `/packages/web/app/test` 配下にモック画面を作成し、テスト一覧ページ(`/test`)に自動的にリンクを追加する。UI/UXの検証、プロトタイピング、テスト画面の作成時に使用すべきスキル。
 ---
 
-# Mock Creator
+# Mock Creator スキル
 
-## Overview
+## 概要
 
 このスキルは、お小遣いクエストボードプロジェクトのモック画面作成を効率化する。ユーザーからモック画面作成依頼を受けると、`/packages/web/app/test` 配下にモック画面を作成し、テスト一覧ページ(`/test`)に自動的にリンクカードを追加する。
 
-## When to Use
+## メインソースファイル
+
+### モック画面
+- `packages/web/app/test/<mock-name>/page.tsx`: 各モック画面実装
+- `packages/web/app/test/page.tsx`: テスト一覧ページ
+
+### 設定ファイル
+- `packages/web/app/(core)/endpoints.ts`: URL定義
+
+### スクリプト
+- `.github/skills/mock-creator/scripts/create_mock_page.sh`: モックページ生成スクリプト
+
+## 主要機能グループ
+
+### 1. モック画面作成
+- 単一パターンモック: シンプルな機能検証用
+- レイアウト系モック: 複数バリエーションをタブで比較
+
+### 2. テスト一覧統合
+- エンドポイント自動追加
+- モックカード自動生成
+- バッジとアイコンの設定
+
+### 3. レイアウトパターン判定
+- キーワード検出による自動判定
+- 適切なテンプレート選択
+
+## Reference Files Usage
+
+### コンポーネント構造を理解する場合
+モック画面の階層構造、レイアウトパターンを確認：
+```
+references/component_structure.md
+```
+
+### ワークフローを把握する場合
+モック作成の全体フロー、タブ切り替えロジックを確認：
+```
+references/flow_diagram.md
+```
+
+### テンプレートコードを確認する場合
+モックページのテンプレート、コード例を確認：
+```
+references/templates.md
+```
+
+## クイックスタート
+
+1. **要件確認**: レイアウト系かどうかを判定（キーワードチェック）
+2. **スクリプト実行**: `create_mock_page.sh <mock-name> "<title>" [tabs]`
+3. **統合作業**: endpoints.ts と test/page.tsx を更新
+4. **検証**: `/test` で一覧表示、モック画面へ遷移確認
+
+## 使用時のトリガー
 
 次の場合にこのスキルを使用する：
 
@@ -18,9 +72,9 @@ description: このスキルはモック画面作成依頼を受けて `/package
 - コンポーネントの動作確認用テストページが必要な時
 - 既存機能の改善案をビジュアルで確認したい時
 
-## Workflow
+## 実装ワークフロー
 
-### Step 1: Requirements Gathering
+### Step 1: 要件収集
 
 ユーザーからモック画面作成依頼を受けたら、以下を確認する：
 
@@ -29,54 +83,45 @@ description: このスキルはモック画面作成依頼を受けて `/package
 3. **必要なコンポーネント**: 既存コンポーネントを使用するか、新規作成するか
 4. **表示内容**: どのような内容を表示するか
 
-ユーザーが「内部の構造は何でもいい」と言う場合は、シンプルな構成で作成する。
-
-**重要**: レイアウトやデザインパターンの検証依頼の場合は、**複数バリエーション（3つ程度）をタブで切り替える構成**にすることを前提とする。以下のキーワードが含まれる場合は自動的にこのアプローチを採用：
+**レイアウト系判定**: 以下のキーワードが含まれる場合は複数バリエーション（タブ型）を作成
 - 「レイアウト」「デザイン」「スタイル」「パターン」「バリエーション」
 - 「比較」「検証」「プロトタイプ」
 - サイドメニュー、ヘッダー、フッター、カード、ボタンなどのUI要素名
 
-### Step 2: Create Mock Page
+### Step 2: モックページ作成
 
-モックページ作成スクリプトを使用してpage.tsxを生成する：
+スクリプトを使用してpage.tsxを生成：
 
 ```bash
 # 単一パターン
 .github/skills/mock-creator/scripts/create_mock_page.sh <mock-name> "<title>"
 
-# タブバリエーション（レイアウト系モック）
+# タブバリエーション（レイアウト系）
 .github/skills/mock-creator/scripts/create_mock_page.sh <mock-name> "<title>" tabs
 ```
 
-**レイアウト系モック判定基準**: 以下のキーワードが依頼に含まれる場合は、`tabs`オプションを使用
-- 「レイアウト」「デザイン」「スタイル」
-- 「パターン」「バリエーション」
-- 「比較」「検証」「プロトタイプ」
-- サイドメニュー、ヘッダー、フッター、カードなどのUI要素名
+### Step 3: エンドポイント更新
 
-**詳細なテンプレート**: `references/templates.md` を参照
-
-### Step 3: Update Endpoints
-
-`endpoints.ts` にモック画面のURL定義を追加：
+`endpoints.ts` にURL定義を追加：
 
 ```typescript
-// 既存のテスト用URL定義の後に追加
 export const TEST_<MOCK_NAME>_URL = `${TEST_URL}/<mock-name>`
 ```
 
-### Step 4: Update Test Page
+### Step 4: テスト一覧更新
 
-`test/page.tsx` のインポート文と `mockItems` 配列に新しいモックを追加。  
-詳細な手順は `mock-list` スキルを参照。
+`test/page.tsx` を更新（詳細は `mock-list` スキル参照）：
+- インポート文追加
+- mockItems配列に新規アイテム追加
 
-### Step 5: Verify
+### Step 5: 検証
 
-作成したモック画面を確認：
-1. テスト一覧ページ(`/test`)に新しいモックカードが表示されることを確認
-2. カードをクリックして画面が正常に表示されることを確認
+1. `/test` で一覧表示確認
+2. カードクリックで画面遷移確認
 
-## Best Practices
+## 実装上の注意点
+
+### 必須パターン
 
 - **命名規則**: モック画面のディレクトリ名は `<purpose>-mock` の形式を推奨（例: `button-test-mock`, `layout-experiment-mock`）
 - **シンプルさ優先**: モック画面は検証目的に徹し、不要な複雑さは避ける
