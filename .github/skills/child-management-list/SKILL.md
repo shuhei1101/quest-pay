@@ -3,101 +3,96 @@ name: child-management-list
 description: 子供一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。
 ---
 
-# 子供一覧 スキル
+# 子供管理一覧 スキル
 
 ## 概要
 
-子供一覧画面は、家族内の子供一覧を表示し、子供アカウントの管理を行う画面。
+このスキルは、家族内の子供アカウント一覧を表示し、子供の作成・編集・削除を管理する画面の知識を提供します。
 
-## ファイル構成
+## メインソースファイル
 
-### メインファイル
-- `app/(app)/children/page.tsx`: 子供一覧ページ
-- `app/(app)/children/ChildrenScreen.tsx`: 子供一覧画面実装
+### ページファイル
+- `app/(app)/children/page.tsx`: 子供一覧ルートページ
+- `app/(app)/children/[id]/page.tsx`: 子供詳細ページ
 
-### 関連コンポーネント
-- `app/(app)/children/_components/ChildList.tsx`: 子供一覧表示
-- `app/(app)/children/_components/ChildCard.tsx`: 子供カード
+### コンポーネント
+- `app/(app)/children/_components/ChildCardLayout.tsx`: 子供カードレイアウト
 
 ### フック
-- `app/(app)/children/_hooks/useChildren.ts`: 子供データ取得フック
+- `app/(app)/children/_hook/useChildren.ts`: 子供データ取得フック
 
-## 主要コンポーネント
+### API
+- `app/api/children/client.ts`: APIクライアント関数
+- `app/api/children/route.ts`: 一覧取得、新規作成
+- `app/api/children/[id]/route.ts`: 詳細取得、更新、削除
 
-### ChildrenScreen
-**責務:** 子供一覧の表示と管理
+### データベース
+- `drizzle/schema.ts`: children テーブル
 
-**主要機能:**
-- 子供一覧表示
-- 新規子供登録
-- 子供詳細への遷移
+## 主要機能グループ
+
+### 1. 基本CRUD
+- 子供一覧取得、新規作成、詳細表示、更新、削除
+
+### 2. クエスト統計表示
+- 子供ごとのクエスト進行状況（進行中、完了など）
+- 総クエスト数、完了数の表示
+
+### 3. 子供詳細管理
+- 子供情報の詳細表示
 - 報酬履歴表示
+- アバター管理
 
-## 注意点
+## Reference Files Usage
 
-- 親ユーザーのみアクセス可能
-- 子供アカウントのパスワード管理
+### コンポーネント構造を確認する場合
+子供カードレイアウト、リスト構造、フィルター機能を確認：
+```
+references/component_structure.md
+```
 
-## Structuring This Skill
+### データ取得方法を確認する場合
+React Queryフック、APIクライアント、キャッシュ戦略を確認：
+```
+references/data_fetching.md
+```
 
-[TODO: Choose the structure that best fits this skill's purpose. Common patterns:
+### 処理フローを理解する場合
+初期表示、作成、編集、削除のフローを確認：
+```
+references/flow_diagram.md
+```
 
-**1. Workflow-Based** (best for sequential processes)
-- Works well when there are clear step-by-step procedures
-- Example: DOCX skill with "Workflow Decision Tree" → "Reading" → "Creating" → "Editing"
-- Structure: ## Overview → ## Workflow Decision Tree → ## Step 1 → ## Step 2...
+### CRUD操作を確認する場合
+各種操作のAPIエンドポイント、リクエスト/レスポンス、ナビゲーションパターンを確認：
+```
+references/list_operations.md
+```
 
-**2. Task-Based** (best for tool collections)
-- Works well when the skill offers different operations/capabilities
-- Example: PDF skill with "Quick Start" → "Merge PDFs" → "Split PDFs" → "Extract Text"
-- Structure: ## Overview → ## Quick Start → ## Task Category 1 → ## Task Category 2...
+## クイックスタート
 
-**3. Reference/Guidelines** (best for standards or specifications)
-- Works well for brand guidelines, coding standards, or requirements
-- Example: Brand styling with "Brand Guidelines" → "Colors" → "Typography" → "Features"
-- Structure: ## Overview → ## Guidelines → ## Specifications → ## Usage...
+1. **全体像の把握**: `references/component_structure.md`でレイアウト確認
+2. **データ取得の理解**: `references/data_fetching.md`でReact Queryフック確認
+3. **実装時**: `references/flow_diagram.md`で処理フロー確認
+4. **デバッグ時**: `references/list_operations.md`でCRUD操作確認
 
-**4. Capabilities-Based** (best for integrated systems)
-- Works well when the skill provides multiple interrelated features
-- Example: Product Management with "Core Capabilities" → numbered capability list
-- Structure: ## Overview → ## Core Capabilities → ### 1. Feature → ### 2. Feature...
+## 実装上の注意点
 
-Patterns can be mixed and matched as needed. Most skills combine patterns (e.g., start with task-based, add workflow for complex operations).
+### 必須パターン
+- **useChildren フック**: 子供データとクエスト統計を取得
+- **React Query**: useQuery/useMutationでAPIアクセス
+- **権限管理**: 親ユーザーのみがアクセス可能
+- **Logger**: すべてのAPI処理でlogger使用
 
-Delete this entire "Structuring This Skill" section when done - it's just guidance.]
+### CRUD操作
+- **作成**: POST /api/children
+- **読み取り**: GET /api/children
+- **更新**: PUT /api/children/[id]
+- **削除**: DELETE /api/children/[id] (進行中クエストがある場合は削除不可)
 
-## [TODO: Replace with the first main section based on chosen structure]
-
-[TODO: Add content here. See examples in existing skills:
-- Code samples for technical skills
-- Decision trees for complex workflows
-- Concrete examples with realistic user requests
-- References to scripts/templates/references as needed]
-
-## Resources
-
-This skill includes example resource directories that demonstrate how to organize different types of bundled resources:
-
-### scripts/
-Executable code (Python/Bash/etc.) that can be run directly to perform specific operations.
-
-**Examples from other skills:**
-- PDF skill: `fill_fillable_fields.py`, `extract_form_field_info.py` - utilities for PDF manipulation
-- DOCX skill: `document.py`, `utilities.py` - Python modules for document processing
-
-**Appropriate for:** Python scripts, shell scripts, or any executable code that performs automation, data processing, or specific operations.
-
-**Note:** Scripts may be executed without loading into context, but can still be read by Claude for patching or environment adjustments.
-
-### references/
-Documentation and reference material intended to be loaded into context to inform Claude's process and thinking.
-
-**Examples from other skills:**
-- Product management: `communication.md`, `context_building.md` - detailed workflow guides
-- BigQuery: API reference documentation and query examples
-- Finance: Schema documentation, company policies
-
-**Appropriate for:** In-depth documentation, API references, database schemas, comprehensive guides, or any detailed information that Claude should reference while working.
+### 権限管理
+- **親ユーザー**: すべての操作が可能
+- **子供ユーザー**: この画面へのアクセス不可
 
 ### assets/
 Files not intended to be loaded into context, but rather used within the output Claude produces.

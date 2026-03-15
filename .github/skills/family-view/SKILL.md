@@ -3,100 +3,111 @@ name: family-view
 description: 家族閲覧画面の構造知識を提供するスキル。表示内容、メンバー管理を含む。
 ---
 
-# 家族閲覧 スキル
+# 家族プロフィール閲覧 スキル
 
 ## 概要
 
-家族閲覧画面は、家族の詳細情報とメンバー一覧を表示する画面。
+このスキルは、家族のプロフィール閲覧画面の知識を提供します。家族詳細、フォロー機能、タイムライン表示を含みます。
 
-## ファイル構成
+## メインソースファイル
 
-### メインファイル
-- `app/(app)/families/[id]/view/page.tsx`: 家族閲覧ページ
-- `app/(app)/families/[id]/view/FamilyViewScreen.tsx`: 家族閲覧画面実装
-
-### 関連コンポーネント
-- `app/(app)/families/_components/FamilyDetail.tsx`: 家族詳細表示
-- `app/(app)/families/_components/MemberList.tsx`: メンバー一覧
+### 画面コンポーネント
+- `app/(app)/families/[id]/view/page.tsx`: ルートページ（authGuard + リダイレクト）
+- `app/(app)/families/[id]/view/FamilyProfileViewScreen.tsx`: プロフィール画面（ビジネスロジック）
+- `app/(app)/families/[id]/view/_components/FamilyProfileViewLayout.tsx`: レイアウト（プレゼンテーション）
+- `app/(app)/families/[id]/view/_components/FamilyProfileViewFooter.tsx`: フッター
 
 ### フック
-- `app/(app)/families/_hooks/useFamily.ts`: 家族データ取得フック
+- `app/(app)/families/[id]/view/_hooks/useFamilyProfile.ts`: 家族プロフィール関連フック群
+  - `useFamilyDetail`: 家族詳細取得
+  - `useFollowStatus`: フォロー状態取得
+  - `useFollowToggle`: フォロー切り替え
+  - `useFamilyTimeline`: タイムライン取得
 
-## 主要コンポーネント
+### API Routes
+- `GET /api/families/[id]/profile`: 家族詳細取得
+- `GET /api/families/[id]/follow/status`: フォロー状態取得
+- `POST /api/families/[id]/follow`: フォロー
+- `DELETE /api/families/[id]/follow`: フォロー解除
+- `GET /api/families/[id]/timeline`: タイムライン取得
 
-### FamilyViewScreen
-**責務:** 家族詳細の表示
+## 主要機能グループ
 
-**主要機能:**
-- 家族情報表示
-- メンバー一覧表示
-- 編集画面への遷移
+### 1. プロフィール表示
+- 家族名（オンライン名 or ローカル名）
+- 表示ID（`@displayId`）
+- 家族アイコン
+- 自己紹介文
 
-## 処理フロー
+### 2. 統計情報
+- フォロワー数
+- フォロー数
+- 公開クエスト数
+- いいね数
 
-### 初期表示フロー
-1. FamilyViewScreen がマウント
-2. useFamily フックで家族詳細を取得
-3. 家族情報とメンバーを表示
+### 3. フォロー機能
+- フォロー/フォロー解除ボタン（他家族の場合のみ）
+- フォロー状態の表示
 
-## 注意点
+### 4. タイムライン
+- 家族のタイムラインメッセージ表示
+- 相対時刻表示
 
-- 家族メンバーのみアクセス可能
-- 編集は親ユーザーのみ
+## Reference Files Usage
 
-## Structuring This Skill
+### コンポーネント構造を把握する場合
+画面構成、コンポーネント階層、フック構成を確認：
+```
+references/component_structure.md
+```
 
-[TODO: Choose the structure that best fits this skill's purpose. Common patterns:
+### データ表示パターンを理解する場合
+フック、データソース、整形処理、デフォルト値を確認：
+```
+references/data_display.md
+```
 
-**1. Workflow-Based** (best for sequential processes)
-- Works well when there are clear step-by-step procedures
-- Example: DOCX skill with "Workflow Decision Tree" → "Reading" → "Creating" → "Editing"
-- Structure: ## Overview → ## Workflow Decision Tree → ## Step 1 → ## Step 2...
+### 画面フローを把握する場合
+表示フロー、フォロー切り替え、認証、条件付きレンダリングを確認：
+```
+references/flow_diagram.md
+```
 
-**2. Task-Based** (best for tool collections)
-- Works well when the skill offers different operations/capabilities
-- Example: PDF skill with "Quick Start" → "Merge PDFs" → "Split PDFs" → "Extract Text"
-- Structure: ## Overview → ## Quick Start → ## Task Category 1 → ## Task Category 2...
+### アクション実装を確認する場合
+フォローボタン、統計表示、タイムライン、通知の実装を確認：
+```
+references/action_components.md
+```
 
-**3. Reference/Guidelines** (best for standards or specifications)
-- Works well for brand guidelines, coding standards, or requirements
-- Example: Brand styling with "Brand Guidelines" → "Colors" → "Typography" → "Features"
-- Structure: ## Overview → ## Guidelines → ## Specifications → ## Usage...
+## クイックスタート
 
-**4. Capabilities-Based** (best for integrated systems)
-- Works well when the skill provides multiple interrelated features
-- Example: Product Management with "Core Capabilities" → numbered capability list
-- Structure: ## Overview → ## Core Capabilities → ### 1. Feature → ### 2. Feature...
+1. **全体像の把握**: `references/component_structure.md`でコンポーネント構成確認
+2. **データ構造の理解**: `references/data_display.md`で表示データ確認
+3. **実装時**: `references/flow_diagram.md`で画面フロー確認
+4. **アクション実装時**: `references/action_components.md`で具体的な実装確認
 
-Patterns can be mixed and matched as needed. Most skills combine patterns (e.g., start with task-based, add workflow for complex operations).
+## 実装上の注意点
 
-Delete this entire "Structuring This Skill" section when done - it's just guidance.]
+### 必須パターン
+- **Screen + Layout**: ビジネスロジックとプレゼンテーションの分離
+- **複数フック並列実行**: useFamilyDetail、useFollowStatus、useFamilyTimelineを並列取得
+- **authGuard**: 親のみアクセス可能（子供・ゲストは不可）
+- **自家族判定**: `userInfo.profiles.familyId === id` で判定
 
-## [TODO: Replace with the first main section based on chosen structure]
+### 権限管理
+- **親のみ**: 画面アクセス可能
+- **子供・ゲスト**: ホーム画面へリダイレクト
 
-[TODO: Add content here. See examples in existing skills:
-- Code samples for technical skills
-- Decision trees for complex workflows
-- Concrete examples with realistic user requests
-- References to scripts/templates/references as needed]
+### フォローボタンの表示制御
+- **自家族**: フォローボタン非表示
+- **他家族**: フォローボタン表示
+- **フォロー中**: 「フォロー解除」ボタン
+- **未フォロー**: 「フォローする」ボタン
 
-## Resources
-
-This skill includes example resource directories that demonstrate how to organize different types of bundled resources:
-
-### scripts/
-Executable code (Python/Bash/etc.) that can be run directly to perform specific operations.
-
-**Examples from other skills:**
-- PDF skill: `fill_fillable_fields.py`, `extract_form_field_info.py` - utilities for PDF manipulation
-- DOCX skill: `document.py`, `utilities.py` - Python modules for document processing
-
-**Appropriate for:** Python scripts, shell scripts, or any executable code that performs automation, data processing, or specific operations.
-
-**Note:** Scripts may be executed without loading into context, but can still be read by Claude for patching or environment adjustments.
-
-### references/
-Documentation and reference material intended to be loaded into context to inform Claude's process and thinking.
+### データ整形
+- **家族名**: オンライン名優先、なければローカル名
+- **タイムライン時刻**: `formatTime()` で相対時刻に変換
+- **統計情報**: デフォルト値は `0`
 
 **Examples from other skills:**
 - Product management: `communication.md`, `context_building.md` - detailed workflow guides
