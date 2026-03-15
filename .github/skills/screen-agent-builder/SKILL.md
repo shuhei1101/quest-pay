@@ -5,99 +5,89 @@ description: This skill should be used when creating screen-specific custom agen
 
 # Screen Agent Builder
 
-## Overview
+## 概要
 
 このスキルは、Quest Payプロジェクトの各画面に特化したカスタムエージェントとスキル群を作成するための標準化されたワークフローを提供する。各画面エージェントは、その画面に関連するすべてのパス、コンポーネント、API、レイアウトを熟知し、機能改修・機能説明・スキルアップデートの3つの責務を持つ。
 
-## 画面エージェントの設計思想
+## メインスクリプト
 
-### 構造
-各画面には以下の構成要素が存在する：
-- **カスタムエージェント**: 画面全体を管理する対話型エージェント（`.agent.md`）
-- **スキル群**: 画面の構造知識を保持する知識提供型スキル（複数の`SKILL.md`）
+### エージェント初期化
+- `scripts/init_screen_agent.sh`: 画面エージェントとスキル群を一括生成
 
-### エージェントの3つの責務
-1. **機能改修**: 画面に関連する機能の追加・修正・削除
-2. **機能説明**: 画面の構造・処理フロー・関連ファイルの説明
-3. **スキルアップデート**: 現在のフォルダ状況を確認し、担当スキルの内容を更新
+## 主要機能グループ
 
-### スキルの役割
-各画面エージェントは、以下のようなスキルを持つ：
-- 画面表示スキル（例: 家族クエスト閲覧画面スキル）
-- 編集画面スキル（例: 家族クエスト編集画面スキル）
-- API操作スキル（例: 家族クエストAPIスキル）
-- その他の関連スキル
+### 1. エージェント作成
+画面エージェントファイル（`.agent.md`）の生成、applyTo設定、skillGroups登録
 
-## 作成ワークフロー
+### 2. スキル群作成
+画面に関連する複数スキル（list, view, edit, api等）の一括生成
 
-### Step 1: 画面の特定とパス調査
+### 3. 構造テンプレート提供
+エージェントとスキルの標準構造を提供
 
-まず、エージェントを作成する画面を特定し、関連するパスを調査する：
+## Reference Files Usage
 
-1. `app/(core)/endpoints.ts` で画面のエンドポイントを確認
-2. `app/(app)/` 配下で画面のディレクトリ構造を確認
-3. `app/api/` 配下でAPIルートを確認
-4. 関連する共通コンポーネントを確認（`app/(core)/_components/`, `app/(app)/_components/`）
-
-**調査対象の情報:**
-- 画面のルートパス
-- Screen コンポーネントのパス
-- Layout コンポーネントのパス
-- API ルートのパス
-- hooks のパス
-- 関連する共通コンポーネント
-
-### Step 2: スキル群の作成
-
-画面に関連する各スキルを初期化する：
-
-```bash
-# skill-creator/scriptsのinit_skill.pyを使用
-python3 .github/skills/skill-creator/scripts/init_skill.py <screen-name>-<aspect>-skill --path .github/skills
+### エージェントパターンを理解する場合
+エージェントの基本構造、タイプ別パターン、applyTo設定を確認：
+```
+references/agent_patterns.md
 ```
 
-生成されたスキルのSKILL.mdを編集して、画面の構造・責務・パス情報を記述する。
-
-### Step 3: カスタムエージェントの作成
-
-画面エージェント初期化スクリプトを使用してエージェントとスキル群を一括作成：
-
-```bash
-# 単一コマンドでエージェントとスキル群を初期化
-.github/skills/screen-agent-builder/scripts/init_screen_agent.sh <screen-name> "<screen-title>" [skill-types...]
-
-# 例: 家族クエスト画面
-.github/skills/screen-agent-builder/scripts/init_screen_agent.sh family-quest "家族クエスト" list view edit api
+### スキルパターンを理解する場合
+スキルの基本構造、タイプ別構成、Progressive Disclosure原則を確認：
+```
+references/skill_patterns.md
 ```
 
-スクリプトは以下を実行：
-1. 指定されたスキルタイプのスキル群を作成
-2. エージェントファイルを生成
-3. スキルリストをエージェントに自動登録
-
-
-### Step 4: スキルアップデート機能の実装
-
-各エージェントには、現在のフォルダ構造を確認してスキルを自動更新する機能を持たせる。
-
-**実装パターン:**
-1. 担当スキルを読み込む
-2. 関連ディレクトリの現在の構造を確認（`list_dir`、`file_search`）
-3. スキルに記載されているパスと実際の構造を比較
-4. 差分があれば、スキルの内容を更新
-
-## 画面カテゴリとスキル構成パターン
-
-### パターン1: CRUD画面（家族クエスト、公開クエスト、テンプレートクエスト等）
-
-**スキル構成:**
-- `<screen>-list-skill`: 一覧表示に関する知識
-- `<screen>-view-skill`: 詳細閲覧に関する知識
-- `<screen>-edit-skill`: 編集画面に関する知識
-- `<screen>-api-skill`: API操作に関する知識
-
-**ファイル構成例（家族クエスト）:**
+### 作成ワークフローを把握する場合
+ステップバイステップの作成手順、更新方法、ベストプラクティスを確認：
 ```
+references/workflow_guide.md
+```
+
+### 画面パターン詳細を見る場合
+CRUD画面、閲覧専用画面、子供向け画面などの詳細パターンを確認：
+```
+references/screen_patterns.md
+```
+
+## クイックスタート
+
+1. **画面構造の調査**:
+   ```bash
+   bash .github/skills/common-structure/scripts/generate_screen_structure.sh app/(app)/{screen}
+   ```
+
+2. **エージェントとスキル群の生成**:
+   ```bash
+   .github/skills/screen-agent-builder/scripts/init_screen_agent.sh family-quest "家族クエスト" list view edit api
+   ```
+
+3. **エージェントファイルの編集**: applyToと担当パスを正確に設定
+
+4. **スキルの作成**: 各スキルのSKILL.mdとreferences/を記述
+
+## 実装上の注意点
+
+### エージェント設計
+- **画面単位**: 基本的に1画面=1エージェント
+- **明確なapplyTo**: 具体的で重複のないパスを指定
+- **3つの責務**: 機能改修、機能説明、スキルアップデート
+
+### スキル設計
+- **Progressive Disclosure**: SKILL.mdは簡潔に、詳細はreferences/
+- **単一責任**: 1スキル=1つの役割
+- **ナビゲーション**: Reference Files Usageで案内
+
+### ワークフロー
+1. **調査を先に**: 構造を理解してから作成
+2. **スクリプト活用**: init_screen_agent.shで一括生成
+3. **定期更新**: 機能追加・変更時にスキルも更新
+
+### トークン効率化
+- **スクリプト実行**: 構造分析はスクリプトに任せる
+- **段階的開示**: 必要な時だけreferencesを読み込む
+- **簡潔な記述**: 冗長な説明を避ける
 app/(app)/quests/family/
 ├── page.tsx                    # リダイレクト
 ├── FamilyQuestsScreen.tsx      # 一覧画面

@@ -3,145 +3,104 @@ name: commit-auto
 description: This skill should be used when the user requests to commit changes using phrases like "これでOK", "コミットして", "commit this", or similar approval statements. It automates the git workflow by staging changes and creating commits with self-generated meaningful commit messages.
 ---
 
-# Commit Auto
+# Commit Auto スキル
 
-## Overview
+## 概要
 
-Automate git commit workflow by staging changes and creating commits with auto-generated meaningful messages when users approve changes.
+ユーザーの承認フレーズを受けて、セッション中の変更を安全にコミットするスキルです。自動的にセキュリティチェックを実行し、意味のあるコミットメッセージを生成します。
 
-## When to Use This Skill
+## トリガーフレーズ
 
-Use this skill when the user provides approval or requests to commit changes with phrases such as:
+以下のようなフレーズでこのスキルを起動：
 - "これでOK"
 - "コミットして"
 - "commit this"
 - "変更をコミット"
 - "OK, commit it"
 
-## Commit Workflow
+## メインソースファイル
 
-When the user requests a commit, follow this workflow:
+### スクリプト
+- `scripts/commit_session_changes.sh`: コミット実行スクリプト
+- `scripts/security_check.sh`: セキュリティチェックスクリプト
 
-### Step 1: Identify Session Changes
+## 主要機能グループ
 
-**重要**: このセッション中に実行したツールの履歴を確認し、変更したファイルを特定する。
+### 1. セッション変更の特定
+- ツール履歴から変更ファイルを特定
+- git status で状態確認
 
-**ファイルの特定方法:**
-1. このセッション中に実行したツール（`replace_string_in_file`, `multi_replace_string_in_file`, `create_file`）の履歴を確認
-2. それらのツールで編集・作成したファイルのパスをリストアップ
-3. `git status --short` で変更状態を確認
+### 2. セキュリティチェック
+- 機密情報の自動検出（APIキー、パスワード、トークン等）
+- False positive の除外
+- リスク検出時の警告
 
-### Step 2: Security Check
+### 3. コミットメッセージ生成
+- 変更内容を分析
+- フォーマット: `{ドメイン名}、{ラベル}（{変更概要}）`
+- 日本語で簡潔に要約
 
-**重要**: コミット前に変更ファイルのセキュリティチェックを実行する。
+### 4. 安全なコミット実行
+- 個別ファイル指定によるステージング
+- セキュリティチェック済みファイルのみコミット
+- セッション外のファイル混入を防止
 
-`scripts/security_check.sh` は以下をチェックする：
-- APIキー（AWS, Google, GitHub, Stripe等）
-- パスワードや認証情報
-- プライベートキー
-- トークン（Bearer, JWT等）
-- その他の機密情報
+## Reference Files Usage
 
-**セキュリティチェック結果の対応:**
-- ✅ 問題なし → コミットを続行
-- ⚠️ リスク検出 → ユーザーに警告を表示し、対応方法を提示
-- False positive の場合 → `--skip-security` オプション使用を案内
-
-### Step 3: Generate Commit Message
-
-セッション中の変更内容を分析し、意味のあるコミットメッセージを生成する：
-
-- 変更を簡潔に要約
-- 日本語を使用（Quest Payプロジェクト）
-- **フォーマット**: `{ドメイン名}、{ラベル}（{変更概要}）`
-  - **ドメイン名**: 変更対象のドメイン（家族クエスト閲覧、家族メンバー一覧、クエスト詳細、共通コンポーネントなど）
-  - **ラベル**: 変更の種類を表す単語（機能追加、新規機能、バグ修正、レイアウト調整、リファクタリングなど）
-  - **変更概要**: 具体的な変更内容を一言で
-
-**良いコミットメッセージの例:**
-- `共通コンポーネント、レイアウト調整（ページヘッダーのプロフィールアイコンサイズを縮小）`
-- `家族プロフィール、レイアウト調整（タイトルを簡潔化）`
-- `家族クエスト一覧、バグ修正（完了済みクエストの表示エラーを修正）`
-- `タイムライン、新規機能（コメント投稿機能を追加）`
-- `スキル管理、機能追加（commit-autoスキルを追加）`
-
-### Step 4: Execute Commit Script
-
-**重要**: `scripts/commit_session_changes.sh`スクリプトを使用してコミットする。このスクリプトは：
-- ファイルの存在確認
-- **セキュリティチェックの実行（自動）**
-- 個別ファイル指定によるステージング（`git add -A`等を使用しない）
-- 安全なコミット実行
-
-**実行方法:**
-```bash
-.github/skills/commit-auto/scripts/commit_session_changes.sh "<ドメイン名>" "<ラベル>" "<変更概要>" <file1> <file2> <file3>...
+### スクリプトの使用方法を確認する場合
+コミットスクリプトの実行方法、引数、オプションを確認：
+```
+references/script_usage.md
 ```
 
-**セキュリティチェックをスキップ（false positiveの場合）:**
-```bash
-.github/skills/commit-auto/scripts/commit_session_changes.sh --skip-security "<ドメイン名>" "<ラベル>" "<変更概要>" <file1> <file2> <file3>...
+### コミットメッセージフォーマットを確認する場合
+フォーマット規則、良い例・悪い例、ラベル一覧を確認：
+```
+references/commit_format.md
+```
+
+### ワークフロー全体を理解する場合
+ステップバイステップのワークフロー、エラーハンドリング、ベストプラクティスを確認：
+```
+references/workflow.md
+```
+
+## クイックスタート
+
+1. **トリガー検出**: ユーザーの承認フレーズを検知
+2. **変更特定**: `references/workflow.md` Step 1参照
+3. **セキュリティチェック**: 自動実行される
+4. **メッセージ生成**: `references/commit_format.md` 参照
+5. **コミット実行**: `references/script_usage.md` の実行方法でスクリプト起動
+
+## 実装上の注意点
+
+### 必須パターン
+- **スクリプト使用**: 必ず `scripts/commit_session_changes.sh` を使用
+- **セキュリティチェック**: 自動実行される（スキップは `--skip-security`）
+- **セッション限定**: ツール履歴から特定したファイルのみコミット
+- **日本語メッセージ**: Quest Payプロジェクトでは日本語を使用
+
+### 禁止事項
+- **CRITICAL**: `git add -A`, `git add .`, `git add --all` は絶対に使用しない
+- 手動でのコミット実行を行わない
+- セッション外のファイルを含めない
+- 自動プッシュは行わない（コミットのみ）
+
+### セキュリティチェック対象
+- AWS, Google, GitHub, Stripe の認証情報
+- SSH秘密鍵
+- パスワード、APIキー、Bearer Token, JWT
+
+### コミットメッセージ構造
+```
+{ドメイン名}、{ラベル}（{変更概要}）
 ```
 
 **例:**
-```bash
-.github/skills/commit-auto/scripts/commit_session_changes.sh \
-  "モック画面管理" \
-  "新規機能" \
-  "モック画面管理用エージェントを追加" \
-  .github/agents/mock-agent.md \
-  .github/skills/mock-list/SKILL.md
-```
-
-**生成されるコミットメッセージ:**
-```
-モック画面管理、新規機能（モック画面管理用エージェントを追加）
-```
-
-### Step 5: Handle Security Issues
-
-セキュリティチェックで問題が検出された場合：
-
-1. **検出内容をユーザーに報告**
-   - どのファイルで何が検出されたか
-   - 検出されたパターン（APIキー、パスワード等）
-
-2. **対応方法を提示**
-   - 機密情報を環境変数に移動（`.env`ファイル）
-   - `.gitignore`に`.env`を追加
-   - シークレット管理サービスの使用を推奨
-
-3. **意図的な場合の対応**
-   - False positive（テストデータ等）の場合は`--skip-security`オプション使用を案内
-   - ユーザーの判断を仰ぐ
-
-### Step 6: Confirm Completion
-
-ユーザーにコミット成功を報告し、使用したコミットメッセージを提示する。
-
-## Important Notes
-
-- Always use the `scripts/commit_session_changes.sh` script for commits
-- **セキュリティチェックは自動実行される** - APIキー等の機密情報を検出
-- Generate commit messages autonomously without asking the user
-- Use Japanese for commit messages in this project
-- Keep commit messages concise but descriptive
-- Do NOT push changes automatically - only commit locally
-- **CRITICAL**: The script enforces session-only file commits - never use manual `git add -A`, `git add .`, or `git add --all` commands
-
-## Security Check Details
-
-セキュリティチェックで検出される項目：
-- **AWS**: Access Key, Secret Key
-- **Google**: API Key, OAuth credentials
-- **GitHub**: Personal Access Tokens
-- **Stripe**: Secret Key, Publishable Key
-- **SSH**: Private keys (RSA, EC, DSA)
-- **Generic**: パスワード、APIキー、Bearer Token, JWT
-
-**False Positive の除外:**
-- `example`, `sample`, `test`, `mock`, `dummy`等のキーワードを含む行は除外
-- バイナリファイルは自動スキップ
+- `共通コンポーネント、レイアウト調整（ページヘッダーのプロフィールアイコンサイズを縮小）`
+- `家族クエスト一覧、バグ修正（完了済みクエストの表示エラーを修正）`
+- `タイムライン、新規機能（コメント投稿機能を追加）`
 
 ## Bundled Resources
 
