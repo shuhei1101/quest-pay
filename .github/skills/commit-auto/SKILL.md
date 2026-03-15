@@ -83,6 +83,7 @@ references/workflow.md
 
 ### 禁止事項
 - **CRITICAL**: `git add -A`, `git add .`, `git add --all` は絶対に使用しない
+- **CRITICAL**: `git push` は絶対に実行しない（pushはユーザーが行う）
 - 手動でのコミット実行を行わない
 - セッション外のファイルを含めない
 - 自動プッシュは行わない（コミットのみ）
