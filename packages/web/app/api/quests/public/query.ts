@@ -105,13 +105,17 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
           : eq(publicQuests.isActivate, true)
     )
 
-    // 先に公開クエストのIDを取得する
+    // 先に公開クエストのIDを取得する（重複排除のため）
     const publicQuestIds = await db
-      .select({ id: publicQuests.id })
+      .select({ 
+        id: publicQuests.id,
+        sortValue: quests[params.sortColumn] 
+      })
       .from(publicQuests)
       .innerJoin(quests, eq(publicQuests.questId, quests.id))
       .leftJoin(questTags, eq(questTags.questId, quests.id))
       .where(and(...conditions))
+      .groupBy(publicQuests.id, quests[params.sortColumn]) // 重複を排除
       .orderBy(params.sortOrder === "asc" ? 
         asc(quests[params.sortColumn]) :
         desc(quests[params.sortColumn])
@@ -120,7 +124,7 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
       .offset(offset)
 
     // データを取得する
-    const [rows, [{ total }]] = await Promise.all([
+    const [rows, totalCount] = await Promise.all([
       publicQuestIds.length > 0 
         ? db
           .select()
@@ -138,12 +142,15 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
             desc(quests[params.sortColumn])
           )
         : Promise.resolve([]),
+      // 総件数を取得（重複を排除するため、publicQuestIdsと同じロジックで取得）
       db
-        .select({ total: count() })
+        .select({ id: publicQuests.id })
         .from(publicQuests)
         .innerJoin(quests, eq(publicQuests.questId, quests.id))
         .leftJoin(questTags, eq(questTags.questId, quests.id))
         .where(and(...conditions))
+        .groupBy(publicQuests.id) // 重複を排除
+        .then(result => result.length) // 件数をカウント
     ])
 
 
@@ -153,7 +160,7 @@ export const fetchPublicQuests = async ({ params, db, familyId }: {
 
     return {
       rows: result,
-      totalRecords: total ?? 0
+      totalRecords: totalCount
     }
   } catch (error) {
     throw new QueryError("公開クエストの読み込みに失敗しました。")

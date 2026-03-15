@@ -6,7 +6,8 @@ import {
   IconSettings, 
   IconBrandStripe,
   IconAlertTriangle,
-  IconMenu2
+  IconMenu2,
+  IconArrowDown
 } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import { 
@@ -14,7 +15,8 @@ import {
   TEST_SETTINGS_MOCK_URL,
   TEST_STRIPE_TEST_URL,
   TEST_ERROR_UNKNOWN_URL,
-  TEST_SIDE_MENU_URL
+  TEST_SIDE_MENU_URL,
+  TEST_INFINITE_SCROLL_URL
 } from "@/app/(core)/endpoints"
 
 type MockItem = {
@@ -63,6 +65,13 @@ export default function MockListPage() {
       url: TEST_SIDE_MENU_URL,
       icon: <IconMenu2 size={32} />,
       badge: "UI"
+    },
+    {
+      title: "無限スクロール検知テスト",
+      description: "Intersection Observerを使った無限スクロールの検知テスト",
+      url: TEST_INFINITE_SCROLL_URL,
+      icon: <IconArrowDown size={32} />,
+      badge: "Test"
     }
   ]
 

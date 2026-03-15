@@ -1,7 +1,7 @@
 "use client"
 import { useState, ReactNode, useEffect, memo, useCallback, useMemo } from "react"
 import { Tabs, Loader, Center } from "@mantine/core"
-import { useDisclosure, useIntersection } from "@mantine/hooks"
+import { useIntersection } from "@mantine/hooks"
 import { QuestCategoryTabs } from "./QuestCategoryTabs"
 import { QuestSearchBar } from "./QuestSearchBar"
 import { QuestGrid } from "./QuestGrid"
@@ -112,18 +112,16 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
 
   /** 無限スクロール用 Intersection Observer */
   const { ref: sentinelRef, entry } = useIntersection({
-    threshold: 1,
+    threshold: 0,
+    rootMargin: '0px 0px 300px 0px',
   })
 
   /** 下まで来たら次ページを取得する */
   useEffect(() => {
-    if (entry?.isIntersecting) {
-      // 次のページが存在するときだけセットする
-      if (page < maxPage && !isLoading) {
-        onPageChange(page + 1)
-      }
+    if (entry?.isIntersecting && page < maxPage && !isLoading) {
+      onPageChange(page + 1)
     }
-  }, [entry, totalRecords, page, maxPage, isLoading, onPageChange])
+  }, [entry?.isIntersecting, page, maxPage, isLoading, onPageChange])
 
   /** データ取得時に表示クエスト一覧を更新する */
   useEffect(() => {
@@ -184,8 +182,8 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 onTabChange={handleTabChange}
                 tabList={tabList}
               />
-              {/* 無限スクロール検知エリア */}
-              <div ref={sentinelRef} style={{ height: 1 }} />
+              {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
+              <div ref={tabValue === TAB_ALL ? sentinelRef : undefined} style={{ height: 1 }} />
               {/* 追加ページローディング表示 */}
               {isLoading && displayQuests.length > 0 && (
                 <Center className="my-8">
@@ -214,8 +212,8 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                   onTabChange={handleTabChange}
                   tabList={tabList}
                 />
-                {/* 無限スクロール検知エリア */}
-                <div ref={sentinelRef} style={{ height: 1 }} />
+                {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
+                <div ref={tabValue === category.name ? sentinelRef : undefined} style={{ height: 1 }} />
                 {/* 追加ページローディング表示 */}
                 {isLoading && displayQuests.length > 0 && (
                   <Center className="my-8">
@@ -244,8 +242,8 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 onTabChange={handleTabChange}
                 tabList={tabList}
               />
-              {/* 無限スクロール検知エリア */}
-              <div ref={sentinelRef} style={{ height: 1 }} />
+              {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
+              <div ref={tabValue === TAB_OTHERS ? sentinelRef : undefined} style={{ height: 1 }} />
               {/* 追加ページローディング表示 */}
               {isLoading && displayQuests.length > 0 && (
                 <Center className="my-8">
