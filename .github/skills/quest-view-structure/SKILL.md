@@ -3,347 +3,96 @@ name: quest-view-structure
 description: クエスト閲覧画面の構造知識を提供するスキル。共通コンポーネント、各クエストタイプの閲覧画面構造を含む。
 ---
 
-# quest-view-structure
+# クエスト閲覧画面 スキル
 
-このスキルは、クエスト閲覧画面（QuestView）の構造に関する知識を提供する。すべてのクエストタイプ（家族、公開、テンプレート、子供）の閲覧画面で共通使用される再利用可能なコンポーネント群と、各画面固有の構造を網羅する。
+## 概要
 
-## 対象範囲
+このスキルは、クエスト閲覧画面（QuestView）の構造に関する知識を提供します。すべてのクエストタイプ（家族、公開、テンプレート、子供）の閲覧画面で共通使用される再利用可能なコンポーネント群と、各画面固有の構造を網羅します。
 
-- 共通コンポーネント (`app/(app)/quests/view/_components/`)
-- 家族クエスト閲覧画面 (`app/(app)/quests/family/[id]/view/`)
-- 公開クエスト閲覧画面 (`app/(app)/quests/public/[id]/view/`)
-- テンプレートクエスト閲覧画面 (`app/(app)/quests/template/[id]/view/`)
-- 子供クエスト閲覧画面 (`app/(app)/quests/family/[id]/view/child/[childId]/`)
+## メインソースファイル
 
-## 共通コンポーネント
+### 共通コンポーネント
+- `app/(app)/quests/view/_components/QuestViewHeader.tsx`: ヘッダー
+- `app/(app)/quests/view/_components/QuestViewIcon.tsx`: アイコン
+- `app/(app)/quests/view/_components/QuestConditionTab.tsx`: 条件タブ
+- `app/(app)/quests/view/_components/QuestDetailTab.tsx`: 依頼情報タブ
+- `app/(app)/quests/view/_components/QuestOtherTab.tsx`: その他タブ
+- `app/(app)/quests/view/_components/ChildQuestViewFooter.tsx`: 子供用フッター
 
-### 1. QuestViewHeader
+### 画面タイプ別
+- `app/(app)/quests/family/[id]/view/`: 家族クエスト閲覧
+- `app/(app)/quests/public/[id]/view/`: 公開クエスト閲覧
+- `app/(app)/quests/template/[id]/`: テンプレートクエスト閲覧
+- `app/(app)/quests/family/[id]/view/child/[childId]/`: 子供クエスト閲覧
 
-**パス:** `app/(app)/quests/view/_components/QuestViewHeader.tsx`
+## 主要機能グループ
 
-**役割:** クエスト名を表示する共通ヘッダー
+### 1. 共通コンポーネント
+- QuestViewHeader: クエスト名表示
+- QuestViewIcon: アイコン表示
+- QuestConditionTab: 条件タブ（レベル、報酬、経験値等）
+- QuestDetailTab: 依頼情報タブ
+- QuestOtherTab: その他タブ（タグ、推奨年齢等）
+- ChildQuestViewFooter: 子供用フッター
 
-**Props:**
-- `questName: string` - クエスト名
-- `headerColor?: { light: string, dark: string }` - ヘッダーの背景色（任意、デフォルトはblue）
+### 2. 画面タイプ別構造
+- 家族クエスト閲覧: レベル選択、編集・削除機能
+- 公開クエスト閲覧: いいね・コメント機能
+- テンプレートクエスト閲覧: 採用機能
+- 子供クエスト閲覧: 完了報告・取消機能
 
-### 2. QuestViewIcon
+### 3. 表示制御
+- ステータス別表示（not_started, in_progress, pending_review, completed）
+- 権限別表示（親、子供）
+- レスポンシブ対応（モバイル、タブレット、PC）
 
-**パス:** `app/(app)/quests/view/_components/QuestViewIcon.tsx`
+## Reference Files Usage
 
-**役割:** クエストアイコンを表示する
-
-**Props:**
-- `iconName?: string` - アイコン名
-- `iconSize?: number` - アイコンサイズ
-- `iconColor?: string` - アイコン色
-
-### 3. QuestConditionTab
-
-**パス:** `app/(app)/quests/view/_components/QuestConditionTab.tsx`
-
-**役割:** クエスト条件タブ（レベル、カテゴリ、達成条件、報酬、経験値、必要完了回数）
-
-**主要Props:**
-- `level: number` - クエストレベル
-- `maxLevel?: number` - 最大レベル（デフォルト5）
-- `category: string` - カテゴリ名
-- `successCondition: string` - 達成条件
-- `requiredCompletionCount: number` - 必要完了回数
-- `currentCompletionCount?: number` - 現在の完了回数（進捗表示用）
-- `reward: number` - 報酬額
-- `exp: number` - 獲得経験値
-- `type?: "parent" | "child" | "online"` - クエストタイプ
-- `currentClearCount?: number` - 現在のクリア回数（レベルアップ用）
-- `requiredClearCount?: number` - 次レベルまでの必要クリア回数
-- `iconName?: string` - アイコン名
-- `iconSize?: number` - アイコンサイズ
-- `iconColor?: string` - アイコン色
-
-### 4. QuestDetailTab
-
-**パス:** `app/(app)/quests/view/_components/QuestDetailTab.tsx`
-
-**役割:** 依頼情報タブ（依頼主、依頼内容）
-
-**Props:**
-- `client: string` - 依頼主
-- `requestDetail: string` - 依頼内容
-
-### 5. QuestOtherTab
-
-**パス:** `app/(app)/quests/view/_components/QuestOtherTab.tsx`
-
-**役割:** その他情報タブ（タグ、推奨年齢・月齢）
-
-**Props:**
-- `tags: string[]` - タグリスト
-- `ageFrom?: number | null` - 推奨年齢（開始）
-- `ageTo?: number | null` - 推奨年齢（終了）
-- `monthFrom?: number | null` - 推奨月齢（開始）
-- `monthTo?: number | null` - 推奨月齢（終了）
-
-### 6. ChildQuestViewFooter（共通）
-
-**パス:** `app/(app)/quests/view/_components/ChildQuestViewFooter.tsx`
-
-**役割:** 子供用クエスト閲覧フッター（戻る、完了報告、報告取消）
-
-**主要機能:**
-- 戻るボタン
-- 完了報告ボタン（disabled/enabledの制御）
-- 完了報告取消ボタン（pending_reviewの場合のみ表示）
-
-## 家族クエスト閲覧画面
-
-### ファイル構成
-
+### コンポーネント構造を把握する場合
+共通コンポーネント一覧、画面タイプ別構造、レイアウトパターンを確認：
 ```
-app/(app)/quests/family/[id]/view/
-  ├── page.tsx                           # ページエントリーポイント
-  ├── FamilyQuestViewScreen.tsx          # メイン画面コンポーネント
-  ├── _components/
-  │   ├── FamilyQuestViewLayout.tsx      # レイアウトコンポーネント
-  │   └── ParentQuestViewFooter.tsx      # 親用フッター
-  └── _hooks/
-      └── useFamilyQuest.ts              # クエストデータ取得フック
+references/component_structure.md
 ```
 
-### FamilyQuestViewScreen
-
-**役割:** 家族クエスト閲覧のメイン画面
-
-**主要機能:**
-- レベル選択（複数レベルがある場合）- SubMenuFABに統合
-- 選択レベルに応じた詳細表示
-- 編集モーダル呼び出し
-- 編集権限制御（親のみ）
-- SubMenuFABを使用したレベル選択メニュー表示
-
-**状態管理:**
-- `selectedLevel: number` - 選択中のレベル
-- `editModalOpened: boolean` - 編集モーダル開閉状態
-- `levelMenuOpened: boolean` - レベル選択メニュー開閉状態
-
-**FAB統合:**
-- SubMenuFABに編集ボタンとレベル選択ボタンを統合
-- レベル選択ボタン押下でPaperベースのメニューを表示
-- FABContextでFAB開閉状態を管理
-
-### FamilyQuestViewLayout
-
-**役割:** 家族クエスト閲覧のレイアウト
-
-**Props:**
-- クエスト基本情報（name, backgroundColor, icon情報）
-- 表示データ（level, category, successCondition, reward, exp, requiredCompletionCount）
-- 詳細情報（client, requestDetail, tags, age/month範囲）
-
-**構成:**
-- QuestViewHeader（ヘッダー）
-- Tabs（タブ切り替え）
-  - 条件タブ（QuestConditionTab）
-  - 依頼情報タブ（QuestDetailTab）
-  - その他タブ（QuestOtherTab）
-
-**注意:** レベル選択メニューとアクションボタンはFamilyQuestViewScreen側のSubMenuFABで管理されます。
-
-### ParentQuestViewFooter（非推奨）
-
-**パス:** `app/(app)/quests/family/[id]/view/_components/ParentQuestViewFooter.tsx`
-
-**状態:** このコンポーネントは非推奨です。アクション機能はSubMenuFABに統合されました。
-
-**旧役割:** 親用フッター（編集ボタンのみ）
-
-## 公開クエスト閲覧画面
-
-### ファイル構成
-
+### レンダリング・インタラクションフローを理解する場合
+初期表示、レベル選択、タブ切り替え、完了報告・採用フローを確認：
 ```
-app/(app)/quests/public/[id]/view/
-  ├── page.tsx                           # ページエントリーポイント
-  ├── PublicQuestView.tsx                # メイン画面コンポーネント
-  ├── _components/
-  │   ├── PublicQuestViewLayout.tsx      # レイアウトコンポーネント
-  │   └── PublicQuestViewFooter.tsx      # フッター（未使用？）
-  └── _hooks/
-      ├── usePublicQuest.ts              # クエストデータ取得フック
-      ├── useLikeQuest.ts                # いいね機能フック
-      ├── useLikeCount.ts                # いいね数取得フック
-      ├── useIsLike.ts                   # いいね状態取得フック
-      └── useCancelQuestLike.ts          # いいね解除フック
+references/flow_diagram.md
 ```
 
-### PublicQuestView
-
-**役割:** 公開クエスト閲覧のメイン画面
-
-**主要機能:**
-- レベル選択（複数レベルがある場合、レベル選択メニュー）
-- いいね機能（いいね/いいね解除、いいね数表示）
-- コメント機能（コメントモーダル呼び出し、コメント数表示）
-- 家族情報表示
-- 編集機能（編集権限がある場合のみ）
-- FAB（Floating Action Button）によるアクション提供
-
-**状態管理:**
-- `selectedLevel: number` - 選択中のレベル
-- `levelMenuOpened: boolean` - レベル選択メニュー開閉状態
-- `editModalOpened: boolean` - 編集モーダル開閉状態
-- `commentModalOpened: boolean` - コメントモーダル開閉状態
-
-**編集権限チェック:**
-- `publicQuest?.base.familyId === userInfo?.profiles?.familyId`
-
-### PublicQuestViewLayout
-
-**役割:** 公開クエスト閲覧のレイアウト
-
-**Props:** FamilyQuestViewLayoutと同様
-
-**特徴:** 青系の配色（デフォルト: rgba(191, 219, 254, 0.5) / rgba(59, 130, 246, 0.2)）
-
-## テンプレートクエスト閲覧画面
-
-### ファイル構成
-
+### データ表示パターンを把握する場合
+タブ別表示内容、ヘッダー・アイコン表示、ステータス・権限別表示を確認：
 ```
-app/(app)/quests/template/[id]/view/
-  ├── page.tsx                           # ページエントリーポイント
-  ├── TemplateQuestViewScreen.tsx        # メイン画面コンポーネント
-  ├── _components/
-  │   ├── TemplateQuestViewLayout.tsx    # レイアウトコンポーネント
-  │   └── TemplateQuestViewFooter.tsx    # フッター
-  └── _hooks/
-      └── useTemplateQuest.ts            # クエストデータ取得フック
+references/display_patterns.md
 ```
 
-### TemplateQuestViewScreen
+## クイックスタート
 
-**役割:** テンプレートクエスト閲覧のメイン画面
+1. **全体像の把握**: `references/component_structure.md`でコンポーネント階層確認
+2. **表示パターンの理解**: `references/display_patterns.md`でタブ別表示確認
+3. **実装時**: `references/flow_diagram.md`で処理フロー確認
+4. **デバッグ時**: `references/flow_diagram.md`でインタラクションフロー確認
 
-**主要機能:**
-- レベル選択（複数レベルがある場合）- SubMenuFABに統合
-- 家族クエストとして採用機能
-- SubMenuFABを使用したレベル選択メニュー表示
+## 実装上の注意点
 
-**状態管理:**
-- `selectedLevel: number` - 選択中のレベル
-- `levelMenuOpened: boolean` - レベル選択メニュー開閉状態
+### 必須パターン
+- **共通コンポーネント使用**: QuestView系コンポーネントを再利用
+- **タブ構成**: 条件・依頼情報・その他の3タブ構成を維持
+- **レスポンシブ対応**: モバイルファーストで実装
+- **Logger**: すべての画面でlogger使用
+- **SubMenuFAB統合**: アクションボタン、レベル選択はSubMenuFABに統合
 
-**FAB統合:**
-- SubMenuFABに採用ボタン、元のクエストボタン、削除ボタン、レベル選択ボタンを統合
-- FABContextでFAB開閉状態を管理
+### 権限管理
+- **親のみ**: 編集、削除（家族クエスト）
+- **子供のみ**: 完了報告、報告取消（子供クエスト）
+- **全ユーザー**: いいね、コメント（公開クエスト）、採用（テンプレートクエスト）
 
-### TemplateQuestViewLayout
+### ステータス制御
+- **not_started/in_progress**: 完了報告ボタン有効
+- **pending_review**: 報告取消ボタン表示
+- **completed**: ボタン無効化
 
-**役割:** テンプレートクエスト閲覧のレイアウト
-
-**Props:** FamilyQuestViewLayoutと同様（footer propsなし）
-
-**特徴:** 黄色系の配色（デフォルト: rgba(254, 243, 199, 0.5) / rgba(161, 98, 7, 0.2)）
-
-**注意:** レベル選択メニューとアクションボタンはTemplateQuestViewScreen側のSubMenuFABで管理されます。
-
-### TemplateQuestViewFooter（非推奨）
-
-**パス:** `app/(app)/quests/template/[id]/view/_components/TemplateQuestViewFooter.tsx`
-
-**状態:** このコンポーネントは非推奨です。アクション機能はSubMenuFABに統合されました。
-
-**旧役割:** テンプレートクエスト用フッター（家族クエストとして採用ボタン）
-
-## 子供クエスト閲覧画面
-
-### ファイル構成
-
-```
-app/(app)/quests/family/[id]/view/child/[childId]/
-  ├── page.tsx                           # ページエントリーポイント
-  ├── ChildQuestViewScreen.tsx           # メイン画面コンポーネント
-  ├── _components/
-  │   ├── ChildQuestViewLayout.tsx       # レイアウトコンポーネント
-  │   ├── ChildQuestViewFooter.tsx       # 子供用フッター
-  │   ├── ParentChildQuestViewFooter.tsx # 親用フッター
-  │   ├── ReviewRequestModal.tsx         # 完了報告モーダル（子供用）
-  │   ├── CancelReviewModal.tsx          # 報告取消モーダル（子供用）
-  │   └── ReportReviewModal.tsx          # 報告内容確認モーダル（親用）
-  └── _hooks/
-      ├── useChildQuest.ts               # クエストデータ取得フック
-      ├── useReviewRequest.ts            # 完了報告フック
-      ├── useCancelReview.ts             # 報告取消フック
-      ├── useRejectReport.ts             # 報告却下フック
-      ├── useApproveReport.ts            # 報告承認フック
-      └── useDeleteChildQuest.ts         # クエスト削除フック
-```
-
-### ChildQuestViewScreen
-
-**役割:** 子供クエスト閲覧のメイン画面（子供/親両方が使用）
-
-**主要機能:**
-- ユーザータイプ別のフッター表示切り替え
-  - 親: ParentChildQuestViewFooter（報告確認、編集、リセット）
-  - 子供: ChildQuestViewFooter（戻る、完了報告、報告取消）
-- 完了報告機能（子供用）
-- 報告取消機能（子供用）
-- 報告承認/却下機能（親用）
-- クエスト削除（親用）
-
-**モーダル:**
-- ReviewRequestModal - 完了報告モーダル（子供用）
-- CancelReviewModal - 報告取消モーダル（子供用）
-- ReportReviewModal - 報告内容確認モーダル（親用、承認/却下）
-
-### ChildQuestViewLayout
-
-**役割:** 子供クエスト閲覧のレイアウト
-
-**Props:** FamilyQuestViewLayoutと同様（footer propsなし）
-
-**特徴:** ブラウン系の配色（デフォルト: rgba(120, 53, 15, 0.2) / rgba(255, 255, 255, 0.2)）
-
-**注意:** アクションボタンはChildQuestViewScreen側のSubMenuFABで管理されます（レベル選択機能なし）。
-
-### ParentChildQuestViewFooter
-
-**役割:** 親用フッター（子供クエスト管理用）
-
-**Props:**
-- `isPendingReview: boolean` - 報告待ち状態かどうか
-- `onReviewReport: () => void` - 報告確認ボタン押下時のハンドラー
-- `onEdit: () => void` - 編集ボタン押下時のハンドラー（家族クエスト閲覧に遷移）
-- `onReset: () => void` - リセットボタン押下時のハンドラー
-
-## 共通の設計パターン
-
-### レイアウトコンポーネントの責務
-- データ表示のみに専念
-- API呼び出しは行わない
-- Propsで受け取ったデータを整形して表示
-- 共通コンポーネント（QuestViewHeader、タブ系）を組み合わせて構成
-- **footerはレイアウトから削除され、SubMenuFABに統合**
-
-### 画面コンポーネント（Screen）の責務
-- データ取得（フック使用）
-- 状態管理（レベル選択、モーダル開閉など）
-- イベントハンドラーの実装
-- レイアウトコンポーネントへのProps受け渡し
-- 権限制御ロジック
-- **SubMenuFABの管理とレベル選択メニューの制御**
-
-### レベル選択機能
-- 複数レベルがある場合のみ有効化
-- `selectedLevel`状態で管理
-- `availableLevels = details.map(d => d.level).filter(非null)`で利用可能レベルを取得
-- `selectedDetail = details.find(d => d.level === selectedLevel) || details[0]`で選択中の詳細を取得
-- **SubMenuFABに統合され、Paperベースのメニューで選択UI提供**
-- **FABContextを使用してFABとメニューの開閉状態を管理**
-- **レベル選択メニューは画面右下に固定表示（z-index: 3001）**
-
-### 配色パターン
-- 家族クエスト: ブラウン系 `rgba(120, 53, 15, 0.2)` / `rgba(255, 255, 255, 0.2)`
-- 公開クエスト: 青系 `rgba(191, 219, 254, 0.5)` / `rgba(59, 130, 246, 0.2)`
-- テンプレートクエスト: 黄色系 `rgba(255, 237, 213, 0.5)` / `rgba(255, 159, 0, 0.2)`
-- 子供クエスト: ブラウン系 `rgba(120, 53, 15, 0.2)` / `rgba(255, 255, 255, 0.2)`（家族クエストと同じ）
+### レイアウト設計パターン
+- **Screen**: データ取得、状態管理、イベントハンドラー、SubMenuFAB管理
+- **Layout**: データ表示のみ、共通コンポーネント組み合わせ
+- **レベル選択**: SubMenuFABに統合、Paperベースのメニューで提供
