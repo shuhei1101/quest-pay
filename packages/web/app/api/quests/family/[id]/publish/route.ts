@@ -6,6 +6,7 @@ import { withRouteErrorHandling } from "@/app/(core)/error/handler/server"
 import { fetchFamilyQuest } from "../../query"
 import { registerPublicQuestByFamilyQuest } from "../../../public/service"
 import { fetchPublicQuestByFamilyId } from "../../../public/query"
+import { logger } from "@/app/(core)/logger"
 
 
 /** 家族クエストを公開する */
@@ -14,29 +15,52 @@ export async function POST(
   context: { params: Promise<{ id: string }> }
 ) {
   return withRouteErrorHandling(async () => {
+    logger.info('家族クエスト公開API開始', {
+      path: '/api/quests/family/[id]/publish',
+      method: 'POST',
+    })
+
     // 認証コンテキストを取得する
     const { db, userId } = await getAuthContext()
-      // パスパラメータからIDを取得する
-      const { id } = await context.params
+    logger.debug('認証コンテキスト取得完了', { userId })
 
-      // プロフィール情報を取得する取得する取得する
-      const userInfo = await fetchUserInfoByUserId({userId, db})
-      if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
-      // 現在の家族クエストを取得する
-      const currentFamilyQuest = await fetchFamilyQuest({ db, id })
-      // 家族IDが一致しない場合
-      if (userInfo.profiles.familyId !== currentFamilyQuest?.base.familyId) throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
+    // パスパラメータからIDを取得する
+    const { id } = await context.params
 
-      // 既に登録されていないか確認する
-      const existingPublicQuest = await fetchPublicQuestByFamilyId({db, familyQuestId: id})
-      if (existingPublicQuest) throw new ServerError("この家族クエストは既に公開されています。")
-        
-      // 家族クエストを更新する
-      await registerPublicQuestByFamilyQuest({
-        db,
-        familyQuestId: id
+    // プロフィール情報を取得する
+    const userInfo = await fetchUserInfoByUserId({userId, db})
+    if (!userInfo?.profiles?.familyId) throw new ServerError("家族IDの取得に失敗しました。")
+    logger.debug('プロフィール情報取得完了', { familyId: userInfo.profiles.familyId })
+
+    // 現在の家族クエストを取得する
+    const currentFamilyQuest = await fetchFamilyQuest({ db, id })
+
+    // 家族IDが一致しない場合
+    if (userInfo.profiles.familyId !== currentFamilyQuest?.base.familyId) {
+      logger.warn('異なる家族のクエスト公開試行', {
+        userId,
+        userFamilyId: userInfo.profiles.familyId,
+        questFamilyId: currentFamilyQuest?.base.familyId,
       })
+      throw new ServerError("同じ家族に所属していないデータにアクセスしました。")
+    }
+
+    // 既に登録されていないか確認する
+    const existingPublicQuest = await fetchPublicQuestByFamilyId({db, familyQuestId: id})
+    if (existingPublicQuest) {
+      logger.warn('既に公開済みのクエスト公開試行', { familyQuestId: id })
+      throw new ServerError("この家族クエストは既に公開されています。")
+    }
       
-      return NextResponse.json({})
+    // 家族クエストを公開する
+    await registerPublicQuestByFamilyQuest({
+      db,
+      familyQuestId: id
     })
+    logger.debug('公開クエスト登録完了', { familyQuestId: id })
+    
+    logger.info('家族クエスト公開成功', { familyQuestId: id })
+
+    return NextResponse.json({})
+  })
 }
