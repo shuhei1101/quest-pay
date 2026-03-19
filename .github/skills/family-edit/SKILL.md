@@ -1,6 +1,6 @@
 ---
 name: family-edit
-description: 家族編集画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: family edit, edit family, family form, update family
+description: 家族編集画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: 家族編集、家族フォーム、家族更新
 ---
 
 # 家族編集 スキル

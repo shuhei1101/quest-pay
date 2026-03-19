@@ -1,6 +1,6 @@
 ---
 name: endpoints-definition
-description: エンドポイント定義の知識を提供するスキル。endpoints.tsの構造と使用方法を含む。 Trigger Keywords: endpoints, API routes, URL definition, endpoints.ts, route paths
+description: エンドポイント定義の知識を提供するスキル。endpoints.tsの構造と使用方法を含む。 Trigger Keywords: エンドポイント、APIルート、URL定義、endpoints.ts、ルートパス
 ---
 
 # エンドポイント定義 スキル

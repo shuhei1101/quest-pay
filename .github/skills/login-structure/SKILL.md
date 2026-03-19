@@ -1,6 +1,6 @@
 ---
 name: login-structure
-description: ログイン画面の構造知識を提供するスキル。ファイル構成、フォーム管理、ログインタイプ選択、処理フローを含む。 Trigger Keywords: login screen, login page, login form, authentication UI, login type
+description: ログイン画面の構造知識を提供するスキル。ファイル構成、フォーム管理、ログインタイプ選択、処理フローを含む。 Trigger Keywords: ログイン画面、ログインページ、ログインフォーム、認証UI、ログインタイプ
 ---
 
 # ログイン画面 スキル

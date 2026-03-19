@@ -1,6 +1,6 @@
 ---
 name: logger-management
-description: 'Logger 導入・管理の知識を提供するスキル。loglevelを使用したフロント・バック両対応のログシステム構築、debug/info/error等のレベル分けを担当。 Trigger Keywords: logger, loglevel, logging, debug log, log management, log configuration'
+description: 'Logger 導入・管理の知識を提供するスキル。loglevelを使用したフロント・バック両対応のログシステム構築、debug/info/error等のレベル分けを担当。 Trigger Keywords: ロガー、loglevel、ログ記録、デバッグログ、ログ管理、ログ設定
 ---
 
 # Logger Management スキル

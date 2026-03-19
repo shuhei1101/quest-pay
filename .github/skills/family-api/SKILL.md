@@ -1,6 +1,6 @@
 ---
 name: family-api
-description: 家族API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: family API, family CRUD, family operations, family endpoint
+description: 家族API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: 家族API、家族CRUD、家族操作、家族エンドポイント
 ---
 
 # 家族API スキル

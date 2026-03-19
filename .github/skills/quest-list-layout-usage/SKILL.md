@@ -1,6 +1,6 @@
 ---
 name: quest-list-layout-usage
-description: クエスト一覧レイアウト使用方法を提供するスキル。Props定義、使用例を含む。 Trigger Keywords: quest list layout usage, how to use list layout, list layout props
+description: クエスト一覧レイアウト使用方法を提供するスキル。Props定義、使用例を含む。 Trigger Keywords: クエスト一覧レイアウト使用方法、一覧レイアウトの使い方、レイアウトProps
 ---
 
 # クエスト一覧レイアウト使用方法 スキル

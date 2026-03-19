@@ -1,6 +1,6 @@
 ---
 name: quest-view-api
-description: クエスト閲覧画面のAPI操作知識を提供するスキル。エンドポイント、リクエスト/レスポンス、フック、DB操作を含む。 Trigger Keywords: quest view API, quest details API, quest data fetch
+description: クエスト閲覧画面のAPI操作知識を提供するスキル。エンドポイント、リクエスト/レスポンス、フック、DB操作を含む。 Trigger Keywords: クエスト閲覧API、クエスト詳細API、クエストデータ取得
 ---
 
 # クエストビューAPI スキル

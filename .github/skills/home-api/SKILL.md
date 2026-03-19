@@ -1,6 +1,6 @@
 ---
 name: home-api
-description: ホーム画面API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: home API, home screen API, dashboard API, home data
+description: ホーム画面API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: ホームAPI、ホーム画面API、ダッシュボードAPI、ホームデータ
 ---
 
 # ホームAPI スキル

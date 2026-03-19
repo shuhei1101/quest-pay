@@ -1,6 +1,6 @@
 ---
 name: comment-post
-description: コメント投稿機能の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: post comment, comment form, submit comment, write comment
+description: コメント投稿機能の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: コメント投稿、コメントフォーム、コメント送信、コメント書き込み
 ---
 
 # コメント投稿 スキル

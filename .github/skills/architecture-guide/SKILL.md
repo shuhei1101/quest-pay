@@ -1,6 +1,6 @@
 ---
 name: architecture-guide
-description: This skill should be used when implementing new features, understanding the project structure, or navigating the Quest Pay codebase. It provides architectural patterns, module responsibilities, and file organization guidelines. Trigger Keywords: architecture, project structure, codebase navigation, module organization, design patterns
+description: This skill should be used when implementing new features, understanding the project structure, or navigating the Quest Pay codebase. It provides architectural patterns, module responsibilities, and file organization guidelines. Trigger Keywords: アーキテクチャ、プロジェクト構造、コードベースナビゲーション、モジュール構成、設計パターン
 ---
 
 # Architecture Guide

@@ -1,6 +1,6 @@
 ---
 name: public-quest-api
-description: 公開クエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: public quest API, public quest operations, community quest API
+description: 公開クエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: 公開クエストAPI、公開クエスト操作、コミュニティクエストAPI
 ---
 
 # 公開クエストAPI スキル

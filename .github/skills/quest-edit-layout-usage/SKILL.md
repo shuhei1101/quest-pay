@@ -1,6 +1,6 @@
 ---
 name: quest-edit-layout-usage
-description: クエスト編集レイアウト使用方法を提供するスキル。Props定義、使用例を含む。 Trigger Keywords: quest edit layout usage, how to use edit layout, layout props
+description: クエスト編集レイアウト使用方法を提供するスキル。Props定義、使用例を含む。 Trigger Keywords: クエスト編集レイアウト使用方法、編集レイアウトの使い方、レイアウトProps
 ---
 
 # クエスト編集レイアウト使用方法 スキル

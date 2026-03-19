@@ -1,6 +1,6 @@
 ---
 name: common-components-usage
-description: 共通コンポーネントの使用方法を提供するスキル。Props定義、使用例を含む。 Trigger Keywords: component usage, how to use components, component props, component examples
+description: 共通コンポーネントの使用方法を提供するスキル。Props定義、使用例を含む。 Trigger Keywords: コンポーネント使用方法、コンポーネントの使い方、コンポーネントProps、コンポーネント例
 ---
 
 # 共通コンポーネント使用方法 スキル

@@ -1,6 +1,6 @@
 ---
 name: family-quest-view
-description: 家族クエスト閲覧画面の構造知識を提供するスキル。ファイル構成、表示内容、子供向け機能を含む。 Trigger Keywords: family quest view, view quest, quest details, quest information
+description: 家族クエスト閲覧画面の構造知識を提供するスキル。ファイル構成、表示内容、子供向け機能を含む。 Trigger Keywords: 家族クエスト閲覧、クエスト閲覧、クエスト詳細、クエスト情報
 ---
 
 # 家族クエスト閲覧 スキル

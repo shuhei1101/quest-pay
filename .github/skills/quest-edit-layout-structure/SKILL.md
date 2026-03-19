@@ -1,6 +1,6 @@
 ---
 name: quest-edit-layout-structure
-description: クエスト編集レイアウト構造の知識を提供するスキル。ファイル構成、コンポーネントを含む。 Trigger Keywords: quest edit layout, edit layout structure, quest form layout
+description: クエスト編集レイアウト構造の知識を提供するスキル。ファイル構成、コンポーネントを含む。 Trigger Keywords: クエスト編集レイアウト、編集レイアウト構造、クエストフォームレイアウト
 ---
 
 # クエスト編集レイアウト構造 スキル

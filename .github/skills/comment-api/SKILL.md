@@ -1,6 +1,6 @@
 ---
 name: comment-api
-description: コメントAPI操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: comment API, comment CRUD, comment operations, post comment
+description: コメントAPI操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: コメントAPI、コメントCRUD、コメント操作、コメント投稿
 ---
 
 # コメントAPI スキル

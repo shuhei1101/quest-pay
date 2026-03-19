@@ -1,6 +1,6 @@
 ---
 name: family-list
-description: 家族一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: family list, families list, family management screen
+description: 家族一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: 家族一覧、家族リスト、家族管理画面
 ---
 
 # 家族一覧 スキル

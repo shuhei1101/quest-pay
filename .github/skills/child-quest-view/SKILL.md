@@ -1,6 +1,6 @@
 ---
 name: child-quest-view
-description: 子供クエスト閲覧画面の構造知識を提供するスキル。表示内容、完了報告機能を含む。 Trigger Keywords: child quest view, view child quest, quest details child, complete quest
+description: 子供クエスト閲覧画面の構造知識を提供するスキル。表示内容、完了報告機能を含む。 Trigger Keywords: 子供クエスト閲覧、クエスト詳細、クエスト完了
 ---
 
 # 子供クエスト閲覧 スキル

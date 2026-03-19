@@ -1,6 +1,6 @@
 ---
 name: child-quest-api
-description: 子供クエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: child quest API, child quest operations, child quest CRUD
+description: 子供クエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: 子供クエストAPI、子供クエスト操作、子供クエストCRUD
 ---
 
 # 子供クエストAPI スキル

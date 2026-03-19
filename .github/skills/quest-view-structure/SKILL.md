@@ -1,6 +1,6 @@
 ---
 name: quest-view-structure
-description: クエスト閲覧画面の構造知識を提供するスキル。共通コンポーネント、各クエストタイプの閲覧画面構造を含む。 Trigger Keywords: quest view screen, quest details screen, view quest UI, quest display
+description: クエスト閲覧画面の構造知識を提供するスキル。共通コンポーネント、各クエストタイプの閲覧画面構造を含む。 Trigger Keywords: クエスト閲覧画面、クエスト詳細画面、クエスト表示UI
 ---
 
 # クエスト閲覧画面 スキル

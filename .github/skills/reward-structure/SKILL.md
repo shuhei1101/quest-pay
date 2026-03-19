@@ -1,5 +1,5 @@
 ---
-description: 報酬設定画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: reward screen, reward settings screen, allowance settings UI
+description: 報酬設定画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: 報酬画面、報酬設定画面、お小遣い設定UI
 ---
 
 # 報酬設定画面の構造

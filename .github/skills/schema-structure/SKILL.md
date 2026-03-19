@@ -1,6 +1,6 @@
 ---
 name: schema-structure
-description: DBスキーマ構造の知識を提供するスキル。テーブル定義、カラム型を含む。 Trigger Keywords: database schema, table structure, column definitions, schema.ts, database design
+description: DBスキーマ構造の知識を提供するスキル。テーブル定義、カラム型を含む。 Trigger Keywords: データベーススキーマ、テーブル構造、カラム定義、schema.ts、データベース設計
 ---
 
 # DBスキーマ構造 スキル

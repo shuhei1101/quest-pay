@@ -1,6 +1,6 @@
 ---
 name: app-shell-components
-description: AppShell関連コンポーネントの知識を提供するスキル。サイドメニュー、フッターの実装詳細を含む。 Trigger Keywords: AppShell, side menu, footer, app shell components, layout components
+description: AppShell関連コンポーネントの知識を提供するスキル。サイドメニュー、フッターの実装詳細を含む。 Trigger Keywords: AppShell、サイドメニュー、フッター、アプリシェルコンポーネント、レイアウトコンポーネント
 ---
 
 # AppShellコンポーネント スキル

@@ -1,6 +1,6 @@
 ---
 name: child-quest-list
-description: 子供クエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: child quest list, my quests, child quest screen
+description: 子供クエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: 子供クエスト一覧、マイクエスト、子供クエスト画面
 ---
 
 # 子供クエスト一覧 スキル

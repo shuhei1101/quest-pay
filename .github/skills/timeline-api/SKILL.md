@@ -1,6 +1,6 @@
 ---
 name: timeline-api
-description: タイムラインAPI操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: timeline API, timeline operations, activity timeline, timeline data
+description: タイムラインAPI操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: タイムラインAPI、タイムライン操作、アクティビティタイムライン、タイムラインデータ
 ---
 
 # タイムラインAPI スキル

@@ -1,6 +1,6 @@
 ---
 name: comment-list
-description: コメント一覧表示の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: comment list, comment section, display comments, comment thread
+description: コメント一覧表示の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: コメント一覧、コメントセクション、コメント表示、コメントスレッド
 ---
 
 # コメント一覧 スキル

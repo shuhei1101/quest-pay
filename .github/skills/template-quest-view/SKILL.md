@@ -1,6 +1,6 @@
 ---
 name: template-quest-view
-description: テンプレートクエスト閲覧画面の構造知識を提供するスキル。表示内容、採用機能を含む。 Trigger Keywords: template quest view, view template, template details, adopt template
+description: テンプレートクエスト閲覧画面の構造知識を提供するスキル。表示内容、採用機能を含む。 Trigger Keywords: テンプレートクエスト閲覧、テンプレート閲覧、テンプレート詳細、テンプレート採用
 ---
 
 # テンプレートクエスト閲覧 スキル

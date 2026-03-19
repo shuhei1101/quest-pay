@@ -1,6 +1,6 @@
 ---
 name: common-components-catalog
-description: 共通コンポーネント一覧を提供するスキル。再利用可能なコンポーネントのカタログ。 Trigger Keywords: common components, component catalog, reusable components, UI components list
+description: 共通コンポーネント一覧を提供するスキル。再利用可能なコンポーネントのカタログ。 Trigger Keywords: 共通コンポーネント、コンポーネントカタログ、再利用可能コンポーネント、UIコンポーネント一覧
 ---
 
 # 共通コンポーネントカタログ スキル

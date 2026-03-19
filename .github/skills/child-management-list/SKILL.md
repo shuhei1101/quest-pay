@@ -1,6 +1,6 @@
 ---
 name: child-management-list
-description: 子供一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: child list, children list, child management screen
+description: 子供一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: 子供一覧、子供リスト、子供管理画面
 ---
 
 # 子供管理一覧 スキル

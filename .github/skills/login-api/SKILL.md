@@ -1,6 +1,6 @@
 ---
 name: login-api
-description: ログインAPI操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: login API, authentication API, auth endpoint, login operations
+description: ログインAPI操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: ログインAPI、認証API、認証エンドポイント、ログイン操作
 ---
 
 # ログインAPI スキル

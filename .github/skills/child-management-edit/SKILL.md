@@ -1,6 +1,6 @@
 ---
 name: child-management-edit
-description: 子供編集画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: child edit, edit child, child form, update child
+description: 子供編集画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: 子供編集、子供フォーム、子供更新
 ---
 
 # 子供編集 スキル

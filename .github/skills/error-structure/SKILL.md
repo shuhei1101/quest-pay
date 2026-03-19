@@ -1,6 +1,6 @@
 ---
 name: error-structure
-description: エラー画面の構造知識を提供するスキル。グローバルエラーハンドラー、認証エラー画面の構造を含む。 Trigger Keywords: error screen, error page, global error, auth error, error UI
+description: エラー画面の構造知識を提供するスキル。グローバルエラーハンドラー、認証エラー画面の構造を含む。 Trigger Keywords: エラー画面、エラーページ、グローバルエラー、認証エラー、エラーUI
 ---
 
 # エラー画面構造 スキル

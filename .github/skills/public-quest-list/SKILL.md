@@ -1,6 +1,6 @@
 ---
 name: public-quest-list
-description: 公開クエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: public quest list, community quests, public quest screen
+description: 公開クエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: 公開クエスト一覧、コミュニティクエスト、公開クエスト画面
 ---
 
 # 公開クエスト一覧 スキル
