@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Image, useMantineColorScheme } from '@mantine/core'
+import { Box, useMantineColorScheme } from '@mantine/core'
 import { useSystemTheme } from '../../(core)/useSystemTheme'
 import { useEffect, useState } from 'react'
 import { FeedbackMessage } from '../../(core)/_components/FeedbackMessageWrapper'
@@ -29,8 +29,7 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
       <Box
         style={{
           width: "100vw",
-          height: "100vh",
-          position: "relative",
+          minHeight: "100vh",
           backgroundColor: isSystemDark ? "#1a1b1e" : "#faf8f3",
           // iOSのセーフエリア対応
           paddingTop: "env(safe-area-inset-top)",
@@ -39,29 +38,7 @@ export const BackgroundWrapper = ({children}: {children: React.ReactNode}) => {
           paddingRight: "env(safe-area-inset-right)",
         }}
       >
-        {/* <Image
-          src={isSystemDark ? "/images/bg-dark.png" : "/images/bg-light.png"}
-          alt="bg"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            zIndex: 0,
-          }}
-        /> */}
-
-        <Box
-          style={{
-            position: "relative",
-            zIndex: 1,
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          {children}
-        </Box>
+        {children}
       </Box>
       <FeedbackMessage />
     </>

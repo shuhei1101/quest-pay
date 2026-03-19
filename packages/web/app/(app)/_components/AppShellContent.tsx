@@ -160,6 +160,7 @@ const AppShellContentInner = ({children}: {children: React.ReactNode}) => {
         {/* メインコンテンツ */}
         <AppShell.Main style={{
           paddingBottom: '100px', // FAB用の下部余白
+          backgroundColor: 'transparent',
         }}>
           {children}
         </AppShell.Main>
