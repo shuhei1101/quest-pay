@@ -1,16 +1,16 @@
 "use client"
 
 import { HOME_URL, SETTINGS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL, TEST_URL } from '@/app/(core)/endpoints'
-import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay } from '@mantine/core'
-import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconBell, IconLogout, IconMenu2, IconCoin } from '@tabler/icons-react'
+import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay, Menu } from '@mantine/core'
+import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconBell, IconLogout, IconMenu2, IconCoin, IconPalette, IconCheck } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useLoginUserInfo } from '@/app/(auth)/login/_hooks/useLoginUserInfo'
 import { menuColors } from '@/app/(core)/_theme/colors'
 import { RenderIcon } from '@/app/(app)/icons/_components/RenderIcon'
 import { useTheme } from '@/app/(core)/_theme/useTheme'
 import Image from 'next/image'
-import { ThemeToggleButton } from './ThemeToggleButton'
 import { useState } from 'react'
+import { themes, ThemeKey } from '@/app/(core)/_theme/themes'
 import { NotificationModal } from '../notifications/_components/NotificationModal'
 import { useNotifications } from '../notifications/_hooks/useNotifications'
 import { appStorage } from '../../(core)/_sessionStorage/appStorage'
@@ -24,7 +24,7 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
   /** 通知モーダルの開閉状態 */
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   /** テーマ情報 */
-  const { colors } = useTheme()
+  const { colors, themeKey } = useTheme()
   /** 通知データ */
   const { notifications } = useNotifications()
   
@@ -181,11 +181,36 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {/* 境界線 */}
       <Divider className="mx-3 my-2" />
       {/* カラーパレット */}
-      <NavLink
-          className='side-nav'
-          label="カラーパレット"
-          leftSection={<ThemeToggleButton size={18} iconStroke={1.2} />}
-        />
+      <Menu shadow="md" width={200}>
+        <Menu.Target>
+          <NavLink
+            className='side-nav'
+            label="カラーパレット"
+            leftSection={<IconPalette color={menuColors.settings} size={18} stroke={1.2} />}
+          />
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Label>テーマを選択</Menu.Label>
+          {(Object.keys(themes) as ThemeKey[]).map((key) => (
+            <Menu.Item
+              key={key}
+              onClick={() => {
+                const { setTheme: updateTheme } = require('@/app/(core)/_theme/useTheme')
+                updateTheme(key)
+              }}
+              leftSection={
+                themeKey === key ? (
+                  <IconCheck size={16} />
+                ) : (
+                  <div style={{ width: 16 }} />
+                )
+              }
+            >
+              {themes[key].name}
+            </Menu.Item>
+          ))}
+        </Menu.Dropdown>
+      </Menu>
       {/* 通知 */}
       {!isGuest && (
         <NavLink
@@ -241,7 +266,34 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {/* 薄い線で境界 */}
       <Divider className="w-4/5" />
       {/* カラーパレット */}
-      <ThemeToggleButton  />
+      <Menu shadow="md" width={200}>
+        <Menu.Target>
+          <ActionIcon variant="subtle" size="xl" aria-label="テーマ切り替え">
+            <IconPalette color={menuColors.settings} stroke={1.4} />
+          </ActionIcon>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Label>テーマを選択</Menu.Label>
+          {(Object.keys(themes) as ThemeKey[]).map((key) => (
+            <Menu.Item
+              key={key}
+              onClick={() => {
+                const { setTheme: updateTheme } = require('@/app/(core)/_theme/useTheme')
+                updateTheme(key)
+              }}
+              leftSection={
+                themeKey === key ? (
+                  <IconCheck size={16} />
+                ) : (
+                  <div style={{ width: 16 }} />
+                )
+              }
+            >
+              {themes[key].name}
+            </Menu.Item>
+          ))}
+        </Menu.Dropdown>
+      </Menu>
       {/* 通知ボタン */}
       {!isGuest && (
         <Indicator label={unreadCount > 0 ? unreadCount : null} size={16} color="red" disabled={unreadCount === 0}>
