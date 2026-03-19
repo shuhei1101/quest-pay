@@ -103,7 +103,7 @@ export const FamilyQuestViewLayout = ({
 
       {/* クエスト内容カード */}
       <Paper
-        className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto"
+        className="flex-1 min-h-[800px] overflow-x-hidden overflow-y-auto"
         p="md" 
         radius="md" 
         style={{ 
