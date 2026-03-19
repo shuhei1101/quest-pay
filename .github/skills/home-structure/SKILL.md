@@ -1,6 +1,6 @@
 ---
 name: home-structure
-description: ホーム画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。
+description: ホーム画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: home screen, home page, dashboard, home UI
 ---
 
 # ホーム画面 スキル

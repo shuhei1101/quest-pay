@@ -1,6 +1,6 @@
 ---
 name: template-quest-api
-description: テンプレートクエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。
+description: テンプレートクエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: template quest API, quest template API, template operations
 ---
 
 # テンプレートクエストAPI スキル

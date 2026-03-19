@@ -1,6 +1,6 @@
 ---
 name: mock-creator
-description: このスキルはモック画面作成依頼を受けて `/packages/web/app/test` 配下にモック画面を作成し、テスト一覧ページ(`/test`)に自動的にリンクを追加する。UI/UXの検証、プロトタイピング、テスト画面の作成時に使用すべきスキル。
+description: このスキルはモック画面作成依頼を受けて `/packages/web/app/test` 配下にモック画面を作成し、テスト一覧ページ(`/test`)に自動的にリンクを追加する。UI/UXの検証、プロトタイピング、テスト画面の作成時に使用すべきスキル。 Trigger Keywords: mock screen, test screen, prototype, mock UI, test page, UI verification
 ---
 
 # Mock Creator スキル

@@ -1,6 +1,6 @@
 ---
 name: family-quest-list
-description: 家族クエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。
+description: 家族クエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: family quest list, quest list, quest management screen
 ---
 
 # 家族クエスト一覧 スキル

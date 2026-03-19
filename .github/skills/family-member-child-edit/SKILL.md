@@ -1,6 +1,6 @@
 ---
 name: family-member-child-edit
-description: 家族メンバー子供編集画面の構造知識を提供するスキル。ファイル構成、フォーム管理、バリデーション、処理フローを含む。
+description: 家族メンバー子供編集画面の構造知識を提供するスキル。ファイル構成、フォーム管理、バリデーション、処理フローを含む。 Trigger Keywords: family member edit, edit member, member form, child member
 ---
 
 # 家族メンバー子供編集 スキル

@@ -1,6 +1,6 @@
 ---
 name: family-quest-edit
-description: 家族クエスト編集画面の構造知識を提供するスキル。ファイル構成、フォーム管理、バリデーション、処理フローを含む。
+description: 家族クエスト編集画面の構造知識を提供するスキル。ファイル構成、フォーム管理、バリデーション、処理フローを含む。 Trigger Keywords: family quest edit, edit quest, quest form, create quest, update quest
 ---
 
 # 家族クエスト編集 スキル

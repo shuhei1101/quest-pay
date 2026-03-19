@@ -1,6 +1,6 @@
 ---
 name: coding-standards
-description: This skill should be used when writing or reviewing TypeScript, React, or Next.js code for the Quest Pay project. It provides coding conventions including style rules, naming conventions, comment formats, and preferred language constructs.
+description: This skill should be used when writing or reviewing TypeScript, React, or Next.js code for the Quest Pay project. It provides coding conventions including style rules, naming conventions, comment formats, and preferred language constructs. Trigger Keywords: coding style, TypeScript conventions, React style guide, code review standards, naming conventions
 ---
 
 # Coding Standards

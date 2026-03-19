@@ -1,6 +1,6 @@
 ---
 name: notification-list
-description: 通知一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。
+description: 通知一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: notification list, notifications screen, notification UI
 ---
 
 # 通知一覧 スキル

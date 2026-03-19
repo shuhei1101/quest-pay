@@ -1,6 +1,6 @@
 ---
 name: family-member-list
-description: 家族メンバー一覧画面の構造知識を提供するスキル。2ペイン設計、レイアウトパターン、コンポーネント構成を含む。
+description: 家族メンバー一覧画面の構造知識を提供するスキル。2ペイン設計、レイアウトパターン、コンポーネント構成を含む。 Trigger Keywords: family member list, members list, two-pane layout, member management
 ---
 
 # 家族メンバー一覧 スキル

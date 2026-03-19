@@ -1,6 +1,6 @@
 ---
 name: common-structure
-description: 画面構造の自動生成とAPI構造説明を提供するスキル。スクリプトによる効率的な構造分析を実行。
+description: 画面構造の自動生成とAPI構造説明を提供するスキル。スクリプトによる効率的な構造分析を実行。 Trigger Keywords: screen structure, generate structure, analyze structure, structure script
 ---
 
 # Common Structure スキル

@@ -1,6 +1,6 @@
 ---
 name: template-quest-list
-description: テンプレートクエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。
+description: テンプレートクエスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、処理フローを含む。 Trigger Keywords: template quest list, quest templates, template screen
 ---
 
 # テンプレートクエスト一覧 スキル

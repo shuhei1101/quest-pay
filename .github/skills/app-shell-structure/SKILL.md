@@ -1,6 +1,6 @@
 ---
 name: app-shell-structure
-description: AppShellContentの構造知識を提供するスキル。サイドメニュー、フッター、レイアウト構造を含む。
+description: AppShellContentの構造知識を提供するスキル。サイドメニュー、フッター、レイアウト構造を含む。 Trigger Keywords: AppShell structure, app layout, shell content, application structure
 ---
 
 # AppShellContent構造 スキル

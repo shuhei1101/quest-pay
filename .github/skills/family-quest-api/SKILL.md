@@ -1,6 +1,6 @@
 ---
 name: family-quest-api
-description: 家族クエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。
+description: 家族クエストAPIの構造知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: family quest API, family quest CRUD, family quest operations
 ---
 
 # 家族クエストAPI スキル

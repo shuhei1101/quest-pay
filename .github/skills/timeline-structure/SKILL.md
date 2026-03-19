@@ -1,6 +1,6 @@
 ---
 name: timeline-structure
-description: タイムライン画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。
+description: タイムライン画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: timeline screen, timeline UI, activity feed, timeline display
 ---
 
 # タイムライン画面 スキル

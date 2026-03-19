@@ -1,6 +1,6 @@
 ---
 name: child-management-api
-description: 子供管理API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。
+description: 子供管理API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: child API, child management, child CRUD, children endpoint
 ---
 
 # 子供管理API スキル

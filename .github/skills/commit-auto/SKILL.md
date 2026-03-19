@@ -1,6 +1,6 @@
 ---
 name: commit-auto
-description: '**MANDATORY**: すべてのエージェントはgitコミット操作の前に必ずこのスキルを読み込むこと。Quest Payプロジェクト専用のコミットメッセージフォーマット「{ドメイン名}、{ラベル}（{変更概要}）」を定義。ユーザーが「コミットして」「これでOK」などの承認フレーズを使った際、自動的にセキュリティチェックを実行し、正しいフォーマットでコミットを実行する。'
+description: '**MANDATORY**: すべてのエージェントはgitコミット操作の前に必ずこのスキルを読み込むこと。Quest Payプロジェクト専用のコミットメッセージフォーマット「{ドメイン名}、{ラベル}（{変更概要}）」を定義。ユーザーが「コミットして」「これでOK」などの承認フレーズを使った際、自動的にセキュリティチェックを実行し、正しいフォーマットでコミットを実行する。 Trigger Keywords: git commit, commit message, auto commit, commit format, security check'
 ---
 
 # Commit Auto スキル

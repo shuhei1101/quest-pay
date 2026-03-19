@@ -1,6 +1,6 @@
 ---
 name: family-view
-description: 家族閲覧画面の構造知識を提供するスキル。表示内容、メンバー管理を含む。
+description: 家族閲覧画面の構造知識を提供するスキル。表示内容、メンバー管理を含む。 Trigger Keywords: family view, view family, family profile screen
 ---
 
 # 家族プロフィール閲覧 スキル

@@ -1,6 +1,6 @@
 ---
 name: child-reward-api
-description: 子供個別の報酬API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作、共通化戦略を含む。
+description: 子供個別の報酬API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作、共通化戦略を含む。 Trigger Keywords: child reward API, individual reward, child allowance, reward settings child
 ---
 
 # 子供個別の報酬API スキル

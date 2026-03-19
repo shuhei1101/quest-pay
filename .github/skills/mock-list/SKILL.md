@@ -1,6 +1,6 @@
 ---
 name: mock-list
-description: テスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。
+description: テスト一覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: mock list, test list, test screen list, mock index
 ---
 
 # Mock List スキル

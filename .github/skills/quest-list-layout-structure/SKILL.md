@@ -1,6 +1,6 @@
 ---
 name: quest-list-layout-structure
-description: クエスト一覧レイアウト構造の知識を提供するスキル。ファイル構成、コンポーネントを含む。
+description: クエスト一覧レイアウト構造の知識を提供するスキル。ファイル構成、コンポーネントを含む。 Trigger Keywords: quest list layout, list layout structure, quest list UI
 ---
 
 # クエスト一覧レイアウト構造 スキル

@@ -1,6 +1,6 @@
 ---
 name: environment-variables
-description: プロジェクトで使用する環境変数の定義と使用方法を提供するスキル。Supabase、Stripe、Logger、Platformなど全環境変数の設定方法を網羅。
+description: プロジェクトで使用する環境変数の定義と使用方法を提供するスキル。Supabase、Stripe、Logger、Platformなど全環境変数の設定方法を網羅。 Trigger Keywords: environment variables, env vars, .env, configuration, Supabase config, Stripe config
 ---
 
 # Environment Variables スキル

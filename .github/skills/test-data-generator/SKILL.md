@@ -1,6 +1,6 @@
 ---
 name: test-data-generator
-description: 'Supabaseデータベースにテストデータを生成するスキル。schema.tsを熟知し、Pythonスクリプトでテストデータを作成・投入する。大量のテストデータが必要な時に使用する。'
+description: 'Supabaseデータベースにテストデータを生成するスキル。schema.tsを熟知し、Pythonスクリプトでテストデータを作成・投入する。大量のテストデータが必要な時に使用する。 Trigger Keywords: test data, generate data, Supabase data, test database, data generation'
 ---
 
 # Test Data Generator

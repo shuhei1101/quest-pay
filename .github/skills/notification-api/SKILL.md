@@ -1,6 +1,6 @@
 ---
 name: notification-api
-description: 通知API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。
+description: 通知API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: notification API, notification CRUD, notification operations
 ---
 
 # 通知API スキル

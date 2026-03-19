@@ -1,6 +1,6 @@
 ---
 name: family-profile-view
-description: 家族プロフィール閲覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、API、処理フローを含む。
+description: 家族プロフィール閲覧画面の構造知識を提供するスキル。ファイル構成、コンポーネント、フック、API、処理フローを含む。 Trigger Keywords: family profile, view family, family details, family information
 ---
 
 # 家族プロフィール閲覧画面 スキル

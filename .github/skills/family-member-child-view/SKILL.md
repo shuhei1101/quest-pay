@@ -1,6 +1,6 @@
 ---
 name: family-member-child-view
-description: 家族メンバー子供閲覧画面の構造知識を提供するスキル。ファイル構成、表示内容、招待コード機能を含む。
+description: 家族メンバー子供閲覧画面の構造知識を提供するスキル。ファイル構成、表示内容、招待コード機能を含む。 Trigger Keywords: family member view, view member, member details, invitation code
 ---
 
 # 家族メンバー子供閲覧 スキル

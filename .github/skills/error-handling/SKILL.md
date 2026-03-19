@@ -1,6 +1,6 @@
 ---
 name: error-handling
-description: エラーハンドリングの知識を提供するスキル。エラークラス定義、クライアント/サーバーエラーハンドラーを含む。
+description: エラーハンドリングの知識を提供するスキル。エラークラス定義、クライアント/サーバーエラーハンドラーを含む。 Trigger Keywords: error handling, error classes, exception handling, error handler, error boundaries
 ---
 
 # エラーハンドリング スキル

@@ -1,6 +1,6 @@
 ---
 name: public-quest-view
-description: 公開クエスト閲覧画面の構造知識を提供するスキル。表示内容、いいね・コメントモーダル機能を含む。
+description: 公開クエスト閲覧画面の構造知識を提供するスキル。表示内容、いいね・コメントモーダル機能を含む。 Trigger Keywords: public quest view, view public quest, quest details public, like comment
 ---
 
 # 公開クエスト閲覧 スキル

@@ -1,6 +1,6 @@
 ---
 name: database-operations
-description: This skill should be used when implementing database operations using Drizzle ORM and Supabase. It provides guidelines for query construction, transaction handling, and best practices for database access patterns.
+description: This skill should be used when implementing database operations using Drizzle ORM and Supabase. It provides guidelines for query construction, transaction handling, and best practices for database access patterns. Trigger Keywords: database, Drizzle ORM, Supabase, query, transaction, DB operations
 ---
 
 # Database Operations

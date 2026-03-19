@@ -1,6 +1,6 @@
 ---
 name: screen-agent-builder
-description: This skill should be used when creating screen-specific custom agents and their associated skills for the Quest Pay project. It provides a standardized workflow for building agents that manage specific screens, their layouts, APIs, and components.
+description: This skill should be used when creating screen-specific custom agents and their associated skills for the Quest Pay project. It provides a standardized workflow for building agents that manage specific screens, their layouts, APIs, and components. Trigger Keywords: screen agent, custom agent, agent builder, skill builder, agent creation
 ---
 
 # Screen Agent Builder

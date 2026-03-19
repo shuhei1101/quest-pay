@@ -1,6 +1,6 @@
 ---
 name: reward-api
-description: 報酬API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。
+description: 報酬API操作の知識を提供するスキル。エンドポイント、リクエスト/レスポンス、DB操作を含む。 Trigger Keywords: reward API, reward settings API, allowance API, reward CRUD
 ---
 
 # 報酬API スキル

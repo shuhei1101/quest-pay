@@ -1,6 +1,6 @@
 ---
 name: child-reward-structure
-description: 子供個別の報酬設定画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。
+description: 子供個別の報酬設定画面の構造知識を提供するスキル。ファイル構成、コンポーネント、処理フローを含む。 Trigger Keywords: child reward screen, reward settings screen, individual reward UI
 ---
 
 # 子供個別の報酬設定画面 スキル

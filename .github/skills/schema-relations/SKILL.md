@@ -1,6 +1,6 @@
 ---
 name: schema-relations
-description: テーブル間リレーションの知識を提供するスキル。外部キー、リレーション定義を含む。
+description: テーブル間リレーションの知識を提供するスキル。外部キー、リレーション定義を含む。 Trigger Keywords: database schema, table relations, foreign keys, ER diagram, database relationships
 ---
 
 # テーブル間リレーション スキル
