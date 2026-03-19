@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Group, LoadingOverlay, Paper, Tabs } from "@mantine/core"
+import { Group, LoadingOverlay, Tabs } from "@mantine/core"
 import { useState, ReactNode } from "react"
 import { IconAlertCircle } from "@tabler/icons-react"
 import { FloatingActionItem } from "@/app/(core)/_components/FloatingActionButton"
@@ -75,51 +75,47 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
         showProfileButton={false}
       />
 
-      <Box pos="relative">
-        {/* ロード中のオーバーレイ */}
-        <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+      {/* ロード中のオーバーレイ */}
+      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
-        {/* クエスト入力フォーム */}
-        <form onSubmit={onSubmit}>
-          <Paper p="md" withBorder style={{ height: 'var(--content-height)', display: 'flex', flexDirection: 'column' }}>
-            <ScrollableTabs 
-              activeTab={activeTab} 
-              onChange={setActiveTab}
-              tabs={tabs.map((tab) => ({
-                value: tab.value,
-                label: tab.label,
-                rightSection: tab.hasErrors ? <IconAlertCircle size={16} color="red" /> : null
-              }))}
+      {/* クエスト入力フォーム */}
+      <form onSubmit={onSubmit} style={{ height: 'var(--content-height)', display: 'flex', flexDirection: 'column' }}>
+        <ScrollableTabs 
+          activeTab={activeTab} 
+          onChange={setActiveTab}
+          tabs={tabs.map((tab) => ({
+            value: tab.value,
+            label: tab.label,
+            rightSection: tab.hasErrors ? <IconAlertCircle size={16} color="red" /> : null
+          }))}
+        >
+          {/* タブパネル */}
+          {tabs.map((tab) => (
+            <Tabs.Panel
+              key={tab.value}
+              value={tab.value}
+              pt="xs"
+              style={{ 
+                display: activeTab === tab.value ? 'flex' : 'none',
+                flexDirection: 'column',
+                flex: 1, 
+                // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
+                overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
+                overflowX: 'hidden' 
+              }}
             >
-              {/* タブパネル */}
-              {tabs.map((tab) => (
-                <Tabs.Panel
-                  key={tab.value}
-                  value={tab.value}
-                  pt="xs"
-                  style={{ 
-                    display: activeTab === tab.value ? 'flex' : 'none',
-                    flexDirection: 'column',
-                    flex: 1, 
-                    // 詳細設定タブは自身でスクロール制御するため、親ではoverflow指定しない
-                    overflowY: tab.value === 'details' ? 'hidden' : 'auto', 
-                    overflowX: 'hidden' 
-                  }}
-                >
-                  {tab.content}
-                </Tabs.Panel>
-              ))}
-            </ScrollableTabs>
+              {tab.content}
+            </Tabs.Panel>
+          ))}
+        </ScrollableTabs>
 
-            {/* アクションボタン（ボタンがある場合のみ表示） */}
-            {actionButtons.length > 0 && (
-              <Group mt="md" justify="flex-end" gap="xs">
-                {actionButtons}
-              </Group>
-            )}
-          </Paper>
-        </form>
-      </Box>
+        {/* アクションボタン（ボタンがある場合のみ表示） */}
+        {actionButtons.length > 0 && (
+          <Group mt="md" justify="flex-end" gap="xs">
+            {actionButtons}
+          </Group>
+        )}
+      </form>
 
       {/* フローティングポップアップ */}
       {popups}
