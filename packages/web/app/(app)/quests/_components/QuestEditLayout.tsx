@@ -72,7 +72,6 @@ export const QuestEditLayout = <TForm extends Record<string, unknown>>({
       {/* ページタイトル */}
       <PageHeader 
         title={questId ? "クエスト編集" : "クエスト登録"}
-        showProfileButton={false}
       />
 
       {/* ロード中のオーバーレイ */}
