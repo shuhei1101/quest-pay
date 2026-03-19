@@ -12,6 +12,9 @@ import {
 import { useRouter } from "next/navigation"
 import { 
   TEST_FAMILY_PROFILE_MOCK_URL,
+  TEST_FAMILY_PROFILE_TABS_MOCK_URL,
+  TEST_FAMILY_PROFILE_ACCORDION_MOCK_URL,
+  TEST_FAMILY_PROFILE_SECTIONS_MOCK_URL,
   TEST_SETTINGS_MOCK_URL,
   TEST_STRIPE_TEST_URL,
   TEST_ERROR_UNKNOWN_URL,
@@ -35,6 +38,27 @@ export default function MockListPage() {
       title: "家族プロフィールモック",
       description: "家族プロフィール画面のモック",
       url: TEST_FAMILY_PROFILE_MOCK_URL,
+      icon: <IconHome size={32} />,
+      badge: "UI"
+    },
+    {
+      title: "家族プロフィール（タブ方式）",
+      description: "プロフィール/公開クエスト/報酬テンプレートをタブで切替",
+      url: TEST_FAMILY_PROFILE_TABS_MOCK_URL,
+      icon: <IconHome size={32} />,
+      badge: "UI"
+    },
+    {
+      title: "家族プロフィール（アコーディオン方式）",
+      description: "プロフィール表示＋下部セクションを折りたたみ展開",
+      url: TEST_FAMILY_PROFILE_ACCORDION_MOCK_URL,
+      icon: <IconHome size={32} />,
+      badge: "UI"
+    },
+    {
+      title: "家族プロフィール（縦スクロール方式）",
+      description: "縦セクションで公開クエスト/報酬テンプレートを連続表示",
+      url: TEST_FAMILY_PROFILE_SECTIONS_MOCK_URL,
       icon: <IconHome size={32} />,
       badge: "UI"
     },

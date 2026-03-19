@@ -213,6 +213,9 @@ export const PUBLIC_TIMELINE_API_URL = `${TIMELINE_API_URL}/public`
 // テスト・モック画面
 export const TEST_URL = `/test`
 export const TEST_FAMILY_PROFILE_MOCK_URL = `${TEST_URL}/family-profile-mock`
+export const TEST_FAMILY_PROFILE_TABS_MOCK_URL = `${TEST_URL}/family-profile-tabs`
+export const TEST_FAMILY_PROFILE_ACCORDION_MOCK_URL = `${TEST_URL}/family-profile-accordion`
+export const TEST_FAMILY_PROFILE_SECTIONS_MOCK_URL = `${TEST_URL}/family-profile-sections`
 export const TEST_SETTINGS_MOCK_URL = `${TEST_URL}/settings-mock`
 export const TEST_STRIPE_TEST_URL = `${TEST_URL}/stripe-test`
 export const TEST_ERROR_UNKNOWN_URL = `${TEST_URL}/error-unknown`
