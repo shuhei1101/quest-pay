@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Card, Group, Stack, Text, SimpleGrid, ThemeIcon, Badge, Divider } from "@mantine/core"
-import { IconHome, IconUsers, IconCalendar, IconId, IconChecklist, IconCoin, IconUser, IconBabyCarriage, IconTrophy } from "@tabler/icons-react"
+import { IconHome, IconUsers, IconCalendar, IconId, IconChecklist, IconUser, IconBabyCarriage, IconTrophy } from "@tabler/icons-react"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { formatDate } from "@/app/(core)/util"
 import dayjs from 'dayjs'
@@ -30,10 +30,6 @@ export const FamilyProfileViewLayout = ({
       totalCount: number
       completedCount: number
       inProgressCount: number
-    }
-    rewardStats: {
-      totalReward: number
-      monthlyReward: number
     }
   }
 }) => {
@@ -144,28 +140,6 @@ export const FamilyProfileViewLayout = ({
             <Text size="xl" fw={700}>{family.questStats.inProgressCount}</Text>
           </Box>
         </SimpleGrid>
-      </Card>
-
-      {/* 報酬統計カード */}
-      <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
-        <Text size="lg" fw={600} mb="md">報酬統計</Text>
-        <Stack gap="md">
-          <Card padding="md" radius="md" withBorder style={{ backgroundColor: "#FFF9C4" }}>
-            <Group gap="xs" mb="xs">
-              <IconCoin size={24} color="#F57C00" />
-              <Text fw={600}>今月の報酬合計</Text>
-            </Group>
-            <Text size="2.5rem" fw={700} c="#F57C00">{family.rewardStats.monthlyReward.toLocaleString()}円</Text>
-          </Card>
-          
-          <Card padding="md" radius="md" withBorder style={{ backgroundColor: "#E1F5FE" }}>
-            <Group gap="xs" mb="xs">
-              <IconCoin size={24} color="#0277BD" />
-              <Text fw={600}>累計報酬</Text>
-            </Group>
-            <Text size="2rem" fw={700} c="#0277BD">{family.rewardStats.totalReward.toLocaleString()}円</Text>
-          </Card>
-        </Stack>
       </Card>
     </Box>
   )

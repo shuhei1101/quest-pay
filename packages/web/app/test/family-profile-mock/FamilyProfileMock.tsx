@@ -28,10 +28,6 @@ type MockFamilyProfile = {
     completedCount: number
     inProgressCount: number
   }
-  rewardStats: {
-    totalReward: number
-    monthlyReward: number
-  }
 }
 
 /** サンプルデータ */
@@ -54,10 +50,6 @@ const mockFamily: MockFamilyProfile = {
     totalCount: 125,
     completedCount: 98,
     inProgressCount: 27,
-  },
-  rewardStats: {
-    totalReward: 125000,
-    monthlyReward: 8500,
   },
 }
 
