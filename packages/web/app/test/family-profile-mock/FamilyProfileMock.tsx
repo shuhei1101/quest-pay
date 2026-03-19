@@ -2,8 +2,6 @@
 
 import { Box, Button } from "@mantine/core"
 import { useState } from "react"
-import { useDisclosure } from "@mantine/hooks"
-import { InviteCodePopup } from "@/app/(core)/_components/InviteCodePopup"
 import { FamilyProfileViewLayout } from "./FamilyProfileViewLayout"
 import { PageHeader } from "@/app/(core)/_components/PageHeader"
 
@@ -17,7 +15,6 @@ type MockFamilyProfile = {
   iconId: number
   iconName: string
   iconColor: string
-  inviteCode: string
   createdAt: string
   memberStats: {
     parentCount: number
@@ -40,7 +37,6 @@ const mockFamily: MockFamilyProfile = {
   iconId: 1,
   iconName: "IconHome",
   iconColor: "#667eea",
-  inviteCode: "ABC123XYZ",
   createdAt: "2024-01-15T10:00:00Z",
   memberStats: {
     parentCount: 2,
@@ -56,20 +52,13 @@ const mockFamily: MockFamilyProfile = {
 /** 家族プロフィール画面モック */
 export const FamilyProfileMock = () => {
   const [family] = useState<MockFamilyProfile>(mockFamily)
-  const [inviteCodeOpened, { open: openInviteCode, close: closeInviteCode }] = useDisclosure(false)
 
   return (
     <Box p="md">
-      <PageHeader title="家族プロフィール" />
+      <PageHeader title="家族プロフィール" showProfileButton={false} />
       
       {/* トップバー */}
       <div className="flex items-center gap-3 justify-end mb-4">
-        <Button 
-          variant="outline"
-          onClick={openInviteCode}
-        >
-          招待コード表示
-        </Button>
         <Button 
           variant="filled"
         >
@@ -80,14 +69,6 @@ export const FamilyProfileMock = () => {
       {/* 家族プロフィールレイアウト */}
       <FamilyProfileViewLayout
         family={family}
-      />
-
-      {/* 招待コードポップアップ */}
-      <InviteCodePopup 
-        opened={inviteCodeOpened}
-        close={closeInviteCode}
-        inviteCode={family.inviteCode}
-        message="この招待コードを使って新しいメンバーを家族に追加できます"
       />
     </Box>
   )

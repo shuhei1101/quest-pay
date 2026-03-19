@@ -40,7 +40,7 @@ export default function MockListPage() {
     },
     {
       title: "設定モック",
-      description: "設定画面のモック",
+      description: "iPhone風リスト形式の設定画面（PC時は2ペイン構成）",
       url: TEST_SETTINGS_MOCK_URL,
       icon: <IconSettings size={32} />,
       badge: "UI"
