@@ -1,17 +1,15 @@
 "use client"
 
 import { Button, Group } from "@mantine/core"
-import { IconEdit, IconFileText, IconRefresh } from "@tabler/icons-react"
+import { IconFileText, IconRefresh } from "@tabler/icons-react"
 
 /** クエスト閲覧フッター（親向け） */
 export const ParentChildQuestViewFooter = ({
   onReviewReport,
-  onEdit,
   onReset,
   isPendingReview,
 }: {
   onReviewReport: () => void
-  onEdit: () => void
   onReset: () => void
   isPendingReview: boolean
 }) => {
@@ -28,16 +26,6 @@ export const ParentChildQuestViewFooter = ({
           報告内容確認
         </Button>
       )}
-
-      {/* 編集するボタン */}
-      <Button
-        size="md"
-        variant="outline"
-        leftSection={<IconEdit size={18} />}
-        onClick={onEdit}
-      >
-        編集する
-      </Button>
 
       {/* 進捗リセットボタン */}
       <Button

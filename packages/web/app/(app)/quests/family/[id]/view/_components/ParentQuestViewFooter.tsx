@@ -1,18 +1,16 @@
 "use client"
 
 import { Button, Group } from "@mantine/core"
-import { IconArrowLeft, IconEdit } from "@tabler/icons-react"
+import { IconArrowLeft } from "@tabler/icons-react"
 import { LevelSelectMenu } from "../../../../_components/LevelSelectMenu"
 
 /** クエスト閲覧フッター（親向け） */
 export const ParentQuestViewFooter = ({
-  onEdit,
   onBack,
   availableLevels,
   selectedLevel,
   onLevelChange,
 }: {
-  onEdit?: () => void
   onBack?: () => void
   availableLevels?: number[]
   selectedLevel?: number
@@ -26,16 +24,6 @@ export const ParentQuestViewFooter = ({
         selectedLevel={selectedLevel || 1}
         onLevelChange={onLevelChange || (() => {})}
       />
-      {/* 編集するボタン */}
-      <Button 
-        size="md" 
-        radius="xl" 
-        color="blue"
-        leftSection={<IconEdit size={18} />}
-        onClick={onEdit}
-      >
-        編集する
-      </Button>
       {/* 戻るボタン */}
       <Button 
         size="md" 
