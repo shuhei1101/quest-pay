@@ -73,9 +73,6 @@ export const QuestConditionTab = ({
               <Group gap="xs" mb={4}>
                 <LevelIcon size={20} />
                 <Text fw={500}>クエストレベル</Text>
-                {canChangeLevel && (
-                  <Text size="xs" c="dimmed">(クリックで変更)</Text>
-                )}
               </Group>
               
               {/* レベル選択メニュー */}
