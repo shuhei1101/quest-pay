@@ -102,39 +102,36 @@ export function FamilyQuestsScreen() {
           </Paper>
 
           {/* タブパネル */}
-          <Paper p="xs" withBorder>
-
-            <Tabs.Panel value="public">
-              <Suspense fallback={
-                <Center className="my-8">
-                  <Loader size="lg" />
-                </Center>
-              }>
-                <PublicQuestList />
-              </Suspense>
-            </Tabs.Panel>
-            <Tabs.Panel value="family">
-              <Suspense fallback={
-                <Center className="my-8">
-                  <Loader size="lg" />
-                </Center>
-              }>
-                <FamilyQuestList />
-              </Suspense>
-            </Tabs.Panel>
-            <Tabs.Panel value="penalty">
-              違反リスト
-            </Tabs.Panel>
-            <Tabs.Panel value="template">
-              <Suspense fallback={
-                <Center className="my-8">
-                  <Loader size="lg" />
-                </Center>
-              }>
-                <TemplateQuestList />
-              </Suspense>
-            </Tabs.Panel>
-        </Paper>
+          <Tabs.Panel value="public">
+            <Suspense fallback={
+              <Center className="my-8">
+                <Loader size="lg" />
+              </Center>
+            }>
+              <PublicQuestList />
+            </Suspense>
+          </Tabs.Panel>
+          <Tabs.Panel value="family">
+            <Suspense fallback={
+              <Center className="my-8">
+                <Loader size="lg" />
+              </Center>
+            }>
+              <FamilyQuestList />
+            </Suspense>
+          </Tabs.Panel>
+          <Tabs.Panel value="penalty">
+            違反リスト
+          </Tabs.Panel>
+          <Tabs.Panel value="template">
+            <Suspense fallback={
+              <Center className="my-8">
+                <Loader size="lg" />
+              </Center>
+            }>
+              <TemplateQuestList />
+            </Suspense>
+          </Tabs.Panel>
       </div>
       </Tabs>
 

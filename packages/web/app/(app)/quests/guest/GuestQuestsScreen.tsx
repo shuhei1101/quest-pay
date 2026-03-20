@@ -107,8 +107,7 @@ export function GuestQuestsScreen() {
           </Tabs.List>
       </Paper>
 
-      <Paper p="xs" withBorder>
-
+      {/* タブパネル */}
       <Tabs.Panel value="public">
         <PublicQuestList />
       </Tabs.Panel>
@@ -121,7 +120,6 @@ export function GuestQuestsScreen() {
       <Tabs.Panel value="template">
         <GuestScreen/>
       </Tabs.Panel>
-    </Paper>
     </div>
     </Tabs>
     </>
