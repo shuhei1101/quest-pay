@@ -94,6 +94,7 @@ export const FamilyQuestViewLayout = ({
   return (
     <Box
       pos="relative"
+      p="md"
       className="flex flex-col h-full overflow-x-hidden"
     >
       {/* ロード中のオーバーレイ */}
