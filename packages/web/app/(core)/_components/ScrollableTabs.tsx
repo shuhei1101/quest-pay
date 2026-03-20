@@ -17,7 +17,7 @@ export type ScrollableTabItem = {
 }
 
 /** 横スクロール可能なタブコンポーネント */
-export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
+export const ScrollableTabs = ({ activeTab, onChange, tabs, children, variant = "default" }: {
   /** 現在選択されているタブの値 */
   activeTab: string | null
   /** タブ変更時のハンドラ */
@@ -26,6 +26,8 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
   tabs: ScrollableTabItem[]
   /** タブパネルの内容 */
   children: ReactNode
+  /** 表示バリエーション */
+  variant?: "default" | "editorial"
 }) => {
   /** タブリストコンテナの参照 */
   const tabListRef = useRef<HTMLDivElement>(null)
@@ -110,24 +112,43 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children }: {
     }
   }, [])
 
+  const listStyle = variant === "editorial"
+    ? {
+        position: "sticky" as const,
+        top: 16,
+        zIndex: 100,
+        background: isDark
+          ? "linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%)"
+          : "linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.92) 100%)",
+        border: isDark ? "1px solid rgba(148, 163, 184, 0.22)" : "1px solid rgba(15, 23, 42, 0.08)",
+        borderRadius: "16px",
+        padding: "6px",
+        marginBottom: "16px",
+        boxShadow: isDark
+          ? "0 14px 32px rgba(2, 6, 23, 0.28)"
+          : "0 14px 32px rgba(15, 23, 42, 0.08)",
+        backdropFilter: "blur(10px)",
+      }
+    : {
+        position: "sticky" as const,
+        top: 16,
+        zIndex: 100,
+        backgroundColor: "var(--mantine-color-body)",
+        border: isDark ? "1px solid #373A40" : "1px solid #dee2e6",
+        borderRadius: "8px",
+        padding: "2px",
+        marginBottom: "12px",
+      }
+
   return (
     <Tabs 
       value={activeTab} 
       onChange={onChange}
+      variant={variant === "editorial" ? "pills" : "default"}
+      radius={variant === "editorial" ? "xl" : "sm"}
     >
       {/* タブリスト（スティッキー対応） */}
-      <Tabs.List
-        style={{
-          position: "sticky",
-          top: 16,
-          zIndex: 100,
-          backgroundColor: "var(--mantine-color-body)",
-          border: isDark ? "1px solid #373A40" : "1px solid #dee2e6",
-          borderRadius: "8px",
-          padding: "2px",
-          marginBottom: "12px",
-        }}
-      >
+      <Tabs.List style={listStyle}>
         <div
           ref={tabListRef}
           className="flex overflow-x-auto hidden-scrollbar whitespace-nowrap gap-2"

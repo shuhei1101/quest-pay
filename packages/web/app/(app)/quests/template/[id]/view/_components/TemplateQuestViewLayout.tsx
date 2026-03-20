@@ -63,7 +63,7 @@ type TemplateQuestViewLayoutProps = {
 export const TemplateQuestViewLayout = ({
   questName,
   headerColor,
-  backgroundColor,
+  backgroundColor: _backgroundColor,
   iconName,
   iconSize,
   iconColor,
@@ -86,12 +86,16 @@ export const TemplateQuestViewLayout = ({
   onLevelChange,
 }: TemplateQuestViewLayoutProps) => {
   const {isDark} = useWindow()
+  void _backgroundColor
   
   /** アクティブタブ */
   const [activeTab, setActiveTab] = useState<string | null>("condition")
 
   return (
-    <Box pos="relative" className="flex flex-col p-4 h-full overflow-x-hidden" style={{ backgroundColor: isDark ? backgroundColor.dark : backgroundColor.light }}>
+    <Box
+      pos="relative"
+      className="flex flex-col h-full overflow-x-hidden"
+    >
       {/* ロード中のオーバーレイ */}
       <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2, }} />
       
@@ -99,24 +103,36 @@ export const TemplateQuestViewLayout = ({
       <QuestViewHeader 
         questName={questName}
         headerColor={headerColor}
+        iconName={iconName}
+        iconColor={iconColor}
+        category={category}
+        level={level}
+        reward={reward}
+        exp={exp}
+        availableLevels={availableLevels}
+        onLevelChange={onLevelChange}
       />
 
       {/* クエスト内容カード */}
       <Paper
         className="flex-1 min-h-[800px] overflow-x-hidden overflow-y-auto"
-        p="md" 
-        radius="md" 
+        p="md"
+        radius="xl"
         style={{ 
-          backgroundColor: isDark ? "#544c4c" : "#fffef5",
-          boxShadow: "4px 4px 8px rgba(0,0,0,0.15)",
+          backgroundColor: isDark ? "#1f2937" : "#ffffff",
+          border: isDark ? "1px solid rgba(148, 163, 184, 0.18)" : "1px solid rgba(15, 23, 42, 0.08)",
+          boxShadow: isDark
+            ? "0 24px 48px rgba(2, 6, 23, 0.28)"
+            : "0 24px 48px rgba(15,23,42,0.08)",
         }}
       >
         {/* タブ切り替え */}
         <ScrollableTabs
           activeTab={activeTab}
           onChange={setActiveTab}
+          variant="editorial"
           tabs={[
-            { value: "condition", label: "クエスト条件" },
+            { value: "condition", label: "条件" },
             { value: "detail", label: "依頼情報" },
             { value: "other", label: "その他" },
           ]}

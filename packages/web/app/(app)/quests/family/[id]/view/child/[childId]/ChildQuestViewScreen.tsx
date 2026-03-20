@@ -93,6 +93,8 @@ export const ChildQuestViewScreen = ({id, childId}: {id: string, childId: string
       <ChildQuestViewLayout
         questName={childQuest?.quest?.name || ""}
         backgroundColor={{ light: "rgba(120, 53, 15, 0.2)", dark: "rgba(255, 255, 255, 0.2)" }}
+        iconName={childQuest?.icon?.name}
+        iconColor={childQuest?.quest?.iconColor}
         isLoading={questLoading || isDeleteLoading}
         level={currentDetail?.level || 1}
         category={childQuest?.category?.name || ""}

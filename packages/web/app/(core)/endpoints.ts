@@ -221,3 +221,4 @@ export const TEST_STRIPE_TEST_URL = `${TEST_URL}/stripe-test`
 export const TEST_ERROR_UNKNOWN_URL = `${TEST_URL}/error-unknown`
 export const TEST_SIDE_MENU_URL = `${TEST_URL}/side-menu`
 export const TEST_INFINITE_SCROLL_URL = `${TEST_URL}/infinite-scroll-test`
+export const TEST_QUEST_VIEW_MOCK_URL = `${TEST_URL}/quest-view-mock`

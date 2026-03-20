@@ -15,12 +15,14 @@ import {
   TEST_FAMILY_PROFILE_TABS_MOCK_URL,
   TEST_FAMILY_PROFILE_ACCORDION_MOCK_URL,
   TEST_FAMILY_PROFILE_SECTIONS_MOCK_URL,
+  TEST_QUEST_VIEW_MOCK_URL,
   TEST_SETTINGS_MOCK_URL,
   TEST_STRIPE_TEST_URL,
   TEST_ERROR_UNKNOWN_URL,
   TEST_SIDE_MENU_URL,
   TEST_INFINITE_SCROLL_URL
 } from "@/app/(core)/endpoints"
+import { IconLayoutKanban } from "@tabler/icons-react"
 
 type MockItem = {
   title: string
@@ -67,6 +69,13 @@ export default function MockListPage() {
       description: "iPhone風リスト形式の設定画面（PC時は2ペイン構成）",
       url: TEST_SETTINGS_MOCK_URL,
       icon: <IconSettings size={32} />,
+      badge: "UI"
+    },
+    {
+      title: "クエスト閲覧モック",
+      description: "クエスト名ブロック案と閲覧レイアウト案を比較するモック",
+      url: TEST_QUEST_VIEW_MOCK_URL,
+      icon: <IconLayoutKanban size={32} />,
       badge: "UI"
     },
     {
