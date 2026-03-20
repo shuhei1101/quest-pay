@@ -94,7 +94,6 @@ export const TemplateQuestViewLayout = ({
   return (
     <Box
       pos="relative"
-      p="md"
       className="flex flex-col h-full overflow-x-hidden"
     >
       {/* ロード中のオーバーレイ */}
@@ -119,12 +118,9 @@ export const TemplateQuestViewLayout = ({
         className="flex-1 min-h-[800px] overflow-x-hidden overflow-y-auto"
         p="md"
         radius="xl"
-        style={{ 
+        style={{
           backgroundColor: isDark ? "#1f2937" : "#ffffff",
           border: isDark ? "1px solid rgba(148, 163, 184, 0.18)" : "1px solid rgba(15, 23, 42, 0.08)",
-          boxShadow: isDark
-            ? "0 24px 48px rgba(2, 6, 23, 0.28)"
-            : "0 24px 48px rgba(15,23,42,0.08)",
         }}
       >
         {/* タブ切り替え */}

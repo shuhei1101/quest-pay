@@ -44,9 +44,6 @@ export const QuestViewHeader = ({
       style={{
         backgroundColor: isDark ? "#1f2937" : "#ffffff",
         border: isDark ? "1px solid rgba(148, 163, 184, 0.18)" : "1px solid rgba(15, 23, 42, 0.08)",
-        boxShadow: isDark
-          ? "0 22px 46px rgba(2, 6, 23, 0.28)"
-          : "0 20px 42px rgba(15, 23, 42, 0.08)",
       }}
     >
       <Stack gap="sm">
