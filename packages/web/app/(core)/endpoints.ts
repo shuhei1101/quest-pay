@@ -218,4 +218,5 @@ export const TEST_FAMILY_PROFILE_ACCORDION_MOCK_URL = `${TEST_URL}/family-profil
 export const TEST_FAMILY_PROFILE_SECTIONS_MOCK_URL = `${TEST_URL}/family-profile-sections`
 export const TEST_STRIPE_TEST_URL = `${TEST_URL}/stripe-test`
 export const TEST_ERROR_UNKNOWN_URL = `${TEST_URL}/error-unknown`
+export const TEST_SIDE_MENU_URL = `${TEST_URL}/side-menu`
 export const TEST_QUEST_VIEW_MOCK_URL = `${TEST_URL}/quest-view-mock`
