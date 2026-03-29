@@ -3,11 +3,8 @@
 import { Card, Text, SimpleGrid, Badge, Group } from "@mantine/core"
 import { 
   IconHome, 
-  IconSettings, 
   IconBrandStripe,
-  IconAlertTriangle,
-  IconMenu2,
-  IconArrowDown
+  IconMenu2
 } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import { 
@@ -16,11 +13,8 @@ import {
   TEST_FAMILY_PROFILE_ACCORDION_MOCK_URL,
   TEST_FAMILY_PROFILE_SECTIONS_MOCK_URL,
   TEST_QUEST_VIEW_MOCK_URL,
-  TEST_SETTINGS_MOCK_URL,
   TEST_STRIPE_TEST_URL,
-  TEST_ERROR_UNKNOWN_URL,
-  TEST_SIDE_MENU_URL,
-  TEST_INFINITE_SCROLL_URL
+  TEST_SIDE_MENU_URL
 } from "@/app/(core)/endpoints"
 import { IconLayoutKanban } from "@tabler/icons-react"
 
@@ -65,13 +59,6 @@ export default function MockListPage() {
       badge: "UI"
     },
     {
-      title: "設定モック",
-      description: "iPhone風リスト形式の設定画面（PC時は2ペイン構成）",
-      url: TEST_SETTINGS_MOCK_URL,
-      icon: <IconSettings size={32} />,
-      badge: "UI"
-    },
-    {
       title: "クエスト閲覧モック",
       description: "クエスト名ブロック案と閲覧レイアウト案を比較するモック",
       url: TEST_QUEST_VIEW_MOCK_URL,
@@ -86,25 +73,11 @@ export default function MockListPage() {
       badge: "Integration"
     },
     {
-      title: "エラー: 不明",
-      description: "不明なエラー画面のモック（3つのレイアウト）",
-      url: TEST_ERROR_UNKNOWN_URL,
-      icon: <IconAlertTriangle size={32} />,
-      badge: "Test"
-    },
-    {
       title: "サイドメニュー",
       description: "サイドメニューのデザインバリエーション（4つ）",
       url: TEST_SIDE_MENU_URL,
       icon: <IconMenu2 size={32} />,
       badge: "UI"
-    },
-    {
-      title: "無限スクロール検知テスト",
-      description: "Intersection Observerを使った無限スクロールの検知テスト",
-      url: TEST_INFINITE_SCROLL_URL,
-      icon: <IconArrowDown size={32} />,
-      badge: "Test"
     }
   ]
 
