@@ -3,8 +3,7 @@
 import { Card, Text, SimpleGrid, Badge, Group } from "@mantine/core"
 import { 
   IconHome, 
-  IconBrandStripe,
-  IconMenu2
+  IconBrandStripe
 } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import { 
@@ -13,8 +12,7 @@ import {
   TEST_FAMILY_PROFILE_ACCORDION_MOCK_URL,
   TEST_FAMILY_PROFILE_SECTIONS_MOCK_URL,
   TEST_QUEST_VIEW_MOCK_URL,
-  TEST_STRIPE_TEST_URL,
-  TEST_SIDE_MENU_URL
+  TEST_STRIPE_TEST_URL
 } from "@/app/(core)/endpoints"
 import { IconLayoutKanban } from "@tabler/icons-react"
 
@@ -71,13 +69,6 @@ export default function MockListPage() {
       url: TEST_STRIPE_TEST_URL,
       icon: <IconBrandStripe size={32} />,
       badge: "Integration"
-    },
-    {
-      title: "サイドメニュー",
-      description: "サイドメニューのデザインバリエーション（4つ）",
-      url: TEST_SIDE_MENU_URL,
-      icon: <IconMenu2 size={32} />,
-      badge: "UI"
     }
   ]
 
