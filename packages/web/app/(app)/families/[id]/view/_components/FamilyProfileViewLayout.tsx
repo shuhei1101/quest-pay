@@ -1,9 +1,10 @@
 "use client"
 
-import { Box, Paper, LoadingOverlay, Text, Button, Group, Stack, Divider } from "@mantine/core"
+import { Box, Paper, LoadingOverlay, Text, Button, Group, Stack, Divider, ThemeIcon, SimpleGrid, Card } from "@mantine/core"
 import { ReactNode } from "react"
 import { useWindow } from "@/app/(core)/useConstants"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
+import { IconUser, IconBabyCarriage, IconTrophy, IconChecklist } from "@tabler/icons-react"
 
 /** タイムラインアイテムのプロパティ */
 type TimelineItemProps = {
@@ -55,6 +56,17 @@ type FamilyProfileViewLayoutProps = {
   onEdit?: () => void
   /** フッター要素 */
   footer?: ReactNode
+  /** メンバー統計 */
+  memberStats?: {
+    parentCount: number
+    childCount: number
+  }
+  /** クエスト実績統計 */
+  questStats?: {
+    totalCount: number
+    completedCount: number
+    inProgressCount: number
+  }
 }
 
 /** 家族プロフィール画面のレイアウト */
@@ -76,6 +88,8 @@ export const FamilyProfileViewLayout = ({
   onFollowClick,
   onEdit,
   footer,
+  memberStats,
+  questStats,
 }: FamilyProfileViewLayoutProps) => {
   const { isDark } = useWindow()
 
@@ -184,6 +198,59 @@ export const FamilyProfileViewLayout = ({
             </Stack>
           </Group>
         </Paper>
+
+        {/* メンバー統計カード */}
+        {memberStats && (
+          <Card shadow="sm" padding="lg" radius="md" withBorder className="mb-4">
+            <Text size="lg" fw={600} className="mb-3">メンバー構成</Text>
+            <SimpleGrid cols={2} spacing="md">
+              <Box style={{ textAlign: "center" }}>
+                <ThemeIcon size={50} radius="xl" variant="light" color="blue" className="mb-2">
+                  <IconUser size={28} />
+                </ThemeIcon>
+                <Text size="xs" c="dimmed">親</Text>
+                <Text size="xl" fw={700}>{memberStats.parentCount}人</Text>
+              </Box>
+              <Box style={{ textAlign: "center" }}>
+                <ThemeIcon size={50} radius="xl" variant="light" color="pink" className="mb-2">
+                  <IconBabyCarriage size={28} />
+                </ThemeIcon>
+                <Text size="xs" c="dimmed">子供</Text>
+                <Text size="xl" fw={700}>{memberStats.childCount}人</Text>
+              </Box>
+            </SimpleGrid>
+          </Card>
+        )}
+
+        {/* クエスト実績統計カード */}
+        {questStats && (
+          <Card shadow="sm" padding="lg" radius="md" withBorder className="mb-4">
+            <Text size="lg" fw={600} className="mb-3">クエスト実績</Text>
+            <SimpleGrid cols={3} spacing="md">
+              <Box style={{ textAlign: "center" }}>
+                <ThemeIcon size={50} radius="xl" variant="light" color="grape" className="mb-2">
+                  <IconTrophy size={28} />
+                </ThemeIcon>
+                <Text size="xs" c="dimmed">総クエスト数</Text>
+                <Text size="xl" fw={700}>{questStats.totalCount}</Text>
+              </Box>
+              <Box style={{ textAlign: "center" }}>
+                <ThemeIcon size={50} radius="xl" variant="light" color="green" className="mb-2">
+                  <IconChecklist size={28} />
+                </ThemeIcon>
+                <Text size="xs" c="dimmed">完了</Text>
+                <Text size="xl" fw={700}>{questStats.completedCount}</Text>
+              </Box>
+              <Box style={{ textAlign: "center" }}>
+                <ThemeIcon size={50} radius="xl" variant="light" color="orange" className="mb-2">
+                  <IconChecklist size={28} />
+                </ThemeIcon>
+                <Text size="xs" c="dimmed">進行中</Text>
+                <Text size="xl" fw={700}>{questStats.inProgressCount}</Text>
+              </Box>
+            </SimpleGrid>
+          </Card>
+        )}
 
         {/* タイムライン */}
         <Paper className="p-4" withBorder>

@@ -1,5 +1,5 @@
 import { Db } from "@/index"
-import { fetchFamily, fetchFamilyStats } from "../query"
+import { fetchFamily, fetchFamilyStats, fetchFamilyMemberStats, fetchFamilyQuestStats } from "../query"
 import { fetchFollowCount } from "./follow/query"
 import { AppError } from "@/app/(core)/error/appError"
 
@@ -26,6 +26,15 @@ export type FamilyDetailResponse = {
     followerCount: number
     followingCount: number
   }
+  memberStats: {
+    parentCount: number
+    childCount: number
+  }
+  questStats: {
+    totalCount: number
+    completedCount: number
+    inProgressCount: number
+  }
 }
 
 /** 家族詳細情報を取得する */
@@ -45,6 +54,12 @@ export const fetchFamilyDetail = async ({db, familyId}: {
   // フォロー数を取得する
   const followCount = await fetchFollowCount({ db, familyId })
 
+  // メンバー統計を取得する
+  const memberStats = await fetchFamilyMemberStats({ db, familyId })
+
+  // クエスト実績統計を取得する
+  const questStats = await fetchFamilyQuestStats({ db, familyId })
+
   return {
     family: {
       id: familyData.families.id,
@@ -61,5 +76,7 @@ export const fetchFamilyDetail = async ({db, familyId}: {
     } : null,
     stats,
     followCount,
+    memberStats,
+    questStats,
   }
 }

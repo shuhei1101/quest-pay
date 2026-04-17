@@ -8,6 +8,7 @@ import { FamilyQuestCardLayout } from "./FamilyQuestCardLayout"
 import { FamilyQuestFilterPopup } from "./FamilyQuestFilterPopup"
 import { FamilyQuestSortPopup } from "./FamilyQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
+import { countModalFilterItems } from "../../_components/filterCount"
 import { FamilyQuestFilterScheme, type FamilyQuest, type FamilyQuestFilterType } from "@/app/api/quests/family/query"
 import type { QuestSort } from "@/drizzle/schema"
 import { FAMILY_QUEST_VIEW_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
@@ -164,13 +165,7 @@ const FamilyQuestListComponent = () => {
   ), [closeSort, handleSortSearch, sortOpened, sort])
 
   /** フィルター適用数を計算する */
-  const filterCount = useMemo(() => {
-    let count = 0
-    if (searchFilter.name && searchFilter.name.trim() !== '') count++
-    if (searchFilter.tags && searchFilter.tags.length > 0) count += searchFilter.tags.length
-    if (searchFilter.categoryId) count++
-    return count
-  }, [searchFilter])
+  const filterCount = useMemo(() => countModalFilterItems(searchFilter), [searchFilter])
 
   /** ソート適用数を計算する（デフォルトはid, asc） */
   const sortCount = useMemo(() => {

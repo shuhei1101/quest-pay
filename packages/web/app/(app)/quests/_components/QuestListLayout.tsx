@@ -197,8 +197,6 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 renderQuest={renderQuestCard}
                 tabValue={tabValue}
                 questCategoryById={questCategoryById}
-                onTabChange={handleTabChange}
-                tabList={tabList}
               />
               {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
               <div ref={tabValue === TAB_ALL ? sentinelRef : undefined} style={{ height: 1 }} />
@@ -227,8 +225,6 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                   renderQuest={renderQuestCard}
                   tabValue={tabValue}
                   questCategoryById={questCategoryById}
-                  onTabChange={handleTabChange}
-                  tabList={tabList}
                 />
                 {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
                 <div ref={tabValue === category.name ? sentinelRef : undefined} style={{ height: 1 }} />
@@ -257,8 +253,6 @@ const QuestListLayoutComponent = <T extends QuestItem, TFilter, TSort>({
                 renderQuest={renderQuestCard}
                 tabValue={tabValue}
                 questCategoryById={questCategoryById}
-                onTabChange={handleTabChange}
-                tabList={tabList}
               />
               {/* 無限スクロール検知エリア（アクティブタブのみrefを渡す） */}
               <div ref={tabValue === TAB_OTHERS ? sentinelRef : undefined} style={{ height: 1 }} />

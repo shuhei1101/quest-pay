@@ -65,6 +65,8 @@ export const FamilyProfileViewScreen = ({ id }: { id: string }) => {
       isFollowing={isFollowing}
       onFollowClick={handleFollowClick}
       footer={<FamilyProfileViewFooter />}
+      memberStats={familyDetail?.memberStats}
+      questStats={familyDetail?.questStats}
     />
   )
 }

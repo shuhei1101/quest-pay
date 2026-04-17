@@ -32,6 +32,9 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children, variant = 
   /** タブリストコンテナの参照 */
   const tabListRef = useRef<HTMLDivElement>(null)
 
+  /** スワイプ処理中フラグ（二重発火防止） */
+  const isSwipingRef = useRef(false)
+
   /** システムカラースキーム */
   const { isDark } = useSystemTheme()
 
@@ -40,22 +43,36 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children, variant = 
 
   /** スワイプで次のタブに移動 */
   const handleSwipeLeft = () => {
-    if (!activeTab) return
+    if (!activeTab || isSwipingRef.current) return
+
+    isSwipingRef.current = true
 
     const currentIndex = tabs.findIndex((tab) => tab.value === activeTab)
     if (currentIndex < tabs.length - 1) {
       onChange(tabs[currentIndex + 1].value)
     }
+
+    // 300ms後にフラグをリセット
+    setTimeout(() => {
+      isSwipingRef.current = false
+    }, 300)
   }
 
   /** スワイプで前のタブに移動 */
   const handleSwipeRight = () => {
-    if (!activeTab) return
+    if (!activeTab || isSwipingRef.current) return
+
+    isSwipingRef.current = true
 
     const currentIndex = tabs.findIndex((tab) => tab.value === activeTab)
     if (currentIndex > 0) {
       onChange(tabs[currentIndex - 1].value)
     }
+
+    // 300ms後にフラグをリセット
+    setTimeout(() => {
+      isSwipingRef.current = false
+    }, 300)
   }
 
   /** スワイプハンドラを設定 */
@@ -64,9 +81,9 @@ export const ScrollableTabs = ({ activeTab, onChange, tabs, children, variant = 
     onSwipedRight: handleSwipeRight,
     trackMouse: false, // マウスでのスワイプは無効化
     preventScrollOnSwipe: false, // 縦スクロールとの共存を許可
-    delta: 50, // スワイプと判定する最小距離（ピクセル）- 確実に検出
-    swipeDuration: 500, // スワイプの最大継続時間（ミリ秒）
-    touchEventOptions: { passive: false } // タッチイベントのpreventDefaultを有効化
+    delta: 80, // スワイプと判定する最小距離を増やして誤検知を防ぐ
+    swipeDuration: 300, // スワイプの最大継続時間を短く
+    touchEventOptions: { passive: true } // 縦スクロールとの競合を防ぐ
   })
 
   /** タブ変更時に選択されたタブを画面内にスクロールする */

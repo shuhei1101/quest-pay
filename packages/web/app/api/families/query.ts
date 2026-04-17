@@ -76,3 +76,90 @@ export const fetchFamilyStats = async ({db, familyId}: {
     throw new QueryError("家族統計情報の取得に失敗しました。")
   }
 }
+
+/** 家族のメンバー統計を取得する */
+export const fetchFamilyMemberStats = async ({db, familyId}: {
+  db: Db,
+  familyId: string
+}) => {
+  try {
+    const { profiles } = await import("@/drizzle/schema")
+    
+    // 親の数を取得する
+    const parentCountResult = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(profiles)
+      .where(
+        and(
+          eq(profiles.familyId, familyId),
+          eq(profiles.type, "parent")
+        )
+      )
+
+    // 子供の数を取得する
+    const childCountResult = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(profiles)
+      .where(
+        and(
+          eq(profiles.familyId, familyId),
+          eq(profiles.type, "child")
+        )
+      )
+
+    return {
+      parentCount: parentCountResult[0]?.count ?? 0,
+      childCount: childCountResult[0]?.count ?? 0,
+    }
+  } catch (error) {
+    throw new QueryError("家族メンバー統計の取得に失敗しました。")
+  }
+}
+
+/** 家族のクエスト実績統計を取得する */
+export const fetchFamilyQuestStats = async ({db, familyId}: {
+  db: Db,
+  familyId: string
+}) => {
+  try {
+    const { questChildren, familyQuests } = await import("@/drizzle/schema")
+    
+    // 総クエスト数を取得する
+    const totalQuestCountResult = await db
+      .select({ count: sql<number>`count(DISTINCT ${familyQuests.id})::int` })
+      .from(familyQuests)
+      .where(eq(familyQuests.familyId, familyId))
+
+    // 完了したクエスト数を取得する
+    const completedQuestCountResult = await db
+      .select({ count: sql<number>`count(DISTINCT ${familyQuests.id})::int` })
+      .from(questChildren)
+      .leftJoin(familyQuests, eq(questChildren.familyQuestId, familyQuests.id))
+      .where(
+        and(
+          eq(familyQuests.familyId, familyId),
+          eq(questChildren.status, "completed")
+        )
+      )
+
+    // 進行中のクエスト数を取得する
+    const inProgressQuestCountResult = await db
+      .select({ count: sql<number>`count(DISTINCT ${familyQuests.id})::int` })
+      .from(questChildren)
+      .leftJoin(familyQuests, eq(questChildren.familyQuestId, familyQuests.id))
+      .where(
+        and(
+          eq(familyQuests.familyId, familyId),
+          eq(questChildren.status, "in_progress")
+        )
+      )
+
+    return {
+      totalCount: totalQuestCountResult[0]?.count ?? 0,
+      completedCount: completedQuestCountResult[0]?.count ?? 0,
+      inProgressCount: inProgressQuestCountResult[0]?.count ?? 0,
+    }
+  } catch (error) {
+    throw new QueryError("家族クエスト実績統計の取得に失敗しました。")
+  }
+}

@@ -9,6 +9,7 @@ import { ChildQuestCardLayout } from "./ChildQuestCardLayout"
 import { ChildQuestFilterPopup } from "./ChildQuestFilterPopup"
 import { ChildQuestSortPopup } from "./ChildQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
+import { countModalFilterItems } from "../../_components/filterCount"
 import { ChildQuestFilterScheme, type ChildQuest, type ChildQuestFilterType } from "@/app/api/quests/family/[id]/child/query"
 import type { QuestSort } from "@/drizzle/schema"
 import { CHILD_QUEST_VIEW_URL, CHILD_QUESTS_URL, FAMILY_QUESTS_URL } from "@/app/(core)/endpoints"
@@ -164,6 +165,9 @@ const ChildQuestListComponent = () => {
     />
   ), [closeSort, handleSortSearch, sortOpened, sort])
 
+  /** フィルター適用数を計算する */
+  const filterCount = useMemo(() => countModalFilterItems(searchFilter), [searchFilter])
+
   return (
     <QuestListLayout<ChildQuest, ChildQuestFilterType, QuestSort>
       quests={fetchedQuests}
@@ -182,6 +186,7 @@ const ChildQuestListComponent = () => {
       onCategoryChange={handleCategoryChange}
       filterPopup={filterPopup}
       sortPopup={sortPopup}
+      filterCount={filterCount}
     />
   )
 }

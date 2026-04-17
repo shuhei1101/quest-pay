@@ -8,6 +8,7 @@ import { PublicQuestCardLayout } from "./_components/PublicQuestCardLayout"
 import { PublicQuestFilterPopup } from "./_components/PublicQuestFilterPopup"
 import { PublicQuestSortPopup } from "./_components/PublicQuestSortPopup"
 import { QuestListLayout } from "../_components/QuestListLayout"
+import { countModalFilterItems } from "../_components/filterCount"
 import { PublicQuestFilterScheme, type PublicQuest, type PublicQuestFilterType } from "@/app/api/quests/public/query"
 import type { QuestSort } from "@/drizzle/schema"
 import { FAMILY_QUESTS_URL, PUBLIC_QUEST_URL } from "@/app/(core)/endpoints"
@@ -173,13 +174,7 @@ const PublicQuestListComponent = () => {
   ), [closeSort, handleSortSearch, sortOpened, sort])
 
   /** フィルター適用数を計算する */
-  const filterCount = useMemo(() => {
-    let count = 0
-    if (searchFilter.name && searchFilter.name.trim() !== '') count++
-    if (searchFilter.tags && searchFilter.tags.length > 0) count += searchFilter.tags.length
-    if (searchFilter.categoryId) count++
-    return count
-  }, [searchFilter])
+  const filterCount = useMemo(() => countModalFilterItems(searchFilter), [searchFilter])
 
   /** ソート適用数を計算する（デフォルトはid, asc） */
   const sortCount = useMemo(() => {

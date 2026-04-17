@@ -8,6 +8,7 @@ import { TemplateQuestCardLayout } from "./TemplateQuestCardLayout"
 import { TemplateQuestFilterPopup } from "./TemplateQuestFilterPopup"
 import { TemplateQuestSortPopup } from "./TemplateQuestSortPopup"
 import { QuestListLayout } from "../../_components/QuestListLayout"
+import { countModalFilterItems } from "../../_components/filterCount"
 import { TemplateQuestFilterScheme, type TemplateQuest, type TemplateQuestFilterType } from "@/app/api/quests/template/query"
 import type { QuestSort } from "@/drizzle/schema"
 import { FAMILY_QUESTS_URL, TEMPLATE_QUEST_URL, TEMPLATE_QUESTS_URL } from "@/app/(core)/endpoints"
@@ -168,13 +169,7 @@ const TemplateQuestListComponent = () => {
   ), [closeSort, handleSortSearch, sortOpened, sort])
 
   /** フィルター適用数を計算する */
-  const filterCount = useMemo(() => {
-    let count = 0
-    if (searchFilter.name && searchFilter.name.trim() !== '') count++
-    if (searchFilter.tags && searchFilter.tags.length > 0) count += searchFilter.tags.length
-    if (searchFilter.categoryId) count++
-    return count
-  }, [searchFilter])
+  const filterCount = useMemo(() => countModalFilterItems(searchFilter), [searchFilter])
 
   /** ソート適用数を計算する（デフォルトはid, asc） */
   const sortCount = useMemo(() => {

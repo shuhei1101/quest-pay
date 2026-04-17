@@ -1,6 +1,6 @@
 "use client"
 
-import { HOME_URL, SETTINGS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL, TEST_URL } from '@/app/(core)/endpoints'
+import { HOME_URL, SETTINGS_URL, FAMILY_MEMBERS_URL, FAMILY_QUESTS_URL, LOGIN_URL, REWARD_URL, FAMILY_VIEW_URL, TEST_URL, PROFILE_URL } from '@/app/(core)/endpoints'
 import { NavLink, ScrollArea, Drawer, ActionIcon, Card, Text, Indicator, Divider, LoadingOverlay, Menu } from '@mantine/core'
 import { IconHome2, IconClipboard, IconUsers, IconSettings, IconWorld, IconClipboardPlus, IconBell, IconLogout, IconMenu2, IconCoin, IconPalette, IconCheck } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
@@ -68,7 +68,13 @@ export const SideMenu = ({isMobile, isDark, opened, onClose, onToggle}: {isMobil
       {/* プロフィールカード */}
       <Card 
         className='m-3 cursor-pointer transition-all hover:scale-[1.02]'
-        onClick={() => router.push(FAMILY_VIEW_URL(userInfo?.families?.id || ''))}
+        onClick={() => {
+          if (isParent) {
+            router.push(FAMILY_VIEW_URL(userInfo?.families?.id || ''))
+          } else {
+            router.push(PROFILE_URL)
+          }
+        }}
         padding="md"
         radius="md"
         withBorder

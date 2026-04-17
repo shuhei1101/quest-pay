@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.sample
+!.env.test.sample
 
 # vercel
 .vercel
@@ -42,3 +44,10 @@ next-env.d.ts
 
 # temporary files
 /tmp
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/e2e/.auth/

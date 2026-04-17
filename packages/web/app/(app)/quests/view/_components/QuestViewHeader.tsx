@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useWindow } from "@/app/(core)/useConstants"
 import { RenderIcon } from "@/app/(app)/icons/_components/RenderIcon"
 import { ActionIcon, Badge, Box, Group, Menu, Paper, Rating, Stack, Text, ThemeIcon } from "@mantine/core"
-import { IconChevronDown, IconCoinYen, IconSparkles } from "@tabler/icons-react"
+import { IconChevronDown } from "@tabler/icons-react"
 
 /** クエスト閲覧ヘッダー */
 export const QuestViewHeader = ({
@@ -47,32 +47,6 @@ export const QuestViewHeader = ({
       }}
     >
       <Stack gap="sm">
-        <Group justify="space-between" align="center">
-          <Badge
-            radius="sm"
-            variant="filled"
-            color={accentColor}
-            style={{
-              fontWeight: 800,
-              letterSpacing: "0.08em",
-            }}
-          >
-            QUEST VIEW
-          </Badge>
-          <Group gap={8}>
-            {reward !== undefined && (
-              <Badge radius="xl" variant="light" color="orange" leftSection={<IconCoinYen size={12} />}>
-                {reward}円
-              </Badge>
-            )}
-            {exp !== undefined && (
-              <Badge radius="xl" variant="light" color="blue" leftSection={<IconSparkles size={12} />}>
-                +{exp} EXP
-              </Badge>
-            )}
-          </Group>
-        </Group>
-
         <Group align="center" wrap="nowrap">
           {!isMobile && iconName && (
             <ThemeIcon
