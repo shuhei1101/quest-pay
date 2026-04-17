@@ -1,5 +1,5 @@
 superpowers
-
+*.local.*
 # dependencies
 *node_modules/
 *.pnp
